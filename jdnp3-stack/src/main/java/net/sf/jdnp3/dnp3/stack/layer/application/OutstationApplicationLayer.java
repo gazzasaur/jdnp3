@@ -15,7 +15,11 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application;
 
+import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
+
 public interface OutstationApplicationLayer extends ApplicationLayer {
 	public void doUnsolicitedResponse(Response response);
 	public void addRequestHandler(RequestHandler requestHandler, RequestFilter filter);
+	
+	public void setTransportLayer(TransportLayer transportLayer);
 }

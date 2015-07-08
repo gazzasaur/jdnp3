@@ -18,10 +18,13 @@ package net.sf.jdnp3.dnp3.stack.layer.application;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
+
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class OutstationApplicationLayerImpl implements OutstationApplicationLayer {
+	private TransportLayer transportLayer = null;
 	private List<Pair<RequestFilter, RequestHandler>> handlers = new ArrayList<>();
 	
 	public void doUnsolicitedResponse(Response response) {
@@ -33,6 +36,9 @@ public class OutstationApplicationLayerImpl implements OutstationApplicationLaye
 	}
 
 	public void dataReceived(List<Byte> data) {
-		System.out.println("Received Data");
+	}
+
+	public void setTransportLayer(TransportLayer transportLayer) {
+		this.transportLayer = transportLayer;
 	}
 }

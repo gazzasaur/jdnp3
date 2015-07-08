@@ -42,8 +42,12 @@ public class ObjectFragmentEncoder {
 			throw new IllegalArgumentException(String.format("The calculated RangeSpecifierCode %s does not match the declared range specifier code %s.", rangeSpecifierCode.getCode(), objectFragment.getObjectFragmentHeader().getQualifierField().getRangeSpecifierCode().getCode()));
 		}
 
+		long startPrefix = -1;
 		for (ObjectField objectField : objectFragment.getObjectFields()) {
-			objectFieldEncoder.encode(objectFragment.getObjectFragmentHeader().getQualifierField().getObjectPrefixCode(), objectField, data);
+			if (startPrefix < 0) {
+				startPrefix = objectField.getPrefix();
+			}
+			objectFieldEncoder.encode(startPrefix, objectFragment.getObjectFragmentHeader().getQualifierField().getObjectPrefixCode(), objectField, data);
 		}
 	}
 }

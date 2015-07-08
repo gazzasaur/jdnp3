@@ -24,6 +24,13 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.Applicatio
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentResponse;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentResponseHeader;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectField;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectPrefixCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
@@ -31,7 +38,7 @@ import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayerImpl;
 
 
 public class App {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		TransportLayer transport = new TransportLayerImpl();
 		transport.setApplicationLayer(new ApplicationLayer() {
 			boolean deviceReset = true;
@@ -56,6 +63,27 @@ public class App {
 				applicationResponseHeader.getApplicationControl().setSequenceNumber(request.getHeader().getApplicationControl().getSequenceNumber());
 				fragment.setHeader(applicationResponseHeader);
 				
+				ObjectFragment objectFragment = new ObjectFragment();
+				IndexRange indexRange = new IndexRange();
+				indexRange.setStartIndex(0);
+				indexRange.setStopIndex(15);
+				objectFragment.getObjectFragmentHeader().setObjectType(ObjectTypeConstants.BINARY_INPUT_STATIC_PACKED);
+				objectFragment.getObjectFragmentHeader().getQualifierField().setObjectPrefixCode(ObjectPrefixCode.NONE);
+				objectFragment.getObjectFragmentHeader().getQualifierField().setRangeSpecifierCode(RangeSpecifierCode.ONE_OCTET_INDEX);
+				objectFragment.getObjectFragmentHeader().setRange(indexRange);
+				
+				for (int i = 0; i < 16; ++i) {
+					BinaryInputStaticObjectInstance binary = new BinaryInputStaticObjectInstance();
+					binary.setIndex(i);
+					binary.setActive(i%2 > 0);
+					ObjectField objectField = new ObjectField();
+					objectField.setPrefix(i);
+					objectField.setObjectInstance(binary);
+					objectFragment.addObjectField(objectField);
+				}
+				
+				fragment.addObjectFragment(objectFragment);
+				
 				transport.sendData(new ApplicationFragmentResponseEncoderImpl().encode(fragment));
 				deviceReset = false;
 			}
@@ -70,6 +98,9 @@ public class App {
 		transport.setDataLinkLater(dataLink);
 		
 		dataLink.enable();
+		
+		Thread.sleep(60000);
+		System.exit(0);
 		
 //		Master master = new Master();
 		

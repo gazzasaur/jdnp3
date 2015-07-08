@@ -22,7 +22,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.util;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class Crc16 {
@@ -67,9 +66,5 @@ public class Crc16 {
 			crc = (crc >> 8) ^ CRC_LOOKUP_TABLE[(crc ^ data.get(index)) & 0xFF]; 
 		}
 		return (~crc) & 0xFFFF;
-	}
-	
-	public static void main(String[] args) {
-		System.out.println(Integer.toHexString(computeCrc(Arrays.asList((byte) 'a', (byte) 'b', (byte) 'c', (byte) 'd', (byte) 'e', (byte) 'f', (byte) 'g', (byte) 'h', (byte) 'i'))));
 	}
 }
