@@ -29,6 +29,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class3Ob
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.InternalIndicatorBitObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectField;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode;
@@ -71,6 +72,9 @@ public class ObjectFragmentDataDecoder {
 		nullCheck(listDecoder, "IndexDecoder", "ObjectPrefixCode", format("0x%02X", objectFragment.getObjectFragmentHeader().getQualifierField().getObjectPrefixCode().getCode()));
 		nullCheck(objectTypeDecoder, "ObjectTypeDecoder", "ObjectType", objectFragment.getObjectFragmentHeader().getObjectType().toString());
 		listDecoder.decode(objectFragment, functionDecoder, objectTypeDecoder, data);
+		for (ObjectField objectField : objectFragment.getObjectFields()) {
+			objectField.getObjectInstance().setRequestedType(objectFragment.getObjectFragmentHeader().getObjectType());
+		}
 	}
 
 	private void nullCheck(Object object, String type, String code, String value) {

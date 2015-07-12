@@ -15,9 +15,13 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
 
-public class InternalIndicatorBitObjectInstance implements ObjectInstance {
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.INTERNAL_INDICATIONS_PACKED;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+
+public class InternalIndicatorBitObjectInstance implements StaticObjectInstance {
 	private long index = 0;
 	private boolean active = false;
+	private ObjectType requestedType =INTERNAL_INDICATIONS_PACKED;
 	
 	public long getIndex() {
 		return index;
@@ -33,5 +37,13 @@ public class InternalIndicatorBitObjectInstance implements ObjectInstance {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public ObjectType getRequestedType() {
+		return requestedType;
+	}
+
+	public void setRequestedType(ObjectType requestedType) {
+		this.requestedType = requestedType;
 	}
 }

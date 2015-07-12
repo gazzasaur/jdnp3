@@ -19,22 +19,19 @@ public class ObjectType {
 	private int group = 0;
 	private int variation = 0;
 	
+	public ObjectType(int group, int variation) {
+		this.group = group;
+		this.variation = variation;
+	}
+	
 	public int getGroup() {
 		return group;
 	}
 	
-	public void setGroup(int group) {
-		this.group = group;
-	}
-
 	public int getVariation() {
 		return variation;
 	}
 
-	public void setVariation(int variation) {
-		this.variation = variation;
-	}
-	
 	public int hashCode() {
 		return new Integer(group).hashCode() + new Integer(variation).hashCode();
 	}

@@ -15,14 +15,19 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.core;
 
+import static java.lang.String.format;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.RequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.ApplicationLayer;
+import net.sf.jdnp3.dnp3.stack.layer.application.Transaction;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoderImpl;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.sort.ObjectInstanceSorter;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.sort.ObjectInstanceTypeRationaliser;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentRequest;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentResponse;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentResponseHeader;
@@ -37,6 +42,7 @@ public class OutstationImpl implements ApplicationLayer {
 	private List<OutstationServiceTypeHelper> outstationServiceTypeHelpers = new ArrayList<>();
 	
 	private DataLinkLayer dataLinkLayer = null;
+	private Transaction currentTransaction = null;
 	private TransportLayer transportLayer = new TransportLayerImpl();
 	private ApplicationFragmentRequestDecoder decoder = new ApplicationFragmentRequestDecoderImpl();
 
@@ -64,6 +70,12 @@ public class OutstationImpl implements ApplicationLayer {
 	}
 	
 	public void dataReceived(List<Byte> data) {
+		System.out.println("AL: ");
+		for (Byte dataByte : data) {
+			System.out.print(format("%02X ", dataByte));
+		}
+		System.out.println();
+		
 		List<ObjectInstance> responseObjects = new ArrayList<>();
 		ApplicationFragmentRequest request = decoder.decode(data);
 		for (ObjectFragment objectFragment : request.getObjectFragments()) {
@@ -86,6 +98,15 @@ public class OutstationImpl implements ApplicationLayer {
 		applicationResponseHeader.getApplicationControl().setFinalFragmentOfMessage(true);
 		applicationResponseHeader.getApplicationControl().setUnsolicitedResponse(false);
 		applicationResponseHeader.getApplicationControl().setSequenceNumber(request.getHeader().getApplicationControl().getSequenceNumber());
+		
+		ObjectInstanceTypeRationaliser rationaliser = new ObjectInstanceTypeRationaliser();
+		for (ObjectInstance objectInstance : responseObjects) {
+			rationaliser.rationaliseType(objectInstance);
+		}
+		ObjectInstanceSorter sorter = new ObjectInstanceSorter();
+		sorter.sort(responseObjects);
+		
+		// FIXME IMPL Add the ability to add a Time Reference for relative time.
 		
 		transportLayer.sendData(new ApplicationFragmentResponseEncoderImpl().encode(response));
 	}

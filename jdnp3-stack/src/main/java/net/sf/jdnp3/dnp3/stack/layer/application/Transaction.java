@@ -16,5 +16,6 @@
 package net.sf.jdnp3.dnp3.stack.layer.application;
 
 public interface Transaction {
-
+	public String getFailureReason();
+	public TransactionState getState();
 }

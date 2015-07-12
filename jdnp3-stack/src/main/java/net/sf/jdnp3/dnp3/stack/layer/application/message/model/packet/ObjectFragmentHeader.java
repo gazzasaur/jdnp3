@@ -15,11 +15,12 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet;
 
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 
 public class ObjectFragmentHeader {
-	private ObjectType objectType = new ObjectType();
+	private ObjectType objectType = ANY;
 	private QualifierField qualifierField = new QualifierField();
 	private Range range = new NoRange();
 	

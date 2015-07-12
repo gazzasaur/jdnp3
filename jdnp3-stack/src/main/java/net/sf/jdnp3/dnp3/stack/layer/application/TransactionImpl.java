@@ -13,23 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CLASS_3;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-
-public class Class3ObjectInstance implements ObjectInstance {
-	private ObjectType requestedType = CLASS_3;
+public class TransactionImpl implements Transaction {
+	private String failureReason = "";
+	private TransactionState transactionState = TransactionState.PENDING;
 	
-	public long getIndex() {
-		return 0;
+	public String getFailureReason() {
+		return failureReason;
+	}
+	
+	public void setFailureReason(String failureReason) {
+		this.failureReason = failureReason;
+	}
+	
+	public TransactionState getState() {
+		return transactionState;
 	}
 
-	public ObjectType getRequestedType() {
-		return requestedType;
-	}
-
-	public void setRequestedType(ObjectType requestedType) {
-		this.requestedType = requestedType;
+	public void setState(TransactionState transactionState) {
+		this.transactionState = transactionState;
 	}
 }

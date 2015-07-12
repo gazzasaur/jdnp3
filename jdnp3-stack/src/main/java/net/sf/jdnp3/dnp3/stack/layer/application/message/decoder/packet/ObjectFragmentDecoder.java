@@ -15,12 +15,15 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
 
+import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getInteger8;
+import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.trim;
+
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.range.RangeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
-import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
 public class ObjectFragmentDecoder {
 	private RangeDecoder rangeDecoder = new RangeDecoder();
@@ -28,9 +31,8 @@ public class ObjectFragmentDecoder {
 	private ObjectFragmentDataDecoder objectFragmentDataDecoder = new ObjectFragmentDataDecoder();
 	
 	public void decode(FunctionCode functionCode, ObjectFragment objectFragment, List<Byte> data) {
-		objectFragment.getObjectFragmentHeader().getObjectType().setGroup((int) DataUtils.getInteger8(0, data));
-		objectFragment.getObjectFragmentHeader().getObjectType().setVariation((int) DataUtils.getInteger8(1, data));
-		DataUtils.trim(2, data);
+		objectFragment.getObjectFragmentHeader().setObjectType(new ObjectType((int) getInteger8(0, data), (int) getInteger8(1, data)));
+		trim(2, data);
 		
 		qualifierDecoder.decode(objectFragment.getObjectFragmentHeader().getQualifierField(), data);
 		rangeDecoder.decode(objectFragment.getObjectFragmentHeader(), data);

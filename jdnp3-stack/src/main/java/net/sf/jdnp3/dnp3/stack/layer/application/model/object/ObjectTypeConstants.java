@@ -18,63 +18,21 @@ package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
 public class ObjectTypeConstants {
-	public static ObjectType BINARY_INPUT_STATIC_ANY = new ObjectType() {{
-		this.setGroup(1);
-		this.setVariation(0);
-	}};
+	public static ObjectType ANY = new ObjectType(-1, -1);
+	
+	public static ObjectType BINARY_INPUT_STATIC_ANY = new ObjectType(1, 0);
+	public static ObjectType BINARY_INPUT_STATIC_PACKED = new ObjectType(1, 1);
+	public static ObjectType BINARY_INPUT_STATIC_FLAGS = new ObjectType(1, 2);
 
-	public static ObjectType BINARY_INPUT_STATIC_PACKED = new ObjectType() {{
-		this.setGroup(1);
-		this.setVariation(1);
-	}};
+	public static ObjectType BINARY_INPUT_EVENT_ANY = new ObjectType(2, 0);
+	public static ObjectType BINARY_INPUT_EVENT_WITHOUT_TIME = new ObjectType(2, 1);
+	public static ObjectType BINARY_INPUT_EVENT_ABSOLUTE_TIME = new ObjectType(2, 2);
+	public static ObjectType BINARY_INPUT_EVENT_RELATIVE_TIME = new ObjectType(2, 3);
 
-	public static ObjectType BINARY_INPUT_STATIC_FLAGS = new ObjectType() {{
-		this.setGroup(1);
-		this.setVariation(2);
-	}};
+	public static ObjectType CLASS_0 = new ObjectType(60, 1);
+	public static ObjectType CLASS_1 = new ObjectType(60, 2);
+	public static ObjectType CLASS_2 = new ObjectType(60, 3);
+	public static ObjectType CLASS_3 = new ObjectType(60, 4);
 
-	public static ObjectType BINARY_INPUT_EVENT_ANY = new ObjectType() {{
-		this.setGroup(2);
-		this.setVariation(0);
-	}};
-
-	public static ObjectType BINARY_INPUT_EVENT_WITHOUT_TIME = new ObjectType() {{
-		this.setGroup(2);
-		this.setVariation(1);
-	}};
-
-	public static ObjectType BINARY_INPUT_EVENT_ABSOLUTE_TIME = new ObjectType() {{
-		this.setGroup(2);
-		this.setVariation(2);
-	}};
-
-	public static ObjectType BINARY_INPUT_EVENT_RELATIVE_TIME = new ObjectType() {{
-		this.setGroup(2);
-		this.setVariation(3);
-	}};
-
-	public static ObjectType CLASS_0 = new ObjectType() {{
-		this.setGroup(60);
-		this.setVariation(1);
-	}};
-
-	public static ObjectType CLASS_1 = new ObjectType() {{
-		this.setGroup(60);
-		this.setVariation(2);
-	}};
-
-	public static ObjectType CLASS_2 = new ObjectType() {{
-		this.setGroup(60);
-		this.setVariation(3);
-	}};
-
-	public static ObjectType CLASS_3 = new ObjectType() {{
-		this.setGroup(60);
-		this.setVariation(4);
-	}};
-
-	public static ObjectType INTERNAL_INDICATIONS_PACKED = new ObjectType() {{
-		this.setGroup(80);
-		this.setVariation(1);
-	}};
+	public static ObjectType INTERNAL_INDICATIONS_PACKED = new ObjectType(80, 1);
 }

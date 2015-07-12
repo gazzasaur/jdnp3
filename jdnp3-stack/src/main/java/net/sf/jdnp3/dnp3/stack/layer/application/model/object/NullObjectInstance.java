@@ -15,6 +15,20 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
 public class NullObjectInstance implements ObjectInstance {
+	private ObjectType objectType = ObjectTypeConstants.ANY;
+	
+	public long getIndex() {
+		return 0;
+	}
+
+	public ObjectType getRequestedType() {
+		return objectType;
+	}
+
+	public void setRequestedType(ObjectType objectType) {
+		this.objectType = objectType;
+	}
 }

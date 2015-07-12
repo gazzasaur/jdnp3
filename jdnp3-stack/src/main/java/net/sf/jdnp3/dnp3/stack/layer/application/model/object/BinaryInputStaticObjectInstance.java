@@ -15,9 +15,13 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
 
-public class BinaryInputStaticObjectInstance implements ObjectInstance {
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+
+public class BinaryInputStaticObjectInstance implements StaticObjectInstance {
 	private long index = 0;
 	private boolean active = false;
+	private ObjectType requestedType = ANY;
 	
 	private boolean online = true;
 	private boolean restart = false;
@@ -40,6 +44,14 @@ public class BinaryInputStaticObjectInstance implements ObjectInstance {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public ObjectType getRequestedType() {
+		return requestedType;
+	}
+
+	public void setRequestedType(ObjectType requestedType) {
+		this.requestedType = requestedType;
 	}
 
 	public boolean isOnline() {

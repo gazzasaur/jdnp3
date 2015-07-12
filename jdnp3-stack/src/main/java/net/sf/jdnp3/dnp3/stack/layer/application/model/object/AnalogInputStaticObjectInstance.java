@@ -15,9 +15,13 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
 
-public class AnalogInputStaticObjectInstance implements ObjectInstance {
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+
+public class AnalogInputStaticObjectInstance implements StaticObjectInstance {
 	private long index = 0;
 	private double value = 0;
+	private ObjectType requestedType = ANY;
 	
 	private boolean online = true;
 	private boolean restart = false;
@@ -42,6 +46,15 @@ public class AnalogInputStaticObjectInstance implements ObjectInstance {
 	public void setValue(double value) {
 		this.value = value;
 	}
+	
+	public ObjectType getRequestedType() {
+		return requestedType;
+	}
+
+	public void setRequestedType(ObjectType objectType) {
+		this.requestedType = objectType;
+	}
+
 
 	public boolean isOnline() {
 		return online;

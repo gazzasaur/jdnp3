@@ -13,23 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.sort;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CLASS_3;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
-public class Class3ObjectInstance implements ObjectInstance {
-	private ObjectType requestedType = CLASS_3;
-	
-	public long getIndex() {
-		return 0;
-	}
-
-	public ObjectType getRequestedType() {
-		return requestedType;
-	}
-
-	public void setRequestedType(ObjectType requestedType) {
-		this.requestedType = requestedType;
-	}
+public interface ObjectInstanceTypeRationaliserHelper {
+	public void rationalise(ObjectInstance objectInstance);
 }

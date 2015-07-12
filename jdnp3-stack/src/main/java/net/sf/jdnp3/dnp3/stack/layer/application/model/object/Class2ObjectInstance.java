@@ -15,5 +15,21 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
 
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CLASS_2;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+
 public class Class2ObjectInstance implements ObjectInstance {
+	private ObjectType requestedType = CLASS_2;
+	
+	public long getIndex() {
+		return 0;
+	}
+
+	public ObjectType getRequestedType() {
+		return requestedType;
+	}
+
+	public void setRequestedType(ObjectType requestedType) {
+		this.requestedType = requestedType;
+	}
 }
