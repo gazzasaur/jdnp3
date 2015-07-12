@@ -33,6 +33,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.Applicatio
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentResponseHeader;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
@@ -70,6 +71,7 @@ public class OutstationImpl implements ApplicationLayer {
 	}
 	
 	public void dataReceived(List<Byte> data) {
+		// FIXME IMPL Need the ability to confirm a packet and complete/cancel a transaction.
 		System.out.println("AL: ");
 		for (Byte dataByte : data) {
 			System.out.print(format("%02X ", dataByte));
@@ -107,6 +109,19 @@ public class OutstationImpl implements ApplicationLayer {
 		sorter.sort(responseObjects);
 		
 		// FIXME IMPL Add the ability to add a Time Reference for relative time.
+		// FIXME IMPL Add the ability to split fragment into multiple packets.
+		long minIndex = 0;
+		long maxIndex = 0;
+		ObjectFragment objectFragment = null;
+//		for (ObjectInstance objectInstance : responseObjects) {
+//			if (objectFragment == null) {
+//				minIndex = objectInstance.getIndex();
+//				maxIndex = objectInstance.getIndex();
+//				objectFragment = new ObjectFragment();
+//				objectFragment.getObjectFragmentHeader().setObjectType(objectInstance.getRequestedType());
+//			} else if (!objectFragment.equals(objectInstance.getRequestedType()) || ) {
+//			}
+//		}
 		
 		transportLayer.sendData(new ApplicationFragmentResponseEncoderImpl().encode(response));
 	}

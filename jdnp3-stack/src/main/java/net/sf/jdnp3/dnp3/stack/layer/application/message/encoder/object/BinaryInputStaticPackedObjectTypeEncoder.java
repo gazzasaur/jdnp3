@@ -18,9 +18,23 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectField;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
-public class BinaryInputStaticObjectTypeEncoder implements ObjectTypeEncoder {
+public class BinaryInputStaticPackedObjectTypeEncoder implements ObjectTypeEncoder {
+	public Range calculateRangeType(long count, long startPrefix, long stopPrefix, ObjectInstance lastObjectInstance) {
+		IndexRange range = new IndexRange();
+		range.setStartIndex(startPrefix);
+		range.setStopIndex(stopPrefix);
+		return range;
+	}
+
+	public boolean fragment(ObjectInstance currentObjectInstance, ObjectInstance previousObjectInstance) {
+		return !currentObjectInstance.getRequestedType().equals(previousObjectInstance.getRequestedType()) || (currentObjectInstance.getIndex() - 1) != previousObjectInstance.getIndex();
+	}
+	
 	public void encode(long startPrefix, ObjectField objectField, List<Byte> data) {
 		BinaryInputStaticObjectInstance binary = (BinaryInputStaticObjectInstance) objectField.getObjectInstance();
 		

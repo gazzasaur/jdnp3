@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryInputStaticObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryInputStaticPackedObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectField;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectPrefixCode;
@@ -30,7 +30,7 @@ import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 public class ObjectFieldEncoder {
 	@SuppressWarnings("serial")
 	private Map<Class<? extends ObjectInstance>, ObjectTypeEncoder> objectTypeEncoders = new HashMap<Class<? extends ObjectInstance>, ObjectTypeEncoder>() {{
-		this.put(BinaryInputStaticObjectInstance.class, new BinaryInputStaticObjectTypeEncoder());
+		this.put(BinaryInputStaticObjectInstance.class, new BinaryInputStaticPackedObjectTypeEncoder());
 	}};
 	
 	public void encode(long startPrefix, ObjectPrefixCode objectPrefixCode, ObjectField objectField, List<Byte> data) {
