@@ -26,16 +26,18 @@ public class DataLinkFrameEncoderImpl implements DataLinkFrameEncoder {
 	private DataLinkFrameHeaderEncoder dataLinkFrameHeaderEncoder = new DataLinkFrameHeaderEncoder();
 	
 	public List<Byte> encode(DataLinkFrame dataLinkFrame) {
+		int partCount = 0;
 		List<Byte> partBuffer = new ArrayList<>();
 		for (int i = 0; i < dataLinkFrame.getData().size(); i += 16) {
 			List<Byte> buffer = dataLinkFrame.getData().subList(i, (i + 16 > dataLinkFrame.getData().size()) ? dataLinkFrame.getData().size() : (i + 16));
 			partBuffer.addAll(buffer);
+			partCount += buffer.size();
 			DataUtils.addInteger16(Crc16.computeCrc(buffer), partBuffer);
 			System.out.println(Integer.toHexString(Crc16.computeCrc(buffer)));
 		}
 		
 		List<Byte> data = new ArrayList<>();
-		dataLinkFrame.getDataLinkFrameHeader().setLength(partBuffer.size() + 3);
+		dataLinkFrame.getDataLinkFrameHeader().setLength(partCount + 5);
 		dataLinkFrameHeaderEncoder.encode(dataLinkFrame.getDataLinkFrameHeader(), data);
 		data.addAll(partBuffer);
 

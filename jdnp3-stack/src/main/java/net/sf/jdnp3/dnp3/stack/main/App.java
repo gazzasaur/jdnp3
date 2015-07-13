@@ -15,13 +15,17 @@
  */
 package net.sf.jdnp3.dnp3.stack.main;
 
+import static java.util.Arrays.asList;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.service.outstation.core.Class1ReadOutstationServiceTypeHelper;
+import net.sf.jdnp3.dnp3.service.outstation.core.Class0ReadOutstationServiceTypeHelper;
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationImpl;
-import net.sf.jdnp3.dnp3.service.outstation.handler.Class1ReadRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.Transaction;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
@@ -29,20 +33,29 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
 public class App {
 	public static void main(String[] args) throws InterruptedException {
 		OutstationImpl outstation = new OutstationImpl();
-		outstation.addHandlerHelper(new Class1ReadOutstationServiceTypeHelper());
-		outstation.addRequestHandler(new Class1ReadRequestHandler() {
-			public List<ObjectInstance> doReadClass(Transaction transaction) {
-				return new ArrayList<>();
+		outstation.addHandlerHelper(new Class0ReadOutstationServiceTypeHelper());
+		outstation.addRequestHandler(new Class0ReadRequestHandler() {
+			public List<ObjectInstance> doReadClass() {
+				List<ObjectInstance> items = new ArrayList<>();
+				for (int i = 250; i < 260; ++i) {
+					BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
+					binaryInputStaticObjectInstance.setActive(i%2 == 0);
+					binaryInputStaticObjectInstance.setOnline(i%4 != 0);
+					binaryInputStaticObjectInstance.setIndex(i);
+					items.add(binaryInputStaticObjectInstance);
+				}
+				return items;
 			}
 			
-			public List<ObjectInstance> doReadClass(Transaction transaction, long returnLimit) {
+			public List<ObjectInstance> doReadClass(long returnLimit) {
+				System.out.println("B");
 				return new ArrayList<>();
 			}
 		});
 		
 		TcpIpServerDataLink dataLink = new TcpIpServerDataLink();
 		dataLink.setDirection(Direction.OUTSTATION_TO_MASTER);
-		dataLink.setDestination(64);
+		dataLink.setDestination(1);
 		dataLink.setSource(2);
 		
 		outstation.setDataLinkLayer(dataLink);

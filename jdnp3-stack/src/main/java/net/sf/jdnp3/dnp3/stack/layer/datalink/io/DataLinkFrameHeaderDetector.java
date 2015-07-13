@@ -15,6 +15,8 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.io;
 
+import static java.lang.String.format;
+
 import java.util.BitSet;
 import java.util.List;
 
@@ -53,7 +55,7 @@ public class DataLinkFrameHeaderDetector {
 			}
 		}
 		if (!foundFunctionCode) {
-			throw new IllegalArgumentException("No function code matches: " + functionCodeValue);
+			throw new IllegalArgumentException(format("No function code matches: %02X", functionCodeValue));
 		}
 		
 		dataLinkFrameHeader.setDestination((int) DataUtils.getInteger16(DESTINATION_OFFSET, data));
@@ -62,7 +64,7 @@ public class DataLinkFrameHeaderDetector {
 		dataLinkFrameHeader.setCheckSum((int) DataUtils.getInteger16(8, data));
 		int calculatedCheckSum = Crc16.computeCrc(data.subList(0, 8));
 		if (calculatedCheckSum != dataLinkFrameHeader.getCheckSum()) {
-			throw new IllegalStateException(String.format("Invalid checksum.  Expected %d but got %d.", calculatedCheckSum, dataLinkFrameHeader.getCheckSum()));
+			throw new IllegalStateException(format("Invalid checksum.  Expected %02X but got %02X.", calculatedCheckSum, dataLinkFrameHeader.getCheckSum()));
 		}
 		return true;
 	}

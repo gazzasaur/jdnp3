@@ -18,12 +18,17 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectField;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectPrefixCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class BinaryInputStaticPackedObjectTypeEncoder implements ObjectTypeEncoder {
+	public ObjectPrefixCode calculateObjectPrefix() {
+		return ObjectPrefixCode.NONE;
+	}
+	
 	public Range calculateRangeType(long count, long startPrefix, long stopPrefix, ObjectInstance lastObjectInstance) {
 		IndexRange range = new IndexRange();
 		range.setStartIndex(startPrefix);

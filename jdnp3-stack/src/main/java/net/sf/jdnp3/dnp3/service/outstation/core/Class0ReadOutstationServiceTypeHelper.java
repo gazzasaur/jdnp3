@@ -36,7 +36,7 @@ public class Class0ReadOutstationServiceTypeHelper implements OutstationServiceT
 	private Class0ReadRequestHandler requestHandler = null;
 
 	public boolean canHandle(FunctionCode functionCode, ObjectFragment request) {
-		if (functionCode == FunctionCode.READ && request.getObjectFragmentHeader().getObjectType() == ObjectTypeConstants.CLASS_0) {
+		if (functionCode == FunctionCode.READ && request.getObjectFragmentHeader().getObjectType().equals(ObjectTypeConstants.CLASS_0)) {
 			return true;
 		}
 		return false;

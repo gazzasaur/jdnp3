@@ -25,6 +25,9 @@ import net.sf.jdnp3.dnp3.stack.layer.application.ApplicationLayer;
 import net.sf.jdnp3.dnp3.stack.layer.application.Transaction;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoderImpl;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectTypeEncoderDirectory;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectTypeEncoderDirectoryImpl;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.sort.ObjectInstanceSorter;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.sort.ObjectInstanceTypeRationaliser;
@@ -32,8 +35,10 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.Applicatio
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentResponse;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentResponseHeader;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectField;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectPrefixCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
@@ -81,7 +86,9 @@ public class OutstationImpl implements ApplicationLayer {
 		List<ObjectInstance> responseObjects = new ArrayList<>();
 		ApplicationFragmentRequest request = decoder.decode(data);
 		for (ObjectFragment objectFragment : request.getObjectFragments()) {
+			System.out.println(objectFragment.getObjectFragmentHeader().getObjectType());
 			for (OutstationServiceTypeHelper helper : outstationServiceTypeHelpers) {
+				System.out.println(helper);
 				if (helper.canHandle(request.getHeader().getFunctionCode(), objectFragment)) {
 					List<ObjectInstance> localResponse = new ArrayList<>();
 					helper.doRequest(request.getHeader().getFunctionCode(), objectFragment, localResponse);
@@ -113,15 +120,51 @@ public class OutstationImpl implements ApplicationLayer {
 		long minIndex = 0;
 		long maxIndex = 0;
 		ObjectFragment objectFragment = null;
-//		for (ObjectInstance objectInstance : responseObjects) {
-//			if (objectFragment == null) {
-//				minIndex = objectInstance.getIndex();
-//				maxIndex = objectInstance.getIndex();
-//				objectFragment = new ObjectFragment();
-//				objectFragment.getObjectFragmentHeader().setObjectType(objectInstance.getRequestedType());
-//			} else if (!objectFragment.equals(objectInstance.getRequestedType()) || ) {
-//			}
-//		}
+		ObjectInstance previousObjectInstance = null;
+		ObjectTypeEncoderDirectory objectTypeEncoderDirectory = new ObjectTypeEncoderDirectoryImpl();
+		for (ObjectInstance objectInstance : responseObjects) {
+			ObjectTypeEncoder encoder = objectTypeEncoderDirectory.getObjectTypeEncoder(objectInstance);
+			if (objectFragment == null) {
+				minIndex = objectInstance.getIndex();
+				maxIndex = objectInstance.getIndex();
+				objectFragment = new ObjectFragment();
+				objectFragment.getObjectFragmentHeader().setObjectType(objectInstance.getRequestedType());
+				
+				previousObjectInstance = null;
+			} else if (previousObjectInstance != null && encoder.fragment(objectInstance, previousObjectInstance)) {
+				Range range = encoder.calculateRangeType(objectFragment.getObjectFields().size(), minIndex, maxIndex, previousObjectInstance);
+				ObjectPrefixCode objectPrefixCode = encoder.calculateObjectPrefix();
+				
+				objectFragment.getObjectFragmentHeader().getQualifierField().setObjectPrefixCode(objectPrefixCode);
+				objectFragment.getObjectFragmentHeader().setRange(range);
+				response.addObjectFragment(objectFragment);
+				
+				minIndex = objectInstance.getIndex();
+				maxIndex = objectInstance.getIndex();
+				objectFragment = new ObjectFragment();
+				objectFragment.getObjectFragmentHeader().setObjectType(objectInstance.getRequestedType());
+				previousObjectInstance = null;
+			}
+			if (objectInstance.getIndex() < minIndex) {
+				minIndex = objectInstance.getIndex();
+			}
+			if (objectInstance.getIndex() > maxIndex) {
+				maxIndex = objectInstance.getIndex();
+			}
+			
+			Range range = encoder.calculateRangeType(objectFragment.getObjectFields().size(), minIndex, maxIndex, previousObjectInstance);
+			ObjectPrefixCode objectPrefixCode = encoder.calculateObjectPrefix();
+			objectFragment.getObjectFragmentHeader().getQualifierField().setObjectPrefixCode(objectPrefixCode);
+			objectFragment.getObjectFragmentHeader().setRange(range);
+
+			ObjectField objectField = new ObjectField();
+			objectField.setObjectInstance(objectInstance);
+			objectField.setPrefix(objectInstance.getIndex());
+			objectFragment.addObjectField(objectField);
+		}
+		if (objectFragment != null && objectFragment.getObjectFields().size() > 0) {
+			response.addObjectFragment(objectFragment);
+		}
 		
 		transportLayer.sendData(new ApplicationFragmentResponseEncoderImpl().encode(response));
 	}
