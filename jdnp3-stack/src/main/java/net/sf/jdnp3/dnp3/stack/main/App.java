@@ -15,16 +15,12 @@
  */
 package net.sf.jdnp3.dnp3.stack.main;
 
-import static java.util.Arrays.asList;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.Class0ReadOutstationServiceTypeHelper;
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationImpl;
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.Transaction;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
@@ -55,7 +51,7 @@ public class App {
 		
 		TcpIpServerDataLink dataLink = new TcpIpServerDataLink();
 		dataLink.setDirection(Direction.OUTSTATION_TO_MASTER);
-		dataLink.setDestination(1);
+		dataLink.setDestination(64);
 		dataLink.setSource(2);
 		
 		outstation.setDataLinkLayer(dataLink);

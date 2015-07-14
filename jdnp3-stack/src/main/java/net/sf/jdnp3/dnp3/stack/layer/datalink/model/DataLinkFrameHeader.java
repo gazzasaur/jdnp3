@@ -33,6 +33,10 @@ public class DataLinkFrameHeader {
 		return length;
 	}
 
+	public int getRawLength() {
+		return 2*((length - 5)/16) + (((length - 5)%16 > 0) ? 2 : 0) + length + 5;
+	}
+
 	public void setLength(int length) {
 		this.length = length;
 	}

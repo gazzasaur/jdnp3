@@ -31,9 +31,9 @@ public class DataLinkFrameDecoderImpl implements DataLinkFrameDecoder {
 		DataLinkFrame dataLinkFrame = new DataLinkFrame();
 		dataLinkFrameHeaderDecoder.decode(dataLinkFrame.getDataLinkFrameHeader(), data);
 		
-		for (int i = 0; i < (dataLinkFrame.getDataLinkFrameHeader().getLength() - 5) / 16 + 1; ++i) {
-			// FIXME BUG This is flawed.
-			int crcOffset = Math.min(i * 18 + 26, dataLinkFrame.getDataLinkFrameHeader().getLength() + 5);
+		int chunks = (dataLinkFrame.getDataLinkFrameHeader().getRawLength() - 10)/18 + (((dataLinkFrame.getDataLinkFrameHeader().getRawLength() - 10)%18 > 0) ? 1 : 0);
+		for (int i = 0; i < chunks; ++i) {
+			int crcOffset = Math.min(i * 18 + 26, dataLinkFrame.getDataLinkFrameHeader().getRawLength() - 2);
 			List<Byte> chunk = new ArrayList<>();
 			for (int j = i * 18 + 10; j < crcOffset; ++j) {
 				chunk.add(data.get(j));

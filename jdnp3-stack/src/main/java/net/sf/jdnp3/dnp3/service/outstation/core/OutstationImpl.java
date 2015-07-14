@@ -77,7 +77,7 @@ public class OutstationImpl implements ApplicationLayer {
 	
 	public void dataReceived(List<Byte> data) {
 		// FIXME IMPL Need the ability to confirm a packet and complete/cancel a transaction.
-		System.out.println("AL: ");
+		System.out.print("AL: ");
 		for (Byte dataByte : data) {
 			System.out.print(format("%02X ", dataByte));
 		}
