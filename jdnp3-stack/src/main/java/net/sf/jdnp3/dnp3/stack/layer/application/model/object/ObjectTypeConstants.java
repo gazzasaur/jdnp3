@@ -34,5 +34,7 @@ public class ObjectTypeConstants {
 	public static ObjectType CLASS_2 = new ObjectType(60, 3);
 	public static ObjectType CLASS_3 = new ObjectType(60, 4);
 
+	public static ObjectType FILE_IDENTIFIER = new ObjectType(70, 1);
+
 	public static ObjectType INTERNAL_INDICATIONS_PACKED = new ObjectType(80, 1);
 }

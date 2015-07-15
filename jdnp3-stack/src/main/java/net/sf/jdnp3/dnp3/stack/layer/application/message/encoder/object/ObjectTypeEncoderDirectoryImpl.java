@@ -15,6 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object;
 
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_STATIC_FLAGS;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_STATIC_PACKED;
 
 import java.util.HashMap;
@@ -22,11 +23,15 @@ import java.util.Map;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
 
 public class ObjectTypeEncoderDirectoryImpl implements ObjectTypeEncoderDirectory {
 	@SuppressWarnings("serial")
 	private Map<ObjectType, ObjectTypeEncoder> objectTypeEncoders = new HashMap<ObjectType, ObjectTypeEncoder>() {{
 		this.put(BINARY_INPUT_STATIC_PACKED, new BinaryInputStaticPackedObjectTypeEncoder());
+		this.put(BINARY_INPUT_STATIC_FLAGS, new BinaryInputStaticFlagsObjectTypeEncoder());
+		
+		this.put(ObjectTypeConstants.BINARY_INPUT_EVENT_ABSOLUTE_TIME, new BinaryInputEventAbsoluteTimeObjectTypeEncoder());
 	}};
 
 	public ObjectTypeEncoder getObjectTypeEncoder(ObjectInstance objectInstance) {

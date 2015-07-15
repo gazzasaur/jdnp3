@@ -43,6 +43,7 @@ public class CountRangeEncoderHelper implements RangeEncoderHelper {
 	public RangeSpecifierCode encode(Range range, List<Byte> data) {
 		CountRange specificRange = (CountRange) range;
 		RangeSpecifierCode rangeSpecifierCode = this.calculateRangeSpecifierCode(specificRange);
+		System.out.println("Count: " + specificRange.getCount());
 		DataUtils.addInteger(specificRange.getCount(), rangeSpecifierCode.getOctetCount(), data);
 		return rangeSpecifierCode;
 	}

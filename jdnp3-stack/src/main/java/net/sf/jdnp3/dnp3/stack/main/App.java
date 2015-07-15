@@ -16,11 +16,17 @@
 package net.sf.jdnp3.dnp3.stack.main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.Class0ReadOutstationServiceTypeHelper;
+import net.sf.jdnp3.dnp3.service.outstation.core.Class1ReadOutstationServiceTypeHelper;
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationImpl;
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.Class1ReadRequestHandler;
+import net.sf.jdnp3.dnp3.stack.layer.application.Transaction;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
@@ -30,21 +36,36 @@ public class App {
 	public static void main(String[] args) throws InterruptedException {
 		OutstationImpl outstation = new OutstationImpl();
 		outstation.addHandlerHelper(new Class0ReadOutstationServiceTypeHelper());
-		outstation.addRequestHandler(new Class0ReadRequestHandler() {
-			public List<ObjectInstance> doReadClass() {
-				List<ObjectInstance> items = new ArrayList<>();
-				for (int i = 250; i < 260; ++i) {
-					BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
-					binaryInputStaticObjectInstance.setActive(i%2 == 0);
-					binaryInputStaticObjectInstance.setOnline(i%4 != 0);
-					binaryInputStaticObjectInstance.setIndex(i);
-					items.add(binaryInputStaticObjectInstance);
-				}
-				return items;
+		outstation.addHandlerHelper(new Class1ReadOutstationServiceTypeHelper());
+//		outstation.addRequestHandler(new Class0ReadRequestHandler() {
+//			public List<ObjectInstance> doReadClass() {
+//				List<ObjectInstance> items = new ArrayList<>();
+//				for (int i = 250; i < 256; ++i) {
+//					BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
+//					binaryInputStaticObjectInstance.setActive(i%2 == 0);
+//					binaryInputStaticObjectInstance.setOnline(true);
+//					binaryInputStaticObjectInstance.setIndex(i);
+//					items.add(binaryInputStaticObjectInstance);
+//				}
+//				return items;
+//			}
+//			
+//			public List<ObjectInstance> doReadClass(long returnLimit) {
+//				System.out.println("B");
+//				return new ArrayList<>();
+//			}
+//		});
+		outstation.addRequestHandler(new Class1ReadRequestHandler() {
+			public List<ObjectInstance> doReadClass(Transaction transaction) {
+				System.out.println("READ CLASS 1");
+				BinaryInputEventObjectInstance binary = new BinaryInputEventObjectInstance();
+				binary.setIndex(60000);
+				binary.setActive(true);
+				binary.setTimestamp(new Date().getTime());
+				return Arrays.asList(binary);
 			}
-			
-			public List<ObjectInstance> doReadClass(long returnLimit) {
-				System.out.println("B");
+
+			public List<ObjectInstance> doReadClass(Transaction transaction, long returnLimit) {
 				return new ArrayList<>();
 			}
 		});

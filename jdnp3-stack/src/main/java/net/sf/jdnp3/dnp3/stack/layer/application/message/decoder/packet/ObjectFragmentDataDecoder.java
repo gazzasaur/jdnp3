@@ -26,6 +26,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class0Ob
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class1ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class2ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class3ObjectTypeDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.FileIdentifierObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.InternalIndicatorBitObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
@@ -60,6 +61,8 @@ public class ObjectFragmentDataDecoder {
 		this.put(ObjectTypeConstants.CLASS_1, new Class1ObjectTypeDecoder());
 		this.put(ObjectTypeConstants.CLASS_2, new Class2ObjectTypeDecoder());
 		this.put(ObjectTypeConstants.CLASS_3, new Class3ObjectTypeDecoder());
+		
+		this.put(ObjectTypeConstants.FILE_IDENTIFIER, new FileIdentifierObjectTypeDecoder());
 
 		this.put(ObjectTypeConstants.INTERNAL_INDICATIONS_PACKED, new InternalIndicatorBitObjectTypeDecoder());
 	}};
@@ -69,7 +72,7 @@ public class ObjectFragmentDataDecoder {
 		ObjectFunctionDecoder functionDecoder = functionDecoders.get(functionCode);
 		ObjectTypeDecoder objectTypeDecoder = objectDecoders.get(objectFragment.getObjectFragmentHeader().getObjectType());
 		nullCheck(functionDecoder, "ObjectFunctionDecoder", "FunctionCode", format("0x%02X", functionCode.getCode()));
-		nullCheck(listDecoder, "IndexDecoder", "ObjectPrefixCode", format("0x%02X", objectFragment.getObjectFragmentHeader().getQualifierField().getObjectPrefixCode().getCode()));
+		nullCheck(listDecoder, "IndexDecoder", "RangeSpecificCode", format("0x%02X", objectFragment.getObjectFragmentHeader().getQualifierField().getRangeSpecifierCode().getCode()));
 		nullCheck(objectTypeDecoder, "ObjectTypeDecoder", "ObjectType", objectFragment.getObjectFragmentHeader().getObjectType().toString());
 		listDecoder.decode(objectFragment, functionDecoder, objectTypeDecoder, data);
 		for (ObjectField objectField : objectFragment.getObjectFields()) {

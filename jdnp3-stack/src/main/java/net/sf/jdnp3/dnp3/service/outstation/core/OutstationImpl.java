@@ -124,6 +124,7 @@ public class OutstationImpl implements ApplicationLayer {
 		ObjectTypeEncoderDirectory objectTypeEncoderDirectory = new ObjectTypeEncoderDirectoryImpl();
 		for (ObjectInstance objectInstance : responseObjects) {
 			ObjectTypeEncoder encoder = objectTypeEncoderDirectory.getObjectTypeEncoder(objectInstance);
+			
 			if (objectFragment == null) {
 				minIndex = objectInstance.getIndex();
 				maxIndex = objectInstance.getIndex();
@@ -131,10 +132,10 @@ public class OutstationImpl implements ApplicationLayer {
 				objectFragment.getObjectFragmentHeader().setObjectType(objectInstance.getRequestedType());
 				
 				previousObjectInstance = null;
-			} else if (previousObjectInstance != null && encoder.fragment(objectInstance, previousObjectInstance)) {
+			} else if (previousObjectInstance != null && (!objectInstance.getRequestedType().equals(previousObjectInstance.getRequestedType()) || encoder.fragment(objectInstance, previousObjectInstance))) {
 				Range range = encoder.calculateRangeType(objectFragment.getObjectFields().size(), minIndex, maxIndex, previousObjectInstance);
-				ObjectPrefixCode objectPrefixCode = encoder.calculateObjectPrefix();
-				
+				ObjectPrefixCode objectPrefixCode = encoder.calculateObjectPrefix(maxIndex);
+								
 				objectFragment.getObjectFragmentHeader().getQualifierField().setObjectPrefixCode(objectPrefixCode);
 				objectFragment.getObjectFragmentHeader().setRange(range);
 				response.addObjectFragment(objectFragment);
@@ -152,15 +153,17 @@ public class OutstationImpl implements ApplicationLayer {
 				maxIndex = objectInstance.getIndex();
 			}
 			
-			Range range = encoder.calculateRangeType(objectFragment.getObjectFields().size(), minIndex, maxIndex, previousObjectInstance);
-			ObjectPrefixCode objectPrefixCode = encoder.calculateObjectPrefix();
-			objectFragment.getObjectFragmentHeader().getQualifierField().setObjectPrefixCode(objectPrefixCode);
-			objectFragment.getObjectFragmentHeader().setRange(range);
-
 			ObjectField objectField = new ObjectField();
 			objectField.setObjectInstance(objectInstance);
 			objectField.setPrefix(objectInstance.getIndex());
 			objectFragment.addObjectField(objectField);
+			
+			Range range = encoder.calculateRangeType(objectFragment.getObjectFields().size(), minIndex, maxIndex, previousObjectInstance);
+			ObjectPrefixCode objectPrefixCode = encoder.calculateObjectPrefix(maxIndex);
+			objectFragment.getObjectFragmentHeader().getQualifierField().setObjectPrefixCode(objectPrefixCode);
+			objectFragment.getObjectFragmentHeader().setRange(range);
+
+			previousObjectInstance = objectInstance;
 		}
 		if (objectFragment != null && objectFragment.getObjectFields().size() > 0) {
 			response.addObjectFragment(objectFragment);

@@ -25,7 +25,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticO
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class BinaryInputStaticPackedObjectTypeEncoder implements ObjectTypeEncoder {
-	public ObjectPrefixCode calculateObjectPrefix() {
+	public ObjectPrefixCode calculateObjectPrefix(long maxPrefix) {
 		return ObjectPrefixCode.NONE;
 	}
 	
@@ -37,7 +37,7 @@ public class BinaryInputStaticPackedObjectTypeEncoder implements ObjectTypeEncod
 	}
 
 	public boolean fragment(ObjectInstance currentObjectInstance, ObjectInstance previousObjectInstance) {
-		return !currentObjectInstance.getRequestedType().equals(previousObjectInstance.getRequestedType()) || (currentObjectInstance.getIndex() - 1) != previousObjectInstance.getIndex();
+		return (currentObjectInstance.getIndex() - 1) != previousObjectInstance.getIndex();
 	}
 	
 	public void encode(long startPrefix, ObjectField objectField, List<Byte> data) {

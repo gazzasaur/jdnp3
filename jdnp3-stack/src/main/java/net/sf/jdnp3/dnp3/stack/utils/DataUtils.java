@@ -75,7 +75,7 @@ public class DataUtils {
 		return ByteBuffer.wrap(rawBuffer).getLong();
 	}
 
-	public static void trim(int count, List<Byte> data) {
+	public static void trim(long count, List<Byte> data) {
 		for (int i = 0; i < count; ++i) {
 			data.remove(0);
 		}

@@ -23,7 +23,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public interface ObjectTypeEncoder {
-	public ObjectPrefixCode calculateObjectPrefix();
+	public ObjectPrefixCode calculateObjectPrefix(long maxPrefix);
 	public Range calculateRangeType(long count, long startPrefix, long stopPrefix, ObjectInstance lastObjectInstance);
 	
 	public boolean fragment(ObjectInstance currentObjectInstance, ObjectInstance previousObjectInstance);
