@@ -17,59 +17,56 @@ package net.sf.jdnp3.dnp3.service.outstation.core;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.BinaryInputStaticReadRequestHandler;
-import net.sf.jdnp3.dnp3.service.outstation.handler.RequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BinaryInputStaticReadOutstationServiceTypeHelper implements OutstationServiceTypeHelper {
+public class Class0ReadRequestAdaptor implements OutstationRequestHandlerAdaptor {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	private BinaryInputStaticReadRequestHandler requestHandler = null;
+	private Class0ReadRequestHandler serviceRequestHandler = null;
 
 	public boolean canHandle(FunctionCode functionCode, ObjectFragment request) {
-		if (functionCode == FunctionCode.READ && request.getObjectFragmentHeader().getObjectType().getGroup() == ObjectTypeConstants.BINARY_INPUT_STATIC_ANY.getGroup()) {
+		if (functionCode == FunctionCode.READ && request.getObjectFragmentHeader().getObjectType().equals(ObjectTypeConstants.CLASS_0)) {
 			return true;
 		}
 		return false;
 	}
 	
 	public void doRequest(FunctionCode functionCode, ObjectFragment request, List<ObjectInstance> response) {
-		if (requestHandler != null) {
-			List<BinaryInputStaticObjectInstance> result = null;
+		if (serviceRequestHandler != null) {
+			List<ObjectInstance> result = null;
 			Range range = request.getObjectFragmentHeader().getRange();
 			
 			if (range instanceof NoRange) {
-				result = requestHandler.doReadStatics();
-			} else if (range instanceof IndexRange) {
-				IndexRange indexRange = (IndexRange) range;
-				result = requestHandler.doReadStatics(indexRange.getStartIndex(), indexRange.getStopIndex());
+				result = serviceRequestHandler.doReadClass();
+			} else if (range instanceof CountRange) {
+				CountRange countRange = (CountRange) range;
+				result = serviceRequestHandler.doReadClass(countRange.getCount());
 			}
 			
 			if (result == null) {
-				logger.warn("Cannot perform a read request on the static binary input on the range type of: " + range.getClass());
+				logger.warn("Cannot perform a read request on the class for the range type of: " + range.getClass());
 			} else {
-				for (BinaryInputStaticObjectInstance binaryInputStaticObjectInstance : result) {
-					response.add(binaryInputStaticObjectInstance);
+				for (ObjectInstance objectInstance : result) {
+					objectInstance.setRequestedType(request.getObjectFragmentHeader().getObjectType());
+					response.add(objectInstance);
 				}
 			}
 		}
 	}
 	
-	public boolean setHandler(RequestHandler requestHandler) {
-		if (requestHandler instanceof BinaryInputStaticReadRequestHandler) {
-			this.requestHandler = (BinaryInputStaticReadRequestHandler) requestHandler;
-			return true;
+	public void setServiceRequestHandler(ServiceRequestHandler serviceRequestHandler) {
+		if (serviceRequestHandler instanceof Class0ReadRequestHandler) {
+			this.serviceRequestHandler = (Class0ReadRequestHandler) serviceRequestHandler;
 		}
-		return false;
 	}
 }

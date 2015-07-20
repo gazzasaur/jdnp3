@@ -30,20 +30,19 @@ import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 public class CountRangeEncoderHelper implements RangeEncoderHelper {
 	private List<RangeSpecifierCode> codes = Arrays.asList(ONE_OCTET_OBJECT_COUNT, TWO_OCTET_OBJECT_COUNT, FOUR_OCTET_OBJECT_COUNT);
 	
-	public RangeSpecifierCode calculateRangeSpecifierCode(Range range) {
+	public RangeSpecifierCode calculateRangeSpecifierCode(Range range, int minOctetCount) {
 		CountRange specificRange = (CountRange) range;
 		for (RangeSpecifierCode rangeSpecifierCode : codes) {
-			if (specificRange.getCount() < rangeSpecifierCode.getUpperLimit()) {
+			if (specificRange.getCount() < rangeSpecifierCode.getUpperLimit() && rangeSpecifierCode.getOctetCount() >= minOctetCount) {
 				return rangeSpecifierCode;
 			}
 		}
 		throw new IllegalArgumentException("The specified count is too large for DNP: " + specificRange.getCount());
 	}
 	
-	public RangeSpecifierCode encode(Range range, List<Byte> data) {
+	public RangeSpecifierCode encode(Range range, int minOctetCount, List<Byte> data) {
 		CountRange specificRange = (CountRange) range;
-		RangeSpecifierCode rangeSpecifierCode = this.calculateRangeSpecifierCode(specificRange);
-		System.out.println("Count: " + specificRange.getCount());
+		RangeSpecifierCode rangeSpecifierCode = this.calculateRangeSpecifierCode(specificRange, minOctetCount);
 		DataUtils.addInteger(specificRange.getCount(), rangeSpecifierCode.getOctetCount(), data);
 		return rangeSpecifierCode;
 	}

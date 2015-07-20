@@ -18,6 +18,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.sort;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
@@ -32,13 +33,16 @@ public class ObjectInstanceTypeRationaliser {
 	private Map<Class<? extends ObjectInstance>, ObjectInstanceTypeRationaliserHelper> rationaliserHelpers = new HashMap<Class<? extends ObjectInstance>, ObjectInstanceTypeRationaliserHelper>() {{
 		this.put(BinaryInputStaticObjectInstance.class, new BinaryInputStaticTypeRationaliserHelper());
 		this.put(BinaryInputEventObjectInstance.class, new BinaryInputEventTypeRationaliserHelper());
+		
+		this.put(AnalogInputStaticObjectInstance.class, new AnalogInputStaticTypeRationaliserHelper());
 	}};
 	
 	public void rationaliseType(ObjectInstance objectInstance) {
 		ObjectInstanceTypeRationaliserHelper rationaliserHelper = rationaliserHelpers.get(objectInstance.getClass());
 		if (rationaliserHelper == null) {
 			logger.warn("No Rationaliser found for type: " + objectInstance.getClass());
+		} else {
+			rationaliserHelper.rationalise(objectInstance);
 		}
-		rationaliserHelper.rationalise(objectInstance);
 	}
 }

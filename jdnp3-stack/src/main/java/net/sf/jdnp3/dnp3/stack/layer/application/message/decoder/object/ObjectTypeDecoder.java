@@ -17,8 +17,10 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectField;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 
 public interface ObjectTypeDecoder {
-	public void decode(long startIndex, long stopIndex, ObjectField objectField, List<Byte> data);
+	public boolean canDecode(FunctionCode functionCode, ObjectFragment objectFragment);
+	public void decode(FunctionCode functionCode, ObjectFragment objectFragment, List<Byte> data);
 }

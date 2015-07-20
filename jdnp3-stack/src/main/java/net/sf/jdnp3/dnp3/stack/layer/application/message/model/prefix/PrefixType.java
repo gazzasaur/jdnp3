@@ -13,26 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix;
 
-import java.util.List;
-
-public class Master {
-	public void requestPoint(int index) {
-	}
-	
-	public void requestStaticObjects(int startIndex, int count) {
-	}
-	
-	public void requestAllPoints() {
-	}
-
-	public void requestPoints(int count) {
-	}
-
-	public void requestPoints(List<Integer> indicies) {
-	}
-	
-//	public void addHandler() { Create filter for group, group and variation, index as well as aggregation filter.
-//	}
+public interface PrefixType {
+	public int getOctetCount();
 }

@@ -13,30 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object;
 
-public enum ObjectPrefixCode {
-	NONE(0x00, 0),
-	ONE_OCTET_INDEX(0x01, 1),
-	TWO_OCTET_INDEX(0x02, 2),
-	FOUR_OCTET_INDEX(0x03, 4),
-	ONE_OCTET_LENGTH(0x04, 1),
-	TWO_OCTET_LENGTH(0x05, 2),
-	FOUR_OCTET_LENGTH(0x06, 4);
-	
-	private final int code;
-	private final int octetCount;
-	
-	ObjectPrefixCode(int code, int octetCount) {
-		this.code = code;
-		this.octetCount = octetCount;
-	}
-
-	public int getCode() {
-		return code;
-	}
-
-	public int getOctetCount() {
-		return octetCount;
+public class EncoderUtils {
+	public static int calculateOctetCount(long value) {
+		if (value < 0) {
+			throw new IndexOutOfBoundsException("A negative value is not supported.");
+		} else if (value < 256) {
+			return 1;
+		} else if (value < 65536) {
+			return 2;
+		} else if (value < 4294967296L) {
+			return 4;
+		}
+		throw new IndexOutOfBoundsException("The give value cannot fit into a 32 bit field.");
 	}
 }

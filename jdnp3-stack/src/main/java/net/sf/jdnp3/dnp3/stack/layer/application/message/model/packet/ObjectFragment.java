@@ -20,9 +20,11 @@ import static java.util.Collections.unmodifiableList;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+
 public class ObjectFragment {
 	private ObjectFragmentHeader objectFragmentHeader = new ObjectFragmentHeader();
-	private List<ObjectField> objectFields = new ArrayList<>();
+	private List<ObjectInstance> objectInstances = new ArrayList<>();
 	
 	public ObjectFragmentHeader getObjectFragmentHeader() {
 		return objectFragmentHeader;
@@ -32,11 +34,11 @@ public class ObjectFragment {
 		this.objectFragmentHeader = objectFragmentHeader;
 	}
 
-	public List<ObjectField> getObjectFields() {
-		return unmodifiableList(objectFields);
+	public List<ObjectInstance> getObjectInstances() {
+		return unmodifiableList(objectInstances);
 	}
 
-	public void addObjectField(ObjectField objectField) {
-		objectFields.add(objectField);
+	public void addObjectInstance(ObjectInstance objectInstance) {
+		objectInstances.add(objectInstance);
 	}
 }

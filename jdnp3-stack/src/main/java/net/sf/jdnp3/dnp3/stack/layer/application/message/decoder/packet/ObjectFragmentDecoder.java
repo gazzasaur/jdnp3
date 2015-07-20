@@ -28,6 +28,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 public class ObjectFragmentDecoder {
 	private RangeDecoder rangeDecoder = new RangeDecoder();
 	private QualifierDecoder qualifierDecoder = new QualifierDecoder();
+	private PrefixTypeDecoder prefixTypeDecoder = new PrefixTypeDecoder();
 	private ObjectFragmentDataDecoder objectFragmentDataDecoder = new ObjectFragmentDataDecoder();
 	
 	public void decode(FunctionCode functionCode, ObjectFragment objectFragment, List<Byte> data) {
@@ -36,6 +37,7 @@ public class ObjectFragmentDecoder {
 		
 		qualifierDecoder.decode(objectFragment.getObjectFragmentHeader().getQualifierField(), data);
 		rangeDecoder.decode(objectFragment.getObjectFragmentHeader(), data);
+		prefixTypeDecoder.decode(objectFragment.getObjectFragmentHeader());
 		
 		objectFragmentDataDecoder.decode(functionCode, objectFragment, data);
 	}

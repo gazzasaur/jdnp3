@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentResponse;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class ApplicationFragmentResponseEncoderImpl implements ApplicationFragmentResponseEncoder {
 	private ApplicationFragmentResponseHeaderEncoder applicationHeaderEncoder = new ApplicationFragmentResponseHeaderEncoder();
@@ -29,8 +30,23 @@ public class ApplicationFragmentResponseEncoderImpl implements ApplicationFragme
 		List<Byte> data = new ArrayList<>();
 		applicationHeaderEncoder.encode(fragment.getHeader(), data);
 		
-		for (ObjectFragment objectFragment : fragment.getObjectFragments()) {
-			objectFragmentEncoder.encode(objectFragment, data);
+		ObjectType objectType = null;
+		List<ObjectInstance> likeInstances = new ArrayList<>();
+		for (ObjectInstance objectInstance : fragment.getObjectInstances()) {
+			if (objectType == null) {
+				objectType = objectInstance.getRequestedType();
+				likeInstances.add(objectInstance);
+			} else if (!objectType.equals(objectInstance.getRequestedType())) {
+				objectFragmentEncoder.encode(fragment.getHeader().getFunctionCode(), objectType, likeInstances, data);
+				likeInstances.clear();
+				objectType = objectInstance.getRequestedType();
+				likeInstances.add(objectInstance);
+			} else {
+				likeInstances.add(objectInstance);
+			}
+		}
+		if (objectType != null) {
+			objectFragmentEncoder.encode(fragment.getHeader().getFunctionCode(), objectType, likeInstances, data);
 		}
 		return data;
 	}

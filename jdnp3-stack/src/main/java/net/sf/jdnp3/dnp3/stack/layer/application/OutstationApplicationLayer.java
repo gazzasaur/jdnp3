@@ -15,11 +15,95 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application;
 
-import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
+import static java.lang.String.format;
 
-public interface OutstationApplicationLayer extends ApplicationLayer {
-	public void doUnsolicitedResponse(Response response);
-	public void addRequestHandler(RequestHandler requestHandler, RequestFilter filter);
+import java.util.ArrayList;
+import java.util.List;
+
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoderImpl;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoderImpl;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.sort.ObjectInstanceSorter;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.sort.ObjectInstanceTypeRationaliser;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentRequest;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentResponse;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentResponseHeader;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
+import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
+import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayerImpl;
+
+public class OutstationApplicationLayer implements ApplicationLayer {
+	private List<OutstationRequestHandler> outstationRequestHandlers = new ArrayList<>();
 	
-	public void setTransportLayer(TransportLayer transportLayer);
+	private DataLinkLayer dataLinkLayer = null;
+	private Transaction currentTransaction = null;
+	private TransportLayer transportLayer = new TransportLayerImpl();
+	private ApplicationFragmentRequestDecoder decoder = new ApplicationFragmentRequestDecoderImpl();
+
+	public DataLinkLayer getDataLinkLayer() {
+		return dataLinkLayer;
+	}
+
+	public void setDataLinkLayer(DataLinkLayer dataLinkLayer) {
+		this.dataLinkLayer = dataLinkLayer;
+		this.dataLinkLayer.setTransportLayer(transportLayer);
+		this.transportLayer.setDataLinkLater(dataLinkLayer);
+		this.transportLayer.setApplicationLayer(this);
+	}
+	
+	public void addHandlerHelper(OutstationRequestHandler outstationRequestHandler) {
+		outstationRequestHandlers.add(outstationRequestHandler);
+	}
+	
+	public void dataReceived(List<Byte> data) {
+		// FIXME IMPL Need the ability to confirm a packet and complete/cancel a transaction.
+		System.out.print("AL: ");
+		for (Byte dataByte : data) {
+			System.out.print(format("%02X ", dataByte));
+		}
+		System.out.println();
+		
+		List<ObjectInstance> responseObjects = new ArrayList<>();
+		ApplicationFragmentRequest request = decoder.decode(data);
+		for (ObjectFragment objectFragment : request.getObjectFragments()) {
+			for (OutstationRequestHandler handler : outstationRequestHandlers) {
+				if (handler.canHandle(request.getHeader().getFunctionCode(), objectFragment)) {
+					List<ObjectInstance> localResponse = new ArrayList<>();
+					handler.doRequest(request.getHeader().getFunctionCode(), objectFragment, localResponse);
+					responseObjects.addAll(localResponse);
+					break;
+				}
+			}
+		}
+		
+		ApplicationFragmentResponse response = new ApplicationFragmentResponse();
+		ApplicationFragmentResponseHeader applicationResponseHeader = response.getHeader();
+		applicationResponseHeader.setFunctionCode(FunctionCode.RESPONSE);
+		applicationResponseHeader.getInternalIndicatorField().setDeviceRestart(false);
+		applicationResponseHeader.getApplicationControl().setConfirmationRequired(false);
+		applicationResponseHeader.getApplicationControl().setFirstFragmentOfMessage(true);
+		applicationResponseHeader.getApplicationControl().setFinalFragmentOfMessage(true);
+		applicationResponseHeader.getApplicationControl().setUnsolicitedResponse(false);
+		applicationResponseHeader.getApplicationControl().setSequenceNumber(request.getHeader().getApplicationControl().getSequenceNumber());
+		
+		System.out.println("+++++");
+		ObjectInstanceTypeRationaliser rationaliser = new ObjectInstanceTypeRationaliser();
+		for (ObjectInstance objectInstance : responseObjects) {
+			System.out.println("-----");
+			System.out.println(objectInstance.getRequestedType());
+			rationaliser.rationaliseType(objectInstance);
+			System.out.println(objectInstance.getRequestedType());
+		}
+		ObjectInstanceSorter sorter = new ObjectInstanceSorter();
+		sorter.sort(responseObjects);
+		
+		for (ObjectInstance objectInstance : responseObjects) {
+			response.addObjectInstance(objectInstance);
+		}
+		
+		transportLayer.sendData(new ApplicationFragmentResponseEncoderImpl().encode(response));
+	}
 }

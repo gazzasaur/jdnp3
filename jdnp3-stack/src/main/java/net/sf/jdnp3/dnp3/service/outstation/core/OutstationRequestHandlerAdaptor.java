@@ -15,16 +15,8 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.core;
 
-import java.util.List;
+import net.sf.jdnp3.dnp3.stack.layer.application.OutstationRequestHandler;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.RequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-
-public interface OutstationServiceTypeHelper {
-	public boolean canHandle(FunctionCode functionCode, ObjectFragment request);
-	public void doRequest(FunctionCode functionCode, ObjectFragment request, List<ObjectInstance> response);
-	
-	public boolean setHandler(RequestHandler requestHandler);
+public interface OutstationRequestHandlerAdaptor extends OutstationRequestHandler {
+	public void setServiceRequestHandler(ServiceRequestHandler serviceRequestHandler);
 }

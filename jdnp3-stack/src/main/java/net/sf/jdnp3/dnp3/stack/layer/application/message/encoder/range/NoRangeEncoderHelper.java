@@ -23,12 +23,12 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecif
 
 public class NoRangeEncoderHelper implements RangeEncoderHelper {
 	
-	public RangeSpecifierCode calculateRangeSpecifierCode(Range range) {
+	public RangeSpecifierCode calculateRangeSpecifierCode(Range range, int minOctetCount) {
 		NoRange.class.cast(range);
 		return RangeSpecifierCode.NO_RANGE;
 	}
 	
-	public RangeSpecifierCode encode(Range range, List<Byte> data) {
-		return this.calculateRangeSpecifierCode(range);
+	public RangeSpecifierCode encode(Range range, int minOctetCount, List<Byte> data) {
+		return this.calculateRangeSpecifierCode(range, minOctetCount);
 	}
 }

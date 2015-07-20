@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.INTERNAL_INDICATIONS_PACKED;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_STATIC_ANY;
 
 import java.util.List;
 
@@ -23,35 +23,21 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCo
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.InternalIndicatorBitObjectInstance;
-import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
 
-public class InternalIndicatorBitObjectTypeDecoder implements ObjectTypeDecoder {
+public class BinaryInputStaticObjectTypeDecoder implements ObjectTypeDecoder {
 	public boolean canDecode(FunctionCode functionCode, ObjectFragment objectFragment) {
-		return functionCode.equals(FunctionCode.WRITE)
-				&& objectFragment.getObjectFragmentHeader().getObjectType().equals(INTERNAL_INDICATIONS_PACKED)
+		return (functionCode.equals(FunctionCode.READ)
+				|| functionCode.equals(FunctionCode.ASSIGN_CLASS))
+				&& (objectFragment.getObjectFragmentHeader().getObjectType().getGroup() == BINARY_INPUT_STATIC_ANY.getGroup())
 				&& objectFragment.getObjectFragmentHeader().getPrefixType() instanceof NoPrefixType
-				&& objectFragment.getObjectFragmentHeader().getRange() instanceof IndexRange;
+				&& (objectFragment.getObjectFragmentHeader().getRange() instanceof NoRange
+						|| objectFragment.getObjectFragmentHeader().getRange() instanceof IndexRange);
 	}
-
+	
 	public void decode(FunctionCode functionCode, ObjectFragment objectFragment, List<Byte> data) {
 		if (!this.canDecode(functionCode, objectFragment)) {
-			throw new IllegalArgumentException("Cannot decode data.");
-		}
-		IndexRange indexRange = (IndexRange) objectFragment.getObjectFragmentHeader().getRange();
-		
-		int dataSize = 1;
-		if (indexRange.getStartIndex() < 8 && indexRange.getStopIndex() > 7) {
-			dataSize = 2;
-		}
-		long value = DataUtils.getInteger(0, dataSize, data);
-		DataUtils.trim(dataSize, data);
-		
-		for (long i = indexRange.getStartIndex(); i <= indexRange.getStopIndex(); ++i) {
-			InternalIndicatorBitObjectInstance objectInstance = new InternalIndicatorBitObjectInstance();
-			objectInstance.setIndex(i);
-			objectInstance.setActive((value & (1 << i)) != 0);
-			objectFragment.addObjectInstance(objectInstance);
+			throw new IllegalArgumentException("Unable to decode data.");
 		}
 	}
 }

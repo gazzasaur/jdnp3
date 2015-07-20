@@ -20,44 +20,64 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.service.outstation.core.Class0ReadOutstationServiceTypeHelper;
-import net.sf.jdnp3.dnp3.service.outstation.core.Class1ReadOutstationServiceTypeHelper;
-import net.sf.jdnp3.dnp3.service.outstation.core.OutstationImpl;
+import net.sf.jdnp3.dnp3.service.outstation.core.OutstationServiceImpl;
+import net.sf.jdnp3.dnp3.service.outstation.handler.BinaryInputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class1ReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.Transaction;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
 
 public class App {
 	public static void main(String[] args) throws InterruptedException {
-		OutstationImpl outstation = new OutstationImpl();
-		outstation.addHandlerHelper(new Class0ReadOutstationServiceTypeHelper());
-		outstation.addHandlerHelper(new Class1ReadOutstationServiceTypeHelper());
-//		outstation.addRequestHandler(new Class0ReadRequestHandler() {
-//			public List<ObjectInstance> doReadClass() {
-//				List<ObjectInstance> items = new ArrayList<>();
-//				for (int i = 250; i < 256; ++i) {
-//					BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
-//					binaryInputStaticObjectInstance.setActive(i%2 == 0);
-//					binaryInputStaticObjectInstance.setOnline(true);
-//					binaryInputStaticObjectInstance.setIndex(i);
-//					items.add(binaryInputStaticObjectInstance);
-//				}
-//				return items;
-//			}
-//			
-//			public List<ObjectInstance> doReadClass(long returnLimit) {
-//				System.out.println("B");
-//				return new ArrayList<>();
-//			}
-//		});
-		outstation.addRequestHandler(new Class1ReadRequestHandler() {
+		OutstationServiceImpl outstation = new OutstationServiceImpl();
+		outstation.addServiceRequestHandler(new BinaryInputStaticReadRequestHandler() {
+			public List<BinaryInputStaticObjectInstance> doReadStatics(long startIndex, long stopIndex) {
+				List<BinaryInputStaticObjectInstance> points = new ArrayList<>();
+				for (long i = startIndex; i <= stopIndex; ++i) {
+					BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
+					binaryInputStaticObjectInstance.setActive(i%2 == 0);
+					binaryInputStaticObjectInstance.setOnline(true);
+					binaryInputStaticObjectInstance.setIndex(i);
+					points.add(binaryInputStaticObjectInstance);
+				}
+				return points;
+			}
+			
+			public List<BinaryInputStaticObjectInstance> doReadStatics() {
+				return new ArrayList<>();
+			}
+		});
+		outstation.addServiceRequestHandler(new Class0ReadRequestHandler() {
+			public List<ObjectInstance> doReadClass() {
+				List<ObjectInstance> items = new ArrayList<>();
+				for (int i = 250; i < 257; ++i) {
+					BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
+					binaryInputStaticObjectInstance.setActive(i%2 == 0);
+					binaryInputStaticObjectInstance.setOnline(true);
+					binaryInputStaticObjectInstance.setIndex(i);
+					items.add(binaryInputStaticObjectInstance);
+				}
+				AnalogInputStaticObjectInstance analogInputStaticObjectInstance = new AnalogInputStaticObjectInstance();
+				analogInputStaticObjectInstance.setRequestedType(ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT16);
+				analogInputStaticObjectInstance.setValue(56.73);
+				analogInputStaticObjectInstance.setIndex(0);
+				items.add(analogInputStaticObjectInstance);
+				return items;
+			}
+			
+			public List<ObjectInstance> doReadClass(long returnLimit) {
+				System.out.println("B");
+				return new ArrayList<>();
+			}
+		});
+		outstation.addServiceRequestHandler(new Class1ReadRequestHandler() {
 			public List<ObjectInstance> doReadClass(Transaction transaction) {
-				System.out.println("READ CLASS 1");
 				BinaryInputEventObjectInstance binary = new BinaryInputEventObjectInstance();
 				binary.setIndex(60000);
 				binary.setActive(true);
@@ -77,129 +97,5 @@ public class App {
 		
 		outstation.setDataLinkLayer(dataLink);
 		dataLink.enable();
-		
-//		TransportLayer transport = new TransportLayerImpl();
-//		transport.setApplicationLayer(new ApplicationLayer() {
-//			boolean deviceReset = true;
-//			public void dataReceived(List<Byte> data) {
-//				System.out.print("AL: ");
-//				for (Byte value : data) {
-//					System.out.print(String.format("%02X ", value));
-//				}
-//				System.out.println();
-//				
-//				ApplicationFragmentRequestDecoderImpl decoder = new ApplicationFragmentRequestDecoderImpl();
-//				ApplicationFragmentRequest request = decoder.decode(data);
-//				
-//				ApplicationFragmentResponse fragment = new ApplicationFragmentResponse();
-//				ApplicationFragmentResponseHeader applicationResponseHeader = new ApplicationFragmentResponseHeader();
-//				applicationResponseHeader.setFunctionCode(FunctionCode.RESPONSE);
-//				applicationResponseHeader.getInternalIndicatorField().setDeviceRestart(deviceReset);
-//				applicationResponseHeader.getApplicationControl().setConfirmationRequired(false);
-//				applicationResponseHeader.getApplicationControl().setFirstFragmentOfMessage(true);
-//				applicationResponseHeader.getApplicationControl().setFinalFragmentOfMessage(true);
-//				applicationResponseHeader.getApplicationControl().setUnsolicitedResponse(false);
-//				applicationResponseHeader.getApplicationControl().setSequenceNumber(request.getHeader().getApplicationControl().getSequenceNumber());
-//				fragment.setHeader(applicationResponseHeader);
-//				
-//				ObjectFragment objectFragment = new ObjectFragment();
-//				IndexRange indexRange = new IndexRange();
-//				indexRange.setStartIndex(0);
-//				indexRange.setStopIndex(15);
-//				objectFragment.getObjectFragmentHeader().setObjectType(ObjectTypeConstants.BINARY_INPUT_STATIC_PACKED);
-//				objectFragment.getObjectFragmentHeader().getQualifierField().setObjectPrefixCode(ObjectPrefixCode.NONE);
-//				objectFragment.getObjectFragmentHeader().getQualifierField().setRangeSpecifierCode(RangeSpecifierCode.ONE_OCTET_INDEX);
-//				objectFragment.getObjectFragmentHeader().setRange(indexRange);
-//				
-//				for (int i = 0; i < 16; ++i) {
-//					BinaryInputStaticObjectInstance binary = new BinaryInputStaticObjectInstance();
-//					binary.setIndex(i);
-//					binary.setActive(i%2 > 0);
-//					ObjectField objectField = new ObjectField();
-//					objectField.setPrefix(i);
-//					objectField.setObjectInstance(binary);
-//					objectFragment.addObjectField(objectField);
-//				}
-//				
-//				fragment.addObjectFragment(objectFragment);
-//				
-//				transport.sendData(new ApplicationFragmentResponseEncoderImpl().encode(fragment));
-//				deviceReset = false;
-//			}
-//		});
-//		
-//		TcpIpServerDataLink dataLink = new TcpIpServerDataLink();
-//		dataLink.setDirection(Direction.OUTSTATION_TO_MASTER);
-//		dataLink.setTransportLayer(transport);
-//		dataLink.setDestination(1);
-//		dataLink.setSource(2);
-//		
-//		transport.setDataLinkLater(dataLink);
-//		
-//		dataLink.enable();
-//		
-//		Thread.sleep(60000);
-//		System.exit(0);
-		
-//		Master master = new Master();
-		
-//		ApplicationFragmentRequest fragment = new ApplicationFragmentRequest();
-//		ApplicationFragmentRequestHeader applicationRequestHeader = new ApplicationFragmentRequestHeader();
-//		applicationRequestHeader.setFunctionCode(FunctionCode.WRITE);
-//		applicationRequestHeader.getApplicationControl().setConfirmationRequired(false);
-//		applicationRequestHeader.getApplicationControl().setFirstFragmentOfMessage(true);
-//		applicationRequestHeader.getApplicationControl().setFinalFragmentOfMessage(true);
-//		applicationRequestHeader.getApplicationControl().setUnsolicitedResponse(false);
-//		applicationRequestHeader.getApplicationControl().setSequenceNumber(1);
-//		fragment.setApplicationHeader(applicationRequestHeader);
-//		
-//		OneOctetIndexRange range = new OneOctetIndexRange();
-//		range.setStartIndex(7);
-//		range.setStopIndex(7);
-//		
-//		ObjectFragment objectFragment = new ObjectFragment();
-//		objectFragment.getObjectFragmentHeader().getObjectType().setGroup(80);
-//		objectFragment.getObjectFragmentHeader().getObjectType().setVariation(1);
-//		objectFragment.getObjectFragmentHeader().getQualifierField().setObjectPrefixCode(ObjectPrefixCode.NONE);
-//		objectFragment.getObjectFragmentHeader().getQualifierField().setRangeSpecifierCode(RangeSpecifierCode.ONE_OCTET_INDEX);
-//		objectFragment.getObjectFragmentHeader().setRange(range);
-//		
-//		OneOctetObjectInstance oneOctetObjectInstance = new OneOctetObjectInstance();
-//		oneOctetObjectInstance.setValue(0);
-//		
-//		ObjectField objectField = new ObjectField();
-//		objectField.setObjectPrefix(new NoObjectPrefix());
-//		objectField.setObjectInstance(oneOctetObjectInstance);
-//		objectFragment.addObjectField(objectField);
-//		fragment.addObjectFragment(objectFragment);
-//		
-//		ApplicationFragmentEncoder fragmentEncoder = new ApplicationFragmentEncoderImpl();
-//		for (Byte data : fragmentEncoder.encode(fragment)) {
-//			System.out.print(String.format("%02X ", data));
-//		}
-//		System.out.println();
-//		
-//		TransportSegment transportSegment = new TransportSegment();
-//		transportSegment.getTransportHeader().setFirstSegment(true);
-//		transportSegment.getTransportHeader().setFinalSegment(true);
-//		transportSegment.getTransportHeader().setSequenceNumber(2);
-//		transportSegment.setData(fragmentEncoder.encode(fragment));
-//		
-//		TransportSegmentEncoder transportSegmentEncoder = new TransportSegmentEncoderImpl();
-//		for (Byte data : transportSegmentEncoder.encode(transportSegment)) {
-//			System.out.print(String.format("%02X ", data));
-//		}
-//		System.out.println();
-//		
-//		DataLinkFrame dataLinkFrame = new DataLinkFrame();
-//		dataLinkFrame.setData(transportSegmentEncoder.encode(transportSegment));
-//		dataLinkFrame.getDataLinkFrameHeader().setSource(1);
-//		dataLinkFrame.getDataLinkFrameHeader().setLength(5 + dataLinkFrame.getData().size());
-//		dataLinkFrame.getDataLinkFrameHeader().setDestination(10);
-//		
-//		DataLinkFrameEncoder dataLinkFrameEncoder = new DataLinkFrameEncoderImpl();
-//		for (Byte data : dataLinkFrameEncoder.encode(dataLinkFrame)) {
-//			System.out.print(String.format("%02X ", data));
-//		}
 	}
 }

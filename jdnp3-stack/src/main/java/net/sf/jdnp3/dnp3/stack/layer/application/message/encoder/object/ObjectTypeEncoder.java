@@ -17,15 +17,11 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectField;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectPrefixCode;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public interface ObjectTypeEncoder {
-	public ObjectPrefixCode calculateObjectPrefix(long maxPrefix);
-	public Range calculateRangeType(long count, long startPrefix, long stopPrefix, ObjectInstance lastObjectInstance);
-	
-	public boolean fragment(ObjectInstance currentObjectInstance, ObjectInstance previousObjectInstance);
-	public void encode(long startPrefix, ObjectField objectField, List<Byte> data);
+	public boolean canEncode(FunctionCode functionCode, ObjectType objectType);
+	public void encode(FunctionCode functionCode, ObjectType objectType, List<ObjectInstance> objectInstances, List<Byte> data);
 }

@@ -15,51 +15,70 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object;
 
+import static java.lang.String.format;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_EVENT_ABSOLUTE_TIME;
+
 import java.util.BitSet;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectField;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectPrefixCode;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectPrefixCodeCalculator;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.QualifierFieldCalculator;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class BinaryInputEventAbsoluteTimeObjectTypeEncoder implements ObjectTypeEncoder {
-	public ObjectPrefixCode calculateObjectPrefix(long maxPrefix) {
-		return ObjectPrefixCodeCalculator.calculateIndexPrefix(maxPrefix);
-	}
-	
-	public Range calculateRangeType(long count, long startPrefix, long stopPrefix, ObjectInstance lastObjectInstance) {
-		CountRange range = new CountRange();
-		range.setCount(count);
-		return range;
+	private ObjectFragmentHeaderEncoder objectFragmentHeaderEncoder = new ObjectFragmentHeaderEncoder();
+
+	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
+		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_INPUT_EVENT_ABSOLUTE_TIME);
 	}
 
-	public boolean fragment(ObjectInstance currentObjectInstance, ObjectInstance previousObjectInstance) {
-		return false;
-	}
-	
-	public void encode(long startPrefix, ObjectField objectField, List<Byte> data) {
-		BinaryInputEventObjectInstance binary = (BinaryInputEventObjectInstance) objectField.getObjectInstance();
-		BitSet bitSet = new BitSet();
-		bitSet.set(7, binary.isActive());
-		bitSet.set(5, binary.isChatterFilter());
-		bitSet.set(4, binary.isLocalForced());
-		bitSet.set(3, binary.isRemoteForced());
-		bitSet.set(2, binary.isCommunicationsLost());
-		bitSet.set(1, binary.isRestart());
-		bitSet.set(0, binary.isOnline());
-		
-		byte[] rawValue = bitSet.toByteArray();
-		byte value = 0;
-		if (rawValue.length > 0) {
-			value = rawValue[0];
+	public void encode(FunctionCode functionCode, ObjectType objectType, List<ObjectInstance> objectInstances, List<Byte> data) {
+		if (!this.canEncode(functionCode, objectType) || objectInstances.size() < 1) {
+			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", functionCode, objectType));
 		}
-		data.add(value);
-
-		DataUtils.addInteger(binary.getTimestamp(), 6, data);
+		CountRange countRange = new CountRange();
+		countRange.setCount(0);
+		
+		long maxIndex = 0;
+		for (ObjectInstance objectInstance : objectInstances) {
+			if (objectInstance.getIndex() > maxIndex) {
+				maxIndex = objectInstance.getIndex();
+			}
+			countRange.setCount(countRange.getCount() + 1);
+		}
+		
+		IndexPrefixType indexPrefixType = new IndexPrefixType();
+		indexPrefixType.setOctetCount(EncoderUtils.calculateOctetCount(maxIndex));
+		QualifierField qualifierField = QualifierFieldCalculator.calculate(indexPrefixType, countRange);
+		
+		objectFragmentHeaderEncoder.encode(objectType, qualifierField, countRange, data);
+		
+		for (ObjectInstance objectInstance : objectInstances) {
+			BinaryInputEventObjectInstance specificInstance = (BinaryInputEventObjectInstance) objectInstance;
+			BitSet bitSet = new BitSet(8);
+			bitSet.set(7, specificInstance.isActive());
+			bitSet.set(5, specificInstance.isChatterFilter());
+			bitSet.set(4, specificInstance.isLocalForced());
+			bitSet.set(3, specificInstance.isRemoteForced());
+			bitSet.set(2, specificInstance.isCommunicationsLost());
+			bitSet.set(1, specificInstance.isRestart());
+			bitSet.set(0, specificInstance.isOnline());
+			
+			byte[] rawValue = bitSet.toByteArray();
+			byte value = 0;
+			if (rawValue.length > 0) {
+				value = rawValue[0];
+			}
+			
+			DataUtils.addInteger(specificInstance.getIndex(), qualifierField.getObjectPrefixCode().getOctetCount(), data);
+			data.add(value);
+			DataUtils.addInteger(specificInstance.getTimestamp(), 6, data);
+		}
 	}
 }

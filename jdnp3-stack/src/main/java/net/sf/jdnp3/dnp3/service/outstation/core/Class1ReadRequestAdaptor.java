@@ -18,7 +18,6 @@ package net.sf.jdnp3.dnp3.service.outstation.core;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class1ReadRequestHandler;
-import net.sf.jdnp3.dnp3.service.outstation.handler.RequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
@@ -30,50 +29,44 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstant
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Class1ReadOutstationServiceTypeHelper implements OutstationServiceTypeHelper {
+public class Class1ReadRequestAdaptor implements OutstationRequestHandlerAdaptor {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	private Class1ReadRequestHandler requestHandler = null;
+	private Class1ReadRequestHandler serviceRequestHandler = null;
 
 	public boolean canHandle(FunctionCode functionCode, ObjectFragment request) {
-		System.out.println(request.getObjectFragmentHeader().getObjectType());
-		System.out.println(ObjectTypeConstants.CLASS_1);
-		System.out.println(functionCode == FunctionCode.READ);
-		
 		if (functionCode == FunctionCode.READ && request.getObjectFragmentHeader().getObjectType().equals(ObjectTypeConstants.CLASS_1)) {
-			System.out.println("YES");
 			return true;
 		}
 		return false;
 	}
 	
 	public void doRequest(FunctionCode functionCode, ObjectFragment request, List<ObjectInstance> response) {
-		if (requestHandler != null) {
+		if (serviceRequestHandler != null) {
 			List<ObjectInstance> result = null;
 			Range range = request.getObjectFragmentHeader().getRange();
 			
 			if (range instanceof NoRange) {
-				result = requestHandler.doReadClass(null);
+				result = serviceRequestHandler.doReadClass(null);
 			} else if (range instanceof CountRange) {
 				CountRange countRange = (CountRange) range;
-				result = requestHandler.doReadClass(null, countRange.getCount());
+				result = serviceRequestHandler.doReadClass(null, countRange.getCount());
 			}
 			
 			if (result == null) {
 				logger.warn("Cannot perform a read request on the class for the range type of: " + range.getClass());
 			} else {
 				for (ObjectInstance objectInstance : result) {
+					objectInstance.setRequestedType(request.getObjectFragmentHeader().getObjectType());
 					response.add(objectInstance);
 				}
 			}
 		}
 	}
 	
-	public boolean setHandler(RequestHandler requestHandler) {
-		if (requestHandler instanceof Class1ReadRequestHandler) {
-			this.requestHandler = (Class1ReadRequestHandler) requestHandler;
-			return true;
+	public void setServiceRequestHandler(ServiceRequestHandler serviceRequestHandler) {
+		if (serviceRequestHandler instanceof Class1ReadRequestHandler) {
+			this.serviceRequestHandler = (Class1ReadRequestHandler) serviceRequestHandler;
 		}
-		return false;
 	}
 }

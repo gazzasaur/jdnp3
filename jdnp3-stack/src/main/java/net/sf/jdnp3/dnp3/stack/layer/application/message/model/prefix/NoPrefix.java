@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix;
 
-import java.util.List;
-
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectField;
-
-public class FileIdentifierObjectTypeDecoder implements ObjectTypeDecoder {
-	public void decode(long startIndex, long stopIndex, ObjectField objectField, List<Byte> data) {
+public class NoPrefix implements Prefix {
+	public long getValue() {
+		return 0;
 	}
 }

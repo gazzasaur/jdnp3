@@ -15,8 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.core;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.RequestHandler;
-
 public interface OutstationService {
-	public void setRequestHandler(RequestHandler requestHandler);
+	public void addServiceRequestHandler(ServiceRequestHandler serviceRequestHandler);
 }

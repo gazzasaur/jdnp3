@@ -17,11 +17,25 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectField;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.Class0ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
 
 public class Class0ObjectTypeDecoder implements ObjectTypeDecoder {
-	public void decode(long startIndex, long stopIndex, ObjectField objectField, List<Byte> data) {
-		objectField.setObjectInstance(new Class0ObjectInstance());
+	public boolean canDecode(FunctionCode functionCode, ObjectFragment objectFragment) {
+		return functionCode.equals(FunctionCode.READ)
+				&& objectFragment.getObjectFragmentHeader().getObjectType().equals(ObjectTypeConstants.CLASS_0)
+				&& objectFragment.getObjectFragmentHeader().getPrefixType() instanceof NoPrefixType
+				&& objectFragment.getObjectFragmentHeader().getRange() instanceof NoRange;
+	}
+	
+	public void decode(FunctionCode functionCode, ObjectFragment objectFragment, List<Byte> data) {
+		if (!this.canDecode(functionCode, objectFragment)) {
+			throw new IllegalArgumentException("Unable to decode data.");
+		}
+		objectFragment.addObjectInstance(new Class0ObjectInstance());
 	}
 }

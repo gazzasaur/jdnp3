@@ -15,6 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.ObjectPrefixCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode;
 
 public class QualifierField {

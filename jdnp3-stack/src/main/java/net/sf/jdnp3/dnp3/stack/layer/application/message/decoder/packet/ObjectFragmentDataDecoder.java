@@ -17,72 +17,41 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
 
 import static java.lang.String.format;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.BinaryInputObjectTypeDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.BinaryInputStaticObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class0ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class1ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class2ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class3ObjectTypeDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.FileIdentifierObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.InternalIndicatorBitObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectField;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
 
 public class ObjectFragmentDataDecoder {
 	@SuppressWarnings("serial")
-	private Map<RangeSpecifierCode, ObjectInstanceListDecoder> listDecoders = new HashMap<RangeSpecifierCode, ObjectInstanceListDecoder>() {{
-		this.put(RangeSpecifierCode.ONE_OCTET_INDEX, new IndexRangeObjectInstanceListDecoder());
-		this.put(RangeSpecifierCode.TWO_OCTET_INDEX, new IndexRangeObjectInstanceListDecoder());
-		this.put(RangeSpecifierCode.FOUR_OCTET_INDEX, new IndexRangeObjectInstanceListDecoder());
-		this.put(RangeSpecifierCode.NO_RANGE, new NoRangeObjectInstanceListDecoder());
-	}};
-	
-	@SuppressWarnings("serial")
-	private Map<FunctionCode, ObjectFunctionDecoder> functionDecoders = new HashMap<FunctionCode, ObjectFunctionDecoder>() {{
-		this.put(FunctionCode.READ, new NullObjectFunctionDecoder());
-		this.put(FunctionCode.WRITE, new ObjectInstanceFunctionDecoder());
-		this.put(FunctionCode.ENABLE_UNSOLICITED, new NullObjectFunctionDecoder());
-		this.put(FunctionCode.DISABLE_UNSOLICITED, new NullObjectFunctionDecoder());
-	}};
-
-	@SuppressWarnings("serial")
-	private Map<ObjectType, ObjectTypeDecoder> objectDecoders = new HashMap<ObjectType, ObjectTypeDecoder>() {{
-		this.put(ObjectTypeConstants.BINARY_INPUT_STATIC_ANY, new BinaryInputObjectTypeDecoder());
-		
-		this.put(ObjectTypeConstants.CLASS_0, new Class0ObjectTypeDecoder());
-		this.put(ObjectTypeConstants.CLASS_1, new Class1ObjectTypeDecoder());
-		this.put(ObjectTypeConstants.CLASS_2, new Class2ObjectTypeDecoder());
-		this.put(ObjectTypeConstants.CLASS_3, new Class3ObjectTypeDecoder());
-		
-		this.put(ObjectTypeConstants.FILE_IDENTIFIER, new FileIdentifierObjectTypeDecoder());
-
-		this.put(ObjectTypeConstants.INTERNAL_INDICATIONS_PACKED, new InternalIndicatorBitObjectTypeDecoder());
+	private List<ObjectTypeDecoder> objectTypeDecoders = new ArrayList<ObjectTypeDecoder>() {{
+		this.add(new BinaryInputStaticObjectTypeDecoder());
+		this.add(new Class0ObjectTypeDecoder());
+		this.add(new Class1ObjectTypeDecoder());
+		this.add(new Class2ObjectTypeDecoder());
+		this.add(new Class3ObjectTypeDecoder());
+		this.add(new InternalIndicatorBitObjectTypeDecoder());
 	}};
 	
 	public void decode(FunctionCode functionCode, ObjectFragment objectFragment, List<Byte> data) {
-		ObjectInstanceListDecoder listDecoder = listDecoders.get(objectFragment.getObjectFragmentHeader().getQualifierField().getRangeSpecifierCode());
-		ObjectFunctionDecoder functionDecoder = functionDecoders.get(functionCode);
-		ObjectTypeDecoder objectTypeDecoder = objectDecoders.get(objectFragment.getObjectFragmentHeader().getObjectType());
-		nullCheck(functionDecoder, "ObjectFunctionDecoder", "FunctionCode", format("0x%02X", functionCode.getCode()));
-		nullCheck(listDecoder, "IndexDecoder", "RangeSpecificCode", format("0x%02X", objectFragment.getObjectFragmentHeader().getQualifierField().getRangeSpecifierCode().getCode()));
-		nullCheck(objectTypeDecoder, "ObjectTypeDecoder", "ObjectType", objectFragment.getObjectFragmentHeader().getObjectType().toString());
-		listDecoder.decode(objectFragment, functionDecoder, objectTypeDecoder, data);
-		for (ObjectField objectField : objectFragment.getObjectFields()) {
-			objectField.getObjectInstance().setRequestedType(objectFragment.getObjectFragmentHeader().getObjectType());
+		boolean decoded = false;
+		for (ObjectTypeDecoder objectTypeDecoder : objectTypeDecoders) {
+			if (objectTypeDecoder.canDecode(functionCode, objectFragment)) {
+				objectTypeDecoder.decode(functionCode, objectFragment, data);
+				decoded = true;
+				break;
+			}
 		}
-	}
-
-	private void nullCheck(Object object, String type, String code, String value) {
-		if (object == null) {
-			throw new IllegalArgumentException(format("No %s was found for the %s: %s", type, code, value));
+		if (!decoded) {
+			throw new IllegalArgumentException(format("No decoder was found for %s %s.", functionCode, objectFragment.getObjectFragmentHeader().getObjectType()));
 		}
 	}
 }

@@ -16,46 +16,31 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.sort;
 
 import static java.lang.String.format;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT16;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_STATIC_ANY;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_STATIC_FLAGS;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_STATIC_PACKED;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CLASS_0;
 
 import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BinaryInputStaticTypeRationaliserHelper implements ObjectInstanceTypeRationaliserHelper {
+public class AnalogInputStaticTypeRationaliserHelper implements ObjectInstanceTypeRationaliserHelper {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	private List<ObjectType> validObjectTypes = Arrays.asList(ANY, CLASS_0, BINARY_INPUT_STATIC_ANY, BINARY_INPUT_STATIC_FLAGS, BINARY_INPUT_STATIC_PACKED);
+	private List<ObjectType> validObjectTypes = Arrays.asList(ANY, CLASS_0, ObjectTypeConstants.ANALOG_INPUT_STATIC_ANY, ANALOG_INPUT_STATIC_FLOAT16);
 	
 	public void rationalise(ObjectInstance objectInstance) {
-		BinaryInputStaticObjectInstance specificInstance = (BinaryInputStaticObjectInstance) objectInstance;
+		AnalogInputStaticObjectInstance specificInstance = (AnalogInputStaticObjectInstance) objectInstance;
 		if (!validObjectTypes.contains(specificInstance.getRequestedType())) {
 			logger.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
 			objectInstance.setRequestedType(ANY);
 		}
-		if (!specificInstance.isOnline()
-				|| specificInstance.isRestart()
-				|| specificInstance.isLocalForced()
-				|| specificInstance.isRemoteForced()
-				|| specificInstance.isChatterFilter()
-				|| specificInstance.isCommunicationsLost()
-				|| specificInstance.getRequestedType().equals(BINARY_INPUT_STATIC_FLAGS)) {
-			if (specificInstance.getRequestedType().equals(ObjectTypeConstants.BINARY_INPUT_STATIC_PACKED)) {
-				logger.warn(format("Packed format requested but flags are required."));
-			}
-			objectInstance.setRequestedType(BINARY_INPUT_STATIC_FLAGS);
-		} else {
-			objectInstance.setRequestedType(BINARY_INPUT_STATIC_PACKED);
-		}
+		objectInstance.setRequestedType(ANALOG_INPUT_STATIC_FLOAT16);
 	}
 }

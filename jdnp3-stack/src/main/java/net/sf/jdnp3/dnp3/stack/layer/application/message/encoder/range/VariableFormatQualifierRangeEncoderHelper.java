@@ -26,17 +26,17 @@ import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class VariableFormatQualifierRangeEncoderHelper implements RangeEncoderHelper {
 	
-	public RangeSpecifierCode calculateRangeSpecifierCode(Range range) {
+	public RangeSpecifierCode calculateRangeSpecifierCode(Range range, int minOctetCount) {
 		VariableFormatQualifierRange specificRange = (VariableFormatQualifierRange) range;
-		if (specificRange.getCount() < VARIABLE_FORMAT_QUALIFIER.getUpperLimit()) {
+		if (specificRange.getCount() < VARIABLE_FORMAT_QUALIFIER.getUpperLimit() && VARIABLE_FORMAT_QUALIFIER.getOctetCount() >= minOctetCount) {
 			return VARIABLE_FORMAT_QUALIFIER;
 		}
 		throw new IllegalArgumentException("The specified size is too large for DNP: " + specificRange.getCount());
 	}
 	
-	public RangeSpecifierCode encode(Range range, List<Byte> data) {
+	public RangeSpecifierCode encode(Range range, int minOctetCount, List<Byte> data) {
 		VariableFormatQualifierRange specificRange = (VariableFormatQualifierRange) range;
-		RangeSpecifierCode rangeSpecifierCode = this.calculateRangeSpecifierCode(specificRange);
+		RangeSpecifierCode rangeSpecifierCode = this.calculateRangeSpecifierCode(specificRange, minOctetCount);
 		DataUtils.addInteger(specificRange.getCount(), rangeSpecifierCode.getOctetCount(), data);
 		return rangeSpecifierCode;
 	}

@@ -28,6 +28,9 @@ public class ObjectTypeConstants {
 	public static ObjectType BINARY_INPUT_EVENT_WITHOUT_TIME = new ObjectType(2, 1);
 	public static ObjectType BINARY_INPUT_EVENT_ABSOLUTE_TIME = new ObjectType(2, 2);
 	public static ObjectType BINARY_INPUT_EVENT_RELATIVE_TIME = new ObjectType(2, 3);
+	
+	public static ObjectType ANALOG_INPUT_STATIC_ANY = new ObjectType(30, 0);
+	public static ObjectType ANALOG_INPUT_STATIC_FLOAT16 = new ObjectType(30, 5);
 
 	public static ObjectType CLASS_0 = new ObjectType(60, 1);
 	public static ObjectType CLASS_1 = new ObjectType(60, 2);

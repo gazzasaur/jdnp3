@@ -16,7 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_STATIC_FLAGS;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT16;
 
 import java.util.BitSet;
 import java.util.List;
@@ -27,19 +27,20 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
-public class BinaryInputStaticFlagsObjectTypeEncoder implements ObjectTypeEncoder {
+public class AnalogInputStaticFloat16ObjectTypeEncoder implements ObjectTypeEncoder {
 	private ObjectFragmentHeaderEncoder objectFragmentHeaderEncoder = new ObjectFragmentHeaderEncoder();
 
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_INPUT_STATIC_FLAGS);
+		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(ANALOG_INPUT_STATIC_FLOAT16);
 	}
 
 	public void encode(FunctionCode functionCode, ObjectType objectType, List<ObjectInstance> objectInstances, List<Byte> data) {
 		if (!this.canEncode(functionCode, objectType) || objectInstances.size() < 1) {
-			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", functionCode, objectType));
+			throw new IllegalArgumentException(format("Cannot encode the given value %s %s.", functionCode, objectType));
 		}
 		IndexRange indexRange = new IndexRange();
 		indexRange.setStartIndex(objectInstances.get(0).getIndex());
@@ -49,10 +50,10 @@ public class BinaryInputStaticFlagsObjectTypeEncoder implements ObjectTypeEncode
 		objectFragmentHeaderEncoder.encode(objectType, qualifierField, indexRange, data);
 		
 		for (ObjectInstance objectInstance : objectInstances) {
-			BinaryInputStaticObjectInstance specificInstance = (BinaryInputStaticObjectInstance) objectInstance;
+			AnalogInputStaticObjectInstance specificInstance = (AnalogInputStaticObjectInstance) objectInstance;
 			BitSet bitSet = new BitSet(8);
-			bitSet.set(7, specificInstance.isActive());
-			bitSet.set(5, specificInstance.isChatterFilter());
+			bitSet.set(6, specificInstance.isReferenceError());
+			bitSet.set(5, specificInstance.isOverRange());
 			bitSet.set(4, specificInstance.isLocalForced());
 			bitSet.set(3, specificInstance.isRemoteForced());
 			bitSet.set(2, specificInstance.isCommunicationsLost());
@@ -64,8 +65,10 @@ public class BinaryInputStaticFlagsObjectTypeEncoder implements ObjectTypeEncode
 			if (rawValue.length > 0) {
 				value = rawValue[0];
 			}
-			
 			data.add(value);
+			
+			int intBits = Float.floatToIntBits((float) specificInstance.getValue());
+			DataUtils.addInteger(intBits, 4, data);
 		}
 	}
 }

@@ -13,13 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix;
 
-import java.util.List;
+public enum ObjectPrefixCode {
+	NONE(0x00, 0),
+	ONE_OCTET_INDEX(0x01, 1),
+	TWO_OCTET_INDEX(0x02, 2),
+	FOUR_OCTET_INDEX(0x03, 4),
+	ONE_OCTET_LENGTH(0x04, 1),
+	TWO_OCTET_LENGTH(0x05, 2),
+	FOUR_OCTET_LENGTH(0x06, 4);
+	
+	private final int code;
+	private final int octetCount;
+	
+	ObjectPrefixCode(int code, int octetCount) {
+		this.code = code;
+		this.octetCount = octetCount;
+	}
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.ObjectTypeDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
+	public int getCode() {
+		return code;
+	}
 
-public interface ObjectInstanceListDecoder {
-	void decode(ObjectFragment objectFragment, ObjectFunctionDecoder functionDecoder, ObjectTypeDecoder objectTypeDecoder, List<Byte> data);
+	public int getOctetCount() {
+		return octetCount;
+	}
 }

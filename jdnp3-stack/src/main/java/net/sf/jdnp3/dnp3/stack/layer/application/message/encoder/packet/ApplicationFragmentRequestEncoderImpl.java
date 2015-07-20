@@ -30,7 +30,7 @@ public class ApplicationFragmentRequestEncoderImpl implements ApplicationFragmen
 		applicationHeaderEncoder.encode(fragment.getHeader(), data);
 		
 		for (ObjectFragment objectFragment : fragment.getObjectFragments()) {
-			objectFragmentEncoder.encode(objectFragment, data);
+			objectFragmentEncoder.encode(fragment.getHeader().getFunctionCode(), objectFragment.getObjectFragmentHeader().getObjectType(), objectFragment.getObjectInstances(), data);
 		}
 		return data;
 	}

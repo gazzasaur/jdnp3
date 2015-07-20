@@ -16,12 +16,15 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 
 public class ObjectFragmentHeader {
 	private ObjectType objectType = ANY;
 	private QualifierField qualifierField = new QualifierField();
+	private PrefixType prefixType = new NoPrefixType();
 	private Range range = new NoRange();
 	
 	public ObjectType getObjectType() {
@@ -38,6 +41,14 @@ public class ObjectFragmentHeader {
 
 	public void setQualifierField(QualifierField qualifierField) {
 		this.qualifierField = qualifierField;
+	}
+
+	public PrefixType getPrefixType() {
+		return prefixType;
+	}
+
+	public void setPrefixType(PrefixType prefixType) {
+		this.prefixType = prefixType;
 	}
 
 	public Range getRange() {

@@ -15,39 +15,42 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet;
 
+import static java.lang.String.format;
+
+import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.range.RangeEncoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectField;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.AnalogInputStaticFloat16ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryInputEventAbsoluteTimeObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryInputStaticFlagsObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryInputStaticPackedObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class ObjectFragmentEncoder {
-	private RangeEncoder rangeEncoder = new RangeEncoder();
-	private QualifierEncoder qualifierEncoder = new QualifierEncoder();
-	private ObjectFieldEncoder objectFieldEncoder = new ObjectFieldEncoder();
+	@SuppressWarnings("serial")
+	private List<ObjectTypeEncoder> objectTypeEncoders = new ArrayList<ObjectTypeEncoder>() {{
+		this.add(new BinaryInputStaticPackedObjectTypeEncoder());
+		this.add(new BinaryInputStaticFlagsObjectTypeEncoder());
+		this.add(new BinaryInputEventAbsoluteTimeObjectTypeEncoder());
+		
+		this.add(new AnalogInputStaticFloat16ObjectTypeEncoder());
+	}};
 	
-	// FIXME IMPL If object prefix cannot fit in the OPC do I override, throw exception.  Or do I always calculate it.
-	// FIXME IMPL If the range cannot fit in the RSC do I override, throw exception.  Or do I always calculate it.
-	public void encode(ObjectFragment objectFragment, List<Byte> data) {
-		RangeSpecifierCode rangeSpecifierCode = rangeEncoder.calculateRangeSpecifierCode(objectFragment.getObjectFragmentHeader().getRange());
-		objectFragment.getObjectFragmentHeader().getQualifierField().setRangeSpecifierCode(rangeSpecifierCode);
+	public void encode(FunctionCode functionCode, ObjectType objectType, List<ObjectInstance> objectInstances, List<Byte> data) {
+		boolean encoded = false;
 		
-		data.add((byte) objectFragment.getObjectFragmentHeader().getObjectType().getGroup());
-		data.add((byte) objectFragment.getObjectFragmentHeader().getObjectType().getVariation());
-		qualifierEncoder.encode(objectFragment.getObjectFragmentHeader().getQualifierField(), data);
-		rangeEncoder.encode(objectFragment.getObjectFragmentHeader().getRange(), data);
-		
-		if (rangeSpecifierCode != objectFragment.getObjectFragmentHeader().getQualifierField().getRangeSpecifierCode()) {
-			throw new IllegalArgumentException(String.format("The calculated RangeSpecifierCode %s does not match the declared range specifier code %s.", rangeSpecifierCode.getCode(), objectFragment.getObjectFragmentHeader().getQualifierField().getRangeSpecifierCode().getCode()));
-		}
-
-		long startPrefix = -1;
-		for (ObjectField objectField : objectFragment.getObjectFields()) {
-			if (startPrefix < 0) {
-				startPrefix = objectField.getPrefix();
+		for (ObjectTypeEncoder objectTypeEncoder : objectTypeEncoders) {
+			if (objectTypeEncoder.canEncode(functionCode, objectType)) {
+				objectTypeEncoder.encode(functionCode, objectType, objectInstances, data);
+				encoded = true;
+				break;
 			}
-			objectFieldEncoder.encode(startPrefix, objectFragment.getObjectFragmentHeader().getQualifierField().getObjectPrefixCode(), objectField, data);
+		}
+		if (!encoded) {
+			throw new IllegalArgumentException(format("Failed to encode %s %s", functionCode, objectType));
 		}
 	}
 }

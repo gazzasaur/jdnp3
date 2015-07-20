@@ -17,8 +17,8 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectPrefixCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.ObjectPrefixCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode;
 
 public class QualifierDecoder {

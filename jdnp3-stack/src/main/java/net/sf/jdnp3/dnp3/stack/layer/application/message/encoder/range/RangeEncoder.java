@@ -37,20 +37,19 @@ public class RangeEncoder {
 		this.put(VariableFormatQualifierRange.class, new VariableFormatQualifierRangeEncoderHelper());
 	}};
 	
-	public RangeSpecifierCode calculateRangeSpecifierCode(Range range) {
+	public RangeSpecifierCode calculateRangeSpecifierCode(Range range, int minOctetCount) {
 		RangeEncoderHelper helper = helpers.get(range.getClass());
 		if (helper == null) {
 			throw new RuntimeException("No RangeEncoderHelper found for class " + range.getClass());
 		}
-		return helper.calculateRangeSpecifierCode(range);
+		return helper.calculateRangeSpecifierCode(range, minOctetCount);
 	}
 	
-	// FIXME IMPL It may not long be necessary to return the RSC for cross validation as this is now pre-calculated.
-	public RangeSpecifierCode encode(Range range, List<Byte> data) {
+	public void encode(Range range, int minOctetCount, List<Byte> data) {
 		RangeEncoderHelper helper = helpers.get(range.getClass());
 		if (helper == null) {
 			throw new RuntimeException("No RangeEncoderHelper found for class " + range.getClass());
 		}
-		return helper.encode(range, data);
+		helper.encode(range, minOctetCount, data);
 	}
 }

@@ -13,14 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
+package net.sf.jdnp3.dnp3.service.outstation.core;
 
-import java.util.List;
-
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.ObjectTypeDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
-
-public class NoRangeObjectInstanceListDecoder implements ObjectInstanceListDecoder {
-	public void decode(ObjectFragment objectFragment, ObjectFunctionDecoder functionDecoder, ObjectTypeDecoder objectTypeDecoder, List<Byte> data) {
-	}
+public interface ServiceRequestHandler {
 }

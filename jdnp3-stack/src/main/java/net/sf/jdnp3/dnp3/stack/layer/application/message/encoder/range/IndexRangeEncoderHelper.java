@@ -30,19 +30,19 @@ import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 public class IndexRangeEncoderHelper implements RangeEncoderHelper {
 	private List<RangeSpecifierCode> codes = Arrays.asList(ONE_OCTET_INDEX, TWO_OCTET_INDEX, FOUR_OCTET_INDEX);
 	
-	public RangeSpecifierCode calculateRangeSpecifierCode(Range range) {
+	public RangeSpecifierCode calculateRangeSpecifierCode(Range range, int minOctetCount) {
 		IndexRange specificRange = (IndexRange) range;
 		for (RangeSpecifierCode rangeSpecifierCode : codes) {
-			if (specificRange.getStopIndex() < rangeSpecifierCode.getUpperLimit()) {
+			if (specificRange.getStopIndex() < rangeSpecifierCode.getUpperLimit() && rangeSpecifierCode.getOctetCount() >= minOctetCount) {
 				return rangeSpecifierCode;
 			}
 		}
 		throw new IllegalArgumentException("The specified index is too large for DNP: " + specificRange.getStopIndex());
 	}
 	
-	public RangeSpecifierCode encode(Range range, List<Byte> data) {
+	public RangeSpecifierCode encode(Range range, int minOctetCount, List<Byte> data) {
 		IndexRange specificRange = (IndexRange) range;
-		RangeSpecifierCode rangeSpecifierCode = calculateRangeSpecifierCode(specificRange);
+		RangeSpecifierCode rangeSpecifierCode = calculateRangeSpecifierCode(specificRange, minOctetCount);
 		DataUtils.addInteger(specificRange.getStartIndex(), rangeSpecifierCode.getOctetCount(), data);
 		DataUtils.addInteger(specificRange.getStopIndex(), rangeSpecifierCode.getOctetCount(), data);
 		return rangeSpecifierCode;

@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix;
 
-import java.util.List;
+public class IndexPrefixType implements PrefixType {
+	private int octetCount = 1;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectField;
+	public int getOctetCount() {
+		return octetCount;
+	}
 
-public class BinaryInputObjectTypeDecoder implements ObjectTypeDecoder {
-	public void decode(long startIndex, long stopIndex, ObjectField objectField, List<Byte> data) {
-		// FIXME IMPL Finish this.
+	public void setOctetCount(int octetCount) {
+		this.octetCount = octetCount;
 	}
 }

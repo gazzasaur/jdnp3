@@ -30,19 +30,19 @@ import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 public class VirtualAddressRangeEncoderHelper implements RangeEncoderHelper {
 	private List<RangeSpecifierCode> codes = Arrays.asList(ONE_OCTET_VIRTUAL_ADDRESS, TWO_OCTET_VIRTUAL_ADDRESS, FOUR_OCTET_VIRTUAL_ADDRESS);
 	
-	public RangeSpecifierCode calculateRangeSpecifierCode(Range range) {
+	public RangeSpecifierCode calculateRangeSpecifierCode(Range range, int minOctetCount) {
 		VirtualAddressRange specificRange = (VirtualAddressRange) range;
 		for (RangeSpecifierCode rangeSpecifierCode : codes) {
-			if (specificRange.getStopAddress() < rangeSpecifierCode.getUpperLimit()) {
+			if (specificRange.getStopAddress() < rangeSpecifierCode.getUpperLimit() && rangeSpecifierCode.getOctetCount() >= minOctetCount) {
 				return rangeSpecifierCode;
 			}
 		}
 		throw new IllegalArgumentException("The specified address is too large for DNP: " + specificRange.getStopAddress());
 	}
 	
-	public RangeSpecifierCode encode(Range range, List<Byte> data) {
+	public RangeSpecifierCode encode(Range range, int minOctetCount, List<Byte> data) {
 		VirtualAddressRange specificRange = (VirtualAddressRange) range;
-		RangeSpecifierCode rangeSpecifierCode = this.calculateRangeSpecifierCode(specificRange);
+		RangeSpecifierCode rangeSpecifierCode = this.calculateRangeSpecifierCode(specificRange, minOctetCount);
 		DataUtils.addInteger(specificRange.getStartAddress(), rangeSpecifierCode.getOctetCount(), data);
 		DataUtils.addInteger(specificRange.getStopAddress(), rangeSpecifierCode.getOctetCount(), data);
 		return rangeSpecifierCode;
