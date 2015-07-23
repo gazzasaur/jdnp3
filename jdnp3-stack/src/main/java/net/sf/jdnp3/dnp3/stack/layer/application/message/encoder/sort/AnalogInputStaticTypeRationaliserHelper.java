@@ -16,7 +16,9 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.sort;
 
 import static java.lang.String.format;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT16;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT64;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CLASS_0;
 
@@ -26,14 +28,13 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AnalogInputStaticTypeRationaliserHelper implements ObjectInstanceTypeRationaliserHelper {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	private List<ObjectType> validObjectTypes = Arrays.asList(ANY, CLASS_0, ObjectTypeConstants.ANALOG_INPUT_STATIC_ANY, ANALOG_INPUT_STATIC_FLOAT16);
+	private List<ObjectType> validObjectTypes = Arrays.asList(ANY, CLASS_0, ANALOG_INPUT_STATIC_ANY, ANALOG_INPUT_STATIC_FLOAT16, ANALOG_INPUT_STATIC_FLOAT64);
 	
 	public void rationalise(ObjectInstance objectInstance) {
 		AnalogInputStaticObjectInstance specificInstance = (AnalogInputStaticObjectInstance) objectInstance;
@@ -41,6 +42,8 @@ public class AnalogInputStaticTypeRationaliserHelper implements ObjectInstanceTy
 			logger.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
 			objectInstance.setRequestedType(ANY);
 		}
-		objectInstance.setRequestedType(ANALOG_INPUT_STATIC_FLOAT16);
+		if (specificInstance.getRequestedType().getGroup() != ANALOG_INPUT_STATIC_ANY.getGroup() || specificInstance.getRequestedType().getVariation() == 0) {
+			objectInstance.setRequestedType(ANALOG_INPUT_STATIC_FLOAT16);
+		}
 	}
 }

@@ -23,6 +23,7 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoderImpl;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.sort.DefaultObjectTypeMapping;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.sort.ObjectInstanceSorter;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.sort.ObjectInstanceTypeRationaliser;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentRequest;
@@ -89,13 +90,11 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		applicationResponseHeader.getApplicationControl().setUnsolicitedResponse(false);
 		applicationResponseHeader.getApplicationControl().setSequenceNumber(request.getHeader().getApplicationControl().getSequenceNumber());
 		
-		System.out.println("+++++");
+		DefaultObjectTypeMapping mapping = new DefaultObjectTypeMapping();
 		ObjectInstanceTypeRationaliser rationaliser = new ObjectInstanceTypeRationaliser();
 		for (ObjectInstance objectInstance : responseObjects) {
-			System.out.println("-----");
-			System.out.println(objectInstance.getRequestedType());
+			mapping.performMapping(objectInstance);
 			rationaliser.rationaliseType(objectInstance);
-			System.out.println(objectInstance.getRequestedType());
 		}
 		ObjectInstanceSorter sorter = new ObjectInstanceSorter();
 		sorter.sort(responseObjects);

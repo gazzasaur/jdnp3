@@ -64,7 +64,6 @@ public class App {
 					items.add(binaryInputStaticObjectInstance);
 				}
 				AnalogInputStaticObjectInstance analogInputStaticObjectInstance = new AnalogInputStaticObjectInstance();
-				analogInputStaticObjectInstance.setRequestedType(ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT16);
 				analogInputStaticObjectInstance.setValue(56.73);
 				analogInputStaticObjectInstance.setIndex(0);
 				items.add(analogInputStaticObjectInstance);

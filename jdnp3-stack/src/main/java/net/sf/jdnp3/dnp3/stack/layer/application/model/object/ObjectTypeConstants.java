@@ -31,6 +31,7 @@ public class ObjectTypeConstants {
 	
 	public static ObjectType ANALOG_INPUT_STATIC_ANY = new ObjectType(30, 0);
 	public static ObjectType ANALOG_INPUT_STATIC_FLOAT16 = new ObjectType(30, 5);
+	public static ObjectType ANALOG_INPUT_STATIC_FLOAT64 = new ObjectType(30, 6);
 
 	public static ObjectType CLASS_0 = new ObjectType(60, 1);
 	public static ObjectType CLASS_1 = new ObjectType(60, 2);

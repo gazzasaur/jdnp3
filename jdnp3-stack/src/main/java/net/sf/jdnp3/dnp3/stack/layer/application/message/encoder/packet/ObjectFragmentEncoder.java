@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.AnalogInputStaticFloat16ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.AnalogInputStaticFloat64ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryInputEventAbsoluteTimeObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryInputStaticFlagsObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryInputStaticPackedObjectTypeEncoder;
@@ -37,6 +38,7 @@ public class ObjectFragmentEncoder {
 		this.add(new BinaryInputEventAbsoluteTimeObjectTypeEncoder());
 		
 		this.add(new AnalogInputStaticFloat16ObjectTypeEncoder());
+		this.add(new AnalogInputStaticFloat64ObjectTypeEncoder());
 	}};
 	
 	public void encode(FunctionCode functionCode, ObjectType objectType, List<ObjectInstance> objectInstances, List<Byte> data) {
