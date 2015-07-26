@@ -29,7 +29,6 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticO
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
 

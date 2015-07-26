@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:co="http://java.sun.com/jsf/composite"
+	xmlns:j="http://sf.net/jdnp3/facelets">
+	
+<co:interface>
+	<co:attribute name="id" />
+	<co:attribute name="title" />
+</co:interface>
+
+<co:implementation>
+	<ui:composition>
+		<div style="font-size: 0px;">
+			<j:slideswitch id="bi-#{cc.attrs.id}-state" title="State" />
+			<j:dipswitch id="bi-#{cc.attrs.id}-cf" title="Chatter Filter" abbreviation="CF" onclick="requestChangeValue('bi-#{cc.attrs.id}', 'chatterFilter')" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.id}-lf" title="Local Forced" abbreviation="LF" onclick="requestChangeValue('bi-#{cc.attrs.id}', 'localForced')" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.id}-rf" title="Remote Forced" abbreviation="RF" onclick="requestChangeValue('bi-#{cc.attrs.id}', 'remoteForced')" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.id}-cl" title="Communications Lost" abbreviation="CL" onclick="requestChangeValue('bi-#{cc.attrs.id}', 'communicationsLost')" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.id}-rs" title="Restart" abbreviation="RS" onclick="requestChangeValue('bi-#{cc.attrs.id}', 'restart')" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.id}-ol" title="Online" abbreviation="OL" value="true" onclick="requestChangeValue('bi-#{cc.attrs.id}', 'online')" disabled="true" />
+		</div>
+	</ui:composition>
+</co:implementation>
+</html>

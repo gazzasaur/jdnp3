@@ -1,0 +1,32 @@
+.ui-widget-content {
+	border-style: none;
+}
+
+.ui-panelgrid .ui-panelgrid-cell {
+	padding: 0px;
+	border-style: none;
+}
+
+.text-field {
+	position: relative;
+	width: 200px;
+	height: 40px;
+	overflow: hidden;
+	border-radius: 3px;
+	border: 1px solid #7777FF;
+	background-color: #FFFFFF;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	display: inline-block;
+}
+
+.text-field .text-field-value {
+	width: 100%;
+	height: 100%;
+	color: #7777FF;
+	font-weight: bold;
+	font-family: Aerial;
+	text-align: right;
+	font-size: 25px;
+}

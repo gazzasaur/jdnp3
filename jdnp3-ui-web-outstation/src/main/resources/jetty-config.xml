@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="webAppContext" class="org.eclipse.jetty.webapp.WebAppContext">
+		<property name="contextPath" value="/" />
+		<property name="resourceBase" value="src/main/webapp/" />
+		<property name="descriptor" value="src/main/webapp/WEB-INF/web.xml" />
+	</bean>
+	
+	<bean id="server" class="org.eclipse.jetty.server.Server">
+		<constructor-arg name="port" value="8080" />
+		<property name="handler" ref="webAppContext" />
+	</bean>
+	
+		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetClass" value="org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer" />
+		<property name="targetMethod" value="configureContext" />
+		<property name="arguments">
+			<list>
+				<ref bean="webAppContext" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="serverContainer" factory-bean="webAppContext" factory-method="getAttribute">
+		<constructor-arg name="name" value="javax.websocket.server.ServerContainer" />
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="serverContainer" />
+		<property name="targetMethod" value="addEndpoint" />
+		<property name="arguments">
+			<list>
+				<value type="java.lang.Class">net.sf.jdnp3.ui.web.outstation.GenericWebSocket</value>
+			</list>
+		</property>
+	</bean>
+</beans>

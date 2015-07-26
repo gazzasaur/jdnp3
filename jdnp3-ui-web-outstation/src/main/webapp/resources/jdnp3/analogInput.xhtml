@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:co="http://java.sun.com/jsf/composite"
+	xmlns:j="http://sf.net/jdnp3/facelets">
+	
+<co:interface>
+	<co:attribute name="id" />
+</co:interface>
+
+<co:implementation>
+	<ui:composition>
+		<div style="font-size: 0px;">
+			<div class="text-field">
+				<h:inputText id="ai-#{cc.attrs.id}-value" styleClass="text-field-value" title="Value" />
+			</div>
+			<j:dipswitch id="ai-#{cc.attrs.id}-re" title="Reference Error" abbreviation="RE" />
+			<j:dipswitch id="ai-#{cc.attrs.id}-or" title="Over Range" abbreviation="OR" />
+			<j:dipswitch id="ai-#{cc.attrs.id}-lf" title="Local Forced" abbreviation="LF" />
+			<j:dipswitch id="ai-#{cc.attrs.id}-rf" title="Remote Forced" abbreviation="RF" />
+			<j:dipswitch id="ai-#{cc.attrs.id}-cl" title="Communications Lost" abbreviation="CL" />
+			<j:dipswitch id="ai-#{cc.attrs.id}-rs" title="Restart" abbreviation="RS" />
+			<j:dipswitch id="ai-#{cc.attrs.id}-ol" title="Online" abbreviation="OL" value="true" />
+		</div>
+	</ui:composition>
+</co:implementation>
+</html>
