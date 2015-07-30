@@ -15,26 +15,10 @@
  */
 package net.sf.jdnp3.ui.web.outstation;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-
-import net.sf.jdnp3.ui.web.outstation.database.BinaryDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
-
-@ManagedBean
-@RequestScoped
-public class PointDatabase {
-	public List<String> getPoints() {
-		int index = 0;
-		List<String> names = new ArrayList<>();
-		List<BinaryDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
-		for (BinaryDataPoint binaryDataPoint : binaryDataPoints) {
-			names.add("p" + index);
-			++index;
-		}
-		return names;
+public class ModelChangedMessage implements Message {
+	private String type = "modelChanged";
+	
+	public String getType() {
+		return type;
 	}
 }

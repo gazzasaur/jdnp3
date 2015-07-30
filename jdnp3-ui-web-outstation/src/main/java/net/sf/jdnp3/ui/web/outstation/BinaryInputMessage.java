@@ -18,7 +18,13 @@ package net.sf.jdnp3.ui.web.outstation;
 public class BinaryInputMessage implements Message {
 	private String type = "binaryInput";
 	private long index = 0;
+	private boolean active = false;
+	private boolean online = true;
+	private boolean restart = false;
+	private boolean localForced = false;
+	private boolean remoteForced = false;
 	private boolean chatterFilter = false;
+	private boolean communicationsLost = false;
 	
 	public String getType() {
 		return type;
@@ -31,6 +37,14 @@ public class BinaryInputMessage implements Message {
 	public void setIndex(long index) {
 		this.index = index;
 	}
+	
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
 	public boolean isChatterFilter() {
 		return chatterFilter;
@@ -38,5 +52,45 @@ public class BinaryInputMessage implements Message {
 
 	public void setChatterFilter(boolean chatterFilter) {
 		this.chatterFilter = chatterFilter;
+	}
+
+	public boolean isOnline() {
+		return online;
+	}
+
+	public void setOnline(boolean online) {
+		this.online = online;
+	}
+
+	public boolean isRestart() {
+		return restart;
+	}
+
+	public void setRestart(boolean restart) {
+		this.restart = restart;
+	}
+
+	public boolean isLocalForced() {
+		return localForced;
+	}
+
+	public void setLocalForced(boolean localForced) {
+		this.localForced = localForced;
+	}
+
+	public boolean isRemoteForced() {
+		return remoteForced;
+	}
+
+	public void setRemoteForced(boolean remoteForced) {
+		this.remoteForced = remoteForced;
+	}
+
+	public boolean isCommunicationsLost() {
+		return communicationsLost;
+	}
+
+	public void setCommunicationsLost(boolean communicationsLost) {
+		this.communicationsLost = communicationsLost;
 	}
 }

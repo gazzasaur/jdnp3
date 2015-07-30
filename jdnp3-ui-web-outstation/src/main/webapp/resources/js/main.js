@@ -1,13 +1,21 @@
 var webSocket;
 var webSocketMessageQueue = [];
-var webSocketStatus = 'disconnected';
+
+var ATTRIBUTE_MAP = {};
+ATTRIBUTE_MAP.active = 'state';
+ATTRIBUTE_MAP.online = 'ol';
+ATTRIBUTE_MAP.restart = 'rs';
+ATTRIBUTE_MAP.localForced = 'lf';
+ATTRIBUTE_MAP.remoteForced = 'rf';
+ATTRIBUTE_MAP.chatterFilter = 'cf';
+ATTRIBUTE_MAP.communicationsLost = 'cl';
+
 $(document).ready(function() {
 	var location = document.location.toString().replace(/\bhttp/,'ws').replace(/\/\/.*/,'//') + window.location.host + '/secure/ws/general';
 	webSocket = new WebSocket(location);
 	
 	webSocket.onopen = function() {
 		console.log('WebSocket connection open.');
-		webSocketStatus = 'ready';
 	};
 	webSocket.onclose = function() {
 		console.log('WebSocket connection closed.');
@@ -17,14 +25,16 @@ $(document).ready(function() {
 	};
 	webSocket.onmessage = function(e) {
 		if (e.data) {
-			console.log(e.data)
 			message = jQuery.parseJSON(e.data);
 			if (message.type == 'binaryInput') {
-				var id = 'bi-p' + message.index;
-				$("[id$=" + id + "-cf]").prop('checked', message.chatterFilter)				
+				for (var property in message) {
+					var id = 'bi-p' + message.index;
+				    if (message.hasOwnProperty(property) && property in ATTRIBUTE_MAP) {
+						$("[id$=" + id + "-" + ATTRIBUTE_MAP[property] + "]").prop('checked', message[property])
+				    }
+				}
 			}
 		}
-		console.log('Message for me');
 	}
 });
 
@@ -52,6 +62,11 @@ getBinaryValue = function(id) {
 	}
 	data.active = $('[id$=bi-p' + index + '-state]').prop('checked')  ? true : false;
 	data.chatterFilter = $('[id$=bi-p' + index + '-cf]').prop('checked')  ? true : false;
+	data.localForced = $('[id$=bi-p' + index + '-lf]').prop('checked')  ? true : false;
+	data.remoteForced = $('[id$=bi-p' + index + '-rf]').prop('checked')  ? true : false;
+	data.communicationsLost = $('[id$=bi-p' + index + '-cl]').prop('checked')  ? true : false;
+	data.restart = $('[id$=bi-p' + index + '-rs]').prop('checked')  ? true : false;
+	data.online = $('[id$=bi-p' + index + '-ol]').prop('checked')  ? true : false;
 	return data;
 }
 

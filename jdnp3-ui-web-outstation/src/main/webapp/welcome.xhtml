@@ -20,24 +20,21 @@
 
 	<f:view>
 		<h:form>
-			<p:toolbar>
-				<p:toolbarGroup align="right">
-					<p:menuButton style="font-size: 14px;" value="Point">
-						<p:menuitem value="Logout" style="font-size: 14px;" onclick="$('[id$=blah]').click()" />
-					</p:menuButton>
-				</p:toolbarGroup>
-			</p:toolbar>
-		</h:form>
-
+			<p:remoteCommand name="updatePage" update="page" />
+			<p:outputPanel id="page">
+				<div style="text-align: center; display: block;">
+					<p:panel header="Internal Indicators">
+						<p:panelGrid style="margin: auto; text-align: right;" columns="2">
+							<jdnp3:internalIndicators id="iin" />
+						</p:panelGrid>
+					</p:panel>
+				</div>
 				<div style="text-align: center; display: inline-block;">
 					<p:panel header="Binary Input">
 						<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-							<h:outputText style="margin-right: 10px" value="Pt0" /><jdnp3:binaryInput id="p0" />
-							<h:outputText style="margin-right: 10px" value="Pt1" /><jdnp3:binaryInput id="p1" />
-							<h:outputText style="margin-right: 10px" value="Pt2" /><jdnp3:binaryInput id="p2" />
-							<h:outputText style="margin-right: 10px" value="Pt3" /><jdnp3:binaryInput id="p3" />
-							<h:outputText style="margin-right: 10px" value="Pt4" /><jdnp3:binaryInput id="p4" />
-							<h:outputText style="margin-right: 10px" value="Pt5" /><jdnp3:binaryInput id="p5" />
+							<c:forEach var="pid" items="#{pointDatabase.points}">
+								<h:outputText style="margin-right: 10px" value="#{pid}" /><jdnp3:binaryInput pid="#{pid}" />
+							</c:forEach>
 						</p:panelGrid>
 					</p:panel>
 				</div>
@@ -53,7 +50,8 @@
 						</p:panelGrid>
 					</p:panel>
 				</div>
-		
+			</p:outputPanel>
+		</h:form>
 	</f:view>
 </h:body>
 </html>

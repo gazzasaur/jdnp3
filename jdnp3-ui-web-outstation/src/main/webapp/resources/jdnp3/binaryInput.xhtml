@@ -10,20 +10,20 @@
 	xmlns:j="http://sf.net/jdnp3/facelets">
 	
 <co:interface>
-	<co:attribute name="id" />
+	<co:attribute name="pid" />
 	<co:attribute name="title" />
 </co:interface>
 
 <co:implementation>
 	<ui:composition>
 		<div style="font-size: 0px;">
-			<j:slideswitch id="bi-#{cc.attrs.id}-state" title="State" />
-			<j:dipswitch id="bi-#{cc.attrs.id}-cf" title="Chatter Filter" abbreviation="CF" onclick="requestChangeValue('bi-#{cc.attrs.id}', 'chatterFilter')" disabled="true" />
-			<j:dipswitch id="bi-#{cc.attrs.id}-lf" title="Local Forced" abbreviation="LF" onclick="requestChangeValue('bi-#{cc.attrs.id}', 'localForced')" disabled="true" />
-			<j:dipswitch id="bi-#{cc.attrs.id}-rf" title="Remote Forced" abbreviation="RF" onclick="requestChangeValue('bi-#{cc.attrs.id}', 'remoteForced')" disabled="true" />
-			<j:dipswitch id="bi-#{cc.attrs.id}-cl" title="Communications Lost" abbreviation="CL" onclick="requestChangeValue('bi-#{cc.attrs.id}', 'communicationsLost')" disabled="true" />
-			<j:dipswitch id="bi-#{cc.attrs.id}-rs" title="Restart" abbreviation="RS" onclick="requestChangeValue('bi-#{cc.attrs.id}', 'restart')" disabled="true" />
-			<j:dipswitch id="bi-#{cc.attrs.id}-ol" title="Online" abbreviation="OL" value="true" onclick="requestChangeValue('bi-#{cc.attrs.id}', 'online')" disabled="true" />
+			<j:slideswitch id="bi-#{cc.attrs.pid}-state" title="State" onclick="requestChangeValue('bi-#{cc.attrs.pid}', 'active')" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.pid}-cf" title="Chatter Filter" abbreviation="CF" onclick="requestChangeValue('bi-#{cc.attrs.pid}', 'chatterFilter')" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.pid}-lf" title="Local Forced" abbreviation="LF" onclick="requestChangeValue('bi-#{cc.attrs.pid}', 'localForced')" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.pid}-rf" title="Remote Forced" abbreviation="RF" onclick="requestChangeValue('bi-#{cc.attrs.pid}', 'remoteForced')" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.pid}-cl" title="Communications Lost" abbreviation="CL" onclick="requestChangeValue('bi-#{cc.attrs.pid}', 'communicationsLost')" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.pid}-rs" title="Restart" abbreviation="RS" onclick="requestChangeValue('bi-#{cc.attrs.pid}', 'restart')" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.pid}-ol" title="Online" abbreviation="OL" onclick="requestChangeValue('bi-#{cc.attrs.pid}', 'online')" disabled="true" />
 		</div>
 	</ui:composition>
 </co:implementation>

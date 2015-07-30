@@ -18,9 +18,14 @@ package net.sf.jdnp3.ui.web.outstation.database;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.rits.cloning.Cloner;
 
 public class DatabaseManager {
+	private Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
+	
 	private Database database = new Database();
 	private List<DatabaseListener> databaseListeners = new ArrayList<>();
 	
@@ -38,6 +43,10 @@ public class DatabaseManager {
 		}
 	}
 	
+	public List<BinaryDataPoint> getBinaryDataPoints() {
+		return Cloner.standard().deepClone(database.getBinaryDataPoints());
+	}
+	
 	public void setBinaryDataPoint(BinaryDataPoint binaryDataPoint) {
 		synchronized (database) {
 			database.setBinaryDataPoint(Cloner.standard().deepClone(binaryDataPoint));
@@ -46,6 +55,16 @@ public class DatabaseManager {
 			for (DatabaseListener databaseListener : databaseListeners) {
 				databaseListener.valueChanged(binaryDataPoint);
 			}
+		} else {
+			logger.warn("Cannot write binary data point of index: " + binaryDataPoint.getIndex());
 		}
+	}
+	
+	public void addDatabaseListener(DatabaseListener databaseListener) {
+		databaseListeners.add(databaseListener);
+	}
+
+	public void removeDatabaseListener(DatabaseListener databaseListener) {
+		databaseListeners.remove(databaseListener);
 	}
 }
