@@ -32,8 +32,8 @@
 				<div style="text-align: center; display: inline-block;">
 					<p:panel header="Binary Input">
 						<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-							<c:forEach var="pid" items="#{pointDatabase.points}">
-								<h:outputText style="margin-right: 10px" value="#{pid}" /><jdnp3:binaryInput pid="#{pid}" />
+							<c:forEach var="point" items="#{uiPointDatabase.binaryPoints}">
+								<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:binaryInput point="#{point}" />
 							</c:forEach>
 						</p:panelGrid>
 					</p:panel>

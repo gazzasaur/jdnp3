@@ -28,7 +28,7 @@ $(document).ready(function() {
 			message = jQuery.parseJSON(e.data);
 			if (message.type == 'binaryInput') {
 				for (var property in message) {
-					var id = 'bi-p' + message.index;
+					var id = 'bi-' + message.index;
 				    if (message.hasOwnProperty(property) && property in ATTRIBUTE_MAP) {
 						$("[id$=" + id + "-" + ATTRIBUTE_MAP[property] + "]").prop('checked', message[property])
 				    }
@@ -39,7 +39,7 @@ $(document).ready(function() {
 });
 
 getDataPointIndex = function(id) {
-	var regexArray = /[a-z0-9]+-p(\d+)/g.exec(id);
+	var regexArray = /[a-z0-9]+-(\d+)/g.exec(id);
 	if (!regexArray || regexArray.length != 2) {
 		throw "Cannot extract an index value from the id " + id;
 	}
@@ -47,7 +47,7 @@ getDataPointIndex = function(id) {
 }
 
 getBinaryValue = function(id) {
-	if (!/bi-p(\d+)/g.exec(id)) {
+	if (!/bi-(\d+)/g.exec(id)) {
 		throw "Element " + id + " is not a valid binary input.";
 	}
 	
@@ -57,25 +57,26 @@ getBinaryValue = function(id) {
 			'index': index,
 	};
 	
-	if (!$('[id$=bi-p' + index + '-state]').length) {
+	if (!$('[id$=bi-' + index + '-state]').length) {
 		throw "Element " + id + " does not exist.";
 	}
-	data.active = $('[id$=bi-p' + index + '-state]').prop('checked')  ? true : false;
-	data.chatterFilter = $('[id$=bi-p' + index + '-cf]').prop('checked')  ? true : false;
-	data.localForced = $('[id$=bi-p' + index + '-lf]').prop('checked')  ? true : false;
-	data.remoteForced = $('[id$=bi-p' + index + '-rf]').prop('checked')  ? true : false;
-	data.communicationsLost = $('[id$=bi-p' + index + '-cl]').prop('checked')  ? true : false;
-	data.restart = $('[id$=bi-p' + index + '-rs]').prop('checked')  ? true : false;
-	data.online = $('[id$=bi-p' + index + '-ol]').prop('checked')  ? true : false;
+	data.active = $('[id$=bi-' + index + '-state]').prop('checked')  ? true : false;
+	data.chatterFilter = $('[id$=bi-' + index + '-cf]').prop('checked')  ? true : false;
+	data.localForced = $('[id$=bi-' + index + '-lf]').prop('checked')  ? true : false;
+	data.remoteForced = $('[id$=bi-' + index + '-rf]').prop('checked')  ? true : false;
+	data.communicationsLost = $('[id$=bi-' + index + '-cl]').prop('checked')  ? true : false;
+	data.restart = $('[id$=bi-' + index + '-rs]').prop('checked')  ? true : false;
+	data.online = $('[id$=bi-' + index + '-ol]').prop('checked')  ? true : false;
 	return data;
 }
 
 requestChangeValue = function(id, attribute) {
-	var binaryType = /bi-p(\d+)/g.exec(id);
+	var binaryType = /bi-(\d+)/g.exec(id);
 	if (binaryType) {
 		var data = getBinaryValue(id);
 		if (data.hasOwnProperty(attribute)) {
 			data[attribute] = !data[attribute];
+			console.log(data);
 			webSocket.send(JSON.stringify(data));
 		}
 	}

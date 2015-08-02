@@ -36,6 +36,7 @@ public class Database {
 	
 	public void setBinaryDataPoint(BinaryDataPoint binaryDataPoint) {
 		if (binaryDataPoint.getIndex() < binaryDataPoints.size()) {
+			binaryDataPoint.setName(binaryDataPoints.get((int) binaryDataPoint.getIndex()).getName());
 			binaryDataPoints.set((int) binaryDataPoint.getIndex(), binaryDataPoint);
 		}
 	}

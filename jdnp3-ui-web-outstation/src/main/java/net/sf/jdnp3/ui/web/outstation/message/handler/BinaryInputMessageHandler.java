@@ -39,7 +39,6 @@ public class BinaryInputMessageHandler implements MessageHandler {
 
 		BinaryDataPoint binaryDataPoint = new BinaryDataPoint();
 		try {
-			System.out.println(((BinaryInputMessage) message).isActive());
 			BeanUtils.copyProperties(binaryDataPoint, message);
 			DatabaseManagerProvider.getDatabaseManager().setBinaryDataPoint(binaryDataPoint);
 		} catch (Exception e) {

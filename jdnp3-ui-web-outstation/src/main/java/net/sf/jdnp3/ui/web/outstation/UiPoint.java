@@ -15,26 +15,40 @@
  */
 package net.sf.jdnp3.ui.web.outstation;
 
-import java.util.ArrayList;
-import java.util.List;
+public class UiPoint {
+	private long index = 0;
+	private String name = "";
+	private String dnpClass = "Class1";
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+	public long getIndex() {
+		return index;
+	}
 
-import net.sf.jdnp3.ui.web.outstation.database.BinaryDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
+	public void setIndex(long index) {
+		this.index = index;
+	}
 
-@ManagedBean
-@RequestScoped
-public class PointDatabase {
-	public List<String> getPoints() {
-		int index = 0;
-		List<String> names = new ArrayList<>();
-		List<BinaryDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
-		for (BinaryDataPoint binaryDataPoint : binaryDataPoints) {
-			names.add("p" + index);
-			++index;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDnpClass() {
+		String value = dnpClass;
+		if (dnpClass.equals("Class1")) {
+			dnpClass = "Class2";
+		} else if (dnpClass.equals("Class2")) {
+			dnpClass = "Class3";
+		} else {
+			dnpClass = "Class1";
 		}
-		return names;
+		return value;
+	}
+
+	public void setDnpClass(String dnpClass) {
+		this.dnpClass = dnpClass;
 	}
 }

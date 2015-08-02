@@ -18,6 +18,7 @@ package net.sf.jdnp3.ui.web.outstation;
 public class BinaryInputMessage implements Message {
 	private String type = "binaryInput";
 	private long index = 0;
+	private String name = "";
 	private boolean active = false;
 	private boolean online = true;
 	private boolean restart = false;
@@ -92,5 +93,19 @@ public class BinaryInputMessage implements Message {
 
 	public void setCommunicationsLost(boolean communicationsLost) {
 		this.communicationsLost = communicationsLost;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 }

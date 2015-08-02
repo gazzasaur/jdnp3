@@ -15,6 +15,8 @@
  */
 package net.sf.jdnp3.dnp3.stack.main;
 
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_EVENT_WITHOUT_TIME;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -80,6 +82,7 @@ public class App {
 				binary.setIndex(60000);
 				binary.setActive(true);
 				binary.setTimestamp(new Date().getTime());
+				binary.setRequestedType(BINARY_INPUT_EVENT_WITHOUT_TIME);
 				return Arrays.asList(binary);
 			}
 

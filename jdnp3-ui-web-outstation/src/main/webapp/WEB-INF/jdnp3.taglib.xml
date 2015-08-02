@@ -11,4 +11,9 @@
 		<tag-name>slideswitch</tag-name>
 		<source>tags/slideswitch.xhtml</source>
 	</tag>
+	
+	<tag>
+		<tag-name>eventbutton</tag-name>
+		<source>tags/eventbutton.xhtml</source>
+	</tag>
 </facelet-taglib>

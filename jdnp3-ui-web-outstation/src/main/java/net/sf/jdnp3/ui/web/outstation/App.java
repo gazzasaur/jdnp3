@@ -35,8 +35,6 @@ import org.eclipse.jetty.server.Server;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-// Make thisfit on one screen.
-
 public class App {
 	public static void main(String[] args) {
 		SLF4JBridgeHandler.removeHandlersForRootLogger();
