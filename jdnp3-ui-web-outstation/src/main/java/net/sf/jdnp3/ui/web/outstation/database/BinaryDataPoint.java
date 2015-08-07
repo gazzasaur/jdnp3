@@ -15,6 +15,9 @@
  */
 package net.sf.jdnp3.ui.web.outstation.database;
 
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+
 public class BinaryDataPoint {
 	private long index = 0;
 	private String name = "";
@@ -26,6 +29,10 @@ public class BinaryDataPoint {
 	private boolean remoteForced = false;
 	private boolean chatterFilter = false;
 	private boolean communicationsLost = false;
+	
+	private ObjectType staticType = ANY;
+	private ObjectType eventType = ANY;
+	private int eventClass = 1;
 
 	public long getIndex() {
 		return index;
@@ -97,5 +104,29 @@ public class BinaryDataPoint {
 
 	public void setCommunicationsLost(boolean communicationsLost) {
 		this.communicationsLost = communicationsLost;
+	}
+
+	public ObjectType getStaticType() {
+		return staticType;
+	}
+
+	public void setStaticType(ObjectType staticType) {
+		this.staticType = staticType;
+	}
+
+	public ObjectType getEventType() {
+		return eventType;
+	}
+
+	public void setEventType(ObjectType eventType) {
+		this.eventType = eventType;
+	}
+
+	public int getEventClass() {
+		return eventClass;
+	}
+
+	public void setEventClass(int eventClass) {
+		this.eventClass = eventClass;
 	}
 }

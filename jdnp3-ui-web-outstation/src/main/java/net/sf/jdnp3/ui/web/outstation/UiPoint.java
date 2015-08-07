@@ -18,7 +18,6 @@ package net.sf.jdnp3.ui.web.outstation;
 public class UiPoint {
 	private long index = 0;
 	private String name = "";
-	private String dnpClass = "Class1";
 
 	public long getIndex() {
 		return index;
@@ -34,21 +33,5 @@ public class UiPoint {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getDnpClass() {
-		String value = dnpClass;
-		if (dnpClass.equals("Class1")) {
-			dnpClass = "Class2";
-		} else if (dnpClass.equals("Class2")) {
-			dnpClass = "Class3";
-		} else {
-			dnpClass = "Class1";
-		}
-		return value;
-	}
-
-	public void setDnpClass(String dnpClass) {
-		this.dnpClass = dnpClass;
 	}
 }

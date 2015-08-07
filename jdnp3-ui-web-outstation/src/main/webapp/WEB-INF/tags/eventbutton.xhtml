@@ -13,10 +13,10 @@
 	<ui:composition>
 		<h:outputStylesheet library="css" name="buttons.css" />
 		
-		<div class="glossy-button" onclick="#{onclick}" title="#{title}">
+		<div style="display: inline-block;" onclick="#{onclick}" title="#{title}">
 			<h:selectBooleanCheckbox styleClass="eventbutton-checkbox" id="#{id}" value="#{value}" disabled="#{disabled}" />
-			<h:outputLabel for="${id}">
-				<span>E</span>
+			<h:outputLabel styleClass="glossy-button" for="${id}">
+				<span>#{label}</span>
 			</h:outputLabel>
 		</div>
 	</ui:composition>

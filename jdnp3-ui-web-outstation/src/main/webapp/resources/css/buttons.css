@@ -39,6 +39,23 @@
     background: -webkit-linear-gradient(top,  #6699ff 33%, #6699ff 100%);
 }
 
+.eventbutton-checkbox:checked+.glossy-button {
+    background: #ff7700;
+    background: -webkit-linear-gradient(top,  #ffaa55 33%, #ffddaa 100%);
+    background: -moz-linear-gradient(top,  #ffaa55 33%, #ffddaa 100%);
+}
+
+.eventbutton-checkbox:checked+.glossy-button:hover {
+    background: -moz-linear-gradient(top,  #ffddaa 33%, #ffddaa 100%);
+    background: -webkit-linear-gradient(top,  #ffddaa 33%, #ffddaa 100%);
+}
+
+.eventbutton-checkbox:checked+.glossy-button:active {
+	background: #6699ff;
+    background: -moz-linear-gradient(top,  #ffaa55 33%, #ffaa55 100%);
+    background: -webkit-linear-gradient(top,  #ffaa55 33%, #ffaa55 100%);
+}
+
 .glossy-button:before {
     content: "";
     
