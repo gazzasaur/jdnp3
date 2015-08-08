@@ -50,7 +50,6 @@ public class AnalogInputStaticFloat64ObjectTypeEncoder implements ObjectTypeEnco
 		indexRange.setStopIndex(objectInstances.get(objectInstances.size() - 1).getIndex());
 		
 		QualifierField qualifierField = QualifierFieldCalculator.calculate(new NoPrefixType(), indexRange);
-		System.out.println(objectType.getGroup());
 		objectFragmentHeaderEncoder.encode(objectType, qualifierField, indexRange, data);
 		
 		for (ObjectInstance objectInstance : objectInstances) {

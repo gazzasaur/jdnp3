@@ -15,8 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application;
 
-import static java.lang.String.format;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,12 +29,14 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.Applicatio
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentResponseHeader;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayerImpl;
 
 public class OutstationApplicationLayer implements ApplicationLayer {
+	private List<EventObjectInstance> pendingEvents = new ArrayList<>();
 	private List<OutstationRequestHandler> outstationRequestHandlers = new ArrayList<>();
 	
 	private DataLinkLayer dataLinkLayer = null;
@@ -67,6 +67,15 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		// FIXME IMPL Need the ability to confirm a packet and complete/cancel a transaction.
 		List<ObjectInstance> responseObjects = new ArrayList<>();
 		ApplicationFragmentRequest request = decoder.decode(data);
+		
+		if (request.getHeader().getFunctionCode() == FunctionCode.CONFIRM) {
+			for (EventObjectInstance eventObjectInstance : pendingEvents) {
+				eventQueue.confirm(eventObjectInstance);
+			}
+			pendingEvents.clear();
+			return;
+		}
+		
 		for (ObjectFragment objectFragment : request.getObjectFragments()) {
 			for (OutstationRequestHandler handler : outstationRequestHandlers) {
 				if (handler.canHandle(request.getHeader().getFunctionCode(), objectFragment)) {
@@ -86,6 +95,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		applicationResponseHeader.getApplicationControl().setFirstFragmentOfMessage(true);
 		applicationResponseHeader.getApplicationControl().setFinalFragmentOfMessage(true);
 		applicationResponseHeader.getApplicationControl().setUnsolicitedResponse(false);
+		applicationResponseHeader.getApplicationControl().setConfirmationRequired(true);
 		applicationResponseHeader.getApplicationControl().setSequenceNumber(request.getHeader().getApplicationControl().getSequenceNumber());
 		
 		DefaultObjectTypeMapping mapping = new DefaultObjectTypeMapping();
@@ -98,6 +108,9 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		sorter.sort(responseObjects);
 		
 		for (ObjectInstance objectInstance : responseObjects) {
+			if (objectInstance instanceof EventObjectInstance) {
+				pendingEvents.add((EventObjectInstance) objectInstance);
+			}
 			response.addObjectInstance(objectInstance);
 		}
 		
