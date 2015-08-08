@@ -40,8 +40,8 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	private List<OutstationRequestHandler> outstationRequestHandlers = new ArrayList<>();
 	
 	private DataLinkLayer dataLinkLayer = null;
-	private Transaction currentTransaction = null;
 	private TransportLayer transportLayer = new TransportLayerImpl();
+	private OutstationEventQueue eventQueue = new OutstationEventQueue();
 	private ApplicationFragmentRequestDecoder decoder = new ApplicationFragmentRequestDecoderImpl();
 
 	public DataLinkLayer getDataLinkLayer() {
@@ -59,14 +59,12 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		outstationRequestHandlers.add(outstationRequestHandler);
 	}
 	
+	public OutstationEventQueue getOutstationEventQueue() {
+		return eventQueue;
+	}
+	
 	public void dataReceived(List<Byte> data) {
 		// FIXME IMPL Need the ability to confirm a packet and complete/cancel a transaction.
-		System.out.print("AL: ");
-		for (Byte dataByte : data) {
-			System.out.print(format("%02X ", dataByte));
-		}
-		System.out.println();
-		
 		List<ObjectInstance> responseObjects = new ArrayList<>();
 		ApplicationFragmentRequest request = decoder.decode(data);
 		for (ObjectFragment objectFragment : request.getObjectFragments()) {

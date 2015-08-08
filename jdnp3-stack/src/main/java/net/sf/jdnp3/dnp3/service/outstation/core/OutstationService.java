@@ -15,6 +15,9 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.core;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.OutstationEventQueue;
+
 public interface OutstationService {
+	public OutstationEventQueue getOutstationEventQueue();
 	public void addServiceRequestHandler(ServiceRequestHandler serviceRequestHandler);
 }

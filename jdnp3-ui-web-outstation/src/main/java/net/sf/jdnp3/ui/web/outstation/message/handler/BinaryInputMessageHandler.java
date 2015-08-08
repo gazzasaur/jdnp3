@@ -15,6 +15,7 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.handler;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.ui.web.outstation.BinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.Message;
 import net.sf.jdnp3.ui.web.outstation.MessageHandler;
@@ -36,10 +37,13 @@ public class BinaryInputMessageHandler implements MessageHandler {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
+		BinaryInputMessage binaryInputMessage = (BinaryInputMessage) message;
 
 		BinaryDataPoint binaryDataPoint = new BinaryDataPoint();
 		try {
-			BeanUtils.copyProperties(binaryDataPoint, message);
+			BeanUtils.copyProperties(binaryDataPoint, binaryInputMessage);
+			binaryDataPoint.setStaticType(new ObjectType(1, binaryInputMessage.getStaticVariation()));
+			binaryDataPoint.setEventType(new ObjectType(2, binaryInputMessage.getEventVariation()));
 			DatabaseManagerProvider.getDatabaseManager().setBinaryDataPoint(binaryDataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);

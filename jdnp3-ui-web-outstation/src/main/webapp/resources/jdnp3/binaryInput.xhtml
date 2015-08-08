@@ -35,18 +35,24 @@
 		</div>
 		<p:dialog header="Binary Input #{cc.attrs.point.index}" widgetVar="bi-edit#{cc.attrs.point.index}" modal="true">
 			<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+				<h:outputText value="Event Class:" />
+				<p:outputPanel>
+					<j:eventbutton id="bi-#{cc.attrs.point.index}-cl-1" title="Class 1" label="1" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'eventClass', 1)" disabled="true" />
+					<j:eventbutton id="bi-#{cc.attrs.point.index}-cl-2" title="Class 2" label="2" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'eventClass', 2)" disabled="true" />
+					<j:eventbutton id="bi-#{cc.attrs.point.index}-cl-3" title="Class 3" label="3" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'eventClass', 3)" disabled="true" />
+				</p:outputPanel>
 				<h:outputText value="Preferred Static Type:" />
 				<p:outputPanel>
-					<j:eventbutton id="bi-#{cc.attrs.point.index}-st-0" title="Any" label="0" />
-					<j:eventbutton id="bi-#{cc.attrs.point.index}-st-1" title="Packed" label="1" />
-					<j:eventbutton id="bi-#{cc.attrs.point.index}-st-2" title="Flags" label="2" />
+					<j:eventbutton id="bi-#{cc.attrs.point.index}-st-0" title="Any" label="0" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'staticVariation', 0)" disabled="true" />
+					<j:eventbutton id="bi-#{cc.attrs.point.index}-st-1" title="Packed" label="1" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'staticVariation', 1)" disabled="true" />
+					<j:eventbutton id="bi-#{cc.attrs.point.index}-st-2" title="Flags" label="2" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'staticVariation', 2)" disabled="true" />
 				</p:outputPanel>
 				<h:outputText value="Preferred Event Type:" />
 				<p:outputPanel>
-					<j:eventbutton id="bi-#{cc.attrs.point.index}-ev-0" title="Any" label="0" />
-					<j:eventbutton id="bi-#{cc.attrs.point.index}-ev-1" title="Without Time" label="1" />
-					<j:eventbutton id="bi-#{cc.attrs.point.index}-ev-2" title="Absolute Time" label="2" />
-					<j:eventbutton id="bi-#{cc.attrs.point.index}-ev-3" title="Relative Time" label="3" />
+					<j:eventbutton id="bi-#{cc.attrs.point.index}-ev-0" title="Any" label="0" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'eventVariation', 0)" disabled="true" />
+					<j:eventbutton id="bi-#{cc.attrs.point.index}-ev-1" title="Without Time" label="1" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'eventVariation', 1)" disabled="true" />
+					<j:eventbutton id="bi-#{cc.attrs.point.index}-ev-2" title="Absolute Time" label="2" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'eventVariation', 2)" disabled="true" />
+					<j:eventbutton id="bi-#{cc.attrs.point.index}-ev-3" title="Relative Time" label="3" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'eventVariation', 3)" disabled="true" />
 				</p:outputPanel>
 			</h:panelGrid>
 		</p:dialog>

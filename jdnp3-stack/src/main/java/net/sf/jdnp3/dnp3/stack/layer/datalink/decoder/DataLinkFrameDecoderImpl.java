@@ -42,10 +42,6 @@ public class DataLinkFrameDecoderImpl implements DataLinkFrameDecoder {
 			int expectedCheckSum = Crc16.computeCrc(chunk);
 			int actualCheckSum = (int) DataUtils.getInteger16(crcOffset, data);
 			if (expectedCheckSum != actualCheckSum) {
-				for (Byte chunkByte : chunk) {
-					System.out.print(format("%02X", chunkByte));
-				}
-				System.out.println();
 				throw new IllegalStateException(String.format("Mismatched Crc on chunk %d.  Expected %d but got %d.", i, expectedCheckSum, actualCheckSum));
 			}
 			

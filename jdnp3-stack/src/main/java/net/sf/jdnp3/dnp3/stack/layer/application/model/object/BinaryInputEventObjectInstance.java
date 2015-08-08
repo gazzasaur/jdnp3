@@ -21,6 +21,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 public class BinaryInputEventObjectInstance implements EventObjectInstance {
 	private long index = 0;
 	private long timestamp = 0;
+	private int eventClass = 1;
 	private boolean active = false;
 	private ObjectType requestedType = ANY;
 	
@@ -109,5 +110,13 @@ public class BinaryInputEventObjectInstance implements EventObjectInstance {
 
 	public void setCommunicationsLost(boolean communicationsLost) {
 		this.communicationsLost = communicationsLost;
+	}
+
+	public int getEventClass() {
+		return eventClass;
+	}
+
+	public void setEventClass(int eventClass) {
+		this.eventClass = eventClass;
 	}
 }

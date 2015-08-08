@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.OutstationApplicationLayer;
+import net.sf.jdnp3.dnp3.stack.layer.application.OutstationEventQueue;
 import net.sf.jdnp3.dnp3.stack.layer.application.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
 
@@ -46,5 +47,9 @@ public class OutstationServiceImpl implements OutstationService {
 	
 	public void setDataLinkLayer(DataLinkLayer dataLinkLayer) {
 		applicationLayer.setDataLinkLayer(dataLinkLayer);
+	}
+
+	public OutstationEventQueue getOutstationEventQueue() {
+		return applicationLayer.getOutstationEventQueue();
 	}
 }

@@ -65,6 +65,8 @@ public class GenericWebSocket implements DatabaseListener {
 		BinaryInputMessage binaryInputMessage = new BinaryInputMessage();
 		try {
 			BeanUtils.copyProperties(binaryInputMessage, binaryDataPoint);
+			binaryInputMessage.setStaticVariation(binaryDataPoint.getStaticType().getVariation());
+			binaryInputMessage.setEventVariation(binaryDataPoint.getEventType().getVariation());
 			session.getAsyncRemote().sendObject(binaryInputMessage);
 		} catch (Exception e) {
 			logger.error("Cannot create message.", e);

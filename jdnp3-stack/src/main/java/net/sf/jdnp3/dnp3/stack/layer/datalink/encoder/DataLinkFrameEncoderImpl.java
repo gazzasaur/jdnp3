@@ -33,7 +33,6 @@ public class DataLinkFrameEncoderImpl implements DataLinkFrameEncoder {
 			partBuffer.addAll(buffer);
 			partCount += buffer.size();
 			DataUtils.addInteger16(Crc16.computeCrc(buffer), partBuffer);
-			System.out.println(Integer.toHexString(Crc16.computeCrc(buffer)));
 		}
 		
 		List<Byte> data = new ArrayList<>();

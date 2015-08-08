@@ -18,6 +18,10 @@ package net.sf.jdnp3.ui.web.outstation;
 public class BinaryInputMessage implements Message {
 	private String type = "binaryInput";
 	private long index = 0;
+	private int eventClass = 1;
+	private int eventVariation = 0;
+	private int staticVariation = 0;
+	
 	private String name = "";
 	private boolean active = false;
 	private boolean online = true;
@@ -95,17 +99,47 @@ public class BinaryInputMessage implements Message {
 		this.communicationsLost = communicationsLost;
 	}
 
-	/**
-	 * @return the name
-	 */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * @param name the name to set
-	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public int getStaticVariation() {
+		return staticVariation;
+	}
+
+	public void setStaticVariation(int staticVariation) {
+		this.staticVariation = staticVariation;
+	}
+
+	/**
+	 * @return the eventVariation
+	 */
+	public int getEventVariation() {
+		return eventVariation;
+	}
+
+	/**
+	 * @param eventVariation the eventVariation to set
+	 */
+	public void setEventVariation(int eventVariation) {
+		this.eventVariation = eventVariation;
+	}
+
+	/**
+	 * @return the eventClass
+	 */
+	public int getEventClass() {
+		return eventClass;
+	}
+
+	/**
+	 * @param eventClass the eventClass to set
+	 */
+	public void setEventClass(int eventClass) {
+		this.eventClass = eventClass;
 	}
 }

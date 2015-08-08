@@ -184,14 +184,11 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 			throw new IllegalStateException("No transport layer has been specified.");
 		}
 		DataLinkFrame dataLinkFrame = decoder.decode(buffer);
-		System.out.println(dataLinkFrame.getDataLinkFrameHeader().getDestination());
-		System.out.println(dataLinkFrame.getDataLinkFrameHeader().getSource());
 		if (dataLinkFrame.getDataLinkFrameHeader().getDestination() == source &&
 				dataLinkFrame.getDataLinkFrameHeader().getSource() == destination &&
 				dataLinkFrame.getDataLinkFrameHeader().getDirection() != direction &&
 				dataLinkFrame.getDataLinkFrameHeader().getFunctionCode() == FunctionCode.UNCONFIRMED_USER_DATA &&
 				dataLinkFrame.getDataLinkFrameHeader().isPrimary()) {
-			System.out.println("HERE2");
 			transportLayer.receiveData(dataLinkFrame.getData());
 		}
 	}

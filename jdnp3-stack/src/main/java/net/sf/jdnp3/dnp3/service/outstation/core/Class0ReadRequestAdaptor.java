@@ -15,6 +15,8 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.core;
 
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
+
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
@@ -57,7 +59,9 @@ public class Class0ReadRequestAdaptor implements OutstationRequestHandlerAdaptor
 				logger.warn("Cannot perform a read request on the class for the range type of: " + range.getClass());
 			} else {
 				for (ObjectInstance objectInstance : result) {
-					objectInstance.setRequestedType(request.getObjectFragmentHeader().getObjectType());
+					if (objectInstance.getRequestedType().equals(ANY)) {
+						objectInstance.setRequestedType(request.getObjectFragmentHeader().getObjectType());
+					}
 					response.add(objectInstance);
 				}
 			}

@@ -26,12 +26,40 @@ $(document).ready(function() {
 	webSocket.onmessage = function(e) {
 		if (e.data) {
 			message = jQuery.parseJSON(e.data);
+			console.log(message);
 			if (message.type == 'binaryInput') {
 				for (var property in message) {
 					var id = 'bi-' + message.index;
 				    if (message.hasOwnProperty(property) && property in ATTRIBUTE_MAP) {
 						$("[id$=" + id + "-" + ATTRIBUTE_MAP[property] + "]").prop('checked', message[property])
 				    }
+				}
+				
+				for (var i = 1; i < 4; ++i) {
+					var id = 'bi-' + message.index + '-cl-' + i;
+					if (i == message.eventClass) {
+						$('[id$=' + id + ']').prop('checked', 'true');
+					} else {
+						$('[id$=' + id + ']').prop('checked', '');
+					}
+				}
+				
+				for (var i = 0; i < 3; ++i) {
+					var id = 'bi-' + message.index + '-st-' + i;
+					if (i == message.staticVariation) {
+						$('[id$=' + id + ']').prop('checked', 'true');
+					} else {
+						$('[id$=' + id + ']').prop('checked', '');
+					}
+				}
+				
+				for (var i = 0; i < 4; ++i) {
+					var id = 'bi-' + message.index + '-ev-' + i;
+					if (i == message.eventVariation) {
+						$('[id$=' + id + ']').prop('checked', 'true');
+					} else {
+						$('[id$=' + id + ']').prop('checked', '');
+					}
 				}
 			}
 		}
@@ -67,6 +95,33 @@ getBinaryValue = function(id) {
 	data.communicationsLost = $('[id$=bi-' + index + '-cl]').prop('checked')  ? true : false;
 	data.restart = $('[id$=bi-' + index + '-rs]').prop('checked')  ? true : false;
 	data.online = $('[id$=bi-' + index + '-ol]').prop('checked')  ? true : false;
+
+	data.eventClass = 0;
+	for (var i = 1; i < 4; ++i) {
+		var id = 'bi-' + index + '-cl-' + i;
+		if ($('[id$=' + id + ']').prop('checked')) {
+			var regexArray = /.*-(\d+)/g.exec(id);
+			data.eventClass = parseInt(regexArray[1]);
+		}
+	}
+
+	data.staticVariation = 0;
+	for (var i = 0; i < 3; ++i) {
+		var id = 'bi-' + index + '-st-' + i;
+		if ($('[id$=' + id + ']').prop('checked')) {
+			var regexArray = /.*-(\d+)/g.exec(id);
+			data.staticVariation = parseInt(regexArray[1]);
+		}
+	}
+	
+	data.eventVariation = 0;
+	for (var i = 0; i < 4; ++i) {
+		var id = 'bi-' + index + '-ev-' + i;
+		if ($('[id$=' + id + ']').prop('checked')) {
+			var regexArray = /.*-(\d+)/g.exec(id);
+			data.eventVariation = parseInt(regexArray[1]);
+		}
+	}
 	return data;
 }
 
@@ -76,6 +131,18 @@ requestChangeValue = function(id, attribute) {
 		var data = getBinaryValue(id);
 		if (data.hasOwnProperty(attribute)) {
 			data[attribute] = !data[attribute];
+			console.log(data);
+			webSocket.send(JSON.stringify(data));
+		}
+	}
+}
+
+requestChangeAttributeValue = function(id, attribute, value) {
+	var binaryType = /bi-(\d+)/g.exec(id);
+	if (binaryType) {
+		var data = getBinaryValue(id);
+		if (data.hasOwnProperty(attribute)) {
+			data[attribute] = value;
 			console.log(data);
 			webSocket.send(JSON.stringify(data));
 		}

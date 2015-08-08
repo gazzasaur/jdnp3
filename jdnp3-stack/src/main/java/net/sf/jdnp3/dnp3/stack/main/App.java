@@ -18,7 +18,6 @@ package net.sf.jdnp3.dnp3.stack.main;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_EVENT_WITHOUT_TIME;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -26,11 +25,12 @@ import net.sf.jdnp3.dnp3.service.outstation.core.OutstationServiceImpl;
 import net.sf.jdnp3.dnp3.service.outstation.handler.BinaryInputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class1ReadRequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.Transaction;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
 
@@ -72,22 +72,26 @@ public class App {
 			}
 			
 			public List<ObjectInstance> doReadClass(long returnLimit) {
-				System.out.println("B");
 				return new ArrayList<>();
 			}
 		});
 		outstation.addServiceRequestHandler(new Class1ReadRequestHandler() {
-			public List<ObjectInstance> doReadClass(Transaction transaction) {
-				BinaryInputEventObjectInstance binary = new BinaryInputEventObjectInstance();
-				binary.setIndex(60000);
-				binary.setActive(true);
-				binary.setTimestamp(new Date().getTime());
-				binary.setRequestedType(BINARY_INPUT_EVENT_WITHOUT_TIME);
-				return Arrays.asList(binary);
+			public List<ObjectInstance> doReadClass() {
+				EventObjectInstanceSelector selector = new EventObjectInstanceSelector() {
+					public boolean select(EventObjectInstance eventObjectInstance) {
+						return eventObjectInstance.getEventClass() == 1;
+					}
+				};
+				return outstation.getOutstationEventQueue().request(selector);
 			}
 
-			public List<ObjectInstance> doReadClass(Transaction transaction, long returnLimit) {
-				return new ArrayList<>();
+			public List<ObjectInstance> doReadClass(long returnLimit) {
+				EventObjectInstanceSelector selector = new EventObjectInstanceSelector() {
+					public boolean select(EventObjectInstance eventObjectInstance) {
+						return eventObjectInstance.getEventClass() == 1;
+					}
+				};
+				return outstation.getOutstationEventQueue().request(selector, returnLimit);
 			}
 		});
 		
@@ -98,5 +102,21 @@ public class App {
 		
 		outstation.setDataLinkLayer(dataLink);
 		dataLink.enable();
+		
+		new Thread(new Runnable() {
+			public void run() {
+				while (true) {
+					BinaryInputEventObjectInstance binaryInputEventObjectInstance = new BinaryInputEventObjectInstance();
+					binaryInputEventObjectInstance.setRequestedType(BINARY_INPUT_EVENT_WITHOUT_TIME);
+					outstation.getOutstationEventQueue().addEvent(binaryInputEventObjectInstance);
+					
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}).start();
 	}
 }

@@ -95,7 +95,6 @@ public class App {
 			}
 			
 			public List<ObjectInstance> doReadClass(long returnLimit) {
-				System.out.println("B");
 				return new ArrayList<>();
 			}
 		});
