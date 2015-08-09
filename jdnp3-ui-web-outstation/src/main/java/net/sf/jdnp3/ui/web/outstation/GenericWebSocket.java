@@ -13,14 +13,17 @@ import javax.websocket.server.ServerEndpoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseListener;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
+import net.sf.jdnp3.ui.web.outstation.message.decoder.GenericMessageDecoder;
 import net.sf.jdnp3.ui.web.outstation.message.handler.MessageHandlerRegistry;
 import net.sf.jdnp3.ui.web.outstation.message.handler.MessageHandlerRegistryProvider;
+import net.sf.jdnp3.ui.web.outstation.message.model.BinaryInputMessage;
+import net.sf.jdnp3.ui.web.outstation.message.model.Message;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@ServerEndpoint(value="/secure/ws/general", encoders=MessageEncoder.class, decoders=BinaryInputMessageDecoder.class, configurator=GenericWebSocketConfigurator.class)
+@ServerEndpoint(value="/secure/ws/general", encoders=MessageEncoder.class, decoders=GenericMessageDecoder.class, configurator=GenericWebSocketConfigurator.class)
 public class GenericWebSocket implements DatabaseListener {
 	private Logger logger = LoggerFactory.getLogger(GenericWebSocket.class);
 	
@@ -43,7 +46,7 @@ public class GenericWebSocket implements DatabaseListener {
     	MessageHandler messageHandler = messageHandlerRegistry.fetchMessageHandler(message);
    		messageHandler.processMessage(message);
     }
-    
+	
     @OnClose
     public void onClose(Session session) {
     }

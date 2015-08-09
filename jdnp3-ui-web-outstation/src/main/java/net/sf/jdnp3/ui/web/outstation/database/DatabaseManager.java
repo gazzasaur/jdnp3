@@ -27,6 +27,7 @@ public class DatabaseManager {
 	private Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
 	
 	private Database database = new Database();
+	private List<EventListener> eventListeners = new ArrayList<>();
 	private List<DatabaseListener> databaseListeners = new ArrayList<>();
 	
 	public void setBinaryDatabaseSize(int size) {
@@ -59,6 +60,13 @@ public class DatabaseManager {
 			logger.warn("Cannot write binary data point of index: " + binaryDataPoint.getIndex());
 		}
 	}
+
+	public void triggerBinaryEvent(long index) {
+		BinaryDataPoint binaryDataPoint = database.getBinaryDataPoints().get((int) index);
+		for (EventListener eventListener : eventListeners) {
+			eventListener.eventReceived(binaryDataPoint);
+		}
+	}
 	
 	public void addDatabaseListener(DatabaseListener databaseListener) {
 		databaseListeners.add(databaseListener);
@@ -66,5 +74,13 @@ public class DatabaseManager {
 
 	public void removeDatabaseListener(DatabaseListener databaseListener) {
 		databaseListeners.remove(databaseListener);
+	}
+	
+	public void addEventListener(EventListener eventListener) {
+		eventListeners.add(eventListener);
+	}
+
+	public void removeEventListener(EventListener eventListener) {
+		eventListeners.remove(eventListener);
 	}
 }

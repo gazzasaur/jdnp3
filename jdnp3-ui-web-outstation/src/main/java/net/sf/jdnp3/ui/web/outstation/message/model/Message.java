@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation;
+package net.sf.jdnp3.ui.web.outstation.message.model;
 
-import net.sf.jdnp3.ui.web.outstation.message.model.Message;
+public interface Message {
 
-public interface MessageHandler {
-	public boolean canHandle(Message message);
-	public void processMessage(Message message);
 }

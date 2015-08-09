@@ -27,7 +27,7 @@ $(document).ready(function() {
 		if (e.data) {
 			message = jQuery.parseJSON(e.data);
 			console.log(message);
-			if (message.type == 'binaryInput') {
+			if (message.type == 'binaryInputPoint') {
 				for (var property in message) {
 					var id = 'bi-' + message.index;
 				    if (message.hasOwnProperty(property) && property in ATTRIBUTE_MAP) {
@@ -81,7 +81,7 @@ getBinaryValue = function(id) {
 	
 	var index = getDataPointIndex(id);
 	var data = {
-			'type': 'binaryInput',
+			'type': 'binaryInputPoint',
 			'index': index,
 	};
 	
@@ -146,5 +146,16 @@ requestChangeAttributeValue = function(id, attribute, value) {
 			console.log(data);
 			webSocket.send(JSON.stringify(data));
 		}
+	}
+}
+
+requestEvent = function(id) {
+	var binaryType = /bi-(\d+)/g.exec(id);
+	if (binaryType) {
+		var data = {
+			'type': 'binaryInputEvent',
+			'index': parseInt(binaryType[1])
+		};
+		webSocket.send(JSON.stringify(data));
 	}
 }

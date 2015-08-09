@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation;
+package net.sf.jdnp3.ui.web.outstation.message.model;
 
 public class BinaryInputMessage implements Message {
-	private String type = "binaryInput";
+	private String type = "binaryInputPoint";
 	private long index = 0;
 	private int eventClass = 1;
 	private int eventVariation = 0;
@@ -115,30 +115,18 @@ public class BinaryInputMessage implements Message {
 		this.staticVariation = staticVariation;
 	}
 
-	/**
-	 * @return the eventVariation
-	 */
 	public int getEventVariation() {
 		return eventVariation;
 	}
 
-	/**
-	 * @param eventVariation the eventVariation to set
-	 */
 	public void setEventVariation(int eventVariation) {
 		this.eventVariation = eventVariation;
 	}
 
-	/**
-	 * @return the eventClass
-	 */
 	public int getEventClass() {
 		return eventClass;
 	}
 
-	/**
-	 * @param eventClass the eventClass to set
-	 */
 	public void setEventClass(int eventClass) {
 		this.eventClass = eventClass;
 	}

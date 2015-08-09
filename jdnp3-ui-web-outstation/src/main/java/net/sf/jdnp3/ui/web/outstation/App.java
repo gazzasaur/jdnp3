@@ -16,22 +16,31 @@
 package net.sf.jdnp3.ui.web.outstation;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationServiceImpl;
 import net.sf.jdnp3.dnp3.service.outstation.handler.BinaryInputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.Class1ReadRequestHandler;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
+import net.sf.jdnp3.dnp3.stack.main.EventObjectInstanceSelector;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
+import net.sf.jdnp3.ui.web.outstation.database.EventListener;
+import net.sf.jdnp3.ui.web.outstation.message.handler.BinaryInputEventMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.handler.BinaryInputMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.handler.MessageHandlerRegistryProvider;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.eclipse.jetty.server.Server;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -40,8 +49,11 @@ public class App {
 		SLF4JBridgeHandler.removeHandlersForRootLogger();
 		SLF4JBridgeHandler.install();
 		
+		Logger logger = LoggerFactory.getLogger(App.class);
+		
 		DatabaseManagerProvider.getDatabaseManager().setBinaryDatabaseSize(10);
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputMessageHandler());
+		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputEventMessageHandler());
 		
 		OutstationServiceImpl outstation = new OutstationServiceImpl();
 		outstation.addServiceRequestHandler(new BinaryInputStaticReadRequestHandler() {
@@ -96,6 +108,41 @@ public class App {
 			
 			public List<ObjectInstance> doReadClass(long returnLimit) {
 				return new ArrayList<>();
+			}
+		});
+		
+		outstation.addServiceRequestHandler(new Class1ReadRequestHandler() {
+			public List<ObjectInstance> doReadClass() {
+				EventObjectInstanceSelector selector = new EventObjectInstanceSelector() {
+					public boolean select(EventObjectInstance eventObjectInstance) {
+						return eventObjectInstance.getEventClass() == 1;
+					}
+				};
+				return outstation.getOutstationEventQueue().request(selector);
+			}
+
+			public List<ObjectInstance> doReadClass(long returnLimit) {
+				EventObjectInstanceSelector selector = new EventObjectInstanceSelector() {
+					public boolean select(EventObjectInstance eventObjectInstance) {
+						return eventObjectInstance.getEventClass() == 1;
+					}
+				};
+				return outstation.getOutstationEventQueue().request(selector, returnLimit);
+			}
+		});
+		
+		DatabaseManagerProvider.getDatabaseManager().addEventListener(new EventListener() {
+			public void eventReceived(BinaryDataPoint binaryDataPoint) {
+				BinaryInputEventObjectInstance binaryInputEventObjectInstance = new BinaryInputEventObjectInstance();
+				try {
+					BeanUtils.copyProperties(binaryInputEventObjectInstance, binaryDataPoint);
+					binaryInputEventObjectInstance.setTimestamp(new Date().getTime());
+					binaryInputEventObjectInstance.setEventClass(binaryDataPoint.getEventClass());
+					binaryInputEventObjectInstance.setRequestedType(binaryDataPoint.getEventType());
+					outstation.getOutstationEventQueue().addEvent(binaryInputEventObjectInstance);
+				} catch (Exception e) {
+					logger.error("Failed to send event.", e);
+				}
 			}
 		});
 		

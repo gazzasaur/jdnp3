@@ -15,8 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.decoder;
 
-import static java.lang.String.format;
-
 import java.util.ArrayList;
 import java.util.List;
 

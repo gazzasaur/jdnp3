@@ -15,38 +15,21 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.handler;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.ui.web.outstation.MessageHandler;
-import net.sf.jdnp3.ui.web.outstation.database.BinaryDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
-import net.sf.jdnp3.ui.web.outstation.message.model.BinaryInputMessage;
+import net.sf.jdnp3.ui.web.outstation.message.model.BinaryInputEventMessage;
 import net.sf.jdnp3.ui.web.outstation.message.model.Message;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public class BinaryInputMessageHandler implements MessageHandler {
-	private Logger logger = LoggerFactory.getLogger(BinaryInputMessageHandler.class);
-	
+public class BinaryInputEventMessageHandler implements MessageHandler {
 	public boolean canHandle(Message message) {
-		return message instanceof BinaryInputMessage;
+		return message instanceof BinaryInputEventMessage;
 	}
 
 	public void processMessage(Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
-		BinaryInputMessage binaryInputMessage = (BinaryInputMessage) message;
-
-		BinaryDataPoint binaryDataPoint = new BinaryDataPoint();
-		try {
-			BeanUtils.copyProperties(binaryDataPoint, binaryInputMessage);
-			binaryDataPoint.setStaticType(new ObjectType(1, binaryInputMessage.getStaticVariation()));
-			binaryDataPoint.setEventType(new ObjectType(2, binaryInputMessage.getEventVariation()));
-			DatabaseManagerProvider.getDatabaseManager().setBinaryDataPoint(binaryDataPoint);
-		} catch (Exception e) {
-			logger.error("Failed to copy object.", e);
-		}
+		BinaryInputEventMessage binaryInputEventMessage = (BinaryInputEventMessage) message;
+		DatabaseManagerProvider.getDatabaseManager().triggerBinaryEvent(binaryInputEventMessage.getIndex());
 	}
 }

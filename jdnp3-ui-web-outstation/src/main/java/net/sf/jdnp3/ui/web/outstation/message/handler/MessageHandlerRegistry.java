@@ -18,8 +18,8 @@ package net.sf.jdnp3.ui.web.outstation.message.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jdnp3.ui.web.outstation.Message;
 import net.sf.jdnp3.ui.web.outstation.MessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.model.Message;
 
 public class MessageHandlerRegistry {
 	private List<MessageHandler> messageHandlers = new ArrayList<>();

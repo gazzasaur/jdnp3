@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation;
+package net.sf.jdnp3.ui.web.outstation.database;
 
-public interface Message {
-
+public interface EventListener {
+	public void eventReceived(BinaryDataPoint binaryDataPoint);
 }
