@@ -1,3 +1,5 @@
+var scheduler = jdnp3.schedule.getDefaultScheduler();
+
 var webSocket;
 var webSocketMessageQueue = [];
 
@@ -24,45 +26,47 @@ $(document).ready(function() {
 		console.log('WebSocket error detected: ' + error);
 	};
 	webSocket.onmessage = function(e) {
-		if (e.data) {
-			message = jQuery.parseJSON(e.data);
-			console.log(message);
-			if (message.type == 'binaryInputPoint') {
-				for (var property in message) {
-					var id = 'bi-' + message.index;
-				    if (message.hasOwnProperty(property) && property in ATTRIBUTE_MAP) {
-						$("[id$=" + id + "-" + ATTRIBUTE_MAP[property] + "]").prop('checked', message[property])
-				    }
-				}
-				
-				for (var i = 1; i < 4; ++i) {
-					var id = 'bi-' + message.index + '-cl-' + i;
-					if (i == message.eventClass) {
-						$('[id$=' + id + ']').prop('checked', 'true');
-					} else {
-						$('[id$=' + id + ']').prop('checked', '');
+		scheduler.addTask(function() {
+			if (e.data) {
+				message = jQuery.parseJSON(e.data);
+				console.log(message);
+				if (message.type == 'binaryInputPoint') {
+					for (var property in message) {
+						var id = 'bi-' + message.index;
+					    if (message.hasOwnProperty(property) && property in ATTRIBUTE_MAP) {
+							$("[id$=" + id + "-" + ATTRIBUTE_MAP[property] + "]").prop('checked', message[property])
+					    }
 					}
-				}
-				
-				for (var i = 0; i < 3; ++i) {
-					var id = 'bi-' + message.index + '-st-' + i;
-					if (i == message.staticVariation) {
-						$('[id$=' + id + ']').prop('checked', 'true');
-					} else {
-						$('[id$=' + id + ']').prop('checked', '');
+					
+					for (var i = 1; i < 4; ++i) {
+						var id = 'bi-' + message.index + '-cl-' + i;
+						if (i == message.eventClass) {
+							$('[id$=' + id + ']').prop('checked', 'true');
+						} else {
+							$('[id$=' + id + ']').prop('checked', '');
+						}
 					}
-				}
-				
-				for (var i = 0; i < 4; ++i) {
-					var id = 'bi-' + message.index + '-ev-' + i;
-					if (i == message.eventVariation) {
-						$('[id$=' + id + ']').prop('checked', 'true');
-					} else {
-						$('[id$=' + id + ']').prop('checked', '');
+					
+					for (var i = 0; i < 3; ++i) {
+						var id = 'bi-' + message.index + '-st-' + i;
+						if (i == message.staticVariation) {
+							$('[id$=' + id + ']').prop('checked', 'true');
+						} else {
+							$('[id$=' + id + ']').prop('checked', '');
+						}
+					}
+					
+					for (var i = 0; i < 4; ++i) {
+						var id = 'bi-' + message.index + '-ev-' + i;
+						if (i == message.eventVariation) {
+							$('[id$=' + id + ']').prop('checked', 'true');
+						} else {
+							$('[id$=' + id + ']').prop('checked', '');
+						}
 					}
 				}
 			}
-		}
+		}, 0);
 	}
 });
 
@@ -126,36 +130,42 @@ getBinaryValue = function(id) {
 }
 
 requestChangeValue = function(id, attribute) {
-	var binaryType = /bi-(\d+)/g.exec(id);
-	if (binaryType) {
-		var data = getBinaryValue(id);
-		if (data.hasOwnProperty(attribute)) {
-			data[attribute] = !data[attribute];
-			console.log(data);
-			webSocket.send(JSON.stringify(data));
+	scheduler.addTask(function() {
+		var binaryType = /bi-(\d+)/g.exec(id);
+		if (binaryType) {
+			var data = getBinaryValue(id);
+			if (data.hasOwnProperty(attribute)) {
+				data[attribute] = !data[attribute];
+				console.log(data);
+				webSocket.send(JSON.stringify(data));
+			}
 		}
-	}
+	}, 0);
 }
 
 requestChangeAttributeValue = function(id, attribute, value) {
-	var binaryType = /bi-(\d+)/g.exec(id);
-	if (binaryType) {
-		var data = getBinaryValue(id);
-		if (data.hasOwnProperty(attribute)) {
-			data[attribute] = value;
-			console.log(data);
-			webSocket.send(JSON.stringify(data));
+	scheduler.addTask(function() {
+		var binaryType = /bi-(\d+)/g.exec(id);
+		if (binaryType) {
+			var data = getBinaryValue(id);
+			if (data.hasOwnProperty(attribute)) {
+				data[attribute] = value;
+				console.log(data);
+				webSocket.send(JSON.stringify(data));
+			}
 		}
-	}
+	}, 0);
 }
 
 requestEvent = function(id) {
-	var binaryType = /bi-(\d+)/g.exec(id);
-	if (binaryType) {
-		var data = {
-			'type': 'binaryInputEvent',
-			'index': parseInt(binaryType[1])
-		};
-		webSocket.send(JSON.stringify(data));
-	}
+	scheduler.addTask(function() {
+		var binaryType = /bi-(\d+)/g.exec(id);
+		if (binaryType) {
+			var data = {
+				'type': 'binaryInputEvent',
+				'index': parseInt(binaryType[1])
+			};
+			webSocket.send(JSON.stringify(data));
+		}
+	}, 0);
 }
