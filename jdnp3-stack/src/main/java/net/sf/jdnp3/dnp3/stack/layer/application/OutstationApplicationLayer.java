@@ -15,7 +15,10 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application;
 
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_EVENT_RELATIVE_TIME;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
@@ -29,8 +32,11 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.Applicatio
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentResponseHeader;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.CtoObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.SynchronisedCtoObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayerImpl;
@@ -100,6 +106,8 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		
 		DefaultObjectTypeMapping mapping = new DefaultObjectTypeMapping();
 		ObjectInstanceTypeRationaliser rationaliser = new ObjectInstanceTypeRationaliser();
+		List<ObjectType> relativeTimeTypes = Arrays.asList(BINARY_INPUT_EVENT_RELATIVE_TIME);
+		
 		for (ObjectInstance objectInstance : responseObjects) {
 			mapping.performMapping(objectInstance);
 			rationaliser.rationaliseType(objectInstance);
@@ -107,8 +115,18 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		ObjectInstanceSorter sorter = new ObjectInstanceSorter();
 		sorter.sort(responseObjects);
 		
+		CtoObjectInstance ctoObjectInstance = null;
 		for (ObjectInstance objectInstance : responseObjects) {
 			if (objectInstance instanceof EventObjectInstance) {
+				EventObjectInstance eventObjectInstance = (EventObjectInstance) objectInstance;
+				if (relativeTimeTypes.contains(eventObjectInstance) && (ctoObjectInstance == null || Math.abs(ctoObjectInstance.getTimestamp() - eventObjectInstance.getTimestamp()) > 32767)) {
+					// FIXME Possibly consider unsynchronised.
+					SynchronisedCtoObjectInstance newCtoObjectInstance = new SynchronisedCtoObjectInstance();
+					newCtoObjectInstance.setTimestamp(eventObjectInstance.getTimestamp());
+					response.addObjectInstance(newCtoObjectInstance);
+					ctoObjectInstance = newCtoObjectInstance;
+				}
+				
 				pendingEvents.add((EventObjectInstance) objectInstance);
 			}
 			response.addObjectInstance(objectInstance);

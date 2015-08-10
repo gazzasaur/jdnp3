@@ -31,13 +31,17 @@ public class ApplicationFragmentResponseEncoderImpl implements ApplicationFragme
 		applicationHeaderEncoder.encode(fragment.getHeader(), data);
 		
 		ObjectType objectType = null;
+		ObjectFragmentEncoderContext context = new ObjectFragmentEncoderContext();
+		context.setFunctionCode(fragment.getHeader().getFunctionCode());
+		
 		List<ObjectInstance> likeInstances = new ArrayList<>();
 		for (ObjectInstance objectInstance : fragment.getObjectInstances()) {
 			if (objectType == null) {
 				objectType = objectInstance.getRequestedType();
 				likeInstances.add(objectInstance);
 			} else if (!objectType.equals(objectInstance.getRequestedType())) {
-				objectFragmentEncoder.encode(fragment.getHeader().getFunctionCode(), objectType, likeInstances, data);
+				context.setObjectType(objectType);
+				objectFragmentEncoder.encode(context, likeInstances, data);
 				likeInstances.clear();
 				objectType = objectInstance.getRequestedType();
 				likeInstances.add(objectInstance);
@@ -46,7 +50,8 @@ public class ApplicationFragmentResponseEncoderImpl implements ApplicationFragme
 			}
 		}
 		if (objectType != null) {
-			objectFragmentEncoder.encode(fragment.getHeader().getFunctionCode(), objectType, likeInstances, data);
+			context.setObjectType(objectType);
+			objectFragmentEncoder.encode(context, likeInstances, data);
 		}
 		return data;
 	}

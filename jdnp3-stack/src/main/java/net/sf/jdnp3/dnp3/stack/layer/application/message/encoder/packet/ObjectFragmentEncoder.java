@@ -27,8 +27,6 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryIn
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryInputStaticFlagsObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryInputStaticPackedObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectTypeEncoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class ObjectFragmentEncoder {
@@ -44,18 +42,18 @@ public class ObjectFragmentEncoder {
 		this.add(new AnalogInputStaticFloat64ObjectTypeEncoder());
 	}};
 	
-	public void encode(FunctionCode functionCode, ObjectType objectType, List<ObjectInstance> objectInstances, List<Byte> data) {
+	public void encode(ObjectFragmentEncoderContext context, List<ObjectInstance> objectInstances, List<Byte> data) {
 		boolean encoded = false;
 		
 		for (ObjectTypeEncoder objectTypeEncoder : objectTypeEncoders) {
-			if (objectTypeEncoder.canEncode(functionCode, objectType)) {
-				objectTypeEncoder.encode(functionCode, objectType, objectInstances, data);
+			if (objectTypeEncoder.canEncode(context.getFunctionCode(), context.getObjectType())) {
+				objectTypeEncoder.encode(context, objectInstances, data);
 				encoded = true;
 				break;
 			}
 		}
 		if (!encoded) {
-			throw new IllegalArgumentException(format("Failed to encode %s %s", functionCode, objectType));
+			throw new IllegalArgumentException(format("Failed to encode %s %s", context.getFunctionCode(), context.getObjectType()));
 		}
 	}
 }
