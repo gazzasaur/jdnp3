@@ -23,10 +23,12 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.AnalogInputStaticFloat16ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.AnalogInputStaticFloat64ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryInputEventAbsoluteTimeObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryInputEventRelativeTimeObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryInputEventWithoutTimeTimeObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryInputStaticFlagsObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.BinaryInputStaticPackedObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.SynchronisedCtoObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class ObjectFragmentEncoder {
@@ -37,9 +39,12 @@ public class ObjectFragmentEncoder {
 		
 		this.add(new BinaryInputEventWithoutTimeTimeObjectTypeEncoder());
 		this.add(new BinaryInputEventAbsoluteTimeObjectTypeEncoder());
+		this.add(new BinaryInputEventRelativeTimeObjectTypeEncoder());
 		
 		this.add(new AnalogInputStaticFloat16ObjectTypeEncoder());
 		this.add(new AnalogInputStaticFloat64ObjectTypeEncoder());
+		
+		this.add(new SynchronisedCtoObjectTypeEncoder());
 	}};
 	
 	public void encode(ObjectFragmentEncoderContext context, List<ObjectInstance> objectInstances, List<Byte> data) {

@@ -21,6 +21,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeC
 import java.util.BitSet;
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.QualifierFieldCalculator;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
@@ -37,16 +38,16 @@ public class BinaryInputStaticFlagsObjectTypeEncoder implements ObjectTypeEncode
 		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_INPUT_STATIC_FLAGS);
 	}
 
-	public void encode(FunctionCode functionCode, ObjectType objectType, List<ObjectInstance> objectInstances, List<Byte> data) {
-		if (!this.canEncode(functionCode, objectType) || objectInstances.size() < 1) {
-			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", functionCode, objectType));
+	public void encode(ObjectFragmentEncoderContext context, List<ObjectInstance> objectInstances, List<Byte> data) {
+		if (!this.canEncode(context.getFunctionCode(), context.getObjectType()) || objectInstances.size() < 1) {
+			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
 		IndexRange indexRange = new IndexRange();
 		indexRange.setStartIndex(objectInstances.get(0).getIndex());
 		indexRange.setStopIndex(objectInstances.get(objectInstances.size() - 1).getIndex());
 		
 		QualifierField qualifierField = QualifierFieldCalculator.calculate(new NoPrefixType(), indexRange);
-		objectFragmentHeaderEncoder.encode(objectType, qualifierField, indexRange, data);
+		objectFragmentHeaderEncoder.encode(context.getObjectType(), qualifierField, indexRange, data);
 		
 		for (ObjectInstance objectInstance : objectInstances) {
 			BinaryInputStaticObjectInstance specificInstance = (BinaryInputStaticObjectInstance) objectInstance;

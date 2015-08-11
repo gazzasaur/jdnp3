@@ -29,8 +29,12 @@ public class ApplicationFragmentRequestEncoderImpl implements ApplicationFragmen
 		List<Byte> data = new ArrayList<>();
 		applicationHeaderEncoder.encode(fragment.getHeader(), data);
 		
+		ObjectFragmentEncoderContext context = new ObjectFragmentEncoderContext();
+		context.setFunctionCode(fragment.getHeader().getFunctionCode());
+		context.setCommonTimeOfOccurrance(0);
 		for (ObjectFragment objectFragment : fragment.getObjectFragments()) {
-			objectFragmentEncoder.encode(fragment.getHeader().getFunctionCode(), objectFragment.getObjectFragmentHeader().getObjectType(), objectFragment.getObjectInstances(), data);
+			context.setObjectType(objectFragment.getObjectFragmentHeader().getObjectType());
+			objectFragmentEncoder.encode(context, objectFragment.getObjectInstances(), data);
 		}
 		return data;
 	}

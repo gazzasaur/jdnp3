@@ -16,7 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_EVENT_ABSOLUTE_TIME;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_EVENT_RELATIVE_TIME;
 
 import java.util.BitSet;
 import java.util.List;
@@ -32,11 +32,11 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventOb
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
-public class BinaryInputEventAbsoluteTimeObjectTypeEncoder implements ObjectTypeEncoder {
+public class BinaryInputEventRelativeTimeObjectTypeEncoder implements ObjectTypeEncoder {
 	private ObjectFragmentHeaderEncoder objectFragmentHeaderEncoder = new ObjectFragmentHeaderEncoder();
 
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_INPUT_EVENT_ABSOLUTE_TIME);
+		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_INPUT_EVENT_RELATIVE_TIME);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, List<ObjectInstance> objectInstances, List<Byte> data) {
@@ -79,7 +79,7 @@ public class BinaryInputEventAbsoluteTimeObjectTypeEncoder implements ObjectType
 			
 			DataUtils.addInteger(specificInstance.getIndex(), qualifierField.getObjectPrefixCode().getOctetCount(), data);
 			data.add(value);
-			DataUtils.addInteger(specificInstance.getTimestamp(), 6, data);
+			DataUtils.addInteger(specificInstance.getTimestamp() - context.getCommonTimeOfOccurrance(), 2, data);
 		}
 	}
 }

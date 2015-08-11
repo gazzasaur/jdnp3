@@ -21,6 +21,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeC
 import java.util.BitSet;
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.QualifierFieldCalculator;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
@@ -38,9 +39,9 @@ public class BinaryInputEventWithoutTimeTimeObjectTypeEncoder implements ObjectT
 		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_INPUT_EVENT_WITHOUT_TIME);
 	}
 
-	public void encode(FunctionCode functionCode, ObjectType objectType, List<ObjectInstance> objectInstances, List<Byte> data) {
-		if (!this.canEncode(functionCode, objectType) || objectInstances.size() < 1) {
-			throw new IllegalArgumentException(format("Cannot encode the given value %s %s.", functionCode, objectType));
+	public void encode(ObjectFragmentEncoderContext context, List<ObjectInstance> objectInstances, List<Byte> data) {
+		if (!this.canEncode(context.getFunctionCode(), context.getObjectType()) || objectInstances.size() < 1) {
+			throw new IllegalArgumentException(format("Cannot encode the given value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
 		CountRange countRange = new CountRange();
 		countRange.setCount(0);
@@ -57,7 +58,7 @@ public class BinaryInputEventWithoutTimeTimeObjectTypeEncoder implements ObjectT
 		indexPrefixType.setOctetCount(EncoderUtils.calculateOctetCount(maxIndex));
 		QualifierField qualifierField = QualifierFieldCalculator.calculate(indexPrefixType, countRange);
 		
-		objectFragmentHeaderEncoder.encode(objectType, qualifierField, countRange, data);
+		objectFragmentHeaderEncoder.encode(context.getObjectType(), qualifierField, countRange, data);
 		
 		for (ObjectInstance objectInstance : objectInstances) {
 			BinaryInputEventObjectInstance specificInstance = (BinaryInputEventObjectInstance) objectInstance;

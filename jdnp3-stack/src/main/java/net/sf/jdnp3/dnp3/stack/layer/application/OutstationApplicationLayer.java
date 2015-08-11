@@ -119,7 +119,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		for (ObjectInstance objectInstance : responseObjects) {
 			if (objectInstance instanceof EventObjectInstance) {
 				EventObjectInstance eventObjectInstance = (EventObjectInstance) objectInstance;
-				if (relativeTimeTypes.contains(eventObjectInstance) && (ctoObjectInstance == null || Math.abs(ctoObjectInstance.getTimestamp() - eventObjectInstance.getTimestamp()) > 32767)) {
+				if (relativeTimeTypes.contains(eventObjectInstance.getRequestedType()) && (ctoObjectInstance == null || Math.abs(ctoObjectInstance.getTimestamp() - eventObjectInstance.getTimestamp()) > 32767)) {
 					// FIXME Possibly consider unsynchronised.
 					SynchronisedCtoObjectInstance newCtoObjectInstance = new SynchronisedCtoObjectInstance();
 					newCtoObjectInstance.setTimestamp(eventObjectInstance.getTimestamp());
