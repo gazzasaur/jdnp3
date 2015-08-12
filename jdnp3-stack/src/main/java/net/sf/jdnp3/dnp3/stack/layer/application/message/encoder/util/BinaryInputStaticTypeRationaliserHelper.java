@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.sort;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util;
 
 import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;

@@ -13,44 +13,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_STATIC_FLAGS;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_EVENT_WITHOUT_TIME;
 
 import java.util.BitSet;
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.EncoderUtils;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectFragmentHeaderEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.QualifierFieldCalculator;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
-public class BinaryInputStaticFlagsObjectTypeEncoder implements ObjectTypeEncoder {
+public class BinaryInputEventWithoutTimeTimeObjectTypeEncoder implements ObjectTypeEncoder {
 	private ObjectFragmentHeaderEncoder objectFragmentHeaderEncoder = new ObjectFragmentHeaderEncoder();
 
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_INPUT_STATIC_FLAGS);
+		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_INPUT_EVENT_WITHOUT_TIME);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, List<ObjectInstance> objectInstances, List<Byte> data) {
 		if (!this.canEncode(context.getFunctionCode(), context.getObjectType()) || objectInstances.size() < 1) {
-			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
+			throw new IllegalArgumentException(format("Cannot encode the given value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
-		IndexRange indexRange = new IndexRange();
-		indexRange.setStartIndex(objectInstances.get(0).getIndex());
-		indexRange.setStopIndex(objectInstances.get(objectInstances.size() - 1).getIndex());
+		CountRange countRange = new CountRange();
+		countRange.setCount(0);
 		
-		QualifierField qualifierField = QualifierFieldCalculator.calculate(new NoPrefixType(), indexRange);
-		objectFragmentHeaderEncoder.encode(context.getObjectType(), qualifierField, indexRange, data);
+		long maxIndex = 0;
+		for (ObjectInstance objectInstance : objectInstances) {
+			if (objectInstance.getIndex() > maxIndex) {
+				maxIndex = objectInstance.getIndex();
+			}
+			countRange.setCount(countRange.getCount() + 1);
+		}
+		
+		IndexPrefixType indexPrefixType = new IndexPrefixType();
+		indexPrefixType.setOctetCount(EncoderUtils.calculateOctetCount(maxIndex));
+		QualifierField qualifierField = QualifierFieldCalculator.calculate(indexPrefixType, countRange);
+		
+		objectFragmentHeaderEncoder.encode(context.getObjectType(), qualifierField, countRange, data);
 		
 		for (ObjectInstance objectInstance : objectInstances) {
-			BinaryInputStaticObjectInstance specificInstance = (BinaryInputStaticObjectInstance) objectInstance;
+			BinaryInputEventObjectInstance specificInstance = (BinaryInputEventObjectInstance) objectInstance;
 			BitSet bitSet = new BitSet(8);
 			bitSet.set(7, specificInstance.isActive());
 			bitSet.set(5, specificInstance.isChatterFilter());
@@ -66,6 +80,7 @@ public class BinaryInputStaticFlagsObjectTypeEncoder implements ObjectTypeEncode
 				value = rawValue[0];
 			}
 			
+			DataUtils.addInteger(specificInstance.getIndex(), qualifierField.getObjectPrefixCode().getOctetCount(), data);
 			data.add(value);
 		}
 	}

@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_EVENT_WITHOUT_TIME;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_EVENT_RELATIVE_TIME;
 
 import java.util.BitSet;
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.EncoderUtils;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectFragmentHeaderEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.QualifierFieldCalculator;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
@@ -32,16 +35,16 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventOb
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
-public class BinaryInputEventWithoutTimeTimeObjectTypeEncoder implements ObjectTypeEncoder {
+public class BinaryInputEventRelativeTimeObjectTypeEncoder implements ObjectTypeEncoder {
 	private ObjectFragmentHeaderEncoder objectFragmentHeaderEncoder = new ObjectFragmentHeaderEncoder();
 
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_INPUT_EVENT_WITHOUT_TIME);
+		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_INPUT_EVENT_RELATIVE_TIME);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, List<ObjectInstance> objectInstances, List<Byte> data) {
 		if (!this.canEncode(context.getFunctionCode(), context.getObjectType()) || objectInstances.size() < 1) {
-			throw new IllegalArgumentException(format("Cannot encode the given value %s %s.", context.getFunctionCode(), context.getObjectType()));
+			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
 		CountRange countRange = new CountRange();
 		countRange.setCount(0);
@@ -79,6 +82,7 @@ public class BinaryInputEventWithoutTimeTimeObjectTypeEncoder implements ObjectT
 			
 			DataUtils.addInteger(specificInstance.getIndex(), qualifierField.getObjectPrefixCode().getOctetCount(), data);
 			data.add(value);
+			DataUtils.addInteger(specificInstance.getTimestamp() - context.getCommonTimeOfOccurrance(), 2, data);
 		}
 	}
 }

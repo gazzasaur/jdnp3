@@ -20,7 +20,6 @@ import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.main.EventObjectInstanceSelector;
 
 public class OutstationEventQueue implements ConfirmationListener {
 	private List<EventObjectInstance> events = new ArrayList<>();

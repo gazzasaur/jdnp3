@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.sort;
+package net.sf.jdnp3.dnp3.stack.layer.application;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
 
-public interface ObjectInstanceTypeRationaliserHelper {
-	public void rationalise(ObjectInstance objectInstance);
+public interface EventObjectInstanceSelector {
+	public boolean select(EventObjectInstance eventObjectInstance);
 }

@@ -24,6 +24,7 @@ import net.sf.jdnp3.dnp3.service.outstation.core.OutstationServiceImpl;
 import net.sf.jdnp3.dnp3.service.outstation.handler.BinaryInputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class1ReadRequestHandler;
+import net.sf.jdnp3.dnp3.stack.layer.application.EventObjectInstanceSelector;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
