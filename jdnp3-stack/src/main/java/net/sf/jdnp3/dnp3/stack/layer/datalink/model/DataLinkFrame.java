@@ -15,6 +15,8 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.model;
 
+import static java.util.Collections.unmodifiableList;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,10 +33,10 @@ public class DataLinkFrame {
 	}
 
 	public List<Byte> getData() {
-		return data;
+		return unmodifiableList(data);
 	}
 
 	public void setData(List<Byte> data) {
-		this.data = data;
+		this.data = new ArrayList<>(data);
 	}
 }

@@ -59,6 +59,7 @@
 	
 	<modules>
 		<module>../jdnp3-stack</module>
+		<module>../jdnp3-test-utils</module>
 		<module>../jdnp3-ui-web-outstation</module>
 	</modules>
 </project>

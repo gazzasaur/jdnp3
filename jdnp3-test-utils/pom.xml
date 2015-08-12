@@ -9,12 +9,12 @@
 		<relativePath>../jdnp3/pom.xml</relativePath>
 	</parent>
 	
-	<name>jdnp3-stack</name>
-	<artifactId>jdnp3-stack</artifactId>
+	<name>jdnp3-test-utils</name>
+	<artifactId>jdnp3-test-utils</artifactId>
 	<packaging>jar</packaging>
 
-
 	<properties>
+		<org.apache.commons.beanutils.version>1.9.2</org.apache.commons.beanutils.version>
 		<org.apache.commons.lang3.version>3.4</org.apache.commons.lang3.version>
 		<ch.qos.logback.version>1.1.2</ch.qos.logback.version>
 	</properties>
@@ -24,6 +24,11 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>${org.apache.commons.lang3.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>${org.apache.commons.beanutils.version}</version>
 		</dependency>
 		
 		<dependency>
@@ -46,13 +51,6 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
 			<version>${ch.qos.logback.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>net.sf.jdnp3</groupId>
-			<artifactId>jdnp3-test-utils</artifactId>
-			<version>${net.sf.jdnp3.version}</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
