@@ -17,18 +17,18 @@ package net.sf.jdnp3.test.util.gast;
 
 import org.apache.commons.lang3.RandomUtils;
 
-public class DoubleObjectFactory implements ObjectFactory {
+public class EnumeratorObjectFactory implements ObjectFactory {
 
 	public boolean canHandle(Class<?> clazz) {
-		return clazz.equals(Double.class) || clazz.equals(double.class);
+		return clazz.isEnum();
 	}
 
 	public Object createRandomInstance(Class<?> clazz) {
-		return RandomUtils.nextDouble(-1.0 * Double.MAX_VALUE, Double.MAX_VALUE);
+		return clazz.getEnumConstants()[RandomUtils.nextInt(0, clazz.getEnumConstants().length)];
+		
 	}
 
 	public boolean areEqual(Object expected, Object actual) {
 		return expected.equals(actual);
 	}
-
 }

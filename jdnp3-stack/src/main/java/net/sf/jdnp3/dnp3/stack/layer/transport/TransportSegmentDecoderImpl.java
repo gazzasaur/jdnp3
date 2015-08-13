@@ -15,11 +15,13 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.transport;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
 public class TransportSegmentDecoderImpl implements TransportSegmentDecoder {
-	public TransportSegment decode(List<Byte> data) {
+	public TransportSegment decode(List<Byte> linkData) {
+		List<Byte> data = new ArrayList<Byte>(linkData);
 		TransportSegment transportSegment = new TransportSegment();
 		byte headerByte = data.remove(0);
 		BitSet bitSet = BitSet.valueOf(new byte[] { headerByte });

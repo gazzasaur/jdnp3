@@ -40,7 +40,7 @@ public class GetterAndSetterTester {
 		try {
 			PropertyDescriptor propertyDescriptor = new PropertyDescriptor(property, clazz);
 			ObjectFactory objectFactory = this.getObjectFactory(property, propertyDescriptor.getPropertyType());
-			Object randomInstance = objectFactory.createRandomInstance();
+			Object randomInstance = objectFactory.createRandomInstance(propertyDescriptor.getPropertyType());
 			propertyDescriptor.getWriteMethod().invoke(subject, randomInstance);
 			Object object = propertyDescriptor.getReadMethod().invoke(subject);
 			if (!objectFactory.areEqual(randomInstance, object)) {

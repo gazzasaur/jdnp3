@@ -17,6 +17,6 @@ package net.sf.jdnp3.test.util.gast;
 
 public interface ObjectFactory {
 	public boolean canHandle(Class<?> clazz);
-	public Object createRandomInstance();
+	public Object createRandomInstance(Class<?> clazz);
 	public boolean areEqual(Object expected, Object actual);
 }

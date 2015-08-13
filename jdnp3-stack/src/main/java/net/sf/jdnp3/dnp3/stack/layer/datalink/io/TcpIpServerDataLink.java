@@ -16,6 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.datalink.io;
 
 import static java.util.Arrays.asList;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkFrameUtils.headerLengthToRawLength;
 import static org.apache.commons.lang3.ArrayUtils.subarray;
 import static org.apache.commons.lang3.ArrayUtils.toObject;
 
@@ -132,9 +133,9 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 					frameBuffer.addAll(asList(toObject(subarray(buffer.array(), 0, result))));
 					buffer.clear();
 					try {
-						if (detector.detectHeader(dataLinkFrameHeader, frameBuffer) && dataLinkFrameHeader.getRawLength() <= frameBuffer.size()) {
+						if (detector.detectHeader(dataLinkFrameHeader, frameBuffer) && headerLengthToRawLength(dataLinkFrameHeader.getLength()) <= frameBuffer.size()) {
 							frameReceived(frameBuffer);
-							frameBuffer = new ArrayList<>(frameBuffer.subList(dataLinkFrameHeader.getRawLength(), frameBuffer.size()));
+							frameBuffer = new ArrayList<>(frameBuffer.subList(headerLengthToRawLength(dataLinkFrameHeader.getLength()), frameBuffer.size()));
 							lastDrop = new Date().getTime();
 						}
 					} catch (Exception e) {

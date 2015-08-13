@@ -15,20 +15,21 @@
  */
 package net.sf.jdnp3.test.util.gast;
 
+import java.util.Random;
+
 import org.apache.commons.lang3.RandomUtils;
 
-public class DoubleObjectFactory implements ObjectFactory {
+public class IntegerObjectFactory implements ObjectFactory {
 
 	public boolean canHandle(Class<?> clazz) {
-		return clazz.equals(Double.class) || clazz.equals(double.class);
+		return clazz.equals(Integer.class) || clazz.equals(int.class);
 	}
 
 	public Object createRandomInstance(Class<?> clazz) {
-		return RandomUtils.nextDouble(-1.0 * Double.MAX_VALUE, Double.MAX_VALUE);
+		return ((new Random().nextBoolean()) ? -1 : 1) * RandomUtils.nextInt(0, Integer.MAX_VALUE);
 	}
 
 	public boolean areEqual(Object expected, Object actual) {
 		return expected.equals(actual);
 	}
-
 }

@@ -12,23 +12,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * 
+ * Note:
+ * I am not sure how fair it is to license this under this project.
+ * This was taken from IEEE Std 1815 (2012) and adapted to Java.
+ * If you are responsible for this work and feel this is unfair
+ * please let me know and I will apply what ever recognition
+ * you would like to this file.
  */
-package net.sf.jdnp3.test.util.gast;
+package net.sf.jdnp3.dnp3.stack.layer.datalink.util;
 
-import org.apache.commons.lang3.RandomUtils;
-
-public class DoubleObjectFactory implements ObjectFactory {
-
-	public boolean canHandle(Class<?> clazz) {
-		return clazz.equals(Double.class) || clazz.equals(double.class);
+public class DataLinkFrameUtils {
+	public static int headerLengthToRawLength(int headerLength) {
+		return 2*((headerLength - 5)/16) + (((headerLength - 5)%16 > 0) ? 2 : 0) + headerLength + 5;
 	}
-
-	public Object createRandomInstance(Class<?> clazz) {
-		return RandomUtils.nextDouble(-1.0 * Double.MAX_VALUE, Double.MAX_VALUE);
-	}
-
-	public boolean areEqual(Object expected, Object actual) {
-		return expected.equals(actual);
-	}
-
 }

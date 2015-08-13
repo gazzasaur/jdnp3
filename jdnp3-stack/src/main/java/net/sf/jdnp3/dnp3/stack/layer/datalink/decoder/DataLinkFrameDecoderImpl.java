@@ -15,6 +15,8 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.decoder;
 
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkFrameUtils.headerLengthToRawLength;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +28,13 @@ public class DataLinkFrameDecoderImpl implements DataLinkFrameDecoder {
 	private DataLinkFrameHeaderDecoder dataLinkFrameHeaderDecoder = new DataLinkFrameHeaderDecoder();
 	
 	public DataLinkFrame decode(List<Byte> data) {
+		List<Byte> dataChunks = new ArrayList<Byte>(data.size());
 		DataLinkFrame dataLinkFrame = new DataLinkFrame();
 		dataLinkFrameHeaderDecoder.decode(dataLinkFrame.getDataLinkFrameHeader(), data);
 		
-		int chunks = (dataLinkFrame.getDataLinkFrameHeader().getRawLength() - 10)/18 + (((dataLinkFrame.getDataLinkFrameHeader().getRawLength() - 10)%18 > 0) ? 1 : 0);
+		int chunks = (headerLengthToRawLength(dataLinkFrame.getDataLinkFrameHeader().getLength()) - 10)/18 + (((headerLengthToRawLength(dataLinkFrame.getDataLinkFrameHeader().getLength()) - 10)%18 > 0) ? 1 : 0);
 		for (int i = 0; i < chunks; ++i) {
-			int crcOffset = Math.min(i * 18 + 26, dataLinkFrame.getDataLinkFrameHeader().getRawLength() - 2);
+			int crcOffset = Math.min(i * 18 + 26, headerLengthToRawLength(dataLinkFrame.getDataLinkFrameHeader().getLength()) - 2);
 			List<Byte> chunk = new ArrayList<>();
 			for (int j = i * 18 + 10; j < crcOffset; ++j) {
 				chunk.add(data.get(j));
@@ -43,8 +46,9 @@ public class DataLinkFrameDecoderImpl implements DataLinkFrameDecoder {
 				throw new IllegalStateException(String.format("Mismatched Crc on chunk %d.  Expected %d but got %d.", i, expectedCheckSum, actualCheckSum));
 			}
 			
-			dataLinkFrame.getData().addAll(chunk);
+			dataChunks.addAll(chunk);
 		}
+		dataLinkFrame.setData(dataChunks);
 		
 		return dataLinkFrame;
 	}

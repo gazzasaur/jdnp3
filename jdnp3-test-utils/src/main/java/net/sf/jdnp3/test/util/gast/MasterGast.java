@@ -20,6 +20,9 @@ import java.util.List;
 public class MasterGast {
 	private static GetterAndSetterTester getterAndSetterTester = new GetterAndSetterTester() {{
 		this.addObjectFactory(new DoubleObjectFactory());
+		this.addObjectFactory(new BooleanObjectFactory());
+		this.addObjectFactory(new IntegerObjectFactory());
+		this.addObjectFactory(new EnumeratorObjectFactory());
 	}};
 	
 	public static <E> boolean testSubject(E subject, List<String> properties, Class<E> clazz) {

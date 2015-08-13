@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.test.util.gast;
+package net.sf.jdnp3.dnp3.stack.layer.datalink.model;
 
-import org.apache.commons.lang3.RandomUtils;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode.UNCONFIRMED_USER_DATA;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import mockit.integration.junit4.JMockit;
 
-public class DoubleObjectFactory implements ObjectFactory {
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-	public boolean canHandle(Class<?> clazz) {
-		return clazz.equals(Double.class) || clazz.equals(double.class);
+@RunWith(JMockit.class)
+public class FunctionCodeTest {
+	@Test
+	public void testEnumCoverage() {
+		FunctionCode.valueOf("UNCONFIRMED_USER_DATA");
 	}
-
-	public Object createRandomInstance(Class<?> clazz) {
-		return RandomUtils.nextDouble(-1.0 * Double.MAX_VALUE, Double.MAX_VALUE);
+	
+	@Test
+	public void testFunctionCodeValues() {
+		assertThat(UNCONFIRMED_USER_DATA.getCode(), is(4));
 	}
-
-	public boolean areEqual(Object expected, Object actual) {
-		return expected.equals(actual);
-	}
-
 }
