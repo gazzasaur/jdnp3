@@ -15,15 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.service;
 
-import java.util.List;
+public interface DataLinkListener {
 
-import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
-
-public interface DataLinkLayer {
-	void sendData(int source, int destination, boolean master, List<Byte> data);
-	
-	public int getMtu();
-	
-	void addDataLinkLayerListener(DataLinkListener listener);
-	void removeDataLinkLayerListener(DataLinkListener listener);
 }

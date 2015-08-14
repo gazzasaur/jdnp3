@@ -16,6 +16,8 @@
 package net.sf.jdnp3.dnp3.stack.layer.datalink.io;
 
 import static java.util.Arrays.asList;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.MASTER_TO_OUTSTATION;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.OUTSTATION_TO_MASTER;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkFrameUtils.headerLengthToRawLength;
 import static org.apache.commons.lang3.ArrayUtils.subarray;
 import static org.apache.commons.lang3.ArrayUtils.toObject;
@@ -37,9 +39,9 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.encoder.DataLinkFrameEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.encoder.DataLinkFrameEncoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkListener;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
 
 import org.slf4j.Logger;
@@ -50,11 +52,9 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 
 	private Logger logger = LoggerFactory.getLogger(TcpIpServerDataLink.class);
 	
-	private int source = 1;
-	private int destination = 2;
-	private Direction direction = Direction.MASTER_TO_OUTSTATION;
-	
 	private DataLinkFrameEncoder encoder = new DataLinkFrameEncoderImpl();
+	
+	private int mtu = 253;
 	
 	private long lastDrop;
 	private Thread thread = null;
@@ -72,13 +72,13 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 		}
 	}
 
-	public void sendData(List<Byte> data) {
+	public void sendData(int source, int destination, boolean master, List<Byte> data) {
 		DataLinkFrame dataLinkFrame = new DataLinkFrame();
 		dataLinkFrame.getDataLinkFrameHeader().setPrimary(true);
 		dataLinkFrame.getDataLinkFrameHeader().setSource(source);
-		dataLinkFrame.getDataLinkFrameHeader().setDirection(direction);
 		dataLinkFrame.getDataLinkFrameHeader().setDestination(destination);
 		dataLinkFrame.getDataLinkFrameHeader().setFunctionCode(FunctionCode.UNCONFIRMED_USER_DATA);
+		dataLinkFrame.getDataLinkFrameHeader().setDirection((master) ? MASTER_TO_OUTSTATION : OUTSTATION_TO_MASTER);
 		dataLinkFrame.setData(data);
 		
 		sendDeque.addAll(encoder.encode(dataLinkFrame));
@@ -185,48 +185,25 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 			throw new IllegalStateException("No transport layer has been specified.");
 		}
 		DataLinkFrame dataLinkFrame = decoder.decode(buffer);
-		if (dataLinkFrame.getDataLinkFrameHeader().getDestination() == source &&
-				dataLinkFrame.getDataLinkFrameHeader().getSource() == destination &&
-				dataLinkFrame.getDataLinkFrameHeader().getDirection() != direction &&
-				dataLinkFrame.getDataLinkFrameHeader().getFunctionCode() == FunctionCode.UNCONFIRMED_USER_DATA &&
+		if (dataLinkFrame.getDataLinkFrameHeader().getFunctionCode() == FunctionCode.UNCONFIRMED_USER_DATA &&
 				dataLinkFrame.getDataLinkFrameHeader().isPrimary()) {
 			transportLayer.receiveData(dataLinkFrame.getData());
 		}
 	}
 
-	public int getMaximumReceiveDataSize() {
-		return maximumReceiveDataSize;
-	}
-
-	public void setMaximumReceiveDataSize(int maximumReceiveDataSize) {
-		this.maximumReceiveDataSize = maximumReceiveDataSize;
-	}
-
-	public int getSource() {
-		return source;
-	}
-
-	public void setSource(int source) {
-		this.source = source;
-	}
-
-	public int getDestination() {
-		return destination;
-	}
-
-	public void setDestination(int destination) {
-		this.destination = destination;
-	}
-
-	public Direction getDirection() {
-		return direction;
-	}
-
-	public void setDirection(Direction direction) {
-		this.direction = direction;
-	}
-
 	public void setTransportLayer(TransportLayer transportLayer) {
 		this.transportLayer = transportLayer;
+	}
+
+	public int getMtu() {
+		return mtu;
+	}
+
+	public void addDataLinkLayerListener(DataLinkListener listener) {
+		throw new UnsupportedOperationException();
+	}
+
+	public void removeDataLinkLayerListener(DataLinkListener listener) {
+		throw new UnsupportedOperationException();
 	}
 }
