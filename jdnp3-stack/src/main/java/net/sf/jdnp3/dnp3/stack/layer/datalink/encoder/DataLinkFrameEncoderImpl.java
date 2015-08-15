@@ -23,8 +23,6 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.util.Crc16;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class DataLinkFrameEncoderImpl implements DataLinkFrameEncoder {
-	private DataLinkFrameHeaderEncoder dataLinkFrameHeaderEncoder = new DataLinkFrameHeaderEncoder();
-	
 	public List<Byte> encode(DataLinkFrame dataLinkFrame) {
 		int partCount = 0;
 		List<Byte> partBuffer = new ArrayList<>();
@@ -37,7 +35,7 @@ public class DataLinkFrameEncoderImpl implements DataLinkFrameEncoder {
 		
 		List<Byte> data = new ArrayList<>();
 		dataLinkFrame.getDataLinkFrameHeader().setLength(partCount + 5);
-		dataLinkFrameHeaderEncoder.encode(dataLinkFrame.getDataLinkFrameHeader(), data);
+		DataLinkFrameHeaderEncoder.encode(dataLinkFrame.getDataLinkFrameHeader(), data);
 		data.addAll(partBuffer);
 
 		return data;

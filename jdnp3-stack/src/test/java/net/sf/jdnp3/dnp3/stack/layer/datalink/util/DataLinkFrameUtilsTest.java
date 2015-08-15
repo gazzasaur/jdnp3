@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(JMockit.class)
 public class DataLinkFrameUtilsTest {
+	
 	@Test
 	public void testConstructor() {
 		new DataLinkFrameUtils();

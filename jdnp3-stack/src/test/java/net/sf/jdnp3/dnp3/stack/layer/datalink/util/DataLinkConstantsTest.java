@@ -13,24 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.model;
+package net.sf.jdnp3.dnp3.stack.layer.datalink.util;
 
-import static net.sf.jdnp3.test.util.gast.MasterGast.testSubject;
-
-import java.util.Arrays;
-import java.util.List;
-
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkConstants.DNP3_START_BYTES;
+import static org.hamcrest.CoreMatchers.is;
 import mockit.integration.junit4.JMockit;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(JMockit.class)
-public class DataLinkFrameHeaderTest {
-	private List<String> PROPERTIES = Arrays.asList("source", "destination", "length", "checkSum", "primary", "direction", "functionCode");
+public class DataLinkConstantsTest {
+	@Test
+	public void testConstructor() {
+		new DataLinkConstants();
+	}
 	
 	@Test
-	public void testGettersAndSetters() {
-		testSubject(new DataLinkFrameHeader(), PROPERTIES, DataLinkFrameHeader.class);
+	public void testConstants() {
+		Assert.assertThat(DNP3_START_BYTES, is(0x6405));
 	}
 }

@@ -16,7 +16,6 @@
 package net.sf.jdnp3.dnp3.stack.layer.datalink.model;
 
 public class DataLinkFrameHeader {
-	private static final int START = 0x6405;
 	private int length = 0;
 	private int source = 0;
 	private int checkSum = 0;
@@ -25,10 +24,6 @@ public class DataLinkFrameHeader {
 	private Direction direction = Direction.MASTER_TO_OUTSTATION;
 	private FunctionCode functionCode = FunctionCode.UNCONFIRMED_USER_DATA;
 	
-	public int getStart() {
-		return START;
-	}
-
 	public int getLength() {
 		return length;
 	}

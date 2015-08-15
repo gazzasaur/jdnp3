@@ -15,33 +15,27 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.encoder;
 
-import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger16;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.Crc16.computeCrc;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkConstants.DNP3_START_BYTES;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkFrameUtils.computeControlField;
+import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
 
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.util.Crc16;
 
 public class DataLinkFrameHeaderEncoder {
-	public void encode(DataLinkFrameHeader dataLinkFrameHeader, List<Byte> data) {
+	public static void encode(DataLinkFrameHeader dataLinkFrameHeader, List<Byte> data) {
 		List<Byte> buffer = new ArrayList<>();
-		addInteger16(dataLinkFrameHeader.getStart(), buffer);
-		buffer.add((byte) dataLinkFrameHeader.getLength());
 		
-		BitSet controlField = new BitSet(8);
-		controlField.set(7, dataLinkFrameHeader.getDirection().equals(Direction.MASTER_TO_OUTSTATION));
-		controlField.set(6);
-		byte controlFieldValue = controlField.toByteArray()[0];
-		controlFieldValue |= dataLinkFrameHeader.getFunctionCode().getCode();
-		buffer.add(controlFieldValue);
-		
-		addInteger16(dataLinkFrameHeader.getDestination(), buffer);
-		addInteger16(dataLinkFrameHeader.getSource(), buffer);
+		addInteger(DNP3_START_BYTES, 2, buffer);
+		addInteger(dataLinkFrameHeader.getLength(), 1, buffer);
+		addInteger(computeControlField(dataLinkFrameHeader), 1, buffer);
+		addInteger(dataLinkFrameHeader.getDestination(), 2, buffer);
+		addInteger(dataLinkFrameHeader.getSource(), 2, buffer);
 		
 		data.addAll(buffer);
-		addInteger16(Crc16.computeCrc(buffer), data);
+		addInteger(computeCrc(buffer), 2, data);
 	}
 }

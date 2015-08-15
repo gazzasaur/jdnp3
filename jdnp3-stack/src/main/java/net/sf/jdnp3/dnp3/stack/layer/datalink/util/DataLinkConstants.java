@@ -22,22 +22,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.util;
 
-import java.util.BitSet;
-
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
-
-public class DataLinkFrameUtils {
-	public static int headerLengthToRawLength(int headerLength) {
-		return 2*((headerLength - 5)/16) + (((headerLength - 5)%16 > 0) ? 2 : 0) + headerLength + 5;
-	}
-	
-	public static byte computeControlField(DataLinkFrameHeader dataLinkFrameHeader) {
-		BitSet controlField = new BitSet(8);
-		controlField.set(7, dataLinkFrameHeader.getDirection().equals(Direction.MASTER_TO_OUTSTATION));
-		controlField.set(6);
-		byte controlFieldValue = controlField.toByteArray()[0];
-		controlFieldValue |= dataLinkFrameHeader.getFunctionCode().getCode();
-		return controlFieldValue;
-	}
+public class DataLinkConstants {
+	public static final int DNP3_START_BYTES = 0x6405;
 }
