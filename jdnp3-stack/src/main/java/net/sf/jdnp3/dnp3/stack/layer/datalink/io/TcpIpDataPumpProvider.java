@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.service;
+package net.sf.jdnp3.dnp3.stack.layer.datalink.io;
 
-import java.util.List;
-
-public interface DataLinkListener {
-	public void receiveData(List<Byte> data);
+public class TcpIpDataPumpProvider {
+	private static TcpIpDataPump tcpIpDataPump = new TcpIpDataPump();
+	
+	public static TcpIpDataPump getTcpIpDataPump() {
+		return tcpIpDataPump;
+	}
 }

@@ -49,7 +49,6 @@ public class TcpIpDataSinkWorker implements Runnable {
 	public void sendData(SocketChannel socketChannel, List<Byte> data) {
 		ByteBuffer byteBuffer = wrap(toPrimitive(data.toArray(new Byte[0])));
 		socketDataBuffer.add(new ImmutablePair<SocketChannel, ByteBuffer>(socketChannel, byteBuffer));
-		byteBuffer.flip();
 		selector.wakeup();
 	}
 

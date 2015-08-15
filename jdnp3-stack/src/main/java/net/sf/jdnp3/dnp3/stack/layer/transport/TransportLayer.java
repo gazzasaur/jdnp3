@@ -19,8 +19,9 @@ import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.ApplicationLayer;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkListener;
 
-public interface TransportLayer {
+public interface TransportLayer extends DataLinkListener {
 	public void sendData(List<Byte> data);
 	public void receiveData(List<Byte> data);
 	

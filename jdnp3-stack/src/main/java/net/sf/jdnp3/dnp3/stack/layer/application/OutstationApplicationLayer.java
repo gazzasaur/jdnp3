@@ -56,7 +56,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 
 	public void setDataLinkLayer(DataLinkLayer dataLinkLayer) {
 		this.dataLinkLayer = dataLinkLayer;
-		this.dataLinkLayer.setTransportLayer(transportLayer);
+		this.dataLinkLayer.addDataLinkLayerListener(transportLayer);
 		this.transportLayer.setDataLinkLater(dataLinkLayer);
 		this.transportLayer.setApplicationLayer(this);
 	}

@@ -34,6 +34,7 @@ public class TcpIpDataSourceWorker implements Runnable {
 	private Logger logger = LoggerFactory.getLogger(TcpIpDataSourceWorker.class);
 	
 	private Selector selector;
+	private Object selectionLock = new Object();
 	
 	public TcpIpDataSourceWorker() {
 		try {
@@ -45,7 +46,10 @@ public class TcpIpDataSourceWorker implements Runnable {
 	
 	public void registerSource(SocketChannel socketChannel, ConcurrentLinkedDeque<Byte> dataBuffer) {
 		try {
-			socketChannel.register(selector, SelectionKey.OP_READ, dataBuffer);
+			synchronized (selectionLock) {
+				selector.wakeup();
+				socketChannel.register(selector, SelectionKey.OP_READ, dataBuffer);
+			}
 		} catch (ClosedChannelException e) {
 			logger.error("Failed to register a socket to the socket channel.");
 		}
@@ -56,9 +60,12 @@ public class TcpIpDataSourceWorker implements Runnable {
 		while (true) {
 			ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
 			try {
+				synchronized (selectionLock) {
+				}
 				selector.select();
 				Set<SelectionKey> selectedKeys = selector.selectedKeys();
 				Iterator<SelectionKey> iterator = selectedKeys.iterator();
+				
 				while (iterator.hasNext()) {
 					SelectionKey selectionKey = iterator.next();
 					SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
@@ -70,10 +77,12 @@ public class TcpIpDataSourceWorker implements Runnable {
 					}
 					Byte[] byteData = new Byte[count];
 					for (int i = 0; i < count; ++i) {
-						byteData[i] = byteBuffer.array()[0];
+						byteData[i] = byteBuffer.array()[i];
 					}
 					dataBuffer.addAll(asList(byteData));
-					byteBuffer.notify();
+					synchronized (dataBuffer) {
+						dataBuffer.notify();
+					}
 					iterator.remove();
 					byteBuffer.clear();
 				}

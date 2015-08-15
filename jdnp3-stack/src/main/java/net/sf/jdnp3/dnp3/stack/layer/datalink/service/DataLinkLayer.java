@@ -17,8 +17,6 @@ package net.sf.jdnp3.dnp3.stack.layer.datalink.service;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
-
 public interface DataLinkLayer {
 	void sendData(int source, int destination, boolean master, List<Byte> data);
 	

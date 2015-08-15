@@ -15,16 +15,12 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.io;
 
-import static java.util.Arrays.asList;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.MASTER_TO_OUTSTATION;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.OUTSTATION_TO_MASTER;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkFrameUtils.headerLengthToRawLength;
-import static org.apache.commons.lang3.ArrayUtils.subarray;
-import static org.apache.commons.lang3.ArrayUtils.toObject;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
@@ -42,7 +38,6 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkListener;
-import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,17 +47,18 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 
 	private Logger logger = LoggerFactory.getLogger(TcpIpServerDataLink.class);
 	
+	private volatile SocketChannel socketChannel = null;
 	private DataLinkFrameEncoder encoder = new DataLinkFrameEncoderImpl();
+	private Deque<DataLinkListener> dataLinkListeners = new ConcurrentLinkedDeque<>();
 	
 	private int mtu = 253;
 	
 	private long lastDrop;
 	private Thread thread = null;
 	private int maximumReceiveDataSize = 10000;
-	private TransportLayer transportLayer = null;
 	private List<Byte> frameBuffer = new ArrayList<>();
-	private Deque<Byte> sendDeque = new ConcurrentLinkedDeque<>();
 	private DataLinkFrameDecoder decoder = new DataLinkFrameDecoderImpl();
+	private ConcurrentLinkedDeque<Byte> receiveDeque = new ConcurrentLinkedDeque<>();
 	private DataLinkFrameHeaderDetector detector = new DataLinkFrameHeaderDetector();
 	
 	public void enable() {
@@ -81,7 +77,9 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 		dataLinkFrame.getDataLinkFrameHeader().setDirection((master) ? MASTER_TO_OUTSTATION : OUTSTATION_TO_MASTER);
 		dataLinkFrame.setData(data);
 		
-		sendDeque.addAll(encoder.encode(dataLinkFrame));
+		if (socketChannel != null) {
+			TcpIpDataPumpProvider.getTcpIpDataPump().sendData(socketChannel, encoder.encode(dataLinkFrame));
+		}
 	}
 	
 	public void run() {
@@ -101,7 +99,6 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 	
 	private void tryRun() {
 		ServerSocketChannel serverSocketChannel = null;
-		SocketChannel socketChannel = null;
 		
 		try {
 			DataLinkFrameHeader dataLinkFrameHeader = new DataLinkFrameHeader();
@@ -112,43 +109,25 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 			serverSocketChannel.close();
 			serverSocketChannel = null;
 			
+			TcpIpDataPumpProvider.getTcpIpDataPump().registerSource(socketChannel, receiveDeque);
+			
 			lastDrop = new Date().getTime();
-			ByteBuffer buffer = ByteBuffer.allocate(1024);
-			ByteBuffer sendBuffer = ByteBuffer.allocate(1024);
-			sendBuffer.flip();
 			while (true) {
-				if (!sendBuffer.hasRemaining() && sendDeque.size() > 0) {
-					sendBuffer.clear();
-					while (sendBuffer.hasRemaining() && sendDeque.size() > 0) {
-						sendBuffer.put(sendDeque.removeFirst());
-					}
-					sendBuffer.flip();
+				synchronized (receiveDeque) {
+					receiveDeque.wait(1000);
 				}
-				socketChannel.write(sendBuffer);
-				
-				int result = socketChannel.read(buffer);
-				if (result < 0) {
-					return;
-				} else if (result >= 0) {  
-					frameBuffer.addAll(asList(toObject(subarray(buffer.array(), 0, result))));
-					buffer.clear();
-					try {
-						if (detector.detectHeader(dataLinkFrameHeader, frameBuffer) && headerLengthToRawLength(dataLinkFrameHeader.getLength()) <= frameBuffer.size()) {
-							frameReceived(frameBuffer);
-							frameBuffer = new ArrayList<>(frameBuffer.subList(headerLengthToRawLength(dataLinkFrameHeader.getLength()), frameBuffer.size()));
-							lastDrop = new Date().getTime();
-						}
-					} catch (Exception e) {
-						logger.warn(String.format("Error found on stream.  Dropping: %02X", (byte) frameBuffer.remove(0)), e);
+				while (!receiveDeque.isEmpty()) {
+					frameBuffer.add(receiveDeque.poll());
+				}
+				try {
+					if (detector.detectHeader(dataLinkFrameHeader, frameBuffer) && headerLengthToRawLength(dataLinkFrameHeader.getLength()) <= frameBuffer.size()) {
+						frameReceived(frameBuffer);
+						frameBuffer = new ArrayList<>(frameBuffer.subList(headerLengthToRawLength(dataLinkFrameHeader.getLength()), frameBuffer.size()));
 						lastDrop = new Date().getTime();
 					}
-					if (result == 0) {
-						try {
-							Thread.sleep(10);
-						} catch (InterruptedException e) {
-							logger.warn("Failed to sleep.", e);
-						}
-					}
+				} catch (Exception e) {
+					logger.warn(String.format("Error found on stream.  Dropping: %02X", (byte) frameBuffer.remove(0)), e);
+					lastDrop = new Date().getTime();
 				}
 				if (frameBuffer.size() == 0) {
 					lastDrop = new Date().getTime();
@@ -161,7 +140,7 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 					frameBuffer.remove(0);
 				}
 			}
-		} catch (IOException e) {
+		} catch (IOException | InterruptedException e) {
 			logger.error("Stream failure.", e);
 			if (serverSocketChannel != null) {
 				try {
@@ -181,18 +160,16 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 	}
 
 	private void frameReceived(List<Byte> buffer) {
-		if (transportLayer == null) {
+		if (dataLinkListeners.size() == 0) {
 			throw new IllegalStateException("No transport layer has been specified.");
 		}
 		DataLinkFrame dataLinkFrame = decoder.decode(buffer);
 		if (dataLinkFrame.getDataLinkFrameHeader().getFunctionCode() == FunctionCode.UNCONFIRMED_USER_DATA &&
 				dataLinkFrame.getDataLinkFrameHeader().isPrimary()) {
-			transportLayer.receiveData(dataLinkFrame.getData());
+			for (DataLinkListener dataLinkListener : dataLinkListeners) {
+				dataLinkListener.receiveData(dataLinkFrame.getData());
+			}
 		}
-	}
-
-	public void setTransportLayer(TransportLayer transportLayer) {
-		this.transportLayer = transportLayer;
 	}
 
 	public int getMtu() {
@@ -200,10 +177,10 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 	}
 
 	public void addDataLinkLayerListener(DataLinkListener listener) {
-		throw new UnsupportedOperationException();
+		dataLinkListeners.add(listener);
 	}
 
 	public void removeDataLinkLayerListener(DataLinkListener listener) {
-		throw new UnsupportedOperationException();
+		dataLinkListeners.remove(listener);
 	}
 }

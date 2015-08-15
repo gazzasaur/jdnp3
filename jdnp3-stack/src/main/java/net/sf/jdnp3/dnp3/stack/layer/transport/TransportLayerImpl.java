@@ -55,7 +55,7 @@ public class TransportLayerImpl implements TransportLayer {
 			transportSegment.setData(new ArrayList<Byte>(data.subList(i * (maximumTransmissionUnit - 1), ((i + 1) * (maximumTransmissionUnit - 1) > data.size()) ? data.size() : ((i + 1) * (maximumTransmissionUnit - 1)))));
 			sequenceNumber %= 64;
 			
-			dataLinkLayer.sendData(encoder.encode(transportSegment));
+			dataLinkLayer.sendData(2, 1, false, encoder.encode(transportSegment));
 		}
 	}
 

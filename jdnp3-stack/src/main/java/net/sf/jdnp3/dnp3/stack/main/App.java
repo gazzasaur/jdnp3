@@ -31,7 +31,6 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticO
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
 
 public class App {
 	public static void main(String[] args) throws InterruptedException {
@@ -95,9 +94,6 @@ public class App {
 		});
 		
 		TcpIpServerDataLink dataLink = new TcpIpServerDataLink();
-		dataLink.setDirection(Direction.OUTSTATION_TO_MASTER);
-		dataLink.setDestination(64);
-		dataLink.setSource(2);
 		
 		outstation.setDataLinkLayer(dataLink);
 		dataLink.enable();
