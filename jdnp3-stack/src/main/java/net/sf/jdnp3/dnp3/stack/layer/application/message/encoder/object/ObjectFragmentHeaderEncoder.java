@@ -29,8 +29,8 @@ public class ObjectFragmentHeaderEncoder {
 	private QualifierEncoder qualifierEncoder = new QualifierEncoder();
 	
 	public void encode(ObjectType objectType, QualifierField qualifierField, Range range, List<Byte> data) {
-		DataUtils.addInteger8(objectType.getGroup(), data);
-		DataUtils.addInteger8(objectType.getVariation(), data);
+		DataUtils.addInteger(objectType.getGroup(), 1, data);
+		DataUtils.addInteger(objectType.getVariation(), 1, data);
 		qualifierEncoder.encode(qualifierField, data);
 		rangeEncoder.encode(range, qualifierField.getRangeSpecifierCode().getOctetCount(), data);
 	}

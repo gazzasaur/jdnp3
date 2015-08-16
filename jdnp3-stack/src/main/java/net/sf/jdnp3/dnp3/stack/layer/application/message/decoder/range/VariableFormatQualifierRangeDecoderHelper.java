@@ -25,7 +25,7 @@ import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 public class VariableFormatQualifierRangeDecoderHelper implements RangeDecoderHelper {
 	public Range decode(RangeSpecifierCode rangeSpecifierCode, List<Byte> data) {
 		VariableFormatQualifierRange range = new VariableFormatQualifierRange();
-		range.setCount(DataUtils.getInteger8(0, data));
+		range.setCount(DataUtils.getInteger(0, 1, data));
 		DataUtils.trim(1, data);
 		return range;
 	}

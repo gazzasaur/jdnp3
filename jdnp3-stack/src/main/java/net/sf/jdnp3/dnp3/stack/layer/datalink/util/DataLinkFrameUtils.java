@@ -26,6 +26,7 @@ import java.util.BitSet;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
+import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class DataLinkFrameUtils {
 	public static int headerLengthToRawLength(int headerLength) {
@@ -35,8 +36,8 @@ public class DataLinkFrameUtils {
 	public static byte computeControlField(DataLinkFrameHeader dataLinkFrameHeader) {
 		BitSet controlField = new BitSet(8);
 		controlField.set(7, dataLinkFrameHeader.getDirection().equals(Direction.MASTER_TO_OUTSTATION));
-		controlField.set(6);
-		byte controlFieldValue = controlField.toByteArray()[0];
+		controlField.set(6, dataLinkFrameHeader.isPrimary());
+		byte controlFieldValue = DataUtils.bitSetToByte(controlField);
 		controlFieldValue |= dataLinkFrameHeader.getFunctionCode().getCode();
 		return controlFieldValue;
 	}

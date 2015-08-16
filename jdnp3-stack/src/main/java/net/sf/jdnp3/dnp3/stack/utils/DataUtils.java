@@ -19,53 +19,18 @@ import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.ArrayUtils.toObject;
 
 import java.nio.ByteBuffer;
+import java.util.BitSet;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 
 public class DataUtils {
-	public static void addInteger8(long value, List<Byte> data) {
-		byte[] arrayValue = ByteBuffer.allocate(8).putLong((int) value).array();
-		ArrayUtils.reverse(arrayValue);
-		data.addAll(asList(toObject(arrayValue)).subList(0, 1));
-	}
-
-	public static void addInteger16(long value, List<Byte> data) {
-		byte[] arrayValue = ByteBuffer.allocate(8).putLong((int) value).array();
-		ArrayUtils.reverse(arrayValue);
-		data.addAll(asList(toObject(arrayValue)).subList(0, 2));
-	}
-
-	public static void addInteger32(long value, List<Byte> data) {
-		byte[] arrayValue = ByteBuffer.allocate(8).putLong((int) value).array();
-		ArrayUtils.reverse(arrayValue);
-		data.addAll(asList(toObject(arrayValue)).subList(0, 4));
-	}
-
 	public static void addInteger(long value, int octetCount, List<Byte> data) {
 		byte[] arrayValue = ByteBuffer.allocate(8).putLong(value).array();
 		ArrayUtils.reverse(arrayValue);
 		data.addAll(asList(toObject(arrayValue)).subList(0, octetCount));
 	}
 	
-	public static long getInteger8(int index, List<Byte> data) {
-		byte[] rawBuffer = { data.get(index), 0, 0, 0, 0, 0, 0, 0 };
-		ArrayUtils.reverse(rawBuffer);
-		return ByteBuffer.wrap(rawBuffer).getLong();
-	}
-	
-	public static long getInteger16(int index, List<Byte> data) {
-		byte[] rawBuffer = { data.get(index), data.get(index + 1), 0, 0, 0, 0, 0, 0 };
-		ArrayUtils.reverse(rawBuffer);
-		return ByteBuffer.wrap(rawBuffer).getLong();
-	}
-	
-	public static long getInteger32(int index, List<Byte> data) {
-		byte[] rawBuffer = { data.get(index), data.get(index + 1), data.get(index + 2), data.get(index + 3), 0, 0, 0, 0 };
-		ArrayUtils.reverse(rawBuffer);
-		return ByteBuffer.wrap(rawBuffer).getLong();
-	}
-
 	public static long getInteger(int index, int octetCount, List<Byte> data) {
 		byte[] rawBuffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
 		for (int i = 0; i < octetCount; ++i) {
@@ -76,8 +41,20 @@ public class DataUtils {
 	}
 
 	public static void trim(long count, List<Byte> data) {
-		for (int i = 0; i < count; ++i) {
-			data.remove(0);
+		if (data.size() < count) {
+			data.clear();
+		} else if (count > 0) {
+			for (int i = 0; i < count; ++i) {
+				data.remove(0);
+			}
 		}
+	}
+	
+	public static byte bitSetToByte(BitSet bitSet) {
+		byte[] byteArray = bitSet.toByteArray();
+		if (byteArray.length > 0) {
+			return byteArray[0];
+		}
+		return 0;
 	}
 }

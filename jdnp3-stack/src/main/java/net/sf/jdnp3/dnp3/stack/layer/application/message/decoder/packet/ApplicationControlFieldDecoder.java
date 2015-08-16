@@ -23,7 +23,7 @@ import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class ApplicationControlFieldDecoder {
 	public void decode(ApplicationControlField applicationControlField, List<Byte> data) {
-		int sequenceNumber = (int) DataUtils.getInteger8(0, data) & 0x0F;
+		int sequenceNumber = (int) DataUtils.getInteger(0, 1, data) & 0x0F;
 		applicationControlField.setSequenceNumber(sequenceNumber);
 		
 		BitSet flags = BitSet.valueOf(new byte[] { data.remove(0) });

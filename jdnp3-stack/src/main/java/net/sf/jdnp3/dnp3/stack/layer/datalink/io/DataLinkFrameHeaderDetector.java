@@ -38,11 +38,11 @@ public class DataLinkFrameHeaderDetector {
 		if (data.size() < MINIMUM_HEADER_SIZE) {
 			return false;
 		}
-		if (DataUtils.getInteger16(0, data) != DNP3_START_BYTES) {
+		if (DataUtils.getInteger(0, 2, data) != DNP3_START_BYTES) {
 			throw new IllegalArgumentException("Start byte were not detected.");
 		}
 		
-		dataLinkFrameHeader.setLength((int) DataUtils.getInteger8(LENGTH_OFFSET, data));
+		dataLinkFrameHeader.setLength((int) DataUtils.getInteger(LENGTH_OFFSET, 1, data));
 		BitSet bitSet = BitSet.valueOf(new byte[] { data.get(CONTROL_OFFSET) });
 		dataLinkFrameHeader.setPrimary((bitSet.get(7)) ? true : false);
 		dataLinkFrameHeader.setDirection((bitSet.get(6)) ? Direction.MASTER_TO_OUTSTATION : Direction.OUTSTATION_TO_MASTER);
@@ -59,10 +59,10 @@ public class DataLinkFrameHeaderDetector {
 			throw new IllegalArgumentException(format("No function code matches: %02X", functionCodeValue));
 		}
 		
-		dataLinkFrameHeader.setDestination((int) DataUtils.getInteger16(DESTINATION_OFFSET, data));
-		dataLinkFrameHeader.setSource((int) DataUtils.getInteger16(SOURCE_OFFSET, data));
+		dataLinkFrameHeader.setDestination((int) DataUtils.getInteger(DESTINATION_OFFSET, 2, data));
+		dataLinkFrameHeader.setSource((int) DataUtils.getInteger(SOURCE_OFFSET, 2, data));
 		
-		dataLinkFrameHeader.setCheckSum((int) DataUtils.getInteger16(8, data));
+		dataLinkFrameHeader.setCheckSum((int) DataUtils.getInteger(8, 2, data));
 		int calculatedCheckSum = Crc16.computeCrc(data.subList(0, 8));
 		if (calculatedCheckSum != dataLinkFrameHeader.getCheckSum()) {
 			throw new IllegalStateException(format("Invalid checksum.  Expected %02X but got %02X.", calculatedCheckSum, dataLinkFrameHeader.getCheckSum()));

@@ -15,15 +15,25 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.util;
 
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.MASTER_TO_OUTSTATION;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.OUTSTATION_TO_MASTER;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode.UNCONFIRMED_USER_DATA;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkFrameUtils.computeControlField;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import java.util.Random;
+
 import mockit.integration.junit4.JMockit;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(JMockit.class)
 public class DataLinkFrameUtilsTest {
+	private Random random = new Random();
 	
 	@Test
 	public void testConstructor() {
@@ -41,5 +51,30 @@ public class DataLinkFrameUtilsTest {
 		assertThat(DataLinkFrameUtils.headerLengthToRawLength(22), is(31));
 		assertThat(DataLinkFrameUtils.headerLengthToRawLength(50), is(61));
 		assertThat(DataLinkFrameUtils.headerLengthToRawLength(100), is(117));
+	}
+	
+	@Test
+	public void testComputeControlField() {
+		performControlFieldTest(MASTER_TO_OUTSTATION, true, 0xC4);
+		performControlFieldTest(MASTER_TO_OUTSTATION, false, 0x84);
+		performControlFieldTest(OUTSTATION_TO_MASTER, true, 0x44);
+		performControlFieldTest(OUTSTATION_TO_MASTER, false, 0x04);
+	}
+	
+	private void performControlFieldTest(Direction direction, boolean primary, int expectedControlField) {
+		DataLinkFrameHeader header = createRandomHeader();
+		header.setPrimary(primary);
+		header.setDirection(direction);
+		assertThat(computeControlField(header), is((byte) expectedControlField));
+	}
+
+	private DataLinkFrameHeader createRandomHeader() {
+		DataLinkFrameHeader header = new DataLinkFrameHeader();
+		header.setLength(random.nextInt());
+		header.setSource(random.nextInt());
+		header.setCheckSum(random.nextInt());
+		header.setDestination(random.nextInt());
+		header.setFunctionCode(UNCONFIRMED_USER_DATA);
+		return header;
 	}
 }

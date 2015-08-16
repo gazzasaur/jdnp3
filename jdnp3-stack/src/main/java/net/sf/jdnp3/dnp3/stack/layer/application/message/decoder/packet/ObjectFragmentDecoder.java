@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
 
-import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getInteger8;
+import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getInteger;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.trim;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class ObjectFragmentDecoder {
 	private ObjectFragmentDataDecoder objectFragmentDataDecoder = new ObjectFragmentDataDecoder();
 	
 	public void decode(FunctionCode functionCode, ObjectFragment objectFragment, List<Byte> data) {
-		objectFragment.getObjectFragmentHeader().setObjectType(new ObjectType((int) getInteger8(0, data), (int) getInteger8(1, data)));
+		objectFragment.getObjectFragmentHeader().setObjectType(new ObjectType((int) getInteger(0, 1, data), (int) getInteger(1, 1, data)));
 		trim(2, data);
 		
 		qualifierDecoder.decode(objectFragment.getObjectFragmentHeader().getQualifierField(), data);

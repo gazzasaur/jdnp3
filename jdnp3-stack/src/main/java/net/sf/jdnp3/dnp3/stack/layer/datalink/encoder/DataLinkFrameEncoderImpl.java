@@ -30,7 +30,7 @@ public class DataLinkFrameEncoderImpl implements DataLinkFrameEncoder {
 			List<Byte> buffer = dataLinkFrame.getData().subList(i, (i + 16 > dataLinkFrame.getData().size()) ? dataLinkFrame.getData().size() : (i + 16));
 			partBuffer.addAll(buffer);
 			partCount += buffer.size();
-			DataUtils.addInteger16(Crc16.computeCrc(buffer), partBuffer);
+			DataUtils.addInteger(Crc16.computeCrc(buffer), 2, partBuffer);
 		}
 		
 		List<Byte> data = new ArrayList<>();
