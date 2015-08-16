@@ -20,6 +20,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeC
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class1ReadRequestHandler;
+import net.sf.jdnp3.dnp3.stack.layer.application.OutstationEventQueue;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
@@ -34,7 +35,13 @@ import org.slf4j.LoggerFactory;
 public class Class1ReadRequestAdaptor implements OutstationRequestHandlerAdaptor {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	private OutstationEventQueue outstationEventQueue;
 	private Class1ReadRequestHandler serviceRequestHandler = null;
+
+	
+	public Class1ReadRequestAdaptor(OutstationEventQueue outstationEventQueue) {
+		this.outstationEventQueue = outstationEventQueue;
+	}
 
 	public boolean canHandle(FunctionCode functionCode, ObjectFragment request) {
 		if (functionCode == FunctionCode.READ && request.getObjectFragmentHeader().getObjectType().equals(ObjectTypeConstants.CLASS_1)) {
@@ -49,10 +56,10 @@ public class Class1ReadRequestAdaptor implements OutstationRequestHandlerAdaptor
 			Range range = request.getObjectFragmentHeader().getRange();
 			
 			if (range instanceof NoRange) {
-				result = serviceRequestHandler.doReadClass();
+				result = serviceRequestHandler.doReadClass(outstationEventQueue);
 			} else if (range instanceof CountRange) {
 				CountRange countRange = (CountRange) range;
-				result = serviceRequestHandler.doReadClass(countRange.getCount());
+				result = serviceRequestHandler.doReadClass(outstationEventQueue, countRange.getCount());
 			}
 			
 			if (result == null) {

@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation.message.handler;
+package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.ui.web.outstation.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
-import net.sf.jdnp3.ui.web.outstation.message.model.BinaryInputMessage;
-import net.sf.jdnp3.ui.web.outstation.message.model.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;

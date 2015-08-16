@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation.message.model;
+package net.sf.jdnp3.ui.web.outstation.message.ws.model;
 
 public class BinaryInputMessage implements Message {
 	private String type = "binaryInputPoint";

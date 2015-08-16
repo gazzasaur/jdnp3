@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation.message.handler;
+package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jdnp3.ui.web.outstation.MessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.model.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
 public class MessageHandlerRegistry {
 	private List<MessageHandler> messageHandlers = new ArrayList<>();

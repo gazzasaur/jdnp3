@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation.message.handler;
+package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 
 import net.sf.jdnp3.ui.web.outstation.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
-import net.sf.jdnp3.ui.web.outstation.message.model.BinaryInputEventMessage;
-import net.sf.jdnp3.ui.web.outstation.message.model.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputEventMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
 public class BinaryInputEventMessageHandler implements MessageHandler {
 	public boolean canHandle(Message message) {

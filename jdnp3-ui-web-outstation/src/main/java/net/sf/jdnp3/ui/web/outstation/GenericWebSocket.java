@@ -13,11 +13,11 @@ import javax.websocket.server.ServerEndpoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseListener;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
-import net.sf.jdnp3.ui.web.outstation.message.decoder.GenericMessageDecoder;
-import net.sf.jdnp3.ui.web.outstation.message.handler.MessageHandlerRegistry;
-import net.sf.jdnp3.ui.web.outstation.message.handler.MessageHandlerRegistryProvider;
-import net.sf.jdnp3.ui.web.outstation.message.model.BinaryInputMessage;
-import net.sf.jdnp3.ui.web.outstation.message.model.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageDecoder;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistry;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistryProvider;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;

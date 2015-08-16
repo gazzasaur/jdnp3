@@ -13,21 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation.message.model;
+package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 
-public class BinaryInputEventMessage implements Message {
-	private String type = "binaryInputEvent";
-	private long index = 0;
+public class MessageHandlerRegistryProvider {
+	private static MessageHandlerRegistry messageHandlerRegistry = new MessageHandlerRegistry();
 	
-	public String getType() {
-		return type;
-	}
-	
-	public long getIndex() {
-		return index;
-	}
-
-	public void setIndex(long index) {
-		this.index = index;
+	public static MessageHandlerRegistry getMessageHandlerRegistry() {
+		return messageHandlerRegistry;
 	}
 }

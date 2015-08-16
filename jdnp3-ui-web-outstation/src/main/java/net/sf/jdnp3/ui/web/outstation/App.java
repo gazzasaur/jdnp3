@@ -15,26 +15,20 @@
  */
 package net.sf.jdnp3.ui.web.outstation;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationServiceImpl;
-import net.sf.jdnp3.dnp3.service.outstation.handler.BinaryInputStaticReadRequestHandler;
-import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
-import net.sf.jdnp3.dnp3.service.outstation.handler.Class1ReadRequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.EventObjectInstanceSelector;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.database.EventListener;
-import net.sf.jdnp3.ui.web.outstation.message.handler.BinaryInputEventMessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.handler.BinaryInputMessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.handler.MessageHandlerRegistryProvider;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.BinaryInputStaticReader;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class0Reader;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class1Reader;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputEventMessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputMessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistryProvider;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.eclipse.jetty.server.Server;
@@ -55,81 +49,9 @@ public class App {
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputEventMessageHandler());
 		
 		OutstationServiceImpl outstation = new OutstationServiceImpl();
-		outstation.addServiceRequestHandler(new BinaryInputStaticReadRequestHandler() {
-			public List<BinaryInputStaticObjectInstance> doReadStatics(long startIndex, long stopIndex) {
-				List<BinaryInputStaticObjectInstance> points = new ArrayList<>();
-				List<BinaryDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
-				
-				for (long i = startIndex; i <= stopIndex; ++i) {
-					BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
-					try {
-						BeanUtils.copyProperties(binaryInputStaticObjectInstance, binaryDataPoints.get((int) i));
-						points.add(binaryInputStaticObjectInstance);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-				return points;
-			}
-			
-			public List<BinaryInputStaticObjectInstance> doReadStatics() {
-				List<BinaryInputStaticObjectInstance> points = new ArrayList<>();
-				List<BinaryDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
-				
-				for (BinaryDataPoint binaryDataPoint : binaryDataPoints) {
-					BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
-					try {
-						BeanUtils.copyProperties(binaryInputStaticObjectInstance, binaryDataPoint);
-						points.add(binaryInputStaticObjectInstance);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-				return points;
-			}
-		});
-		outstation.addServiceRequestHandler(new Class0ReadRequestHandler() {
-			public List<ObjectInstance> doReadClass() {
-				List<ObjectInstance> points = new ArrayList<>();
-				List<BinaryDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
-				
-				for (BinaryDataPoint binaryDataPoint : binaryDataPoints) {
-					BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
-					try {
-						BeanUtils.copyProperties(binaryInputStaticObjectInstance, binaryDataPoint);
-						binaryInputStaticObjectInstance.setRequestedType(binaryDataPoint.getStaticType());
-						points.add(binaryInputStaticObjectInstance);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-				return points;
-			}
-			
-			public List<ObjectInstance> doReadClass(long returnLimit) {
-				return new ArrayList<>();
-			}
-		});
-		
-		outstation.addServiceRequestHandler(new Class1ReadRequestHandler() {
-			public List<ObjectInstance> doReadClass() {
-				EventObjectInstanceSelector selector = new EventObjectInstanceSelector() {
-					public boolean select(EventObjectInstance eventObjectInstance) {
-						return eventObjectInstance.getEventClass() == 1;
-					}
-				};
-				return outstation.getOutstationEventQueue().request(selector);
-			}
-
-			public List<ObjectInstance> doReadClass(long returnLimit) {
-				EventObjectInstanceSelector selector = new EventObjectInstanceSelector() {
-					public boolean select(EventObjectInstance eventObjectInstance) {
-						return eventObjectInstance.getEventClass() == 1;
-					}
-				};
-				return outstation.getOutstationEventQueue().request(selector, returnLimit);
-			}
-		});
+		outstation.addServiceRequestHandler(new BinaryInputStaticReader());
+		outstation.addServiceRequestHandler(new Class0Reader());
+		outstation.addServiceRequestHandler(new Class1Reader());
 		
 		DatabaseManagerProvider.getDatabaseManager().addEventListener(new EventListener() {
 			public void eventReceived(BinaryDataPoint binaryDataPoint) {

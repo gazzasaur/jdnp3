@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.ui.web.outstation;
 
-import net.sf.jdnp3.ui.web.outstation.message.model.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
 public class ModelChangedMessage implements Message {
 	private String type = "modelChanged";

@@ -1,12 +1,12 @@
-package net.sf.jdnp3.ui.web.outstation.message.decoder;
+package net.sf.jdnp3.ui.web.outstation.message.ws.decoder;
 
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-import net.sf.jdnp3.ui.web.outstation.message.model.BinaryInputEventMessage;
-import net.sf.jdnp3.ui.web.outstation.message.model.BinaryInputMessage;
-import net.sf.jdnp3.ui.web.outstation.message.model.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputEventMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

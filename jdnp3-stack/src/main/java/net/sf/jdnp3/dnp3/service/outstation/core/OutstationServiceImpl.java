@@ -24,14 +24,14 @@ import net.sf.jdnp3.dnp3.stack.layer.application.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
 
 public class OutstationServiceImpl implements OutstationService {
+	private OutstationApplicationLayer applicationLayer = new OutstationApplicationLayer();
+	
 	@SuppressWarnings("serial")
 	private List<OutstationRequestHandlerAdaptor> outstationRequestHandlers = new ArrayList<OutstationRequestHandlerAdaptor>() {{
 		this.add(new Class0ReadRequestAdaptor());
-		this.add(new Class1ReadRequestAdaptor());
+		this.add(new Class1ReadRequestAdaptor(applicationLayer.getOutstationEventQueue()));
 		this.add(new BinaryInputStaticReadRequestAdaptor());
 	}};
-	
-	private OutstationApplicationLayer applicationLayer = new OutstationApplicationLayer();
 	
 	public OutstationServiceImpl() {
 		for (OutstationRequestHandler outstationRequestHandler : outstationRequestHandlers) {
