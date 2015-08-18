@@ -17,10 +17,9 @@ package net.sf.jdnp3.dnp3.service.outstation.handler;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.service.outstation.core.ServiceRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 
-public interface BinaryInputStaticReadRequestHandler extends ServiceRequestHandler {
+public interface BinaryInputStaticReadRequestHandler extends RequestHandler {
 	public List<BinaryInputStaticObjectInstance> doReadStatics();
 	public List<BinaryInputStaticObjectInstance> doReadStatics(long startIndex, long stopIndex);
 }

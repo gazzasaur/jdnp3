@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.DefaultObjectTypeMapping;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.ObjectInstanceSorter;
@@ -48,7 +47,8 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	private DataLinkLayer dataLinkLayer = null;
 	private TransportLayer transportLayer = new TransportLayerImpl();
 	private OutstationEventQueue eventQueue = new OutstationEventQueue();
-	private ApplicationFragmentRequestDecoder decoder = new ApplicationFragmentRequestDecoderImpl();
+	
+	private ApplicationFragmentRequestDecoder decoder = null;
 
 	public DataLinkLayer getDataLinkLayer() {
 		return dataLinkLayer;
@@ -61,12 +61,16 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		this.transportLayer.setApplicationLayer(this);
 	}
 	
-	public void addHandlerHelper(OutstationRequestHandler outstationRequestHandler) {
+	public void addRequestHandler(OutstationRequestHandler outstationRequestHandler) {
 		outstationRequestHandlers.add(outstationRequestHandler);
 	}
 	
 	public OutstationEventQueue getOutstationEventQueue() {
 		return eventQueue;
+	}
+	
+	public void setDecoder(ApplicationFragmentRequestDecoder decoder) {
+		this.decoder = decoder;
 	}
 	
 	public void dataReceived(List<Byte> data) {

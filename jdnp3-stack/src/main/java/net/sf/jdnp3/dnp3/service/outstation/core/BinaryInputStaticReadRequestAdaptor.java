@@ -18,6 +18,7 @@ package net.sf.jdnp3.dnp3.service.outstation.core;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.BinaryInputStaticReadRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.RequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
@@ -65,9 +66,9 @@ public class BinaryInputStaticReadRequestAdaptor implements OutstationRequestHan
 		}
 	}
 	
-	public void setServiceRequestHandler(ServiceRequestHandler serviceRequestHandler) {
-		if (serviceRequestHandler instanceof BinaryInputStaticReadRequestHandler) {
-			this.serviceRequestHandler = (BinaryInputStaticReadRequestHandler) serviceRequestHandler;
+	public void setRequestHandler(RequestHandler requestHandler) {
+		if (requestHandler instanceof BinaryInputStaticReadRequestHandler) {
+			this.serviceRequestHandler = (BinaryInputStaticReadRequestHandler) requestHandler;
 		}
 	}
 }

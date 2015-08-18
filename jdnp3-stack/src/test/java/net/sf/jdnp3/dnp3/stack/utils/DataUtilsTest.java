@@ -69,7 +69,7 @@ public class DataUtilsTest {
 	public void testGetInteger_Sad() {
 		performGetIntegerTest_Sad(-1, 1, generateRandomList());
 		performGetIntegerTest_Sad(-2, 2, generateRandomList());
-		performGetIntegerTest_Sad(-1*random.nextInt(10000) - 1, random.nextInt(10), generateRandomList());
+		performGetIntegerTest_Sad(-1*random.nextInt(10000) - 1, random.nextInt(10) + 1, generateRandomList());
 		performGetIntegerTest_Sad(2, 2, 0x14, 0x83, 0x12);
 		performGetIntegerTest_Sad(4, 1, 0x14, 0x83, 0x12);
 	}

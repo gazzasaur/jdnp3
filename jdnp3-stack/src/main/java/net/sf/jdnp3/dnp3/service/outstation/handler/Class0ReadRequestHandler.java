@@ -17,10 +17,9 @@ package net.sf.jdnp3.dnp3.service.outstation.handler;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.service.outstation.core.ServiceRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
-public interface Class0ReadRequestHandler extends ServiceRequestHandler {
+public interface Class0ReadRequestHandler extends RequestHandler {
 	public List<ObjectInstance> doReadClass();
 	public List<ObjectInstance> doReadClass(long returnLimit);
 }

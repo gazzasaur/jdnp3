@@ -15,5 +15,15 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.core;
 
-public interface ServiceRequestHandler {
+import net.sf.jdnp3.dnp3.service.outstation.handler.RequestHandler;
+import net.sf.jdnp3.dnp3.stack.layer.application.OutstationApplicationLayer;
+
+public interface OutstationAdaptionLayer {
+	public void addRequestHandler(RequestHandler requestHandler);
+	public void removeRequestHandler(RequestHandler requestHandler);
+	
+	public void setApplicationLayer(OutstationApplicationLayer outstationApplicationLayer);
+	
+	public void addOutstationRequestHandlerAdaptor(OutstationRequestHandlerAdaptor outstationRequestHandlerAdaptor);
+	public void removeOutstationRequestHandlerAdaptor(OutstationRequestHandlerAdaptor outstationRequestHandlerAdaptor);
 }

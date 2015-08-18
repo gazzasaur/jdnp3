@@ -17,7 +17,15 @@ package net.sf.jdnp3.ui.web.outstation;
 
 import java.util.Date;
 
-import net.sf.jdnp3.dnp3.service.outstation.core.OutstationServiceImpl;
+import net.sf.jdnp3.dnp3.service.outstation.core.BinaryInputEventReadRequestAdaptor;
+import net.sf.jdnp3.dnp3.service.outstation.core.BinaryInputStaticReadRequestAdaptor;
+import net.sf.jdnp3.dnp3.service.outstation.core.Class0ReadRequestAdaptor;
+import net.sf.jdnp3.dnp3.service.outstation.core.Class1ReadRequestAdaptor;
+import net.sf.jdnp3.dnp3.service.outstation.core.OutstationAdaptionLayer;
+import net.sf.jdnp3.dnp3.service.outstation.core.OutstationAdaptionLayerImpl;
+import net.sf.jdnp3.dnp3.service.outstation.core.OutstationImpl;
+import net.sf.jdnp3.dnp3.stack.layer.application.OutstationApplicationLayer;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryDataPoint;
@@ -48,10 +56,23 @@ public class App {
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputEventMessageHandler());
 		
-		OutstationServiceImpl outstation = new OutstationServiceImpl();
-		outstation.addServiceRequestHandler(new BinaryInputStaticReader());
-		outstation.addServiceRequestHandler(new Class0Reader());
-		outstation.addServiceRequestHandler(new Class1Reader());
+		OutstationApplicationLayer outstationApplicationLayer = new OutstationApplicationLayer();
+		outstationApplicationLayer.setDecoder(new ApplicationFragmentRequestDecoderImpl());
+		
+		OutstationAdaptionLayer outstationAdaptionLayer = new OutstationAdaptionLayerImpl();
+		outstationAdaptionLayer.setApplicationLayer(outstationApplicationLayer);
+		
+		outstationAdaptionLayer.addOutstationRequestHandlerAdaptor(new BinaryInputStaticReadRequestAdaptor());
+		outstationAdaptionLayer.addOutstationRequestHandlerAdaptor(new BinaryInputEventReadRequestAdaptor());
+		outstationAdaptionLayer.addOutstationRequestHandlerAdaptor(new Class0ReadRequestAdaptor());
+		outstationAdaptionLayer.addOutstationRequestHandlerAdaptor(new Class1ReadRequestAdaptor(outstationApplicationLayer.getOutstationEventQueue()));
+		
+		OutstationImpl outstation = new OutstationImpl();
+		outstation.setOutstationApplicationLayer(outstationApplicationLayer);
+		outstation.setOutstationAdaptionLayer(outstationAdaptionLayer);
+		outstation.addRequestHandler(new BinaryInputStaticReader());
+		outstation.addRequestHandler(new Class0Reader());
+		outstation.addRequestHandler(new Class1Reader());
 		
 		DatabaseManagerProvider.getDatabaseManager().addEventListener(new EventListener() {
 			public void eventReceived(BinaryDataPoint binaryDataPoint) {
@@ -61,7 +82,7 @@ public class App {
 					binaryInputEventObjectInstance.setTimestamp(new Date().getTime());
 					binaryInputEventObjectInstance.setEventClass(binaryDataPoint.getEventClass());
 					binaryInputEventObjectInstance.setRequestedType(binaryDataPoint.getEventType());
-					outstation.getOutstationEventQueue().addEvent(binaryInputEventObjectInstance);
+					outstation.sendEvent(binaryInputEventObjectInstance);
 				} catch (Exception e) {
 					logger.error("Failed to send event.", e);
 				}
@@ -70,7 +91,7 @@ public class App {
 		
 		TcpIpServerDataLink dataLink = new TcpIpServerDataLink();
 
-		outstation.setDataLinkLayer(dataLink);
+		outstationApplicationLayer.setDataLinkLayer(dataLink);
 		dataLink.enable();
 		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("jetty-config.xml");

@@ -20,6 +20,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeC
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class1ReadRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.RequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.OutstationEventQueue;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
@@ -75,9 +76,9 @@ public class Class1ReadRequestAdaptor implements OutstationRequestHandlerAdaptor
 		}
 	}
 	
-	public void setServiceRequestHandler(ServiceRequestHandler serviceRequestHandler) {
-		if (serviceRequestHandler instanceof Class1ReadRequestHandler) {
-			this.serviceRequestHandler = (Class1ReadRequestHandler) serviceRequestHandler;
+	public void setRequestHandler(RequestHandler requestHandler) {
+		if (requestHandler instanceof Class1ReadRequestHandler) {
+			this.serviceRequestHandler = (Class1ReadRequestHandler) requestHandler;
 		}
 	}
 }
