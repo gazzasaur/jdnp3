@@ -18,39 +18,47 @@ package net.sf.jdnp3.dnp3.service.outstation.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.RequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.OutstationApplicationLayer;
+import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 public class OutstationAdaptionLayerImpl implements OutstationAdaptionLayer {
-	private OutstationApplicationLayer outstationApplicationLayer;
 	private List<OutstationRequestHandlerAdaptor> adaptors = new ArrayList<>();
 
-	public void addRequestHandler(RequestHandler requestHandler) {
+	public void addRequestHandler(OutstationRequestHandler requestHandler) {
 		for (OutstationRequestHandlerAdaptor adaptor : adaptors) {
 			adaptor.setRequestHandler(requestHandler);
 		}
 	}
 
-	public void removeRequestHandler(RequestHandler requestHandler) {
+	public void removeRequestHandler(OutstationRequestHandler requestHandler) {
 		throw new UnsupportedOperationException();
 	}
 
-	public void setApplicationLayer(OutstationApplicationLayer outstationApplicationLayer) {
-		if (this.outstationApplicationLayer != null) {
-			throw new IllegalStateException("Application layer has already been set.");
-		}
-		this.outstationApplicationLayer = outstationApplicationLayer;
-	}
-
 	public void addOutstationRequestHandlerAdaptor(OutstationRequestHandlerAdaptor outstationRequestHandlerAdaptor) {
-		if (outstationApplicationLayer == null) {
-			throw new IllegalStateException("Application layer has not been set.");
-		}
 		adaptors.add(outstationRequestHandlerAdaptor);
-		outstationApplicationLayer.addRequestHandler(outstationRequestHandlerAdaptor);
 	}
 
 	public void removeOutstationRequestHandlerAdaptor(OutstationRequestHandlerAdaptor outstationRequestHandlerAdaptor) {
 		throw new UnsupportedOperationException();
+	}
+
+	public boolean canHandle(FunctionCode functionCode, ObjectFragment request) {
+		for (OutstationRequestHandlerAdaptor outstationRequestHandlerAdaptor : adaptors) {
+			if (outstationRequestHandlerAdaptor.canHandle(functionCode, request)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void doRequest(FunctionCode functionCode, OutstationEventQueue outstationEventQueue, ObjectFragment request, List<ObjectInstance> response) {
+		for (OutstationRequestHandlerAdaptor outstationRequestHandlerAdaptor : adaptors) {
+			if (outstationRequestHandlerAdaptor.canHandle(functionCode, request)) {
+				outstationRequestHandlerAdaptor.doRequest(functionCode, outstationEventQueue, request, response);
+			}
+		}
 	}
 }

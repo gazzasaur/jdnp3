@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.service.outstation.core;
+package net.sf.jdnp3.dnp3.service.outstation.adaptor;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.READ;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_EVENT_ANY;
 
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.service.outstation.core.OutstationRequestHandlerAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.handler.BinaryInputEventReadRequestHandler;
-import net.sf.jdnp3.dnp3.service.outstation.handler.RequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
@@ -29,6 +30,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +47,7 @@ public class BinaryInputEventReadRequestAdaptor implements OutstationRequestHand
 		return false;
 	}
 	
-	public void doRequest(FunctionCode functionCode, ObjectFragment request, List<ObjectInstance> response) {
+	public void doRequest(FunctionCode functionCode, OutstationEventQueue outstationEventQueue, ObjectFragment request, List<ObjectInstance> response) {
 		if (serviceRequestHandler != null) {
 			List<BinaryInputEventObjectInstance> result = null;
 			Range range = request.getObjectFragmentHeader().getRange();
@@ -68,7 +70,7 @@ public class BinaryInputEventReadRequestAdaptor implements OutstationRequestHand
 		}
 	}
 	
-	public void setRequestHandler(RequestHandler requestHandler) {
+	public void setRequestHandler(OutstationRequestHandler requestHandler) {
 		if (requestHandler instanceof BinaryInputEventReadRequestHandler) {
 			this.serviceRequestHandler = (BinaryInputEventReadRequestHandler) requestHandler;
 		}

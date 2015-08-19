@@ -19,7 +19,7 @@ import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 
-public interface BinaryInputEventReadRequestHandler extends RequestHandler {
+public interface BinaryInputEventReadRequestHandler extends OutstationRequestHandler {
 	public List<BinaryInputEventObjectInstance> doReadEvents();
 	public List<BinaryInputEventObjectInstance> doReadEvents(long returnLimit);
 }

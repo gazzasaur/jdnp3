@@ -15,12 +15,14 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.core;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.RequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
 
 public interface Outstation {
-	public void addRequestHandler(RequestHandler requestHandler);
-	public void removeRequestHandler(RequestHandler requestHandler);
+	public void addRequestHandler(OutstationRequestHandler requestHandler);
+	public void removeRequestHandler(OutstationRequestHandler requestHandler);
 	
 	public void sendEvent(EventObjectInstance eventObjectInstance);
+	public void setDataLinkLayer(TcpIpServerDataLink dataLink);
 }

@@ -13,12 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application;
+package net.sf.jdnp3.dnp3.service.outstation.handler;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
-
-public interface ConfirmationListener {
-	public void confirm(EventObjectInstance eventObjectInstance);
-	public void timedOut(EventObjectInstance eventObjectInstance);
-	public void cancelled(EventObjectInstance eventObjectInstance);
+public interface OutstationRequestHandler {
 }

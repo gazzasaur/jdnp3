@@ -18,10 +18,10 @@ package net.sf.jdnp3.ui.web.outstation.message.dnp.handler;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class1ReadRequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.EventObjectInstanceSelector;
-import net.sf.jdnp3.dnp3.stack.layer.application.OutstationEventQueue;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.EventObjectInstanceSelector;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 public class Class1Reader implements Class1ReadRequestHandler {
 	public List<ObjectInstance> doReadClass(OutstationEventQueue outstationEventQueue) {

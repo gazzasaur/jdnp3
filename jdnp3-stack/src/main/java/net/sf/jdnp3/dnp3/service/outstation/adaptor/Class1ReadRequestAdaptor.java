@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.service.outstation.core;
+package net.sf.jdnp3.dnp3.service.outstation.adaptor;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
-import net.sf.jdnp3.dnp3.service.outstation.handler.RequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.core.OutstationRequestHandlerAdaptor;
+import net.sf.jdnp3.dnp3.service.outstation.handler.Class1ReadRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
@@ -28,32 +29,33 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Class0ReadRequestAdaptor implements OutstationRequestHandlerAdaptor {
+public class Class1ReadRequestAdaptor implements OutstationRequestHandlerAdaptor {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	private Class0ReadRequestHandler serviceRequestHandler = null;
-
+	private Class1ReadRequestHandler serviceRequestHandler = null;
+	
 	public boolean canHandle(FunctionCode functionCode, ObjectFragment request) {
-		if (functionCode == FunctionCode.READ && request.getObjectFragmentHeader().getObjectType().equals(ObjectTypeConstants.CLASS_0)) {
+		if (functionCode == FunctionCode.READ && request.getObjectFragmentHeader().getObjectType().equals(ObjectTypeConstants.CLASS_1)) {
 			return true;
 		}
 		return false;
 	}
 	
-	public void doRequest(FunctionCode functionCode, ObjectFragment request, List<ObjectInstance> response) {
+	public void doRequest(FunctionCode functionCode, OutstationEventQueue outstationEventQueue, ObjectFragment request, List<ObjectInstance> response) {
 		if (serviceRequestHandler != null) {
 			List<ObjectInstance> result = null;
 			Range range = request.getObjectFragmentHeader().getRange();
 			
 			if (range instanceof NoRange) {
-				result = serviceRequestHandler.doReadClass();
+				result = serviceRequestHandler.doReadClass(outstationEventQueue);
 			} else if (range instanceof CountRange) {
 				CountRange countRange = (CountRange) range;
-				result = serviceRequestHandler.doReadClass(countRange.getCount());
+				result = serviceRequestHandler.doReadClass(outstationEventQueue, countRange.getCount());
 			}
 			
 			if (result == null) {
@@ -69,9 +71,9 @@ public class Class0ReadRequestAdaptor implements OutstationRequestHandlerAdaptor
 		}
 	}
 	
-	public void setRequestHandler(RequestHandler requestHandler) {
-		if (requestHandler instanceof Class0ReadRequestHandler) {
-			this.serviceRequestHandler = (Class0ReadRequestHandler) requestHandler;
+	public void setRequestHandler(OutstationRequestHandler requestHandler) {
+		if (requestHandler instanceof Class1ReadRequestHandler) {
+			this.serviceRequestHandler = (Class1ReadRequestHandler) requestHandler;
 		}
 	}
 }

@@ -18,14 +18,15 @@ package net.sf.jdnp3.dnp3.service.outstation.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.RequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.OutstationApplicationLayer;
+import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationLayer;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
 
 public class OutstationImpl implements Outstation {
 	private OutstationAdaptionLayer outstationAdaptionLayer;
 	private OutstationApplicationLayer outstationApplicationLayer;
-	private List<RequestHandler> requestHandlers = new ArrayList<>();
+	private List<OutstationRequestHandler> requestHandlers = new ArrayList<>();
 	
 	public void setOutstationAdaptionLayer(OutstationAdaptionLayer outstationAdaptionLayer) {
 		this.outstationAdaptionLayer = outstationAdaptionLayer;
@@ -35,16 +36,20 @@ public class OutstationImpl implements Outstation {
 		this.outstationApplicationLayer = outstationApplicationLayer;
 	}
 	
-	public void addRequestHandler(RequestHandler requestHandler) {
+	public void addRequestHandler(OutstationRequestHandler requestHandler) {
 		requestHandlers.add(requestHandler);
 		outstationAdaptionLayer.addRequestHandler(requestHandler);
 	}
 	
-	public void removeRequestHandler(RequestHandler requestHandler) {
+	public void removeRequestHandler(OutstationRequestHandler requestHandler) {
 		throw new UnsupportedOperationException();
 	}
 	
 	public void sendEvent(EventObjectInstance eventObjectInstance) {
 		outstationApplicationLayer.getOutstationEventQueue().addEvent(eventObjectInstance);
+	}
+
+	public void setDataLinkLayer(TcpIpServerDataLink dataLink) {
+		outstationApplicationLayer.setDataLinkLayer(dataLink);
 	}
 }

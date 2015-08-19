@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application;
+package net.sf.jdnp3.dnp3.stack.layer.application.service;
 
 import java.util.List;
 
-public interface ApplicationLayer {
-	public void dataReceived(List<Byte> data);
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+
+public interface OutstationApplicationRequestHandler {
+	public boolean canHandle(FunctionCode functionCode, ObjectFragment request);
+	public void doRequest(FunctionCode functionCode, OutstationEventQueue outstationEventQueue, ObjectFragment request, List<ObjectInstance> response);
 }

@@ -20,26 +20,16 @@ import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.BinaryInputStaticObjectTypeDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class0ObjectTypeDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class1ObjectTypeDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class2ObjectTypeDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class3ObjectTypeDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.InternalIndicatorBitObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 
 public class ObjectFragmentDataDecoder {
-	@SuppressWarnings("serial")
-	private List<ObjectTypeDecoder> objectTypeDecoders = new ArrayList<ObjectTypeDecoder>() {{
-		this.add(new BinaryInputStaticObjectTypeDecoder());
-		this.add(new Class0ObjectTypeDecoder());
-		this.add(new Class1ObjectTypeDecoder());
-		this.add(new Class2ObjectTypeDecoder());
-		this.add(new Class3ObjectTypeDecoder());
-		this.add(new InternalIndicatorBitObjectTypeDecoder());
-	}};
+	private List<ObjectTypeDecoder> objectTypeDecoders = new ArrayList<>();
+	
+	public void addObjectTypeDecoder(ObjectTypeDecoder objectTypeDecoder) {
+		objectTypeDecoders.add(objectTypeDecoder);
+	}
 	
 	public void decode(FunctionCode functionCode, ObjectFragment objectFragment, List<Byte> data) {
 		boolean decoded = false;

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.ApplicationLayer;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationLayer;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
 
 public class TransportLayerImpl implements TransportLayer {

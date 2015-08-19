@@ -21,8 +21,12 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.Applicatio
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 
 public class ApplicationFragmentRequestDecoderImpl implements ApplicationFragmentRequestDecoder {
+	private ObjectFragmentDecoder objectFragmentDecoder;
 	private ApplicationFragmentRequestHeaderDecoder decoder = new ApplicationFragmentRequestHeaderDecoder();
-	private ObjectFragmentDecoder objectFragmentDecoder = new ObjectFragmentDecoder();
+	
+	public ApplicationFragmentRequestDecoderImpl(ObjectFragmentDecoder objectFragmentDecoder) {
+		this.objectFragmentDecoder = objectFragmentDecoder;
+	}
 	
 	public ApplicationFragmentRequest decode(List<Byte> data) {
 		ApplicationFragmentRequest applicationFragmentRequest = new ApplicationFragmentRequest();

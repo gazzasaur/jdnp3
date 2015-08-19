@@ -19,7 +19,7 @@ import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 
-public interface BinaryInputStaticReadRequestHandler extends RequestHandler {
+public interface BinaryInputStaticReadRequestHandler extends OutstationRequestHandler {
 	public List<BinaryInputStaticObjectInstance> doReadStatics();
 	public List<BinaryInputStaticObjectInstance> doReadStatics(long startIndex, long stopIndex);
 }

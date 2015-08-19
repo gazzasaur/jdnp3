@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application;
+package net.sf.jdnp3.dnp3.stack.layer.application.service;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_EVENT_RELATIVE_TIME;
 
@@ -42,7 +42,7 @@ import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayerImpl;
 
 public class OutstationApplicationLayer implements ApplicationLayer {
 	private List<EventObjectInstance> pendingEvents = new ArrayList<>();
-	private List<OutstationRequestHandler> outstationRequestHandlers = new ArrayList<>();
+	private List<OutstationApplicationRequestHandler> outstationRequestHandlers = new ArrayList<>();
 	
 	private DataLinkLayer dataLinkLayer = null;
 	private TransportLayer transportLayer = new TransportLayerImpl();
@@ -61,7 +61,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		this.transportLayer.setApplicationLayer(this);
 	}
 	
-	public void addRequestHandler(OutstationRequestHandler outstationRequestHandler) {
+	public void addRequestHandler(OutstationApplicationRequestHandler outstationRequestHandler) {
 		outstationRequestHandlers.add(outstationRequestHandler);
 	}
 	
@@ -87,10 +87,10 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		}
 		
 		for (ObjectFragment objectFragment : request.getObjectFragments()) {
-			for (OutstationRequestHandler handler : outstationRequestHandlers) {
+			for (OutstationApplicationRequestHandler handler : outstationRequestHandlers) {
 				if (handler.canHandle(request.getHeader().getFunctionCode(), objectFragment)) {
 					List<ObjectInstance> localResponse = new ArrayList<>();
-					handler.doRequest(request.getHeader().getFunctionCode(), objectFragment, localResponse);
+					handler.doRequest(request.getHeader().getFunctionCode(), eventQueue, objectFragment, localResponse);
 					responseObjects.addAll(localResponse);
 					break;
 				}

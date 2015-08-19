@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.service.outstation.core;
+package net.sf.jdnp3.dnp3.service.outstation.adaptor;
 
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.service.outstation.core.OutstationRequestHandlerAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.handler.BinaryInputStaticReadRequestHandler;
-import net.sf.jdnp3.dnp3.service.outstation.handler.RequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
@@ -27,6 +28,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +45,7 @@ public class BinaryInputStaticReadRequestAdaptor implements OutstationRequestHan
 		return false;
 	}
 	
-	public void doRequest(FunctionCode functionCode, ObjectFragment request, List<ObjectInstance> response) {
+	public void doRequest(FunctionCode functionCode, OutstationEventQueue outstationEventQueue, ObjectFragment request, List<ObjectInstance> response) {
 		if (serviceRequestHandler != null) {
 			List<BinaryInputStaticObjectInstance> result = null;
 			Range range = request.getObjectFragmentHeader().getRange();
@@ -66,7 +68,7 @@ public class BinaryInputStaticReadRequestAdaptor implements OutstationRequestHan
 		}
 	}
 	
-	public void setRequestHandler(RequestHandler requestHandler) {
+	public void setRequestHandler(OutstationRequestHandler requestHandler) {
 		if (requestHandler instanceof BinaryInputStaticReadRequestHandler) {
 			this.serviceRequestHandler = (BinaryInputStaticReadRequestHandler) requestHandler;
 		}

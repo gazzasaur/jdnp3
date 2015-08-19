@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.stack.layer.transport;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.ApplicationLayer;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationLayer;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkListener;
 
