@@ -49,6 +49,8 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	private OutstationEventQueue eventQueue = new OutstationEventQueue();
 	
 	private ApplicationFragmentRequestDecoder decoder = null;
+	
+	private DefaultObjectTypeMapping defaultObjectTypeMapping = new DefaultObjectTypeMapping();
 
 	public DataLinkLayer getDataLinkLayer() {
 		return dataLinkLayer;
@@ -65,6 +67,10 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		outstationRequestHandlers.add(outstationRequestHandler);
 	}
 	
+	public void addDefaultObjectTypeMapping(Class<? extends ObjectInstance> clazz, ObjectType defaultMapping) {
+		defaultObjectTypeMapping.addMapping(clazz, defaultMapping);
+	}
+	
 	public OutstationEventQueue getOutstationEventQueue() {
 		return eventQueue;
 	}
@@ -74,16 +80,20 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	}
 	
 	public void dataReceived(List<Byte> data) {
-		// FIXME IMPL Need the ability to confirm a packet and complete/cancel a transaction.
 		List<ObjectInstance> responseObjects = new ArrayList<>();
 		ApplicationFragmentRequest request = decoder.decode(data);
-		
+
 		if (request.getHeader().getFunctionCode() == FunctionCode.CONFIRM) {
 			for (EventObjectInstance eventObjectInstance : pendingEvents) {
 				eventQueue.confirm(eventObjectInstance);
 			}
 			pendingEvents.clear();
 			return;
+		} else {
+			for (EventObjectInstance eventObjectInstance : pendingEvents) {
+				eventQueue.cancelled(eventObjectInstance);
+			}
+			pendingEvents.clear();
 		}
 		
 		for (ObjectFragment objectFragment : request.getObjectFragments()) {

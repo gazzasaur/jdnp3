@@ -33,6 +33,8 @@ public class ObjectTypeConstants {
 	public static ObjectType ANALOG_INPUT_STATIC_FLOAT16 = new ObjectType(30, 5);
 	public static ObjectType ANALOG_INPUT_STATIC_FLOAT64 = new ObjectType(30, 6);
 
+	public static ObjectType CROB = new ObjectType(12, 1);
+
 	public static ObjectType SYNCHRONISED_CTO = new ObjectType(51, 1);
 	public static ObjectType UNSYNCHRONISED_CTO = new ObjectType(51, 2);
 

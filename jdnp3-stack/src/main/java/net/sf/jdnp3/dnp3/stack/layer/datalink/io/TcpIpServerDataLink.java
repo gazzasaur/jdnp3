@@ -58,7 +58,7 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 	private int maximumReceiveDataSize = 10000;
 	private List<Byte> frameBuffer = new ArrayList<>();
 	private DataLinkFrameDecoder decoder = new DataLinkFrameDecoderImpl();
-	private ConcurrentLinkedDeque<Byte> receiveDeque = new ConcurrentLinkedDeque<>();
+	private ConcurrentLinkedDeque<Byte> inputDataBuffer = new ConcurrentLinkedDeque<>();
 	private DataLinkFrameHeaderDetector detector = new DataLinkFrameHeaderDetector();
 	
 	public void enable() {
@@ -109,15 +109,15 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 			serverSocketChannel.close();
 			serverSocketChannel = null;
 			
-			TcpIpDataPumpProvider.getTcpIpDataPump().registerSource(socketChannel, receiveDeque);
+			TcpIpDataPumpProvider.getTcpIpDataPump().registerSource(socketChannel, inputDataBuffer);
 			
 			lastDrop = new Date().getTime();
 			while (true) {
-				synchronized (receiveDeque) {
-					receiveDeque.wait(1000);
+				synchronized (inputDataBuffer) {
+					inputDataBuffer.wait(1000);
 				}
-				while (!receiveDeque.isEmpty()) {
-					frameBuffer.add(receiveDeque.poll());
+				while (!inputDataBuffer.isEmpty()) {
+					frameBuffer.add(inputDataBuffer.poll());
 				}
 				try {
 					if (detector.detectHeader(dataLinkFrameHeader, frameBuffer) && headerLengthToRawLength(dataLinkFrameHeader.getLength()) <= frameBuffer.size()) {

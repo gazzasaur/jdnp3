@@ -73,6 +73,10 @@ public class TcpIpDataSourceWorker implements Runnable {
 					int count = socketChannel.read(byteBuffer);
 					if (count < 0) {
 						selectionKey.cancel();
+						socketChannel.close();
+						synchronized (socketChannel) {
+							socketChannel.notifyAll();
+						}
 						continue;
 					}
 					Byte[] byteData = new Byte[count];

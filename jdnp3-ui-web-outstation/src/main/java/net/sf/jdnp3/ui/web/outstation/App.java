@@ -27,6 +27,7 @@ import net.sf.jdnp3.ui.web.outstation.database.EventListener;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.BinaryInputStaticReader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class0Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class1Reader;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.CrobOperator;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputEventMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistryProvider;
@@ -51,12 +52,13 @@ public class App {
 		
 		OutstationFactory outstationFactory = new OutstationFactory();
 		outstationFactory.addStandardOutstationRequestHandlerAdaptors();
-		outstationFactory.addStandardObjectTypeDescoders();
+		outstationFactory.addStandardObjectTypeDecoders();
 		
 		Outstation outstation = outstationFactory.createOutstation();
 		outstation.addRequestHandler(new BinaryInputStaticReader());
 		outstation.addRequestHandler(new Class0Reader());
 		outstation.addRequestHandler(new Class1Reader());
+		outstation.addRequestHandler(new CrobOperator());
 		
 		DatabaseManagerProvider.getDatabaseManager().addEventListener(new EventListener() {
 			public void eventReceived(BinaryDataPoint binaryDataPoint) {

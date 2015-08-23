@@ -16,30 +16,37 @@
 package net.sf.jdnp3.dnp3.service.outstation.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.BinaryInputEventReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.BinaryInputStaticReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class0ReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class1ReadRequestAdaptor;
+import net.sf.jdnp3.dnp3.service.outstation.adaptor.CrobRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.BinaryInputStaticObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class0ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class1ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class2ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class3ObjectTypeDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.CrobObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.InternalIndicatorBitObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDataDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationLayer;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationRequestHandler;
 
 public class OutstationFactory {
 	private List<ObjectTypeDecoder> decoders = new ArrayList<>();
 	private List<OutstationRequestHandlerAdaptor> adaptors = new ArrayList<>();
+	private Map<Class<? extends ObjectInstance>, ObjectType> mapping = new HashMap<>();
 	private List<OutstationRequestHandler> outstationRequestHandlers = new ArrayList<>();
 	private List<OutstationApplicationRequestHandler> outstationApplicationRequestHandlers = new ArrayList<>();
 	
@@ -59,20 +66,25 @@ public class OutstationFactory {
 		decoders.add(objectTypeDecoder);
 	}
 	
+	public void addObjectTypeMapping(Class<? extends ObjectInstance> clazz, ObjectType objectType) {
+		mapping.put(clazz, objectType);
+	}
+	
 	public void addStandardOutstationRequestHandlerAdaptors() {
 		adaptors.add(new BinaryInputStaticReadRequestAdaptor());
 		adaptors.add(new BinaryInputEventReadRequestAdaptor());
 		adaptors.add(new Class0ReadRequestAdaptor());
 		adaptors.add(new Class1ReadRequestAdaptor());
+		adaptors.add(new CrobRequestAdaptor());
 	}
-
 	
-	public void addStandardObjectTypeDescoders() {
+	public void addStandardObjectTypeDecoders() {
 		decoders.add(new BinaryInputStaticObjectTypeDecoder());
 		decoders.add(new Class0ObjectTypeDecoder());
 		decoders.add(new Class1ObjectTypeDecoder());
 		decoders.add(new Class2ObjectTypeDecoder());
 		decoders.add(new Class3ObjectTypeDecoder());
+		decoders.add(new CrobObjectTypeDecoder());
 		decoders.add(new InternalIndicatorBitObjectTypeDecoder());
 	}
 
@@ -108,6 +120,10 @@ public class OutstationFactory {
 			outstation.addRequestHandler(outstationRequestHandler);
 		}
 		outstationRequestHandlers.clear();
+		
+		for (Class<? extends ObjectInstance> clazz : mapping.keySet()) {
+			outstationApplicationLayer.addDefaultObjectTypeMapping(clazz, mapping.get(clazz));
+		}
 		
 		return outstation;
 	}

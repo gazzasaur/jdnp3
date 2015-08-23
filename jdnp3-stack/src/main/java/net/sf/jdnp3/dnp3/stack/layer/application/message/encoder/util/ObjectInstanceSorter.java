@@ -21,15 +21,14 @@ import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StaticObjectInstance;
 
 public class ObjectInstanceSorter {
 	public void sort(List<ObjectInstance> objectInstances) {
 		Comparator<ObjectInstance> objectInstanceComparator = new Comparator<ObjectInstance>() {
 			public int compare(ObjectInstance o1, ObjectInstance o2) {
-				if (o1 instanceof EventObjectInstance && o2 instanceof StaticObjectInstance) {
+				if (o1 instanceof EventObjectInstance && !(o2 instanceof EventObjectInstance)) {
 					return -1;
-				} else if (o1 instanceof StaticObjectInstance && o2 instanceof EventObjectInstance) {
+				} else if (!(o1 instanceof EventObjectInstance) && o2 instanceof EventObjectInstance) {
 					return 1;
 				} else if (o1 instanceof EventObjectInstance && o2 instanceof EventObjectInstance) {
 					EventObjectInstance eo1 = (EventObjectInstance) o1;
