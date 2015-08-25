@@ -16,44 +16,18 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet;
 
 import static java.lang.String.format;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectTypeEncoderConstants.OBJECT_TYPE_ENCODERS;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.AnalogInputStaticFloat16ObjectTypeEncoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.AnalogInputStaticFloat64ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectTypeEncoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.SynchronisedCtoObjectTypeEncoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputEventAbsoluteTimeObjectTypeEncoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputEventRelativeTimeObjectTypeEncoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputEventWithoutTimeTimeObjectTypeEncoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputStaticFlagsObjectTypeEncoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputStaticPackedObjectTypeEncoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.CrobObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class ObjectFragmentEncoder {
-	@SuppressWarnings("serial")
-	private List<ObjectTypeEncoder> objectTypeEncoders = new ArrayList<ObjectTypeEncoder>() {{
-		this.add(new BinaryInputStaticPackedObjectTypeEncoder());
-		this.add(new BinaryInputStaticFlagsObjectTypeEncoder());
-		
-		this.add(new BinaryInputEventWithoutTimeTimeObjectTypeEncoder());
-		this.add(new BinaryInputEventAbsoluteTimeObjectTypeEncoder());
-		this.add(new BinaryInputEventRelativeTimeObjectTypeEncoder());
-		
-		this.add(new CrobObjectTypeEncoder());
-		
-		this.add(new AnalogInputStaticFloat16ObjectTypeEncoder());
-		this.add(new AnalogInputStaticFloat64ObjectTypeEncoder());
-		
-		this.add(new SynchronisedCtoObjectTypeEncoder());
-	}};
-	
 	public void encode(ObjectFragmentEncoderContext context, List<ObjectInstance> objectInstances, List<Byte> data) {
 		boolean encoded = false;
 		
-		for (ObjectTypeEncoder objectTypeEncoder : objectTypeEncoders) {
+		for (ObjectTypeEncoder objectTypeEncoder : OBJECT_TYPE_ENCODERS) {
 			if (objectTypeEncoder.canEncode(context.getFunctionCode(), context.getObjectType())) {
 				objectTypeEncoder.encode(context, objectInstances, data);
 				encoded = true;

@@ -36,7 +36,7 @@ public class ApplicationFragmentEchoResponse {
 		return unmodifiableList(objectFragments);
 	}
 	
-	public void addObjectInstance(ObjectFragment objectFragment) {
+	public void addObjectFragment(ObjectFragment objectFragment) {
 		objectFragments.add(objectFragment);
 	}
 }
