@@ -20,22 +20,37 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.O
 
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectFragmentHeaderEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class ObjectFragmentEncoder {
-	public void encode(ObjectFragmentEncoderContext context, List<ObjectInstance> objectInstances, List<Byte> data) {
-		boolean encoded = false;
+	private ObjectFragmentHeaderEncoder objectFragmentHeaderEncoder = new ObjectFragmentHeaderEncoder();
+	
+	public void encode(ObjectFragmentEncoderContext context, ObjectFragment objectFragment, List<Byte> data) {
+		objectFragmentHeaderEncoder.encode(objectFragment.getObjectFragmentHeader(), data);
+		PrefixType prefixType = objectFragment.getObjectFragmentHeader().getPrefixType();
 		
-		for (ObjectTypeEncoder objectTypeEncoder : OBJECT_TYPE_ENCODERS) {
-			if (objectTypeEncoder.canEncode(context.getFunctionCode(), context.getObjectType())) {
-				objectTypeEncoder.encode(context, objectInstances, data);
-				encoded = true;
-				break;
+		if (objectFragment.getObjectInstances().size() > 0) {
+			context.setStartIndex(objectFragment.getObjectInstances().get(0).getIndex());
+		}
+		
+		ObjectTypeEncoder objectTypeEncoder = null;
+		for (ObjectTypeEncoder encoder : OBJECT_TYPE_ENCODERS) {
+			if (encoder.canEncode(context.getFunctionCode(), context.getObjectType())) {
+				objectTypeEncoder = encoder;
 			}
 		}
-		if (!encoded) {
+		if (objectTypeEncoder == null) {
 			throw new IllegalArgumentException(format("Failed to encode %s %s", context.getFunctionCode(), context.getObjectType()));
+		}
+		
+		for (ObjectInstance objectInstance : objectFragment.getObjectInstances()) {
+			context.setCurrentIndex(objectInstance.getIndex());
+			PrefixTypeEncoder.encode(prefixType, objectInstance, data);
+			objectTypeEncoder.encode(context, objectInstance, data);
 		}
 	}
 }

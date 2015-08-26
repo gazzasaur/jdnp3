@@ -17,59 +17,41 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object;
 
 import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT16;
+import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
+import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.bitSetToByte;
 
 import java.util.BitSet;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.QualifierFieldCalculator;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class AnalogInputStaticFloat16ObjectTypeEncoder implements ObjectTypeEncoder {
-	private ObjectFragmentHeaderEncoder objectFragmentHeaderEncoder = new ObjectFragmentHeaderEncoder();
-
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
 		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(ANALOG_INPUT_STATIC_FLOAT16);
 	}
 
-	public void encode(ObjectFragmentEncoderContext context, List<ObjectInstance> objectInstances, List<Byte> data) {
-		if (!this.canEncode(context.getFunctionCode(), context.getObjectType()) || objectInstances.size() < 1) {
+	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
+		if (!this.canEncode(context.getFunctionCode(), context.getObjectType())) {
 			throw new IllegalArgumentException(format("Cannot encode the given value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
-		IndexRange indexRange = new IndexRange();
-		indexRange.setStartIndex(objectInstances.get(0).getIndex());
-		indexRange.setStopIndex(objectInstances.get(objectInstances.size() - 1).getIndex());
-		
-		QualifierField qualifierField = QualifierFieldCalculator.calculate(new NoPrefixType(), indexRange);
-		objectFragmentHeaderEncoder.encode(context.getObjectType(), qualifierField, indexRange, data);
-		
-		for (ObjectInstance objectInstance : objectInstances) {
-			AnalogInputStaticObjectInstance specificInstance = (AnalogInputStaticObjectInstance) objectInstance;
-			BitSet bitSet = new BitSet(8);
-			bitSet.set(6, specificInstance.isReferenceError());
-			bitSet.set(5, specificInstance.isOverRange());
-			bitSet.set(4, specificInstance.isLocalForced());
-			bitSet.set(3, specificInstance.isRemoteForced());
-			bitSet.set(2, specificInstance.isCommunicationsLost());
-			bitSet.set(1, specificInstance.isRestart());
-			bitSet.set(0, specificInstance.isOnline());
+
+		AnalogInputStaticObjectInstance specificInstance = (AnalogInputStaticObjectInstance) objectInstance;
+		BitSet bitSet = new BitSet(8);
+		bitSet.set(6, specificInstance.isReferenceError());
+		bitSet.set(5, specificInstance.isOverRange());
+		bitSet.set(4, specificInstance.isLocalForced());
+		bitSet.set(3, specificInstance.isRemoteForced());
+		bitSet.set(2, specificInstance.isCommunicationsLost());
+		bitSet.set(1, specificInstance.isRestart());
+		bitSet.set(0, specificInstance.isOnline());
 			
-			byte[] rawValue = bitSet.toByteArray();
-			byte value = 0;
-			if (rawValue.length > 0) {
-				value = rawValue[0];
-			}
-			data.add(value);
-			
-			int intBits = Float.floatToIntBits((float) specificInstance.getValue());
-			DataUtils.addInteger(intBits, 4, data);
-		}
+		int intBits = Float.floatToIntBits((float) specificInstance.getValue());
+		
+		data.add(bitSetToByte(bitSet));
+		addInteger(intBits, 4, data);
 	}
 }

@@ -20,47 +20,34 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeC
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectFragmentHeaderEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.QualifierFieldCalculator;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class BinaryInputStaticPackedObjectTypeEncoder implements ObjectTypeEncoder {
-	private ObjectFragmentHeaderEncoder objectFragmentHeaderEncoder = new ObjectFragmentHeaderEncoder();
-	
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
 		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_INPUT_STATIC_PACKED);
 	}
 
-	public void encode(ObjectFragmentEncoderContext context, List<ObjectInstance> objectInstances, List<Byte> data) {
-		if (!this.canEncode(context.getFunctionCode(), context.getObjectType()) || objectInstances.size() < 1) {
+	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
+		if (!this.canEncode(context.getFunctionCode(), context.getObjectType())) {
 			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
-		IndexRange indexRange = new IndexRange();
-		indexRange.setStartIndex(objectInstances.get(0).getIndex());
-		indexRange.setStopIndex(objectInstances.get(objectInstances.size() - 1).getIndex());
 		
-		QualifierField qualifierField = QualifierFieldCalculator.calculate(new NoPrefixType(), indexRange);
-		objectFragmentHeaderEncoder.encode(context.getObjectType(), qualifierField, indexRange, data);
+		long bitIndex = (context.getCurrentIndex() - context.getStartIndex()) % 8;
+		if (bitIndex == 0) {
+			data.add((byte) 0);
+		}
 		
-		int index = 0;
-		for (ObjectInstance objectInstance : objectInstances) {
-			BinaryInputStaticObjectInstance specificObjectInstance = (BinaryInputStaticObjectInstance) objectInstance;
-			if (index % 8 == 0) {
-				data.add((byte) 0);
-			}
-			
-			if (specificObjectInstance.isActive()) {
-				data.set(data.size() - 1, (byte) (data.get(data.size() - 1) | (1 << (index % 8))));
-			}
-			++index;
+		byte value = data.get(data.size() - 1);
+		
+		BinaryInputStaticObjectInstance specificObjectInstance = (BinaryInputStaticObjectInstance) objectInstance;
+		if (specificObjectInstance.isActive()) {
+			value |= (1 << bitIndex);
+			data.set(data.size() - 1, value);
 		}
 	}
 }

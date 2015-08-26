@@ -24,5 +24,5 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public interface ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType);
-	public void encode(ObjectFragmentEncoderContext context, List<ObjectInstance> objectInstances, List<Byte> data);
+	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data);
 }

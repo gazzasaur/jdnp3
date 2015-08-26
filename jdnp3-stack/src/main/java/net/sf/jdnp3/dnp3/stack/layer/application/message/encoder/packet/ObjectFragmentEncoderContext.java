@@ -24,6 +24,9 @@ public class ObjectFragmentEncoderContext {
 	private ObjectType objectType = ANY;
 	private long commonTimeOfOccurrance = 0;
 	private FunctionCode functionCode = RESPONSE;
+	
+	private long startIndex = 0;
+	private long currentIndex = 0;
 
 	public ObjectType getObjectType() {
 		return objectType;
@@ -47,5 +50,21 @@ public class ObjectFragmentEncoderContext {
 
 	public void setFunctionCode(FunctionCode functionCode) {
 		this.functionCode = functionCode;
+	}
+
+	public long getStartIndex() {
+		return startIndex;
+	}
+
+	public void setStartIndex(long startIndex) {
+		this.startIndex = startIndex;
+	}
+
+	public long getCurrentIndex() {
+		return currentIndex;
+	}
+
+	public void setCurrentIndex(long currentIndex) {
+		this.currentIndex = currentIndex;
 	}
 }

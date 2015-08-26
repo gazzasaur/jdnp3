@@ -16,6 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.utils;
 
 import static java.util.Arrays.asList;
+import static org.apache.commons.lang3.ArrayUtils.reverse;
 import static org.apache.commons.lang3.ArrayUtils.toObject;
 
 import java.nio.ByteBuffer;
@@ -38,6 +39,13 @@ public class DataUtils {
 		}
 		ArrayUtils.reverse(rawBuffer);
 		return ByteBuffer.wrap(rawBuffer).getLong();
+	}
+	
+	public static void addDouble(double value, List<Byte> data) {
+		ByteBuffer byteBuffer = ByteBuffer.allocate(8);
+		byteBuffer.putDouble(value);
+		reverse(byteBuffer.array());
+		data.addAll(asList(toObject(byteBuffer.array())));
 	}
 
 	public static void trim(long count, List<Byte> data) {

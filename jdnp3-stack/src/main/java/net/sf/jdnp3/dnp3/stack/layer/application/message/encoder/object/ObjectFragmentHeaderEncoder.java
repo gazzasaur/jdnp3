@@ -15,22 +15,28 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object;
 
+import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
+
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.QualifierEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.range.RangeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragmentHeader;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
-import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class ObjectFragmentHeaderEncoder {
 	private RangeEncoder rangeEncoder = new RangeEncoder();
 	private QualifierEncoder qualifierEncoder = new QualifierEncoder();
 	
-	public void encode(ObjectType objectType, QualifierField qualifierField, Range range, List<Byte> data) {
-		DataUtils.addInteger(objectType.getGroup(), 1, data);
-		DataUtils.addInteger(objectType.getVariation(), 1, data);
+	public void encode(ObjectFragmentHeader header, List<Byte> data) {
+		Range range = header.getRange();
+		ObjectType objectType = header.getObjectType();
+		QualifierField qualifierField = header.getQualifierField();
+		
+		addInteger(objectType.getGroup(), 1, data);
+		addInteger(objectType.getVariation(), 1, data);
 		qualifierEncoder.encode(qualifierField, data);
 		rangeEncoder.encode(range, qualifierField.getRangeSpecifierCode().getOctetCount(), data);
 	}

@@ -22,6 +22,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.IndexRangeObjectFragmentPacker;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFragmentPackerContext;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFragmentPackerResult;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.DefaultObjectTypeMapping;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.ObjectInstanceSorter;
@@ -129,6 +132,8 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		ObjectInstanceSorter sorter = new ObjectInstanceSorter();
 		sorter.sort(responseObjects);
 		
+		List<ObjectInstance> replyObjects = new ArrayList<>();
+		
 		CtoObjectInstance ctoObjectInstance = null;
 		for (ObjectInstance objectInstance : responseObjects) {
 			if (objectInstance instanceof EventObjectInstance) {
@@ -137,13 +142,26 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 					// FIXME Possibly consider unsynchronised.
 					SynchronisedCtoObjectInstance newCtoObjectInstance = new SynchronisedCtoObjectInstance();
 					newCtoObjectInstance.setTimestamp(eventObjectInstance.getTimestamp());
-					response.addObjectInstance(newCtoObjectInstance);
+					replyObjects.add(newCtoObjectInstance);
 					ctoObjectInstance = newCtoObjectInstance;
 				}
 				
 				pendingEvents.add((EventObjectInstance) objectInstance);
 			}
-			response.addObjectInstance(objectInstance);
+			replyObjects.add(objectInstance);
+		}
+		
+		IndexRangeObjectFragmentPacker packer = new IndexRangeObjectFragmentPacker();
+		ObjectFragmentPackerContext context = new ObjectFragmentPackerContext();
+		context.setFreeSpace(2048);
+		context.setTimeReference(0);
+		context.setFunctionCode(FunctionCode.RESPONSE);
+		while (replyObjects.size() > 0) {
+			if (replyObjects.get(0) instanceof CtoObjectInstance) {
+				context.setTimeReference(((CtoObjectInstance)replyObjects.get(0)).getTimestamp());
+			}
+			ObjectFragmentPackerResult result = packer.pack(context, replyObjects);
+			response.addObjectFragment(result.getObjectFragment());
 		}
 		
 		transportLayer.sendData(new ApplicationFragmentResponseEncoderImpl().encode(response));

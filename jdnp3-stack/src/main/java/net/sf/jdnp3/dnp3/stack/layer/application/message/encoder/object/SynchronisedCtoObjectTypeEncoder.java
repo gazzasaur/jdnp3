@@ -17,41 +17,28 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object;
 
 import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.SYNCHRONISED_CTO;
+import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
 
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.QualifierFieldCalculator;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.SynchronisedCtoObjectInstance;
-import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class SynchronisedCtoObjectTypeEncoder implements ObjectTypeEncoder {
-	private ObjectFragmentHeaderEncoder objectFragmentHeaderEncoder = new ObjectFragmentHeaderEncoder();
-
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
 		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(SYNCHRONISED_CTO);
 	}
 
-	public void encode(ObjectFragmentEncoderContext context, List<ObjectInstance> objectInstances, List<Byte> data) {
-		if (!this.canEncode(context.getFunctionCode(), context.getObjectType()) || objectInstances.size() < 1) {
+	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
+		if (!this.canEncode(context.getFunctionCode(), context.getObjectType())) {
 			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
-		CountRange countRange = new CountRange();
-		countRange.setCount(1);
 		
-		NoPrefixType noPrefixType = new NoPrefixType();
-		QualifierField qualifierField = QualifierFieldCalculator.calculate(noPrefixType, countRange);
-		
-		objectFragmentHeaderEncoder.encode(context.getObjectType(), qualifierField, countRange, data);
-		
-		SynchronisedCtoObjectInstance synchronisedCtoObjectInstance = (SynchronisedCtoObjectInstance)objectInstances.get(0);
+		SynchronisedCtoObjectInstance synchronisedCtoObjectInstance = (SynchronisedCtoObjectInstance) objectInstance;
 		context.setCommonTimeOfOccurrance(synchronisedCtoObjectInstance.getTimestamp());
-		DataUtils.addInteger(synchronisedCtoObjectInstance.getTimestamp(), 6, data);
+		addInteger(synchronisedCtoObjectInstance.getTimestamp(), 6, data);
 	}
 }

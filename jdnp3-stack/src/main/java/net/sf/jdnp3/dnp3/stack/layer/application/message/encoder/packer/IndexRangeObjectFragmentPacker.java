@@ -22,26 +22,23 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.O
 import java.util.ArrayList;
 import java.util.List;
 
-import org.omg.CORBA.FREE_MEM;
-
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.EncoderUtils;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectTypeEncoderConstants;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.QualifierFieldCalculator;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefix;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefix;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
-public class ObjectFragmentPacker {
-	public ObjectFragment pack(ObjectFragmentPackerContext context, List<ObjectInstance> objectInstances) {
+public class IndexRangeObjectFragmentPacker {
+	public ObjectFragmentPackerResult pack(ObjectFragmentPackerContext context, List<ObjectInstance> objectInstances) {
 		if (objectInstances.size() < 1) {
 			throw new IllegalArgumentException("Cannot create an object fragment of size 0.");
 		}
+		
+		ObjectFragmentPackerResult result = new ObjectFragmentPackerResult();
 		
 		ObjectInstance firstInstance = objectInstances.get(0);
 		ObjectType objectType = firstInstance.getRequestedType();
@@ -68,9 +65,13 @@ public class ObjectFragmentPacker {
 		ObjectFragmentEncoderContext encoderContext = new ObjectFragmentEncoderContext();
 		encoderContext.setCommonTimeOfOccurrance(context.getTimeReference());
 		encoderContext.setFunctionCode(context.getFunctionCode());
+		encoderContext.setStartIndex(firstInstance.getIndex());
 		encoderContext.setObjectType(objectType);
 		long committedObjectSize = 0;
 		long overhead = 2;
+		
+		List<Byte> data = new ArrayList<Byte>();
+		
 		while (objectInstances.size() > 0) {
 			ObjectInstance nextInstance = objectInstances.get(0);
 			if (!nextInstance.getRequestedType().equals(objectType)) {
@@ -80,20 +81,27 @@ public class ObjectFragmentPacker {
 				break;
 			}
 			
-			List<Byte> data = new ArrayList<Byte>();
+			maxIndex = nextInstance.getIndex();
 			long indexSize = calculateOctetCount(maxIndex);
-			UPDATE THE CLASSES TO USE A NON-LIST FORM OF ENCODE
-			objectTypeEncoder.encode(encoderContext, objectInstance, data);
+			
+			encoderContext.setCurrentIndex(nextInstance.getIndex());
+			objectTypeEncoder.encode(encoderContext, nextInstance, data);
 			long objectSize = data.size();
-			if (overhead + indexSize + committedObjectSize + objectSize < context.getFreeSpace()) {
+			if (overhead + indexSize + objectSize < context.getFreeSpace()) {
 				objectInstances.remove(0);
-				committedObjectSize += objectSize;
+				committedObjectSize = objectSize;
 				objectFragment.addObjectInstance(nextInstance);
 			} else {
-				UPTO HERE
+				result.setAtCapacity(true);
 			}
 		}
-
-		return null;
+		
+		indexRange.setStopIndex(maxIndex);
+		indexRange.setStartIndex(minIndex);
+		QualifierField qualifierField = QualifierFieldCalculator.calculate(noPrefixType, indexRange);
+		objectFragment.getObjectFragmentHeader().setQualifierField(qualifierField);
+		
+		result.setObjectFragment(objectFragment);
+		return result;
 	}
 }

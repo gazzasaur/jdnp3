@@ -34,7 +34,7 @@ public class ApplicationFragmentRequestEncoderImpl implements ApplicationFragmen
 		context.setCommonTimeOfOccurrance(0);
 		for (ObjectFragment objectFragment : fragment.getObjectFragments()) {
 			context.setObjectType(objectFragment.getObjectFragmentHeader().getObjectType());
-			objectFragmentEncoder.encode(context, objectFragment.getObjectInstances(), data);
+			objectFragmentEncoder.encode(context, objectFragment, data);
 		}
 		return data;
 	}
