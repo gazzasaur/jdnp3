@@ -30,6 +30,7 @@ import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class1Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.CrobOperator;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputEventMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputMessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.HeartbeatMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistryProvider;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -47,6 +48,7 @@ public class App {
 		Logger logger = LoggerFactory.getLogger(App.class);
 		
 		DatabaseManagerProvider.getDatabaseManager().setBinaryDatabaseSize(10);
+		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new HeartbeatMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputEventMessageHandler());
 		

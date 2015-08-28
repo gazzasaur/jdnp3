@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
+import java.util.List;
 
-public interface MessageHandler {
-	public boolean canHandle(Message message);
-	public void processMessage(GenericWebSocket genericWebSocket, Message message);
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+
+public interface ObjectFragmentPacker {
+	public ObjectFragmentPackerResult pack(ObjectFragmentPackerContext context, List<ObjectInstance> objectInstances);
 }

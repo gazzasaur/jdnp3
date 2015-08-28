@@ -16,7 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DIRECT_OPERATE;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.RESPONSE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CROB;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
 
@@ -31,7 +31,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class CrobObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(DIRECT_OPERATE) && objectType.equals(CROB);
+		return functionCode.equals(RESPONSE) && objectType.equals(CROB);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {

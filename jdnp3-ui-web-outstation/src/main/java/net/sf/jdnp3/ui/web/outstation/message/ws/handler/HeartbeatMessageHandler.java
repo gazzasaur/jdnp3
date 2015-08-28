@@ -13,11 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation;
+package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 
+import net.sf.jdnp3.ui.web.outstation.GenericWebSocket;
+import net.sf.jdnp3.ui.web.outstation.MessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.HeartbeatMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
-public interface MessageHandler {
-	public boolean canHandle(Message message);
-	public void processMessage(GenericWebSocket genericWebSocket, Message message);
+public class HeartbeatMessageHandler implements MessageHandler {
+	public boolean canHandle(Message message) {
+		return message instanceof HeartbeatMessage;
+	}
+
+	public void processMessage(GenericWebSocket genericWebSocket, Message message) {
+		if (!this.canHandle(message)) {
+			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
+		}
+		genericWebSocket.sendMessage(message);
+	}
 }

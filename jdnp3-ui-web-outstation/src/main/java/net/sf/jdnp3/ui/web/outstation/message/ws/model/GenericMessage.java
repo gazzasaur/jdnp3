@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation;
+package net.sf.jdnp3.ui.web.outstation.message.ws.model;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
+public class GenericMessage implements Message {
+	private String type = "";
 
-public interface MessageHandler {
-	public boolean canHandle(Message message);
-	public void processMessage(GenericWebSocket genericWebSocket, Message message);
+	public String getType() {
+		return type;
+	}
 }

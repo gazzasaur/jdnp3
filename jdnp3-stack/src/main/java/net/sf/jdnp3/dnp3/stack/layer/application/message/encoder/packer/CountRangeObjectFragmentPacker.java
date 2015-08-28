@@ -28,11 +28,11 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.Qualifie
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
-public class IndexRangeObjectFragmentPacker implements ObjectFragmentPacker {
+public class CountRangeObjectFragmentPacker implements ObjectFragmentPacker {
 	public ObjectFragmentPackerResult pack(ObjectFragmentPackerContext context, List<ObjectInstance> objectInstances) {
 		if (objectInstances.size() < 1) {
 			throw new IllegalArgumentException("Cannot create an object fragment of size 0.");
@@ -52,22 +52,19 @@ public class IndexRangeObjectFragmentPacker implements ObjectFragmentPacker {
 			throw new IllegalArgumentException(format("No encoder found for the operation %s on type %s.", context.getFunctionCode(), objectType));
 		}
 		
-		IndexRange indexRange = new IndexRange();
-		NoPrefixType noPrefixType = new NoPrefixType();
+		CountRange countRange = new CountRange();
+		IndexPrefixType indexPrefixType = new IndexPrefixType();
 		ObjectFragment objectFragment = new ObjectFragment();
-		objectFragment.getObjectFragmentHeader().setRange(indexRange);
+		objectFragment.getObjectFragmentHeader().setRange(countRange);
 		objectFragment.getObjectFragmentHeader().setObjectType(objectType);
-		objectFragment.getObjectFragmentHeader().setPrefixType(noPrefixType);
+		objectFragment.getObjectFragmentHeader().setPrefixType(indexPrefixType);
 		
-		long minIndex = firstInstance.getIndex();
 		long maxIndex = firstInstance.getIndex();
 		
 		ObjectFragmentEncoderContext encoderContext = new ObjectFragmentEncoderContext();
 		encoderContext.setCommonTimeOfOccurrance(context.getTimeReference());
 		encoderContext.setFunctionCode(context.getFunctionCode());
-		encoderContext.setStartIndex(firstInstance.getIndex());
 		encoderContext.setObjectType(objectType);
-		long committedObjectSize = 0;
 		long overhead = 2;
 		
 		List<Byte> data = new ArrayList<Byte>();
@@ -77,28 +74,27 @@ public class IndexRangeObjectFragmentPacker implements ObjectFragmentPacker {
 			if (!nextInstance.getRequestedType().equals(objectType)) {
 				break;
 			}
-			if (committedObjectSize != 0 && (maxIndex + 1) != nextInstance.getIndex()) {
-				break;
-			}
 			
-			maxIndex = nextInstance.getIndex();
+			if (maxIndex < nextInstance.getIndex()) {
+				maxIndex = nextInstance.getIndex();
+			}
 			long indexSize = calculateOctetCount(maxIndex);
+			
+			countRange.setCount(countRange.getCount() + 1);
+			long rangeSize = calculateOctetCount(countRange.getCount());
 			
 			encoderContext.setCurrentIndex(nextInstance.getIndex());
 			objectTypeEncoder.encode(encoderContext, nextInstance, data);
 			long objectSize = data.size();
-			if (overhead + indexSize + objectSize < context.getFreeSpace()) {
+			if (overhead + rangeSize + (countRange.getCount() * indexSize) + objectSize < context.getFreeSpace()) {
 				objectInstances.remove(0);
-				committedObjectSize = objectSize;
 				objectFragment.addObjectInstance(nextInstance);
 			} else {
 				result.setAtCapacity(true);
 			}
 		}
 		
-		indexRange.setStopIndex(maxIndex);
-		indexRange.setStartIndex(minIndex);
-		QualifierField qualifierField = QualifierFieldCalculator.calculate(noPrefixType, indexRange);
+		QualifierField qualifierField = QualifierFieldCalculator.calculate(indexPrefixType, countRange);
 		objectFragment.getObjectFragmentHeader().setQualifierField(qualifierField);
 		
 		result.setObjectFragment(objectFragment);

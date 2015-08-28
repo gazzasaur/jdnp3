@@ -15,6 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.service;
 
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DIRECT_OPERATE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_EVENT_RELATIVE_TIME;
 
 import java.util.ArrayList;
@@ -22,9 +23,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.CountRangeObjectFragmentPacker;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.IndexRangeObjectFragmentPacker;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFragmentPacker;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFragmentPackerContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFragmentPackerResult;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.SingleObjectFragmentPacker;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.DefaultObjectTypeMapping;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.ObjectInstanceSorter;
@@ -38,6 +42,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.CtoObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.SynchronisedCtoObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
@@ -121,6 +126,14 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		applicationResponseHeader.getApplicationControl().setConfirmationRequired(true);
 		applicationResponseHeader.getApplicationControl().setSequenceNumber(request.getHeader().getApplicationControl().getSequenceNumber());
 		
+		if (request.getHeader().getFunctionCode().equals(DIRECT_OPERATE)) {
+			for (ObjectFragment objectFragment : request.getObjectFragments()) {
+				response.addObjectFragment(objectFragment);
+			}
+			transportLayer.sendData(new ApplicationFragmentResponseEncoderImpl().encode(response));
+			return;
+		}
+		
 		DefaultObjectTypeMapping mapping = new DefaultObjectTypeMapping();
 		ObjectInstanceTypeRationaliser rationaliser = new ObjectInstanceTypeRationaliser();
 		List<ObjectType> relativeTimeTypes = Arrays.asList(BINARY_INPUT_EVENT_RELATIVE_TIME);
@@ -151,7 +164,10 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			replyObjects.add(objectInstance);
 		}
 		
-		IndexRangeObjectFragmentPacker packer = new IndexRangeObjectFragmentPacker();
+		ObjectFragmentPacker singlePacker = new SingleObjectFragmentPacker();
+		ObjectFragmentPacker indexPacker = new IndexRangeObjectFragmentPacker();
+		ObjectFragmentPacker countPacker = new CountRangeObjectFragmentPacker();
+		
 		ObjectFragmentPackerContext context = new ObjectFragmentPackerContext();
 		context.setFreeSpace(2048);
 		context.setTimeReference(0);
@@ -160,6 +176,17 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			if (replyObjects.get(0) instanceof CtoObjectInstance) {
 				context.setTimeReference(((CtoObjectInstance)replyObjects.get(0)).getTimestamp());
 			}
+			
+			ObjectFragmentPacker packer = countPacker;
+			System.out.println(replyObjects.get(0));
+			System.out.println("Packer");
+			if (replyObjects.get(0) instanceof StaticObjectInstance) {
+				System.out.println("OTHER");
+				packer = indexPacker;
+			} else if (replyObjects.get(0) instanceof CtoObjectInstance) {
+				packer = singlePacker;
+			}
+			
 			ObjectFragmentPackerResult result = packer.pack(context, replyObjects);
 			response.addObjectFragment(result.getObjectFragment());
 		}

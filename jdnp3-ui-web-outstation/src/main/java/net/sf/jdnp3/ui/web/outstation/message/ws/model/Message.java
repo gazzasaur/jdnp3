@@ -16,5 +16,5 @@
 package net.sf.jdnp3.ui.web.outstation.message.ws.model;
 
 public interface Message {
-
+	public String getType();
 }

@@ -6,6 +6,8 @@ import javax.websocket.EndpointConfig;
 
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputEventMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.GenericMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.HeartbeatMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
 import com.google.gson.Gson;
@@ -21,10 +23,13 @@ public class GenericMessageDecoder implements Decoder.Text<Message> {
 	}
 
 	public Message decode(String data) throws DecodeException {
-		if (data.contains("binaryInputPoint")) {
+		GenericMessage genericMessage = gson.fromJson(data, GenericMessage.class);
+		if (genericMessage.getType().equals("binaryInputPoint")) {
 			return gson.fromJson(data, BinaryInputMessage.class);
-		} else if (data.contains("binaryInputEvent")) {
+		} else if (genericMessage.getType().equals("binaryInputEvent")) {
 			return gson.fromJson(data, BinaryInputEventMessage.class);
+		} else if (genericMessage.getType().equals("heartbeat")) {
+			return gson.fromJson(data, HeartbeatMessage.class);
 		}
 		return null;
 	}

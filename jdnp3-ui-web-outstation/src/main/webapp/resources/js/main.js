@@ -67,7 +67,13 @@ $(document).ready(function() {
 				}
 			}
 		}, 0);
-	}
+	};
+	scheduler.addTask(function() {
+		var data = {
+				'type': 'heartbeat'
+		};
+		webSocket.send(JSON.stringify(data));
+	}, 10000, true);
 });
 
 getDataPointIndex = function(id) {

@@ -44,7 +44,7 @@ public class GenericWebSocket implements DatabaseListener {
     public void onMessage(Session session, Message message) {
     	MessageHandlerRegistry messageHandlerRegistry = MessageHandlerRegistryProvider.getMessageHandlerRegistry();
     	MessageHandler messageHandler = messageHandlerRegistry.fetchMessageHandler(message);
-   		messageHandler.processMessage(message);
+   		messageHandler.processMessage(this, message);
     }
 	
     @OnClose
