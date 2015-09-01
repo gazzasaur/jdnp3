@@ -21,23 +21,48 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
-	private List<BinaryDataPoint> binaryDataPoints = new ArrayList<>();
+	private List<AnalogDataPoint> analogDataPoints = new ArrayList<>();
+	private List<BinaryInputDataPoint> binaryDataPoints = new ArrayList<>();
 
-	public List<BinaryDataPoint> getBinaryDataPoints() {
+	public List<AnalogDataPoint> getAnalogDataPoints() {
+		return unmodifiableList(analogDataPoints);
+	}
+
+	public List<BinaryInputDataPoint> getBinaryDataPoints() {
 		return unmodifiableList(binaryDataPoints);
 	}
 	
+	public void addAnalogDataPoint() {
+		AnalogDataPoint analogDataPoint = new AnalogDataPoint();
+		analogDataPoint.setIndex(analogDataPoints.size());
+		analogDataPoint.setName("Point " + analogDataPoints.size());
+		analogDataPoints.add(analogDataPoint);
+	}
+	
 	public void addBinaryDataPoint() {
-		BinaryDataPoint binaryDataPoint = new BinaryDataPoint();
+		BinaryInputDataPoint binaryDataPoint = new BinaryInputDataPoint();
 		binaryDataPoint.setIndex(binaryDataPoints.size());
 		binaryDataPoint.setName("Point " + binaryDataPoints.size());
 		binaryDataPoints.add(binaryDataPoint);
 	}
 	
-	public void setBinaryDataPoint(BinaryDataPoint binaryDataPoint) {
+	public void setAnalogDataPoint(AnalogDataPoint analogDataPoint) {
+		if (analogDataPoint.getIndex() < analogDataPoints.size()) {
+			analogDataPoint.setName(analogDataPoints.get((int) analogDataPoint.getIndex()).getName());
+			analogDataPoints.set((int) analogDataPoint.getIndex(), analogDataPoint);
+		}
+	}
+	
+	public void setBinaryDataPoint(BinaryInputDataPoint binaryDataPoint) {
 		if (binaryDataPoint.getIndex() < binaryDataPoints.size()) {
 			binaryDataPoint.setName(binaryDataPoints.get((int) binaryDataPoint.getIndex()).getName());
 			binaryDataPoints.set((int) binaryDataPoint.getIndex(), binaryDataPoint);
+		}
+	}
+	
+	public void removeAnalogDataPoint() {
+		if (analogDataPoints.size() > 0) {
+			analogDataPoints.remove(analogDataPoints.size() - 1);
 		}
 	}
 	

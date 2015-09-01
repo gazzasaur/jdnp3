@@ -13,31 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation.message.ws.model;
+package net.sf.jdnp3.ui.web.outstation.database;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_EVENT_ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_STATIC_ANY;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
-public class BinaryInputMessage implements Message {
-	private String type = "binaryInputPoint";
+public class BinaryInputDataPoint implements DataPoint {
 	private long index = 0;
-	private int eventClass = 1;
-	private ObjectType eventType = ANY;
-	private ObjectType staticType = ANY;
-	
 	private String name = "";
-	private boolean active = false;
+	
 	private boolean online = true;
+	private boolean active = false;
 	private boolean restart = false;
 	private boolean localForced = false;
 	private boolean remoteForced = false;
 	private boolean chatterFilter = false;
 	private boolean communicationsLost = false;
 	
-	public String getType() {
-		return type;
-	}
-	
+	private ObjectType staticType = BINARY_INPUT_STATIC_ANY;
+	private ObjectType eventType = BINARY_INPUT_EVENT_ANY;
+	private int eventClass = 1;
+
 	public long getIndex() {
 		return index;
 	}
@@ -45,21 +42,13 @@ public class BinaryInputMessage implements Message {
 	public void setIndex(long index) {
 		this.index = index;
 	}
-	
-	public boolean isActive() {
-		return active;
+
+	public String getName() {
+		return name;
 	}
 
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	public boolean isChatterFilter() {
-		return chatterFilter;
-	}
-
-	public void setChatterFilter(boolean chatterFilter) {
-		this.chatterFilter = chatterFilter;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public boolean isOnline() {
@@ -68,6 +57,14 @@ public class BinaryInputMessage implements Message {
 
 	public void setOnline(boolean online) {
 		this.online = online;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	public boolean isRestart() {
@@ -94,6 +91,14 @@ public class BinaryInputMessage implements Message {
 		this.remoteForced = remoteForced;
 	}
 
+	public boolean isChatterFilter() {
+		return chatterFilter;
+	}
+
+	public void setChatterFilter(boolean chatterFilter) {
+		this.chatterFilter = chatterFilter;
+	}
+
 	public boolean isCommunicationsLost() {
 		return communicationsLost;
 	}
@@ -102,20 +107,12 @@ public class BinaryInputMessage implements Message {
 		this.communicationsLost = communicationsLost;
 	}
 
-	public String getName() {
-		return name;
+	public ObjectType getStaticType() {
+		return staticType;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getEventClass() {
-		return eventClass;
-	}
-
-	public void setEventClass(int eventClass) {
-		this.eventClass = eventClass;
+	public void setStaticType(ObjectType staticType) {
+		this.staticType = staticType;
 	}
 
 	public ObjectType getEventType() {
@@ -126,11 +123,11 @@ public class BinaryInputMessage implements Message {
 		this.eventType = eventType;
 	}
 
-	public ObjectType getStaticType() {
-		return staticType;
+	public int getEventClass() {
+		return eventClass;
 	}
 
-	public void setStaticType(ObjectType staticType) {
-		this.staticType = staticType;
+	public void setEventClass(int eventClass) {
+		this.eventClass = eventClass;
 	}
 }

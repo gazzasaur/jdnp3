@@ -1,7 +1,7 @@
 var jdnp3 = jdnp3 || {};
 jdnp3.schedule = jdnp3.schedule || {};
 
-jdnp3.schedule.PERIOD = 100;
+jdnp3.schedule.PERIOD = 20;
 jdnp3.schedule.DEFAULT_DELAY = 300;
 
 jdnp3.schedule.Task = function(task, ticks, recurring) {

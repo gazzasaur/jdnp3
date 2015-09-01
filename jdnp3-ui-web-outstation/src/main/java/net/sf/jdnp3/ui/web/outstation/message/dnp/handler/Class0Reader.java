@@ -21,7 +21,7 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.ui.web.outstation.database.BinaryDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -29,9 +29,9 @@ import org.apache.commons.beanutils.BeanUtils;
 public class Class0Reader implements Class0ReadRequestHandler {
 	public List<ObjectInstance> doReadClass() {
 		List<ObjectInstance> points = new ArrayList<>();
-		List<BinaryDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
+		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
 
-		for (BinaryDataPoint binaryDataPoint : binaryDataPoints) {
+		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
 			BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
 			try {
 				BeanUtils.copyProperties(binaryInputStaticObjectInstance, binaryDataPoint);
@@ -46,9 +46,9 @@ public class Class0Reader implements Class0ReadRequestHandler {
 
 	public List<ObjectInstance> doReadClass(long returnLimit) {
 		List<ObjectInstance> points = new ArrayList<>();
-		List<BinaryDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
+		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
 
-		for (BinaryDataPoint binaryDataPoint : binaryDataPoints) {
+		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
 			BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
 			try {
 				BeanUtils.copyProperties(binaryInputStaticObjectInstance, binaryDataPoint);

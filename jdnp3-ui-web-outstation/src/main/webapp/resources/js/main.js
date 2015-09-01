@@ -29,8 +29,8 @@ $(document).ready(function() {
 		scheduler.addTask(function() {
 			if (e.data) {
 				message = jQuery.parseJSON(e.data);
-				console.log(message);
 				if (message.type == 'binaryInputPoint') {
+					
 					for (var property in message) {
 						var id = 'bi-' + message.index;
 					    if (message.hasOwnProperty(property) && property in ATTRIBUTE_MAP) {
@@ -47,18 +47,20 @@ $(document).ready(function() {
 						}
 					}
 					
+					$('[id$=bi-' + message.index + '-sg]').html(message.staticType.group);
 					for (var i = 0; i < 3; ++i) {
 						var id = 'bi-' + message.index + '-st-' + i;
-						if (i == message.staticVariation) {
+						if (i == message.staticType.variation) {
 							$('[id$=' + id + ']').prop('checked', 'true');
 						} else {
 							$('[id$=' + id + ']').prop('checked', '');
 						}
 					}
 					
+					$('[id$=bi-' + message.index + '-eg]').html(message.staticType.group);
 					for (var i = 0; i < 4; ++i) {
 						var id = 'bi-' + message.index + '-ev-' + i;
-						if (i == message.eventVariation) {
+						if (i == message.eventType.variation) {
 							$('[id$=' + id + ']').prop('checked', 'true');
 						} else {
 							$('[id$=' + id + ']').prop('checked', '');
@@ -115,21 +117,21 @@ getBinaryValue = function(id) {
 		}
 	}
 
-	data.staticVariation = 0;
+	data.staticType = {'group': 1, 'variation': 0};
 	for (var i = 0; i < 3; ++i) {
 		var id = 'bi-' + index + '-st-' + i;
 		if ($('[id$=' + id + ']').prop('checked')) {
 			var regexArray = /.*-(\d+)/g.exec(id);
-			data.staticVariation = parseInt(regexArray[1]);
+			data.staticType.variation = parseInt(regexArray[1]);
 		}
 	}
 	
-	data.eventVariation = 0;
+	data.eventType = {'group': 2, 'variation': 0};
 	for (var i = 0; i < 4; ++i) {
 		var id = 'bi-' + index + '-ev-' + i;
 		if ($('[id$=' + id + ']').prop('checked')) {
 			var regexArray = /.*-(\d+)/g.exec(id);
-			data.eventVariation = parseInt(regexArray[1]);
+			data.eventType.variation = parseInt(regexArray[1]);
 		}
 	}
 	return data;

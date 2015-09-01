@@ -16,5 +16,5 @@
 package net.sf.jdnp3.ui.web.outstation.database;
 
 public interface EventListener {
-	public void eventReceived(BinaryDataPoint binaryDataPoint);
+	public void eventReceived(DataPoint dataPoint);
 }

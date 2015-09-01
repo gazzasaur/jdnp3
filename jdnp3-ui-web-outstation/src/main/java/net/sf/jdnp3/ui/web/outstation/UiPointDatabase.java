@@ -21,7 +21,7 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
-import net.sf.jdnp3.ui.web.outstation.database.BinaryDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 
 @ManagedBean
@@ -29,8 +29,8 @@ import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 public class UiPointDatabase {
 	public List<UiPoint> getBinaryPoints() {
 		List<UiPoint> points = new ArrayList<>();
-		List<BinaryDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
-		for (BinaryDataPoint binaryDataPoint : binaryDataPoints) {
+		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
+		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
 			UiPoint point = new UiPoint();
 			point.setIndex(binaryDataPoint.getIndex());
 			point.setName(binaryDataPoint.getName());

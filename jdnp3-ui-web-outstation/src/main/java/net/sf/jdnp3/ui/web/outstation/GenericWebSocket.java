@@ -1,5 +1,7 @@
 package net.sf.jdnp3.ui.web.outstation;
 
+import static java.lang.String.format;
+
 import java.util.List;
 
 import javax.websocket.EndpointConfig;
@@ -10,13 +12,15 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import net.sf.jdnp3.ui.web.outstation.database.BinaryDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseListener;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageDecoder;
+import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistry;
+import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistryProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistry;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistryProvider;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -34,8 +38,8 @@ public class GenericWebSocket implements DatabaseListener {
 		this.session = session;
 		DatabaseManagerProvider.getDatabaseManager().addDatabaseListener(this);
 		
-		List<BinaryDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
-		for (BinaryDataPoint binaryDataPoint : binaryDataPoints) {
+		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
+		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
 			this.valueChanged(binaryDataPoint);
 		}
 	}
@@ -64,15 +68,19 @@ public class GenericWebSocket implements DatabaseListener {
 		session.getAsyncRemote().sendObject(new ModelChangedMessage());
 	}
 
-	public void valueChanged(BinaryDataPoint binaryDataPoint) {
-		BinaryInputMessage binaryInputMessage = new BinaryInputMessage();
-		try {
-			BeanUtils.copyProperties(binaryInputMessage, binaryDataPoint);
-			binaryInputMessage.setStaticVariation(binaryDataPoint.getStaticType().getVariation());
-			binaryInputMessage.setEventVariation(binaryDataPoint.getEventType().getVariation());
-			session.getAsyncRemote().sendObject(binaryInputMessage);
-		} catch (Exception e) {
-			logger.error("Cannot create message.", e);
+	public void valueChanged(DataPoint dataPoint) {
+		GenericMessageRegistry registry = GenericMessageRegistryProvider.getRegistry();
+		if (registry.isRegistered(dataPoint.getClass())) {
+			try {
+				Class<? extends Message> messageClass = registry.get(dataPoint.getClass());
+				Message message = messageClass.newInstance();
+				BeanUtils.copyProperties(message, dataPoint);
+				session.getAsyncRemote().sendObject(message);
+			} catch (Exception e) {
+				logger.error("Cannot create message.", e);
+			}
+		} else {
+			logger.warn(format("Data point type %s has not been mapped to a message.", dataPoint.getClass()));
 		}
 	}
 }

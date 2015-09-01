@@ -15,10 +15,9 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.ui.web.outstation.GenericWebSocket;
 import net.sf.jdnp3.ui.web.outstation.MessageHandler;
-import net.sf.jdnp3.ui.web.outstation.database.BinaryDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
@@ -40,11 +39,9 @@ public class BinaryInputMessageHandler implements MessageHandler {
 		}
 		BinaryInputMessage binaryInputMessage = (BinaryInputMessage) message;
 
-		BinaryDataPoint binaryDataPoint = new BinaryDataPoint();
+		BinaryInputDataPoint binaryDataPoint = new BinaryInputDataPoint();
 		try {
 			BeanUtils.copyProperties(binaryDataPoint, binaryInputMessage);
-			binaryDataPoint.setStaticType(new ObjectType(1, binaryInputMessage.getStaticVariation()));
-			binaryDataPoint.setEventType(new ObjectType(2, binaryInputMessage.getEventVariation()));
 			DatabaseManagerProvider.getDatabaseManager().setBinaryDataPoint(binaryDataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);

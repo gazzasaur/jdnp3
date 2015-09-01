@@ -30,6 +30,20 @@ public class DatabaseManager {
 	private List<EventListener> eventListeners = new ArrayList<>();
 	private List<DatabaseListener> databaseListeners = new ArrayList<>();
 	
+	public void setAnalogDatabaseSize(int size) {
+		synchronized (database) {
+			while (database.getAnalogDataPoints().size() > size) {
+				database.removeAnalogDataPoint();
+			}
+			while (database.getAnalogDataPoints().size() < size) {
+				database.addAnalogDataPoint();
+			}
+		}
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.modelChanged();
+		}
+	}
+	
 	public void setBinaryDatabaseSize(int size) {
 		synchronized (database) {
 			while (database.getBinaryDataPoints().size() > size) {
@@ -44,11 +58,28 @@ public class DatabaseManager {
 		}
 	}
 	
-	public List<BinaryDataPoint> getBinaryDataPoints() {
+	public List<AnalogDataPoint> getAnalogDataPoints() {
+		return Cloner.standard().deepClone(database.getAnalogDataPoints());
+	}
+	
+	public List<BinaryInputDataPoint> getBinaryDataPoints() {
 		return Cloner.standard().deepClone(database.getBinaryDataPoints());
 	}
 	
-	public void setBinaryDataPoint(BinaryDataPoint binaryDataPoint) {
+	public void setAnalogDataPoint(AnalogDataPoint analogDataPoint) {
+		synchronized (database) {
+			database.setAnalogDataPoint(Cloner.standard().deepClone(analogDataPoint));
+		}
+		if (analogDataPoint.getIndex() < database.getAnalogDataPoints().size()) {
+			for (DatabaseListener databaseListener : databaseListeners) {
+				databaseListener.valueChanged(analogDataPoint);
+			}
+		} else {
+			logger.warn("Cannot write analog data point of index: " + analogDataPoint.getIndex());
+		}
+	}
+	
+	public void setBinaryDataPoint(BinaryInputDataPoint binaryDataPoint) {
 		synchronized (database) {
 			database.setBinaryDataPoint(Cloner.standard().deepClone(binaryDataPoint));
 		}
@@ -61,8 +92,15 @@ public class DatabaseManager {
 		}
 	}
 
+	public void triggerAnalogEvent(long index) {
+		AnalogDataPoint analogDataPoint = database.getAnalogDataPoints().get((int) index);
+		for (EventListener eventListener : eventListeners) {
+			eventListener.eventReceived(analogDataPoint);
+		}
+	}
+
 	public void triggerBinaryEvent(long index) {
-		BinaryDataPoint binaryDataPoint = database.getBinaryDataPoints().get((int) index);
+		BinaryInputDataPoint binaryDataPoint = database.getBinaryDataPoints().get((int) index);
 		for (EventListener eventListener : eventListeners) {
 			eventListener.eventReceived(binaryDataPoint);
 		}

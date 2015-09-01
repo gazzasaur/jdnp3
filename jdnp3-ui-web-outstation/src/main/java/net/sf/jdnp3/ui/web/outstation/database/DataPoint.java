@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.ui.web.outstation.database;
 
-public interface DatabaseListener {
-	public void modelChanged();
-	public void valueChanged(DataPoint dataPoint);
+public interface DataPoint {
+	public long getIndex();
+	public String getName();
 }

@@ -18,16 +18,17 @@ package net.sf.jdnp3.ui.web.outstation.database;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
-public class BinaryDataPoint {
+public class AnalogDataPoint implements DataPoint {
 	private long index = 0;
 	private String name = "";
+	private double value = 0;
 	
 	private boolean online = true;
-	private boolean active = false;
 	private boolean restart = false;
+	private boolean overRange = false;
 	private boolean localForced = false;
 	private boolean remoteForced = false;
-	private boolean chatterFilter = false;
+	private boolean referenceError = false;
 	private boolean communicationsLost = false;
 	
 	private ObjectType staticType = ANY;
@@ -58,14 +59,6 @@ public class BinaryDataPoint {
 		this.online = online;
 	}
 
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
 	public boolean isRestart() {
 		return restart;
 	}
@@ -88,14 +81,6 @@ public class BinaryDataPoint {
 
 	public void setRemoteForced(boolean remoteForced) {
 		this.remoteForced = remoteForced;
-	}
-
-	public boolean isChatterFilter() {
-		return chatterFilter;
-	}
-
-	public void setChatterFilter(boolean chatterFilter) {
-		this.chatterFilter = chatterFilter;
 	}
 
 	public boolean isCommunicationsLost() {
@@ -128,5 +113,29 @@ public class BinaryDataPoint {
 
 	public void setEventClass(int eventClass) {
 		this.eventClass = eventClass;
+	}
+
+	public boolean isOverRange() {
+		return overRange;
+	}
+
+	public void setOverRange(boolean overRange) {
+		this.overRange = overRange;
+	}
+
+	public boolean isReferenceError() {
+		return referenceError;
+	}
+
+	public void setReferenceError(boolean referenceError) {
+		this.referenceError = referenceError;
+	}
+
+	public double getValue() {
+		return value;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
 	}
 }
