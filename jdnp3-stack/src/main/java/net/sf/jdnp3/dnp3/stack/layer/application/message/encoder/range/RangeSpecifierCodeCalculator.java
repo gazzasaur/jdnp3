@@ -16,7 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.range;
 
 import static java.util.Arrays.asList;
-import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.EncoderUtils.calculateOctetCount;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.EncoderUtils.calculateOctetCount;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode.FOUR_OCTET_INDEX;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode.FOUR_OCTET_OBJECT_COUNT;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode.FOUR_OCTET_VIRTUAL_ADDRESS;

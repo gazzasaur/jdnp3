@@ -58,7 +58,7 @@ public class DatabaseManager {
 		}
 	}
 	
-	public List<AnalogDataPoint> getAnalogDataPoints() {
+	public List<AnalogInputDataPoint> getAnalogDataPoints() {
 		return Cloner.standard().deepClone(database.getAnalogDataPoints());
 	}
 	
@@ -66,7 +66,7 @@ public class DatabaseManager {
 		return Cloner.standard().deepClone(database.getBinaryDataPoints());
 	}
 	
-	public void setAnalogDataPoint(AnalogDataPoint analogDataPoint) {
+	public void setAnalogDataPoint(AnalogInputDataPoint analogDataPoint) {
 		synchronized (database) {
 			database.setAnalogDataPoint(Cloner.standard().deepClone(analogDataPoint));
 		}
@@ -93,7 +93,7 @@ public class DatabaseManager {
 	}
 
 	public void triggerAnalogEvent(long index) {
-		AnalogDataPoint analogDataPoint = database.getAnalogDataPoints().get((int) index);
+		AnalogInputDataPoint analogDataPoint = database.getAnalogDataPoints().get((int) index);
 		for (EventListener eventListener : eventListeners) {
 			eventListener.eventReceived(analogDataPoint);
 		}

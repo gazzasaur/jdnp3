@@ -3,14 +3,8 @@ var scheduler = jdnp3.schedule.getDefaultScheduler();
 var webSocket;
 var webSocketMessageQueue = [];
 
-var ATTRIBUTE_MAP = {};
-ATTRIBUTE_MAP.active = 'state';
-ATTRIBUTE_MAP.online = 'ol';
-ATTRIBUTE_MAP.restart = 'rs';
-ATTRIBUTE_MAP.localForced = 'lf';
-ATTRIBUTE_MAP.remoteForced = 'rf';
-ATTRIBUTE_MAP.chatterFilter = 'cf';
-ATTRIBUTE_MAP.communicationsLost = 'cl';
+var TYPE_HANDLER_REGISTRY = {};
+TYPE_HANDLER_REGISTRY.binaryInputPoint = jdnp3.binary.setBinary;
 
 $(document).ready(function() {
 	var location = document.location.toString().replace(/\bhttp/,'ws').replace(/\/\/.*/,'//') + window.location.host + '/secure/ws/general';
@@ -29,43 +23,10 @@ $(document).ready(function() {
 		scheduler.addTask(function() {
 			if (e.data) {
 				message = jQuery.parseJSON(e.data);
-				if (message.type == 'binaryInputPoint') {
-					
-					for (var property in message) {
-						var id = 'bi-' + message.index;
-					    if (message.hasOwnProperty(property) && property in ATTRIBUTE_MAP) {
-							$("[id$=" + id + "-" + ATTRIBUTE_MAP[property] + "]").prop('checked', message[property])
-					    }
-					}
-					
-					for (var i = 1; i < 4; ++i) {
-						var id = 'bi-' + message.index + '-cl-' + i;
-						if (i == message.eventClass) {
-							$('[id$=' + id + ']').prop('checked', 'true');
-						} else {
-							$('[id$=' + id + ']').prop('checked', '');
-						}
-					}
-					
-					$('[id$=bi-' + message.index + '-sg]').html(message.staticType.group);
-					for (var i = 0; i < 3; ++i) {
-						var id = 'bi-' + message.index + '-st-' + i;
-						if (i == message.staticType.variation) {
-							$('[id$=' + id + ']').prop('checked', 'true');
-						} else {
-							$('[id$=' + id + ']').prop('checked', '');
-						}
-					}
-					
-					$('[id$=bi-' + message.index + '-eg]').html(message.staticType.group);
-					for (var i = 0; i < 4; ++i) {
-						var id = 'bi-' + message.index + '-ev-' + i;
-						if (i == message.eventType.variation) {
-							$('[id$=' + id + ']').prop('checked', 'true');
-						} else {
-							$('[id$=' + id + ']').prop('checked', '');
-						}
-					}
+				if (message.type in TYPE_HANDLER_REGISTRY) {
+					TYPE_HANDLER_REGISTRY[message.type](message);
+				} else {
+					console.log('WARN: No handler found for ' + message.type)
 				}
 			}
 		}, 0);

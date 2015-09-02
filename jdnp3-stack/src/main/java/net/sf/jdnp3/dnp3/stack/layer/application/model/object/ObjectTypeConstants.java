@@ -30,8 +30,22 @@ public class ObjectTypeConstants {
 	public static ObjectType BINARY_INPUT_EVENT_RELATIVE_TIME = new ObjectType(2, 3);
 	
 	public static ObjectType ANALOG_INPUT_STATIC_ANY = new ObjectType(30, 0);
+	public static ObjectType ANALOG_INPUT_STATIC_INT32 = new ObjectType(30, 1);
+	public static ObjectType ANALOG_INPUT_STATIC_INT16 = new ObjectType(30, 2);
+	public static ObjectType ANALOG_INPUT_STATIC_INT32_NO_FLAGS = new ObjectType(30, 3);
+	public static ObjectType ANALOG_INPUT_STATIC_INT16_NO_FLAGS = new ObjectType(30, 4);
 	public static ObjectType ANALOG_INPUT_STATIC_FLOAT16 = new ObjectType(30, 5);
 	public static ObjectType ANALOG_INPUT_STATIC_FLOAT64 = new ObjectType(30, 6);
+
+	public static ObjectType ANALOG_INPUT_EVENT_ANY = new ObjectType(32, 0);
+	public static ObjectType ANALOG_INPUT_EVENT_INT32_WITHOUT_TIME = new ObjectType(32, 1);
+	public static ObjectType ANALOG_INPUT_EVENT_INT16_WITHOUT_TIME = new ObjectType(32, 2);
+	public static ObjectType ANALOG_INPUT_EVENT_INT32_ABSOLUTE_TIME = new ObjectType(32, 3);
+	public static ObjectType ANALOG_INPUT_EVENT_INT16_ABSOLUTE_TIME = new ObjectType(32, 4);
+	public static ObjectType ANALOG_INPUT_EVENT_FLOAT32_WITHOUT_TIME = new ObjectType(32, 5);
+	public static ObjectType ANALOG_INPUT_EVENT_FLOAT64_WITHOUT_TIME = new ObjectType(32, 6);
+	public static ObjectType ANALOG_INPUT_EVENT_FLOAT32_ABSOLUTE_TIME = new ObjectType(32, 7);
+	public static ObjectType ANALOG_INPUT_EVENT_FLOAT64_ABSOLUTE_TIME = new ObjectType(32, 8);
 
 	public static ObjectType CROB = new ObjectType(12, 1);
 

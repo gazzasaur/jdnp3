@@ -21,10 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
-	private List<AnalogDataPoint> analogDataPoints = new ArrayList<>();
+	private List<AnalogInputDataPoint> analogDataPoints = new ArrayList<>();
 	private List<BinaryInputDataPoint> binaryDataPoints = new ArrayList<>();
 
-	public List<AnalogDataPoint> getAnalogDataPoints() {
+	public List<AnalogInputDataPoint> getAnalogDataPoints() {
 		return unmodifiableList(analogDataPoints);
 	}
 
@@ -33,7 +33,7 @@ public class Database {
 	}
 	
 	public void addAnalogDataPoint() {
-		AnalogDataPoint analogDataPoint = new AnalogDataPoint();
+		AnalogInputDataPoint analogDataPoint = new AnalogInputDataPoint();
 		analogDataPoint.setIndex(analogDataPoints.size());
 		analogDataPoint.setName("Point " + analogDataPoints.size());
 		analogDataPoints.add(analogDataPoint);
@@ -46,7 +46,7 @@ public class Database {
 		binaryDataPoints.add(binaryDataPoint);
 	}
 	
-	public void setAnalogDataPoint(AnalogDataPoint analogDataPoint) {
+	public void setAnalogDataPoint(AnalogInputDataPoint analogDataPoint) {
 		if (analogDataPoint.getIndex() < analogDataPoints.size()) {
 			analogDataPoint.setName(analogDataPoints.get((int) analogDataPoint.getIndex()).getName());
 			analogDataPoints.set((int) analogDataPoint.getIndex(), analogDataPoint);

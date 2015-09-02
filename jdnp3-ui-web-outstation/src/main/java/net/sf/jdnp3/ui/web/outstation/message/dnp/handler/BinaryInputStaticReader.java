@@ -33,8 +33,7 @@ public class BinaryInputStaticReader implements BinaryInputStaticReadRequestHand
 		for (long i = startIndex; i <= stopIndex; ++i) {
 			BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
 			try {
-				BeanUtils.copyProperties(binaryInputStaticObjectInstance,
-						binaryDataPoints.get((int) i));
+				BeanUtils.copyProperties(binaryInputStaticObjectInstance, binaryDataPoints.get((int) i));
 				points.add(binaryInputStaticObjectInstance);
 			} catch (Exception e) {
 				e.printStackTrace();

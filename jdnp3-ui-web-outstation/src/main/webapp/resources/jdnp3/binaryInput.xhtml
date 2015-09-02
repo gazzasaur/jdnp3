@@ -16,6 +16,8 @@
 
 <co:implementation>
 	<ui:composition>
+		<h:outputScript library="js" name="binary.js" />
+	
 		<div style="font-size: 0px;">
 			<j:slideswitch id="bi-#{cc.attrs.point.index}-state" title="State" onclick="requestChangeValue('bi-#{cc.attrs.point.index}', 'active')" disabled="true" />
 			<j:dipswitch id="bi-#{cc.attrs.point.index}-cf" title="Chatter Filter" abbreviation="CF" onclick="requestChangeValue('bi-#{cc.attrs.point.index}', 'chatterFilter')" disabled="true" />

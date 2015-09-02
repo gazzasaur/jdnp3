@@ -15,10 +15,11 @@
  */
 package net.sf.jdnp3.ui.web.outstation.database;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_ANY;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
 
-public class AnalogDataPoint implements DataPoint {
+public class AnalogInputDataPoint implements DataPoint {
 	private long index = 0;
 	private String name = "";
 	private double value = 0;
@@ -31,8 +32,8 @@ public class AnalogDataPoint implements DataPoint {
 	private boolean referenceError = false;
 	private boolean communicationsLost = false;
 	
-	private ObjectType staticType = ANY;
-	private ObjectType eventType = ANY;
+	private ObjectType staticType = ANALOG_INPUT_STATIC_ANY;
+	private ObjectType eventType = ObjectTypeConstants.ANALOG_INPUT_EVENT_ANY;
 	private int eventClass = 1;
 
 	public long getIndex() {
