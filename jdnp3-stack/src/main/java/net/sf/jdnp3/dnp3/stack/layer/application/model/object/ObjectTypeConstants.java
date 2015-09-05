@@ -34,7 +34,7 @@ public class ObjectTypeConstants {
 	public static ObjectType ANALOG_INPUT_STATIC_INT16 = new ObjectType(30, 2);
 	public static ObjectType ANALOG_INPUT_STATIC_INT32_NO_FLAGS = new ObjectType(30, 3);
 	public static ObjectType ANALOG_INPUT_STATIC_INT16_NO_FLAGS = new ObjectType(30, 4);
-	public static ObjectType ANALOG_INPUT_STATIC_FLOAT16 = new ObjectType(30, 5);
+	public static ObjectType ANALOG_INPUT_STATIC_FLOAT32 = new ObjectType(30, 5);
 	public static ObjectType ANALOG_INPUT_STATIC_FLOAT64 = new ObjectType(30, 6);
 
 	public static ObjectType ANALOG_INPUT_EVENT_ANY = new ObjectType(32, 0);

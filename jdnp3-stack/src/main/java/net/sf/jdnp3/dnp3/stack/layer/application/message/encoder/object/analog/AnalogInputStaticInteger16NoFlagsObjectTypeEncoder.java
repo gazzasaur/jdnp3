@@ -16,11 +16,9 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT16;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_INT16_NO_FLAGS;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
-import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.bitSetToByte;
 
-import java.util.BitSet;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
@@ -30,9 +28,9 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
-public class AnalogInputStaticFloat16ObjectTypeEncoder implements ObjectTypeEncoder {
+public class AnalogInputStaticInteger16NoFlagsObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(ANALOG_INPUT_STATIC_FLOAT16);
+		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(ANALOG_INPUT_STATIC_INT16_NO_FLAGS);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
@@ -41,18 +39,6 @@ public class AnalogInputStaticFloat16ObjectTypeEncoder implements ObjectTypeEnco
 		}
 
 		AnalogInputStaticObjectInstance specificInstance = (AnalogInputStaticObjectInstance) objectInstance;
-		BitSet bitSet = new BitSet(8);
-		bitSet.set(6, specificInstance.isReferenceError());
-		bitSet.set(5, specificInstance.isOverRange());
-		bitSet.set(4, specificInstance.isLocalForced());
-		bitSet.set(3, specificInstance.isRemoteForced());
-		bitSet.set(2, specificInstance.isCommunicationsLost());
-		bitSet.set(1, specificInstance.isRestart());
-		bitSet.set(0, specificInstance.isOnline());
-			
-		int intBits = Float.floatToIntBits((float) specificInstance.getValue());
-		
-		data.add(bitSetToByte(bitSet));
-		addInteger(intBits, 4, data);
+		addInteger((long) specificInstance.getValue(), 2, data);
 	}
 }

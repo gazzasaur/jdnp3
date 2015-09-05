@@ -12,6 +12,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseListener;
@@ -41,6 +42,10 @@ public class GenericWebSocket implements DatabaseListener {
 		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
 		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
 			this.valueChanged(binaryDataPoint);
+		}
+		List<AnalogInputDataPoint> analogDataPoints = DatabaseManagerProvider.getDatabaseManager().getAnalogDataPoints();
+		for (AnalogInputDataPoint analogDataPoint : analogDataPoints) {
+			this.valueChanged(analogDataPoint);
 		}
 	}
 	

@@ -21,19 +21,30 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
+import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 
 @ManagedBean
 @RequestScoped
 public class UiPointDatabase {
-	public List<UiPoint> getBinaryPoints() {
-		List<UiPoint> points = new ArrayList<>();
+	public List<UiPoint> getBinaryInputDataPoints() {
 		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
-		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
+		return convert(binaryDataPoints);
+	}
+
+	public List<UiPoint> getAnalogInputDataPoints() {
+		List<AnalogInputDataPoint> analogDataPoints = DatabaseManagerProvider.getDatabaseManager().getAnalogDataPoints();
+		return convert(analogDataPoints);
+	}
+
+	private List<UiPoint> convert(List<? extends DataPoint> dataPoints) {
+		List<UiPoint> points = new ArrayList<>();
+		for (DataPoint dataPoint : dataPoints) {
 			UiPoint point = new UiPoint();
-			point.setIndex(binaryDataPoint.getIndex());
-			point.setName(binaryDataPoint.getName());
+			point.setIndex(dataPoint.getIndex());
+			point.setName(dataPoint.getName());
 			points.add(point);
 		}
 		return points;

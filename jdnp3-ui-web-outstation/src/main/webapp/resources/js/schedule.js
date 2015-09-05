@@ -55,14 +55,18 @@ jdnp3.schedule.Scheduler.prototype.stop = function() {
 jdnp3.schedule.Scheduler.prototype.tick = function() {
 	var newTaskList = [];
 	for (var task of this.taskQueue) {
-		if (task.tick() <= 0) {
-			task.getTask()();
-			if (task.isRecurring()) {
-				task.reset();
+		try {
+			if (task.tick() <= 0) {
+				task.getTask()();
+				if (task.isRecurring()) {
+					task.reset();
+					newTaskList.push(task);
+				}
+			} else {
 				newTaskList.push(task);
 			}
-		} else {
-			newTaskList.push(task);
+		} catch (e) {
+			console.log('WARN: Failed task, removed ' + task.getTask() + ': ' + e);
 		}
 	}
 	this.taskQueue = newTaskList;

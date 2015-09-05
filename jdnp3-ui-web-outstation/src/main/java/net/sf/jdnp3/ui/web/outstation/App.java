@@ -21,6 +21,7 @@ import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationFactory;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
+import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
@@ -31,10 +32,12 @@ import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class1Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.CrobOperator;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistry;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistryProvider;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.AnalogInputMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputEventMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.HeartbeatMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistryProvider;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.AnalogInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputEventMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.HeartbeatMessage;
@@ -59,11 +62,13 @@ public class App {
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new HeartbeatMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputEventMessageHandler());
+		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new AnalogInputMessageHandler());
 		
 		GenericMessageRegistry registry = GenericMessageRegistryProvider.getRegistry();
 		registry.register("heartbeat", HeartbeatMessage.class);
 		registry.register("binaryInputEvent", BinaryInputEventMessage.class);
 		registry.register("binaryInputPoint", BinaryInputDataPoint.class, BinaryInputMessage.class);
+		registry.register("analogInputPoint", AnalogInputDataPoint.class, AnalogInputMessage.class);
 		
 		OutstationFactory outstationFactory = new OutstationFactory();
 		outstationFactory.addStandardOutstationRequestHandlerAdaptors();

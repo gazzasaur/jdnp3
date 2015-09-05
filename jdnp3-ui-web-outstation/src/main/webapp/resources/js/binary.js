@@ -10,6 +10,53 @@ jdnp3.binary.ATTRIBUTE_MAP.remoteForced = 'rf';
 jdnp3.binary.ATTRIBUTE_MAP.chatterFilter = 'cf';
 jdnp3.binary.ATTRIBUTE_MAP.communicationsLost = 'cl';
 
+jdnp3.binary.getBinary = function(id) {
+	if (!/bi-(\d+)/g.exec(id)) {
+		throw "Element " + id + " is not a valid binary input.";
+	}
+	
+	var index = getDataPointIndex(id);
+	var data = {
+			'type': 'binaryInputPoint',
+			'index': index,
+	};
+	
+	if (!$('[id$=bi-' + index + '-state]').length) {
+		throw "Element " + id + " does not exist.";
+	}
+	for (var property in jdnp3.binary.ATTRIBUTE_MAP) {
+		data[property] = $('[id$=bi-' + index + '-' + jdnp3.binary.ATTRIBUTE_MAP[property] + ']').prop('checked')  ? true : false;
+	}
+
+	data.eventClass = 0;
+	for (var i = 1; i < 4; ++i) {
+		var id = 'bi-' + index + '-cl-' + i;
+		if ($('[id$=' + id + ']').prop('checked')) {
+			var regexArray = /.*-(\d+)/g.exec(id);
+			data.eventClass = parseInt(regexArray[1]);
+		}
+	}
+
+	data.staticType = {'group': 1, 'variation': 0};
+	for (var i = 0; i < 3; ++i) {
+		var id = 'bi-' + index + '-st-' + i;
+		if ($('[id$=' + id + ']').prop('checked')) {
+			var regexArray = /.*-(\d+)/g.exec(id);
+			data.staticType.variation = parseInt(regexArray[1]);
+		}
+	}
+	
+	data.eventType = {'group': 2, 'variation': 0};
+	for (var i = 0; i < 4; ++i) {
+		var id = 'bi-' + index + '-ev-' + i;
+		if ($('[id$=' + id + ']').prop('checked')) {
+			var regexArray = /.*-(\d+)/g.exec(id);
+			data.eventType.variation = parseInt(regexArray[1]);
+		}
+	}
+	return data;
+}
+
 jdnp3.binary.setBinary = function(binaryDataPoint) {
 	for (var property in binaryDataPoint) {
 		var id = 'bi-' + binaryDataPoint.index;

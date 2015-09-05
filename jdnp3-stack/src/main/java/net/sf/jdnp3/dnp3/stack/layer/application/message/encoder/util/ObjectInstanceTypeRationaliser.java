@@ -18,6 +18,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
@@ -30,6 +31,7 @@ public class ObjectInstanceTypeRationaliser {
 	@SuppressWarnings("serial")
 	private Map<Class<? extends ObjectInstance>, ObjectInstanceTypeRationaliserHelper> rationaliserHelpers = new HashMap<Class<? extends ObjectInstance>, ObjectInstanceTypeRationaliserHelper>() {{
 		this.put(BinaryInputStaticObjectInstance.class, new BinaryInputStaticTypeRationaliserHelper());
+		this.put(AnalogInputStaticObjectInstance.class, new AnalogInputStaticTypeRationaliserHelper());
 	}};
 	
 	public void rationaliseType(ObjectInstance objectInstance) {

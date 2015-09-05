@@ -27,8 +27,9 @@
 }
 
 .text-field .text-field-value {
-	width: 100%;
-	height: 100%;
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
 	color: #7777FF;
 	font-weight: bold;
 	font-family: Aerial;

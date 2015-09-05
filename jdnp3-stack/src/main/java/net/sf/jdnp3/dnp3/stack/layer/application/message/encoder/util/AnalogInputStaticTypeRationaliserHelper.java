@@ -17,8 +17,12 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util;
 
 import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_ANY;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT16;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT32;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT64;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_INT16;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_INT16_NO_FLAGS;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_INT32;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_INT32_NO_FLAGS;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CLASS_0;
 
@@ -34,7 +38,7 @@ import org.slf4j.LoggerFactory;
 
 public class AnalogInputStaticTypeRationaliserHelper implements ObjectInstanceTypeRationaliserHelper {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	private List<ObjectType> validObjectTypes = Arrays.asList(ANY, CLASS_0, ANALOG_INPUT_STATIC_ANY, ANALOG_INPUT_STATIC_FLOAT16, ANALOG_INPUT_STATIC_FLOAT64);
+	private List<ObjectType> validObjectTypes = Arrays.asList(ANY, CLASS_0, ANALOG_INPUT_STATIC_ANY, ANALOG_INPUT_STATIC_INT32, ANALOG_INPUT_STATIC_INT16, ANALOG_INPUT_STATIC_INT32_NO_FLAGS, ANALOG_INPUT_STATIC_INT16_NO_FLAGS, ANALOG_INPUT_STATIC_FLOAT32, ANALOG_INPUT_STATIC_FLOAT64);
 	
 	public void rationalise(ObjectInstance objectInstance) {
 		AnalogInputStaticObjectInstance specificInstance = (AnalogInputStaticObjectInstance) objectInstance;
@@ -42,8 +46,23 @@ public class AnalogInputStaticTypeRationaliserHelper implements ObjectInstanceTy
 			logger.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
 			objectInstance.setRequestedType(ANY);
 		}
+		boolean otherFlags = !specificInstance.isOnline() ||
+				specificInstance.isRestart() ||
+				specificInstance.isCommunicationsLost() ||
+				specificInstance.isRemoteForced() ||
+				specificInstance.isLocalForced() ||
+				specificInstance.isOverRange() ||
+				specificInstance.isReferenceError();
 		if (specificInstance.getRequestedType().getGroup() != ANALOG_INPUT_STATIC_ANY.getGroup() || specificInstance.getRequestedType().getVariation() == 0) {
-			objectInstance.setRequestedType(ANALOG_INPUT_STATIC_FLOAT16);
+			objectInstance.setRequestedType(ANALOG_INPUT_STATIC_FLOAT32);
+		}
+		if (specificInstance.getRequestedType().equals(ANALOG_INPUT_STATIC_INT16_NO_FLAGS) && otherFlags) {
+			logger.warn(format(ANALOG_INPUT_STATIC_INT16_NO_FLAGS.toString() + " format requested but flags are required."));
+			specificInstance.setRequestedType(ANALOG_INPUT_STATIC_INT16);
+		}
+		if (specificInstance.getRequestedType().equals(ANALOG_INPUT_STATIC_INT32_NO_FLAGS) && otherFlags) {
+			logger.warn(format(ANALOG_INPUT_STATIC_INT32_NO_FLAGS.toString() + " format requested but flags are required."));
+			specificInstance.setRequestedType(ANALOG_INPUT_STATIC_INT32);
 		}
 	}
 }

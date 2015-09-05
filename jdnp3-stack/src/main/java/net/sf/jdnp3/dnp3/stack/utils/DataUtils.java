@@ -41,6 +41,13 @@ public class DataUtils {
 		return ByteBuffer.wrap(rawBuffer).getLong();
 	}
 	
+	public static void addFloat(float value, List<Byte> data) {
+		ByteBuffer byteBuffer = ByteBuffer.allocate(4);
+		byteBuffer.putFloat(value);
+		reverse(byteBuffer.array());
+		data.addAll(asList(toObject(byteBuffer.array())));
+	}
+	
 	public static void addDouble(double value, List<Byte> data) {
 		ByteBuffer byteBuffer = ByteBuffer.allocate(8);
 		byteBuffer.putDouble(value);

@@ -21,5 +21,4 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public interface Class0ReadRequestHandler extends OutstationRequestHandler {
 	public List<ObjectInstance> doReadClass();
-	public List<ObjectInstance> doReadClass(long returnLimit);
 }

@@ -18,8 +18,12 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputStaticFloat16ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputStaticFloat32ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputStaticFloat64ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputStaticInteger16NoFlagsObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputStaticInteger16ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputStaticInteger32NoFlagsObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputStaticInteger32ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputEventAbsoluteTimeObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputEventRelativeTimeObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputEventWithoutTimeTimeObjectTypeEncoder;
@@ -41,7 +45,11 @@ public class ObjectTypeEncoderConstants {
 		
 		this.add(new CrobObjectTypeEncoder());
 		
-		this.add(new AnalogInputStaticFloat16ObjectTypeEncoder());
+		this.add(new AnalogInputStaticInteger32ObjectTypeEncoder());
+		this.add(new AnalogInputStaticInteger16ObjectTypeEncoder());
+		this.add(new AnalogInputStaticInteger32NoFlagsObjectTypeEncoder());
+		this.add(new AnalogInputStaticInteger16NoFlagsObjectTypeEncoder());
+		this.add(new AnalogInputStaticFloat32ObjectTypeEncoder());
 		this.add(new AnalogInputStaticFloat64ObjectTypeEncoder());
 		
 		this.add(new SynchronisedCtoObjectTypeEncoder());

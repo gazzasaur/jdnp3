@@ -3,8 +3,17 @@ var scheduler = jdnp3.schedule.getDefaultScheduler();
 var webSocket;
 var webSocketMessageQueue = [];
 
-var TYPE_HANDLER_REGISTRY = {};
-TYPE_HANDLER_REGISTRY.binaryInputPoint = jdnp3.binary.setBinary;
+var MESSAGE_HANDLER_REGISTRY = {};
+MESSAGE_HANDLER_REGISTRY.heartbeat = function() {};
+MESSAGE_HANDLER_REGISTRY.binaryInputPoint = jdnp3.binary.setBinary;
+MESSAGE_HANDLER_REGISTRY.analogInputPoint = jdnp3.analog.setAnalog;
+
+var ATTRIBUTE_CHANGE_HANDLER_REGISTRY = {};
+ATTRIBUTE_CHANGE_HANDLER_REGISTRY.bi = jdnp3.binary.getBinary;
+ATTRIBUTE_CHANGE_HANDLER_REGISTRY.ai = jdnp3.analog.getAnalog;
+
+var EVENT_MESSAGE_REGISTRY = {};
+EVENT_MESSAGE_REGISTRY.bi = 'binaryInputEvent';
 
 $(document).ready(function() {
 	var location = document.location.toString().replace(/\bhttp/,'ws').replace(/\/\/.*/,'//') + window.location.host + '/secure/ws/general';
@@ -23,8 +32,8 @@ $(document).ready(function() {
 		scheduler.addTask(function() {
 			if (e.data) {
 				message = jQuery.parseJSON(e.data);
-				if (message.type in TYPE_HANDLER_REGISTRY) {
-					TYPE_HANDLER_REGISTRY[message.type](message);
+				if (message.type in MESSAGE_HANDLER_REGISTRY) {
+					MESSAGE_HANDLER_REGISTRY[message.type](message);
 				} else {
 					console.log('WARN: No handler found for ' + message.type)
 				}
@@ -47,92 +56,28 @@ getDataPointIndex = function(id) {
 	return parseInt(regexArray[1]);
 }
 
-getBinaryValue = function(id) {
-	if (!/bi-(\d+)/g.exec(id)) {
-		throw "Element " + id + " is not a valid binary input.";
-	}
-	
-	var index = getDataPointIndex(id);
-	var data = {
-			'type': 'binaryInputPoint',
-			'index': index,
-	};
-	
-	if (!$('[id$=bi-' + index + '-state]').length) {
-		throw "Element " + id + " does not exist.";
-	}
-	data.active = $('[id$=bi-' + index + '-state]').prop('checked')  ? true : false;
-	data.chatterFilter = $('[id$=bi-' + index + '-cf]').prop('checked')  ? true : false;
-	data.localForced = $('[id$=bi-' + index + '-lf]').prop('checked')  ? true : false;
-	data.remoteForced = $('[id$=bi-' + index + '-rf]').prop('checked')  ? true : false;
-	data.communicationsLost = $('[id$=bi-' + index + '-cl]').prop('checked')  ? true : false;
-	data.restart = $('[id$=bi-' + index + '-rs]').prop('checked')  ? true : false;
-	data.online = $('[id$=bi-' + index + '-ol]').prop('checked')  ? true : false;
-
-	data.eventClass = 0;
-	for (var i = 1; i < 4; ++i) {
-		var id = 'bi-' + index + '-cl-' + i;
-		if ($('[id$=' + id + ']').prop('checked')) {
-			var regexArray = /.*-(\d+)/g.exec(id);
-			data.eventClass = parseInt(regexArray[1]);
-		}
-	}
-
-	data.staticType = {'group': 1, 'variation': 0};
-	for (var i = 0; i < 3; ++i) {
-		var id = 'bi-' + index + '-st-' + i;
-		if ($('[id$=' + id + ']').prop('checked')) {
-			var regexArray = /.*-(\d+)/g.exec(id);
-			data.staticType.variation = parseInt(regexArray[1]);
-		}
-	}
-	
-	data.eventType = {'group': 2, 'variation': 0};
-	for (var i = 0; i < 4; ++i) {
-		var id = 'bi-' + index + '-ev-' + i;
-		if ($('[id$=' + id + ']').prop('checked')) {
-			var regexArray = /.*-(\d+)/g.exec(id);
-			data.eventType.variation = parseInt(regexArray[1]);
-		}
-	}
-	return data;
-}
-
-requestChangeValue = function(id, attribute) {
-	scheduler.addTask(function() {
-		var binaryType = /bi-(\d+)/g.exec(id);
-		if (binaryType) {
-			var data = getBinaryValue(id);
-			if (data.hasOwnProperty(attribute)) {
-				data[attribute] = !data[attribute];
-				console.log(data);
-				webSocket.send(JSON.stringify(data));
-			}
-		}
-	}, 0);
-}
-
 requestChangeAttributeValue = function(id, attribute, value) {
 	scheduler.addTask(function() {
-		var binaryType = /bi-(\d+)/g.exec(id);
-		if (binaryType) {
-			var data = getBinaryValue(id);
+		var objectId = /([a-z]+)-(\d+)/g.exec(id);
+		if (objectId && objectId[1] in ATTRIBUTE_CHANGE_HANDLER_REGISTRY) {
+			var data = ATTRIBUTE_CHANGE_HANDLER_REGISTRY[objectId[1]](id);
 			if (data.hasOwnProperty(attribute)) {
 				data[attribute] = value;
-				console.log(data);
 				webSocket.send(JSON.stringify(data));
 			}
+		} else {
+			console.log('WARN: Cannot change attribute for ' + objectId);
 		}
 	}, 0);
 }
 
 requestEvent = function(id) {
 	scheduler.addTask(function() {
-		var binaryType = /bi-(\d+)/g.exec(id);
-		if (binaryType) {
+		var objectId = /([a-z]+)-(\d+)/g.exec(id);
+		if (objectId && objectId[1] in EVENT_MESSAGE_REGISTRY) {
 			var data = {
-				'type': 'binaryInputEvent',
-				'index': parseInt(binaryType[1])
+				'type': EVENT_MESSAGE_REGISTRY[objectId[1]],
+				'index': parseInt(objectId[2])
 			};
 			webSocket.send(JSON.stringify(data));
 		}

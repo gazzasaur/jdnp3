@@ -178,10 +178,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			}
 			
 			ObjectFragmentPacker packer = countPacker;
-			System.out.println(replyObjects.get(0));
-			System.out.println("Packer");
 			if (replyObjects.get(0) instanceof StaticObjectInstance) {
-				System.out.println("OTHER");
 				packer = indexPacker;
 			} else if (replyObjects.get(0) instanceof CtoObjectInstance) {
 				packer = singlePacker;
