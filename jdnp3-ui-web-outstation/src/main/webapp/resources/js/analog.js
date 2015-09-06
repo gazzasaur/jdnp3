@@ -61,6 +61,10 @@ jdnp3.analog.getAnalog = function(id) {
 jdnp3.analog.setAnalog = function(analogDataPoint) {
 	var id = 'ai-' + analogDataPoint.index;
 	
+	var stringValue = '' + analogDataPoint.value;
+	if (stringValue.length > 10) {
+		stringValue = parseFloat(analogDataPoint.value).toExponential();
+	}
 	$("[id$=" + id + "-value]").html(analogDataPoint.value);
 	
 	for (var property in analogDataPoint) {

@@ -28,11 +28,12 @@
 
 .text-field .text-field-value {
 	position: absolute;
-	bottom: 0px;
+	display: inline-block;
+	bottom: 7px;
 	right: 0px;
 	color: #7777FF;
 	font-weight: bold;
 	font-family: Aerial;
 	text-align: right;
-	font-size: 25px;
+	font-size: 18px;
 }

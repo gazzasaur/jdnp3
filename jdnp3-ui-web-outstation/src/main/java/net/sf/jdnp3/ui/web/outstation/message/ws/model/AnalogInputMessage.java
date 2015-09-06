@@ -26,7 +26,7 @@ public class AnalogInputMessage implements Message {
 	private ObjectType staticType = ANY;
 	
 	private String name = "";
-	private double value = 0;
+	private String value = "0";
 	private boolean online = true;
 	private boolean restart = false;
 	private boolean overRange = false;
@@ -119,14 +119,6 @@ public class AnalogInputMessage implements Message {
 		this.staticType = staticType;
 	}
 
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
-	}
-
 	public boolean isOverRange() {
 		return overRange;
 	}
@@ -141,5 +133,13 @@ public class AnalogInputMessage implements Message {
 
 	public void setReferenceError(boolean referenceError) {
 		this.referenceError = referenceError;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 }
