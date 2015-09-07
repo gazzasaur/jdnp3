@@ -16,7 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT32;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_EVENT_FLOAT32_WITHOUT_TIME;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addFloat;
 
 import java.util.List;
@@ -25,20 +25,20 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
-public class AnalogInputStaticFloat32ObjectTypeEncoder implements ObjectTypeEncoder {
+public class AnalogInputEventFloat32NoTimeObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(ANALOG_INPUT_STATIC_FLOAT32);
+		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(ANALOG_INPUT_EVENT_FLOAT32_WITHOUT_TIME);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
 		if (!this.canEncode(context.getFunctionCode(), context.getObjectType())) {
-			throw new IllegalArgumentException(format("Cannot encode the given value %s %s.", context.getFunctionCode(), context.getObjectType()));
+			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
-
-		AnalogInputStaticObjectInstance specificInstance = (AnalogInputStaticObjectInstance) objectInstance;
+		
+		AnalogInputEventObjectInstance specificInstance = (AnalogInputEventObjectInstance) objectInstance;
 		data.add(AnalogInputFlagsEncoder.encode(specificInstance));
 		addFloat((float) specificInstance.getValue(), data);
 	}

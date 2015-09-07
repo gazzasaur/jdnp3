@@ -18,9 +18,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog;
 import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_INT32;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
-import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.bitSetToByte;
 
-import java.util.BitSet;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
@@ -41,16 +39,7 @@ public class AnalogInputStaticInteger32ObjectTypeEncoder implements ObjectTypeEn
 		}
 
 		AnalogInputStaticObjectInstance specificInstance = (AnalogInputStaticObjectInstance) objectInstance;
-		BitSet bitSet = new BitSet(8);
-		bitSet.set(6, specificInstance.isReferenceError());
-		bitSet.set(5, specificInstance.isOverRange());
-		bitSet.set(4, specificInstance.isLocalForced());
-		bitSet.set(3, specificInstance.isRemoteForced());
-		bitSet.set(2, specificInstance.isCommunicationsLost());
-		bitSet.set(1, specificInstance.isRestart());
-		bitSet.set(0, specificInstance.isOnline());
-			
-		data.add(bitSetToByte(bitSet));
+		data.add(AnalogInputFlagsEncoder.encode(specificInstance));
 		addInteger((long) specificInstance.getValue(), 4, data);
 	}
 }

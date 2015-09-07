@@ -37,7 +37,7 @@ public class ObjectInstanceTypeRationaliser {
 	public void rationaliseType(ObjectInstance objectInstance) {
 		ObjectInstanceTypeRationaliserHelper rationaliserHelper = rationaliserHelpers.get(objectInstance.getClass());
 		if (rationaliserHelper == null) {
-			logger.warn("No Rationaliser found for type: " + objectInstance.getClass());
+			logger.info("No Rationaliser found for type: " + objectInstance.getClass());
 		} else {
 			rationaliserHelper.rationalise(objectInstance);
 		}

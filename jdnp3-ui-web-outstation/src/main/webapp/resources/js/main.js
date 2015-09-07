@@ -14,6 +14,7 @@ ATTRIBUTE_CHANGE_HANDLER_REGISTRY.ai = jdnp3.analog.getAnalog;
 
 var EVENT_MESSAGE_REGISTRY = {};
 EVENT_MESSAGE_REGISTRY.bi = 'binaryInputEvent';
+EVENT_MESSAGE_REGISTRY.ai = 'analogInputEvent';
 
 $(document).ready(function() {
 	var location = document.location.toString().replace(/\bhttp/,'ws').replace(/\/\/.*/,'//') + window.location.host + '/secure/ws/general';
@@ -80,6 +81,8 @@ requestEvent = function(id) {
 				'index': parseInt(objectId[2])
 			};
 			webSocket.send(JSON.stringify(data));
+		} else {
+			console.log('WARN: Cannot create an event for the id ' + id);
 		}
 	}, 0);
 }

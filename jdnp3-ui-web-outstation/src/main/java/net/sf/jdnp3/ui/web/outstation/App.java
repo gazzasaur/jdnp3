@@ -19,6 +19,7 @@ import java.util.Date;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationFactory;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
@@ -32,11 +33,13 @@ import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class1Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.CrobOperator;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistry;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistryProvider;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.AnalogInputEventMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.AnalogInputMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputEventMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.HeartbeatMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistryProvider;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.AnalogInputEventMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.AnalogInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputEventMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputMessage;
@@ -63,10 +66,12 @@ public class App {
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputEventMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new AnalogInputMessageHandler());
+		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new AnalogInputEventMessageHandler());
 		
 		GenericMessageRegistry registry = GenericMessageRegistryProvider.getRegistry();
 		registry.register("heartbeat", HeartbeatMessage.class);
 		registry.register("binaryInputEvent", BinaryInputEventMessage.class);
+		registry.register("analogInputEvent", AnalogInputEventMessage.class);
 		registry.register("binaryInputPoint", BinaryInputDataPoint.class, BinaryInputMessage.class);
 		registry.register("analogInputPoint", AnalogInputDataPoint.class, AnalogInputMessage.class);
 		
@@ -82,16 +87,30 @@ public class App {
 		
 		DatabaseManagerProvider.getDatabaseManager().addEventListener(new EventListener() {
 			public void eventReceived(DataPoint dataPoint) {
-				BinaryInputEventObjectInstance binaryInputEventObjectInstance = new BinaryInputEventObjectInstance();
-				try {
-					BinaryInputDataPoint binaryDataPoint = (BinaryInputDataPoint) dataPoint;
-					BeanUtils.copyProperties(binaryInputEventObjectInstance, binaryDataPoint);
-					binaryInputEventObjectInstance.setTimestamp(new Date().getTime());
-					binaryInputEventObjectInstance.setEventClass(binaryDataPoint.getEventClass());
-					binaryInputEventObjectInstance.setRequestedType(binaryDataPoint.getEventType());
-					outstation.sendEvent(binaryInputEventObjectInstance);
-				} catch (Exception e) {
-					logger.error("Failed to send event.", e);
+				if (dataPoint instanceof BinaryInputDataPoint) {
+					BinaryInputEventObjectInstance binaryInputEventObjectInstance = new BinaryInputEventObjectInstance();
+					try {
+						BinaryInputDataPoint binaryDataPoint = (BinaryInputDataPoint) dataPoint;
+						BeanUtils.copyProperties(binaryInputEventObjectInstance, binaryDataPoint);
+						binaryInputEventObjectInstance.setTimestamp(new Date().getTime());
+						binaryInputEventObjectInstance.setEventClass(binaryDataPoint.getEventClass());
+						binaryInputEventObjectInstance.setRequestedType(binaryDataPoint.getEventType());
+						outstation.sendEvent(binaryInputEventObjectInstance);
+					} catch (Exception e) {
+						logger.error("Failed to send event.", e);
+					}
+				} else if (dataPoint instanceof AnalogInputDataPoint) {
+					AnalogInputEventObjectInstance analogInputEventObjectInstance = new AnalogInputEventObjectInstance();
+					try {
+						AnalogInputDataPoint analogDataPoint = (AnalogInputDataPoint) dataPoint;
+						BeanUtils.copyProperties(analogInputEventObjectInstance, analogDataPoint);
+						analogInputEventObjectInstance.setTimestamp(new Date().getTime());
+						analogInputEventObjectInstance.setEventClass(analogDataPoint.getEventClass());
+						analogInputEventObjectInstance.setRequestedType(analogDataPoint.getEventType());
+						outstation.sendEvent(analogInputEventObjectInstance);
+					} catch (Exception e) {
+						logger.error("Failed to send event.", e);
+					}
 				}
 			}
 		});

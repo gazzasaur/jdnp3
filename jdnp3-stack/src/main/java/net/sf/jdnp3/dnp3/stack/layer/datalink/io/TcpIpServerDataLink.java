@@ -102,17 +102,20 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 		
 		try {
 			DataLinkFrameHeader dataLinkFrameHeader = new DataLinkFrameHeader();
-			serverSocketChannel = ServerSocketChannel.open();
-			serverSocketChannel.bind(new InetSocketAddress(20000));
-			socketChannel = serverSocketChannel.accept();
-			socketChannel.configureBlocking(false);
-			serverSocketChannel.close();
-			serverSocketChannel = null;
-			
-			TcpIpDataPumpProvider.getTcpIpDataPump().registerSource(socketChannel, inputDataBuffer);
 			
 			lastDrop = new Date().getTime();
 			while (true) {
+				if (socketChannel == null || !socketChannel.isConnected()) {
+					socketChannel = null;
+					serverSocketChannel = ServerSocketChannel.open();
+					serverSocketChannel.bind(new InetSocketAddress(20000));
+					socketChannel = serverSocketChannel.accept();
+					socketChannel.configureBlocking(false);
+					serverSocketChannel.close();
+					serverSocketChannel = null;
+					
+					TcpIpDataPumpProvider.getTcpIpDataPump().registerSource(socketChannel, inputDataBuffer);
+				}
 				synchronized (inputDataBuffer) {
 					inputDataBuffer.wait(1000);
 				}
@@ -126,18 +129,19 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 						lastDrop = new Date().getTime();
 					}
 				} catch (Exception e) {
-					logger.warn(String.format("Error found on stream.  Dropping: %02X", (byte) frameBuffer.remove(0)), e);
-					lastDrop = new Date().getTime();
+					logger.warn("Error found on stream.", e);
+					performRapidDrop(frameBuffer);
 				}
 				if (frameBuffer.size() == 0) {
 					lastDrop = new Date().getTime();
 				}
 				if (new Date().getTime() - lastDrop > CHARACTER_TIMEOUT) {
-					logger.warn(String.format("Timeout on stream.  Dropping: %02X", (byte) frameBuffer.remove(0)));
-					lastDrop = new Date().getTime();
+					logger.warn("Timeout on stream.");
+					performRapidDrop(frameBuffer);
 				}
 				if (frameBuffer.size() > maximumReceiveDataSize) {
-					frameBuffer.remove(0);
+					logger.warn("Receive buffer has exceeded max size.");
+					performRapidDrop(frameBuffer);
 				}
 			}
 		} catch (IOException | InterruptedException e) {
@@ -159,19 +163,6 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 		}
 	}
 
-	private void frameReceived(List<Byte> buffer) {
-		if (dataLinkListeners.size() == 0) {
-			throw new IllegalStateException("No transport layer has been specified.");
-		}
-		DataLinkFrame dataLinkFrame = decoder.decode(buffer);
-		if (dataLinkFrame.getDataLinkFrameHeader().getFunctionCode() == FunctionCode.UNCONFIRMED_USER_DATA &&
-				dataLinkFrame.getDataLinkFrameHeader().isPrimary()) {
-			for (DataLinkListener dataLinkListener : dataLinkListeners) {
-				dataLinkListener.receiveData(dataLinkFrame.getData());
-			}
-		}
-	}
-
 	public int getMtu() {
 		return mtu;
 	}
@@ -182,5 +173,41 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 
 	public void removeDataLinkLayerListener(DataLinkListener listener) {
 		dataLinkListeners.remove(listener);
+	}
+	
+	private void frameReceived(List<Byte> buffer) {
+		if (dataLinkListeners.size() == 0) {
+			throw new IllegalStateException("No transport layer has been specified.");
+		}
+		DataLinkFrame dataLinkFrame = decoder.decode(buffer);
+		if (dataLinkFrame.getDataLinkFrameHeader().getFunctionCode() == FunctionCode.UNCONFIRMED_USER_DATA && dataLinkFrame.getDataLinkFrameHeader().isPrimary()) {
+			for (DataLinkListener dataLinkListener : dataLinkListeners) {
+				dataLinkListener.receiveData(dataLinkFrame.getData());
+			}
+		}
+	}
+	
+	private void performRapidDrop(List<Byte> data) {
+		if (data.size() < 1) {
+			return;
+		}
+		List<Byte> droppedData = new ArrayList<>();
+		droppedData.add(data.remove(0));
+		for (int i = 0; i < mtu; ++i) {
+			try {
+				DataLinkFrameHeader dataLinkFrameHeader = new DataLinkFrameHeader();
+				detector.detectHeader(dataLinkFrameHeader, data);
+				break;
+			} catch (Exception e) {
+				droppedData.add(data.remove(0));
+			}
+		}
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("Dropping: ");
+		for (Byte droppedByte : droppedData) {
+			stringBuilder.append(String.format("%02X", droppedByte));
+		}
+		logger.warn(stringBuilder.toString());
+		lastDrop = new Date().getTime();
 	}
 }

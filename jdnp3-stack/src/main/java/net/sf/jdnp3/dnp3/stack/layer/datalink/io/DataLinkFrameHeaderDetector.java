@@ -16,6 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.datalink.io;
 
 import static java.lang.String.format;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkConstants.DNP3_START_BYTE;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkConstants.DNP3_START_BYTES;
 
 import java.util.BitSet;
@@ -35,11 +36,13 @@ public class DataLinkFrameHeaderDetector {
 	private static final int MINIMUM_HEADER_SIZE = 10;
 
 	public boolean detectHeader(DataLinkFrameHeader dataLinkFrameHeader, List<Byte> data) {
+		if (data.size() >= 2 && DataUtils.getInteger(0, 2, data) != DNP3_START_BYTES) {
+			throw new IllegalArgumentException("Start bytes were not detected.");
+		} else if (data.size() == 1 && DataUtils.getInteger(0, 1, data) != DNP3_START_BYTE) {
+			throw new IllegalArgumentException("Start byte was not detected.");
+		}
 		if (data.size() < MINIMUM_HEADER_SIZE) {
 			return false;
-		}
-		if (DataUtils.getInteger(0, 2, data) != DNP3_START_BYTES) {
-			throw new IllegalArgumentException("Start byte were not detected.");
 		}
 		
 		dataLinkFrameHeader.setLength((int) DataUtils.getInteger(LENGTH_OFFSET, 1, data));

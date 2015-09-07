@@ -12,17 +12,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * Note:
- * I am not sure how fair it is to license this under this project.
- * This was taken from IEEE Std 1815 (2012) and adapted to Java.
- * If you are responsible for this work and feel this is unfair
- * please let me know and I will apply what ever recognition
- * you would like to this file.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.util;
+package net.sf.jdnp3.ui.web.outstation.message.ws.model;
 
-public class DataLinkConstants {
-	public static final int DNP3_START_BYTE = 0x05;
-	public static final int DNP3_START_BYTES = 0x6405;
+public class AnalogInputEventMessage implements Message {
+	private String type = "analogInputEvent";
+	private long index = 0;
+	
+	public String getType() {
+		return type;
+	}
+	
+	public long getIndex() {
+		return index;
+	}
+
+	public void setIndex(long index) {
+		this.index = index;
+	}
 }

@@ -18,6 +18,14 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputEventFloat32AbsoluteTimeObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputEventFloat32NoTimeObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputEventFloat64AbsoluteTimeObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputEventFloat64NoTimeObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputEventInteger16AbsoluteTimeObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputEventInteger16NoTimeObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputEventInteger32AbsoluteTimeObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputEventInteger32NoTimeObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputStaticFloat32ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputStaticFloat64ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputStaticInteger16NoFlagsObjectTypeEncoder;
@@ -51,7 +59,16 @@ public class ObjectTypeEncoderConstants {
 		this.add(new AnalogInputStaticInteger16NoFlagsObjectTypeEncoder());
 		this.add(new AnalogInputStaticFloat32ObjectTypeEncoder());
 		this.add(new AnalogInputStaticFloat64ObjectTypeEncoder());
-		
+
+		this.add(new AnalogInputEventInteger32NoTimeObjectTypeEncoder());
+		this.add(new AnalogInputEventInteger16NoTimeObjectTypeEncoder());
+		this.add(new AnalogInputEventInteger32AbsoluteTimeObjectTypeEncoder());
+		this.add(new AnalogInputEventInteger16AbsoluteTimeObjectTypeEncoder());
+		this.add(new AnalogInputEventFloat32NoTimeObjectTypeEncoder());
+		this.add(new AnalogInputEventFloat64NoTimeObjectTypeEncoder());
+		this.add(new AnalogInputEventFloat32AbsoluteTimeObjectTypeEncoder());
+		this.add(new AnalogInputEventFloat64AbsoluteTimeObjectTypeEncoder());
+
 		this.add(new SynchronisedCtoObjectTypeEncoder());
 	}};
 }
