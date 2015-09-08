@@ -24,6 +24,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventOb
 import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.database.EventListener;
@@ -37,12 +38,14 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.handler.AnalogInputEventMessage
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.AnalogInputMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputEventMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputMessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryOutputMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.HeartbeatMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistryProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.AnalogInputEventMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.AnalogInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputEventMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.HeartbeatMessage;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -59,12 +62,14 @@ public class App {
 		
 		Logger logger = LoggerFactory.getLogger(App.class);
 		
-		DatabaseManagerProvider.getDatabaseManager().setBinaryDatabaseSize(10);
-		DatabaseManagerProvider.getDatabaseManager().setAnalogDatabaseSize(10);
+		DatabaseManagerProvider.getDatabaseManager().setBinaryInputDatabaseSize(10);
+		DatabaseManagerProvider.getDatabaseManager().setAnalogInputDatabaseSize(10);
+		DatabaseManagerProvider.getDatabaseManager().setBinaryOutputDatabaseSize(10);
 		
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new HeartbeatMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputEventMessageHandler());
+		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryOutputMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new AnalogInputMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new AnalogInputEventMessageHandler());
 		
@@ -73,6 +78,7 @@ public class App {
 		registry.register("binaryInputEvent", BinaryInputEventMessage.class);
 		registry.register("analogInputEvent", AnalogInputEventMessage.class);
 		registry.register("binaryInputPoint", BinaryInputDataPoint.class, BinaryInputMessage.class);
+		registry.register("binaryOutputPoint", BinaryOutputDataPoint.class, BinaryOutputMessage.class);
 		registry.register("analogInputPoint", AnalogInputDataPoint.class, AnalogInputMessage.class);
 		
 		OutstationFactory outstationFactory = new OutstationFactory();

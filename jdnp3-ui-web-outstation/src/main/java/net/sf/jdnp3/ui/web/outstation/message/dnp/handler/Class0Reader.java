@@ -19,42 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
-
-import org.apache.commons.beanutils.BeanUtils;
 
 public class Class0Reader implements Class0ReadRequestHandler {
+	private AnalogInputStaticReader analogInputStaticReader = new AnalogInputStaticReader();
+	private BinaryInputStaticReader binaryInputStaticReader = new BinaryInputStaticReader();
+	private BinaryOutputStaticReader binaryOutputStaticReader = new BinaryOutputStaticReader();
+	
 	public List<ObjectInstance> doReadClass() {
 		List<ObjectInstance> points = new ArrayList<>();
-		
-		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
-		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
-			BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
-			try {
-				BeanUtils.copyProperties(binaryInputStaticObjectInstance, binaryDataPoint);
-				binaryInputStaticObjectInstance.setRequestedType(binaryDataPoint.getStaticType());
-				points.add(binaryInputStaticObjectInstance);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		List<AnalogInputDataPoint> analogDataPoints = DatabaseManagerProvider.getDatabaseManager().getAnalogDataPoints();
-		for (AnalogInputDataPoint analogDataPoint : analogDataPoints) {
-			AnalogInputStaticObjectInstance analogInputStaticObjectInstance = new AnalogInputStaticObjectInstance();
-			try {
-				BeanUtils.copyProperties(analogInputStaticObjectInstance, analogDataPoint);
-				analogInputStaticObjectInstance.setRequestedType(analogDataPoint.getStaticType());
-				points.add(analogInputStaticObjectInstance);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		points.addAll(binaryInputStaticReader.doReadStatics());
+		points.addAll(analogInputStaticReader.doReadStatics());
+		points.addAll(binaryOutputStaticReader.doReadStatics());
 
 		return points;
 	}

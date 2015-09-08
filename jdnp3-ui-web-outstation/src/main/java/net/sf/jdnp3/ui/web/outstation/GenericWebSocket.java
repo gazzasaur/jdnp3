@@ -14,6 +14,7 @@ import javax.websocket.server.ServerEndpoint;
 
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseListener;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
@@ -39,11 +40,15 @@ public class GenericWebSocket implements DatabaseListener {
 		this.session = session;
 		DatabaseManagerProvider.getDatabaseManager().addDatabaseListener(this);
 		
-		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
+		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryInputDataPoints();
 		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
 			this.valueChanged(binaryDataPoint);
 		}
-		List<AnalogInputDataPoint> analogDataPoints = DatabaseManagerProvider.getDatabaseManager().getAnalogDataPoints();
+		List<BinaryOutputDataPoint> binaryOutputDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryOutputDataPoints();
+		for (BinaryOutputDataPoint binaryDataPoint : binaryOutputDataPoints) {
+			this.valueChanged(binaryDataPoint);
+		}
+		List<AnalogInputDataPoint> analogDataPoints = DatabaseManagerProvider.getDatabaseManager().getAnalogInputDataPoints();
 		for (AnalogInputDataPoint analogDataPoint : analogDataPoints) {
 			this.valueChanged(analogDataPoint);
 		}

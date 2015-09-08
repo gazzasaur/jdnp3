@@ -28,7 +28,7 @@ import org.apache.commons.beanutils.BeanUtils;
 public class BinaryInputStaticReader implements BinaryInputStaticReadRequestHandler {
 	public List<BinaryInputStaticObjectInstance> doReadStatics(long startIndex, long stopIndex) {
 		List<BinaryInputStaticObjectInstance> points = new ArrayList<>();
-		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
+		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryInputDataPoints();
 
 		for (long i = startIndex; i <= stopIndex; ++i) {
 			BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
@@ -44,7 +44,7 @@ public class BinaryInputStaticReader implements BinaryInputStaticReadRequestHand
 
 	public List<BinaryInputStaticObjectInstance> doReadStatics() {
 		List<BinaryInputStaticObjectInstance> points = new ArrayList<>();
-		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
+		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryInputDataPoints();
 
 		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
 			BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();

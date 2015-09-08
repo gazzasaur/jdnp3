@@ -46,8 +46,20 @@ public class ObjectTypeConstants {
 	public static ObjectType ANALOG_INPUT_EVENT_FLOAT64_WITHOUT_TIME = new ObjectType(32, 6);
 	public static ObjectType ANALOG_INPUT_EVENT_FLOAT32_ABSOLUTE_TIME = new ObjectType(32, 7);
 	public static ObjectType ANALOG_INPUT_EVENT_FLOAT64_ABSOLUTE_TIME = new ObjectType(32, 8);
+	
+	public static ObjectType BINARY_OUTPUT_STATIC_ANY = new ObjectType(10, 0);
+	public static ObjectType BINARY_OUTPUT_STATIC_PACKED = new ObjectType(10, 1);
+	public static ObjectType BINARY_OUTPUT_STATIC_FLAGS = new ObjectType(10, 2);
+
+	public static ObjectType BINARY_OUTPUT_EVENT_ANY = new ObjectType(11, 0);
+	public static ObjectType BINARY_OUTPUT_EVENT_WITHOUT_TIME = new ObjectType(11, 1);
+	public static ObjectType BINARY_OUTPUT_EVENT_ABSOLUTE_TIME = new ObjectType(11, 2);
 
 	public static ObjectType CROB = new ObjectType(12, 1);
+
+	public static ObjectType CROB_EVENT_ANY = new ObjectType(13, 0);
+	public static ObjectType CROB_EVENT_WITHOUT_TIME = new ObjectType(13, 1);
+	public static ObjectType CROB_EVENT_ABSOLUTE_TIME = new ObjectType(13, 2);
 
 	public static ObjectType SYNCHRONISED_CTO = new ObjectType(51, 1);
 	public static ObjectType UNSYNCHRONISED_CTO = new ObjectType(51, 2);

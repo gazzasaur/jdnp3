@@ -23,6 +23,7 @@ import javax.faces.bean.RequestScoped;
 
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 
@@ -30,13 +31,18 @@ import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 @RequestScoped
 public class UiPointDatabase {
 	public List<UiPoint> getBinaryInputDataPoints() {
-		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryDataPoints();
+		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryInputDataPoints();
 		return convert(binaryDataPoints);
 	}
 
 	public List<UiPoint> getAnalogInputDataPoints() {
-		List<AnalogInputDataPoint> analogDataPoints = DatabaseManagerProvider.getDatabaseManager().getAnalogDataPoints();
+		List<AnalogInputDataPoint> analogDataPoints = DatabaseManagerProvider.getDatabaseManager().getAnalogInputDataPoints();
 		return convert(analogDataPoints);
+	}
+
+	public List<UiPoint> getBinaryOutputDataPoints() {
+		List<BinaryOutputDataPoint> dataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryOutputDataPoints();
+		return convert(dataPoints);
 	}
 
 	private List<UiPoint> convert(List<? extends DataPoint> dataPoints) {

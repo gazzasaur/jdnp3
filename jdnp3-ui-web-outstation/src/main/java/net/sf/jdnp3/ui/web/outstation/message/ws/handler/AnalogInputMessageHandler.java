@@ -42,7 +42,7 @@ public class AnalogInputMessageHandler implements MessageHandler {
 		AnalogInputDataPoint analogDataPoint = new AnalogInputDataPoint();
 		try {
 			BeanUtils.copyProperties(analogDataPoint, analogInputMessage);
-			DatabaseManagerProvider.getDatabaseManager().setAnalogDataPoint(analogDataPoint);
+			DatabaseManagerProvider.getDatabaseManager().setAnalogInputDataPoint(analogDataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

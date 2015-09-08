@@ -31,6 +31,6 @@ public class AnalogInputEventMessageHandler implements MessageHandler {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 		AnalogInputEventMessage analogInputEventMessage = (AnalogInputEventMessage) message;
-		DatabaseManagerProvider.getDatabaseManager().triggerAnalogEvent(analogInputEventMessage.getIndex());
+		DatabaseManagerProvider.getDatabaseManager().triggerAnalogInputEvent(analogInputEventMessage.getIndex());
 	}
 }

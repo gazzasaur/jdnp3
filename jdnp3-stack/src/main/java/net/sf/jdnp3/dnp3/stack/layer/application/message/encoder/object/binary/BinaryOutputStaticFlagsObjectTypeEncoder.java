@@ -16,7 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_STATIC_FLAGS;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_OUTPUT_STATIC_FLAGS;
 
 import java.util.List;
 
@@ -24,12 +24,12 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryOutputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
-public class BinaryInputStaticFlagsObjectTypeEncoder implements ObjectTypeEncoder {
+public class BinaryOutputStaticFlagsObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_INPUT_STATIC_FLAGS);
+		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_OUTPUT_STATIC_FLAGS);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
@@ -37,7 +37,7 @@ public class BinaryInputStaticFlagsObjectTypeEncoder implements ObjectTypeEncode
 			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
 
-		BinaryInputStaticObjectInstance specificInstance = (BinaryInputStaticObjectInstance) objectInstance;
+		BinaryOutputStaticObjectInstance specificInstance = (BinaryOutputStaticObjectInstance) objectInstance;
 		data.add(BinaryFlagsEncoder.encode(specificInstance));
 	}
 }

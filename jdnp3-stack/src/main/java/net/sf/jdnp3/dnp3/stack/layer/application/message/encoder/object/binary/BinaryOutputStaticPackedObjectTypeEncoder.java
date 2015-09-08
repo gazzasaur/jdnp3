@@ -16,7 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_STATIC_FLAGS;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_OUTPUT_STATIC_PACKED;
 
 import java.util.List;
 
@@ -24,20 +24,30 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryOutputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
-public class BinaryInputStaticFlagsObjectTypeEncoder implements ObjectTypeEncoder {
+public class BinaryOutputStaticPackedObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_INPUT_STATIC_FLAGS);
+		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_OUTPUT_STATIC_PACKED);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
 		if (!this.canEncode(context.getFunctionCode(), context.getObjectType())) {
 			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
-
-		BinaryInputStaticObjectInstance specificInstance = (BinaryInputStaticObjectInstance) objectInstance;
-		data.add(BinaryFlagsEncoder.encode(specificInstance));
+		
+		long bitIndex = (context.getCurrentIndex() - context.getStartIndex()) % 8;
+		if (bitIndex == 0) {
+			data.add((byte) 0);
+		}
+		
+		byte value = data.get(data.size() - 1);
+		
+		BinaryOutputStaticObjectInstance specificObjectInstance = (BinaryOutputStaticObjectInstance) objectInstance;
+		if (specificObjectInstance.isActive()) {
+			value |= (1 << bitIndex);
+			data.set(data.size() - 1, value);
+		}
 	}
 }

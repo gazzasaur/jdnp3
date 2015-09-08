@@ -30,13 +30,13 @@ public class DatabaseManager {
 	private List<EventListener> eventListeners = new ArrayList<>();
 	private List<DatabaseListener> databaseListeners = new ArrayList<>();
 	
-	public void setAnalogDatabaseSize(int size) {
+	public void setAnalogInputDatabaseSize(int size) {
 		synchronized (database) {
-			while (database.getAnalogDataPoints().size() > size) {
-				database.removeAnalogDataPoint();
+			while (database.getAnalogInputDataPoints().size() > size) {
+				database.removeAnalogInputDataPoint();
 			}
-			while (database.getAnalogDataPoints().size() < size) {
-				database.addAnalogDataPoint();
+			while (database.getAnalogInputDataPoints().size() < size) {
+				database.addAnalogInputDataPoint();
 			}
 		}
 		for (DatabaseListener databaseListener : databaseListeners) {
@@ -44,13 +44,13 @@ public class DatabaseManager {
 		}
 	}
 	
-	public void setBinaryDatabaseSize(int size) {
+	public void setBinaryInputDatabaseSize(int size) {
 		synchronized (database) {
-			while (database.getBinaryDataPoints().size() > size) {
-				database.removeBinaryDataPoint();
+			while (database.getBinaryInputDataPoints().size() > size) {
+				database.removeBinaryInputDataPoint();
 			}
-			while (database.getBinaryDataPoints().size() < size) {
-				database.addBinaryDataPoint();
+			while (database.getBinaryInputDataPoints().size() < size) {
+				database.addBinaryInputDataPoint();
 			}
 		}
 		for (DatabaseListener databaseListener : databaseListeners) {
@@ -58,19 +58,37 @@ public class DatabaseManager {
 		}
 	}
 	
-	public List<AnalogInputDataPoint> getAnalogDataPoints() {
-		return Cloner.standard().deepClone(database.getAnalogDataPoints());
-	}
-	
-	public List<BinaryInputDataPoint> getBinaryDataPoints() {
-		return Cloner.standard().deepClone(database.getBinaryDataPoints());
-	}
-	
-	public void setAnalogDataPoint(AnalogInputDataPoint analogDataPoint) {
+	public void setBinaryOutputDatabaseSize(int size) {
 		synchronized (database) {
-			database.setAnalogDataPoint(Cloner.standard().deepClone(analogDataPoint));
+			while (database.getBinaryOutputDataPoints().size() > size) {
+				database.removeBinaryOutputDataPoint();
+			}
+			while (database.getBinaryOutputDataPoints().size() < size) {
+				database.addBinaryOutputDataPoint();
+			}
 		}
-		if (analogDataPoint.getIndex() < database.getAnalogDataPoints().size()) {
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.modelChanged();
+		}
+	}
+	
+	public List<AnalogInputDataPoint> getAnalogInputDataPoints() {
+		return Cloner.standard().deepClone(database.getAnalogInputDataPoints());
+	}
+	
+	public List<BinaryInputDataPoint> getBinaryInputDataPoints() {
+		return Cloner.standard().deepClone(database.getBinaryInputDataPoints());
+	}
+	
+	public List<BinaryOutputDataPoint> getBinaryOutputDataPoints() {
+		return Cloner.standard().deepClone(database.getBinaryOutputDataPoints());
+	}
+	
+	public void setAnalogInputDataPoint(AnalogInputDataPoint analogDataPoint) {
+		synchronized (database) {
+			database.setAnalogInputDataPoint(Cloner.standard().deepClone(analogDataPoint));
+		}
+		if (analogDataPoint.getIndex() < database.getAnalogInputDataPoints().size()) {
 			for (DatabaseListener databaseListener : databaseListeners) {
 				databaseListener.valueChanged(analogDataPoint);
 			}
@@ -79,11 +97,11 @@ public class DatabaseManager {
 		}
 	}
 	
-	public void setBinaryDataPoint(BinaryInputDataPoint binaryDataPoint) {
+	public void setBinaryInputDataPoint(BinaryInputDataPoint binaryDataPoint) {
 		synchronized (database) {
-			database.setBinaryDataPoint(Cloner.standard().deepClone(binaryDataPoint));
+			database.setBinaryInputDataPoint(Cloner.standard().deepClone(binaryDataPoint));
 		}
-		if (binaryDataPoint.getIndex() < database.getBinaryDataPoints().size()) {
+		if (binaryDataPoint.getIndex() < database.getBinaryInputDataPoints().size()) {
 			for (DatabaseListener databaseListener : databaseListeners) {
 				databaseListener.valueChanged(binaryDataPoint);
 			}
@@ -91,16 +109,29 @@ public class DatabaseManager {
 			logger.warn("Cannot write binary data point of index: " + binaryDataPoint.getIndex());
 		}
 	}
+	
+	public void setBinaryOutputDataPoint(BinaryOutputDataPoint binaryDataPoint) {
+		synchronized (database) {
+			database.setBinaryOutputDataPoint(Cloner.standard().deepClone(binaryDataPoint));
+		}
+		if (binaryDataPoint.getIndex() < database.getBinaryOutputDataPoints().size()) {
+			for (DatabaseListener databaseListener : databaseListeners) {
+				databaseListener.valueChanged(binaryDataPoint);
+			}
+		} else {
+			logger.warn("Cannot write binary output data point of index: " + binaryDataPoint.getIndex());
+		}
+	}
 
-	public void triggerAnalogEvent(long index) {
-		AnalogInputDataPoint analogDataPoint = database.getAnalogDataPoints().get((int) index);
+	public void triggerAnalogInputEvent(long index) {
+		AnalogInputDataPoint analogDataPoint = database.getAnalogInputDataPoints().get((int) index);
 		for (EventListener eventListener : eventListeners) {
 			eventListener.eventReceived(analogDataPoint);
 		}
 	}
 
-	public void triggerBinaryEvent(long index) {
-		BinaryInputDataPoint binaryDataPoint = database.getBinaryDataPoints().get((int) index);
+	public void triggerBinaryInputEvent(long index) {
+		BinaryInputDataPoint binaryDataPoint = database.getBinaryInputDataPoints().get((int) index);
 		for (EventListener eventListener : eventListeners) {
 			eventListener.eventReceived(binaryDataPoint);
 		}

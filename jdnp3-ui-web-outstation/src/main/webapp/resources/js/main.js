@@ -5,11 +5,13 @@ var webSocketMessageQueue = [];
 
 var MESSAGE_HANDLER_REGISTRY = {};
 MESSAGE_HANDLER_REGISTRY.heartbeat = function() {};
-MESSAGE_HANDLER_REGISTRY.binaryInputPoint = jdnp3.binary.setBinary;
+MESSAGE_HANDLER_REGISTRY.binaryInputPoint = jdnp3.binary.setBinaryInput;
+MESSAGE_HANDLER_REGISTRY.binaryOutputPoint = jdnp3.binary.setBinaryOutput;
 MESSAGE_HANDLER_REGISTRY.analogInputPoint = jdnp3.analog.setAnalog;
 
 var ATTRIBUTE_CHANGE_HANDLER_REGISTRY = {};
-ATTRIBUTE_CHANGE_HANDLER_REGISTRY.bi = jdnp3.binary.getBinary;
+ATTRIBUTE_CHANGE_HANDLER_REGISTRY.bi = jdnp3.binary.getBinaryInput;
+ATTRIBUTE_CHANGE_HANDLER_REGISTRY.bo = jdnp3.binary.getBinaryOutput;
 ATTRIBUTE_CHANGE_HANDLER_REGISTRY.ai = jdnp3.analog.getAnalog;
 
 var EVENT_MESSAGE_REGISTRY = {};

@@ -17,20 +17,34 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 
 import net.sf.jdnp3.ui.web.outstation.GenericWebSocket;
 import net.sf.jdnp3.ui.web.outstation.MessageHandler;
+import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputEventMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
-public class BinaryInputEventMessageHandler implements MessageHandler {
+import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class BinaryOutputMessageHandler implements MessageHandler {
+	private Logger logger = LoggerFactory.getLogger(BinaryOutputMessageHandler.class);
+	
 	public boolean canHandle(Message message) {
-		return message instanceof BinaryInputEventMessage;
+		return message instanceof BinaryOutputMessage;
 	}
 
 	public void processMessage(GenericWebSocket genericWebSocket, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
-		BinaryInputEventMessage binaryInputEventMessage = (BinaryInputEventMessage) message;
-		DatabaseManagerProvider.getDatabaseManager().triggerBinaryInputEvent(binaryInputEventMessage.getIndex());
+		BinaryOutputMessage binaryOutputMessage = (BinaryOutputMessage) message;
+
+		BinaryOutputDataPoint binaryDataPoint = new BinaryOutputDataPoint();
+		try {
+			BeanUtils.copyProperties(binaryDataPoint, binaryOutputMessage);
+			DatabaseManagerProvider.getDatabaseManager().setBinaryOutputDataPoint(binaryDataPoint);
+		} catch (Exception e) {
+			logger.error("Failed to copy object.", e);
+		}
 	}
 }

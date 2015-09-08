@@ -10,7 +10,7 @@ jdnp3.binary.ATTRIBUTE_MAP.remoteForced = 'rf';
 jdnp3.binary.ATTRIBUTE_MAP.chatterFilter = 'cf';
 jdnp3.binary.ATTRIBUTE_MAP.communicationsLost = 'cl';
 
-jdnp3.binary.getBinary = function(id) {
+jdnp3.binary.getBinaryInput = function(id) {
 	if (!/bi-(\d+)/g.exec(id)) {
 		throw "Element " + id + " is not a valid binary input.";
 	}
@@ -57,7 +57,7 @@ jdnp3.binary.getBinary = function(id) {
 	return data;
 }
 
-jdnp3.binary.setBinary = function(binaryDataPoint) {
+jdnp3.binary.setBinaryInput = function(binaryDataPoint) {
 	for (var property in binaryDataPoint) {
 		var id = 'bi-' + binaryDataPoint.index;
 		if (binaryDataPoint.hasOwnProperty(property) && property in jdnp3.binary.ATTRIBUTE_MAP) {
@@ -91,6 +91,36 @@ jdnp3.binary.setBinary = function(binaryDataPoint) {
 			$('[id$=' + id + ']').prop('checked', 'true');
 		} else {
 			$('[id$=' + id + ']').prop('checked', '');
+		}
+	}
+}
+
+jdnp3.binary.getBinaryOutput = function(id) {
+	if (!/bo-(\d+)/g.exec(id)) {
+		throw "Element " + id + " is not a valid binary input.";
+	}
+	
+	var index = getDataPointIndex(id);
+	var data = {
+			'type': 'binaryOutputPoint',
+			'index': index,
+	};
+	 
+	if (!$('[id$=bo-' + index + '-state]').length) {
+		throw "Element " + id + " does not exist.";
+	}
+	for (var property in jdnp3.binary.ATTRIBUTE_MAP) {
+		data[property] = $('[id$=bo-' + index + '-' + jdnp3.binary.ATTRIBUTE_MAP[property] + ']').prop('checked')  ? true : false;
+	}
+	
+	return data;
+}
+
+jdnp3.binary.setBinaryOutput = function(binaryDataPoint) {
+	for (var property in binaryDataPoint) {
+		var id = 'bo-' + binaryDataPoint.index;
+		if (binaryDataPoint.hasOwnProperty(property) && property in jdnp3.binary.ATTRIBUTE_MAP) {
+			$("[id$=" + id + "-" + jdnp3.binary.ATTRIBUTE_MAP[property] + "]").prop('checked', binaryDataPoint[property])
 		}
 	}
 }

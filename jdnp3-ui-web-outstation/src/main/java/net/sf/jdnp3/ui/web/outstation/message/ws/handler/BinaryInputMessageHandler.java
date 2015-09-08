@@ -42,7 +42,7 @@ public class BinaryInputMessageHandler implements MessageHandler {
 		BinaryInputDataPoint binaryDataPoint = new BinaryInputDataPoint();
 		try {
 			BeanUtils.copyProperties(binaryDataPoint, binaryInputMessage);
-			DatabaseManagerProvider.getDatabaseManager().setBinaryDataPoint(binaryDataPoint);
+			DatabaseManagerProvider.getDatabaseManager().setBinaryInputDataPoint(binaryDataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

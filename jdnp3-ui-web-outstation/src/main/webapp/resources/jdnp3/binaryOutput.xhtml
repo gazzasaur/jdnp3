@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:co="http://java.sun.com/jsf/composite"
+	xmlns:j="http://sf.net/jdnp3/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<co:interface>
+	<co:attribute name="id" />
+</co:interface>
+
+<co:implementation>
+	<ui:composition>
+		<div style="font-size: 0px;">
+			<j:slideswitch id="bo-#{cc.attrs.point.index}-state" title="State" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'active', !jdnp3.binary.getBinaryOutput('bo-#{cc.attrs.point.index}').active)" disabled="true" />
+			<j:dipswitch id="bo-#{cc.attrs.point.index}-lf" title="Local Forced" abbreviation="LF" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'localForced', !jdnp3.binary.getBinaryOutput('bo-#{cc.attrs.point.index}').localForced)" disabled="true" />
+			<j:dipswitch id="bo-#{cc.attrs.point.index}-rf" title="Remote Forced" abbreviation="RF" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'remoteForced', !jdnp3.binary.getBinaryOutput('bo-#{cc.attrs.point.index}').remoteForced)" disabled="true" />
+			<j:dipswitch id="bo-#{cc.attrs.point.index}-cl" title="Communications Lost" abbreviation="CL" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'communicationsLost', !jdnp3.binary.getBinaryOutput('bo-#{cc.attrs.point.index}').communicationsLost)" disabled="true" />
+			<j:dipswitch id="bo-#{cc.attrs.point.index}-rs" title="Restart" abbreviation="RS" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'restart', !jdnp3.binary.getBinaryOutput('bo-#{cc.attrs.point.index}').restart)" disabled="true" />
+			<j:dipswitch id="bo-#{cc.attrs.point.index}-ol" title="Online" abbreviation="OL" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'online', !jdnp3.binary.getBinaryOutput('bo-#{cc.attrs.point.index}').online)" disabled="true" />
+		</div>
+	</ui:composition>
+</co:implementation>
+</html>

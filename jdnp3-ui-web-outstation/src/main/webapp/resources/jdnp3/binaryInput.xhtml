@@ -16,16 +16,14 @@
 
 <co:implementation>
 	<ui:composition>
-		<h:outputScript library="js" name="binary.js" />
-	
 		<div style="font-size: 0px;">
-			<j:slideswitch id="bi-#{cc.attrs.point.index}-state" title="State" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'active', !jdnp3.binary.getBinary('bi-#{cc.attrs.point.index}').active)" disabled="true" />
-			<j:dipswitch id="bi-#{cc.attrs.point.index}-cf" title="Chatter Filter" abbreviation="CF" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'chatterFilter', !jdnp3.binary.getBinary('bi-#{cc.attrs.point.index}').chatterFilter)" disabled="true" />
-			<j:dipswitch id="bi-#{cc.attrs.point.index}-lf" title="Local Forced" abbreviation="LF" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'localForced', !jdnp3.binary.getBinary('bi-#{cc.attrs.point.index}').localForced)" disabled="true" />
-			<j:dipswitch id="bi-#{cc.attrs.point.index}-rf" title="Remote Forced" abbreviation="RF" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'remoteForced', !jdnp3.binary.getBinary('bi-#{cc.attrs.point.index}').remoteForced)" disabled="true" />
-			<j:dipswitch id="bi-#{cc.attrs.point.index}-cl" title="Communications Lost" abbreviation="CL" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'communicationsLost', !jdnp3.binary.getBinary('bi-#{cc.attrs.point.index}').communicationsLost)" disabled="true" />
-			<j:dipswitch id="bi-#{cc.attrs.point.index}-rs" title="Restart" abbreviation="RS" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'restart', !jdnp3.binary.getBinary('bi-#{cc.attrs.point.index}').restart)" disabled="true" />
-			<j:dipswitch id="bi-#{cc.attrs.point.index}-ol" title="Online" abbreviation="OL" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'online', !jdnp3.binary.getBinary('bi-#{cc.attrs.point.index}').online)" disabled="true" />
+			<j:slideswitch id="bi-#{cc.attrs.point.index}-state" title="State" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'active', !jdnp3.binary.getBinaryInput('bi-#{cc.attrs.point.index}').active)" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.point.index}-cf" title="Chatter Filter" abbreviation="CF" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'chatterFilter', !jdnp3.binary.getBinaryInput('bi-#{cc.attrs.point.index}').chatterFilter)" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.point.index}-lf" title="Local Forced" abbreviation="LF" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'localForced', !jdnp3.binary.getBinaryInput('bi-#{cc.attrs.point.index}').localForced)" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.point.index}-rf" title="Remote Forced" abbreviation="RF" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'remoteForced', !jdnp3.binary.getBinaryInput('bi-#{cc.attrs.point.index}').remoteForced)" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.point.index}-cl" title="Communications Lost" abbreviation="CL" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'communicationsLost', !jdnp3.binary.getBinaryInput('bi-#{cc.attrs.point.index}').communicationsLost)" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.point.index}-rs" title="Restart" abbreviation="RS" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'restart', !jdnp3.binary.getBinaryInput('bi-#{cc.attrs.point.index}').restart)" disabled="true" />
+			<j:dipswitch id="bi-#{cc.attrs.point.index}-ol" title="Online" abbreviation="OL" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'online', !jdnp3.binary.getBinaryInput('bi-#{cc.attrs.point.index}').online)" disabled="true" />
 			
 			<div class="menu-button" style="font-size: 14px; display: inline-block; width: 34px; height: 42px; overflow: hidden;">
 				<p:commandButton style="width: 100%; height: 100%" id="bi-options#{cc.attrs.point.index}" value="" type="button" icon="ui-icon-extlink" />

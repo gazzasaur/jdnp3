@@ -20,6 +20,7 @@ import java.util.Map;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryOutputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 import org.slf4j.Logger;
@@ -31,6 +32,7 @@ public class ObjectInstanceTypeRationaliser {
 	@SuppressWarnings("serial")
 	private Map<Class<? extends ObjectInstance>, ObjectInstanceTypeRationaliserHelper> rationaliserHelpers = new HashMap<Class<? extends ObjectInstance>, ObjectInstanceTypeRationaliserHelper>() {{
 		this.put(BinaryInputStaticObjectInstance.class, new BinaryInputStaticTypeRationaliserHelper());
+		this.put(BinaryOutputStaticObjectInstance.class, new BinaryOutputStaticTypeRationaliserHelper());
 		this.put(AnalogInputStaticObjectInstance.class, new AnalogInputStaticTypeRationaliserHelper());
 	}};
 	

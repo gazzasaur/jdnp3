@@ -21,54 +21,79 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
-	private List<AnalogInputDataPoint> analogDataPoints = new ArrayList<>();
-	private List<BinaryInputDataPoint> binaryDataPoints = new ArrayList<>();
+	private List<AnalogInputDataPoint> analogInputDataPoints = new ArrayList<>();
+	private List<BinaryInputDataPoint> binaryInputDataPoints = new ArrayList<>();
+	private List<BinaryOutputDataPoint> binaryOutputDataPoints = new ArrayList<>();
 
-	public List<AnalogInputDataPoint> getAnalogDataPoints() {
-		return unmodifiableList(analogDataPoints);
+	public List<AnalogInputDataPoint> getAnalogInputDataPoints() {
+		return unmodifiableList(analogInputDataPoints);
 	}
 
-	public List<BinaryInputDataPoint> getBinaryDataPoints() {
-		return unmodifiableList(binaryDataPoints);
+	public List<BinaryInputDataPoint> getBinaryInputDataPoints() {
+		return unmodifiableList(binaryInputDataPoints);
+	}
+
+	public List<BinaryOutputDataPoint> getBinaryOutputDataPoints() {
+		return unmodifiableList(binaryOutputDataPoints);
 	}
 	
-	public void addAnalogDataPoint() {
+	public void addAnalogInputDataPoint() {
 		AnalogInputDataPoint analogDataPoint = new AnalogInputDataPoint();
-		analogDataPoint.setIndex(analogDataPoints.size());
-		analogDataPoint.setName("Point " + analogDataPoints.size());
-		analogDataPoints.add(analogDataPoint);
+		analogDataPoint.setIndex(analogInputDataPoints.size());
+		analogDataPoint.setName("Point " + analogInputDataPoints.size());
+		analogInputDataPoints.add(analogDataPoint);
 	}
 	
-	public void addBinaryDataPoint() {
+	public void addBinaryInputDataPoint() {
 		BinaryInputDataPoint binaryDataPoint = new BinaryInputDataPoint();
-		binaryDataPoint.setIndex(binaryDataPoints.size());
-		binaryDataPoint.setName("Point " + binaryDataPoints.size());
-		binaryDataPoints.add(binaryDataPoint);
+		binaryDataPoint.setIndex(binaryInputDataPoints.size());
+		binaryDataPoint.setName("Point " + binaryInputDataPoints.size());
+		binaryInputDataPoints.add(binaryDataPoint);
 	}
 	
-	public void setAnalogDataPoint(AnalogInputDataPoint analogDataPoint) {
-		if (analogDataPoint.getIndex() < analogDataPoints.size()) {
-			analogDataPoint.setName(analogDataPoints.get((int) analogDataPoint.getIndex()).getName());
-			analogDataPoints.set((int) analogDataPoint.getIndex(), analogDataPoint);
+	public void addBinaryOutputDataPoint() {
+		BinaryOutputDataPoint binaryDataPoint = new BinaryOutputDataPoint();
+		binaryDataPoint.setIndex(binaryOutputDataPoints.size());
+		binaryDataPoint.setName("Point " + binaryOutputDataPoints.size());
+		binaryOutputDataPoints.add(binaryDataPoint);
+	}
+	
+	public void setAnalogInputDataPoint(AnalogInputDataPoint analogInputDataPoint) {
+		if (analogInputDataPoint.getIndex() < analogInputDataPoints.size()) {
+			analogInputDataPoint.setName(analogInputDataPoints.get((int) analogInputDataPoint.getIndex()).getName());
+			analogInputDataPoints.set((int) analogInputDataPoint.getIndex(), analogInputDataPoint);
 		}
 	}
 	
-	public void setBinaryDataPoint(BinaryInputDataPoint binaryDataPoint) {
-		if (binaryDataPoint.getIndex() < binaryDataPoints.size()) {
-			binaryDataPoint.setName(binaryDataPoints.get((int) binaryDataPoint.getIndex()).getName());
-			binaryDataPoints.set((int) binaryDataPoint.getIndex(), binaryDataPoint);
+	public void setBinaryInputDataPoint(BinaryInputDataPoint binaryInputDataPoint) {
+		if (binaryInputDataPoint.getIndex() < binaryInputDataPoints.size()) {
+			binaryInputDataPoint.setName(binaryInputDataPoints.get((int) binaryInputDataPoint.getIndex()).getName());
+			binaryInputDataPoints.set((int) binaryInputDataPoint.getIndex(), binaryInputDataPoint);
 		}
 	}
 	
-	public void removeAnalogDataPoint() {
-		if (analogDataPoints.size() > 0) {
-			analogDataPoints.remove(analogDataPoints.size() - 1);
+	public void setBinaryOutputDataPoint(BinaryOutputDataPoint binaryDataPoint) {
+		if (binaryDataPoint.getIndex() < binaryInputDataPoints.size()) {
+			binaryDataPoint.setName(binaryInputDataPoints.get((int) binaryDataPoint.getIndex()).getName());
+			binaryOutputDataPoints.set((int) binaryDataPoint.getIndex(), binaryDataPoint);
 		}
 	}
 	
-	public void removeBinaryDataPoint() {
-		if (binaryDataPoints.size() > 0) {
-			binaryDataPoints.remove(binaryDataPoints.size() - 1);
+	public void removeAnalogInputDataPoint() {
+		if (analogInputDataPoints.size() > 0) {
+			analogInputDataPoints.remove(analogInputDataPoints.size() - 1);
+		}
+	}
+	
+	public void removeBinaryInputDataPoint() {
+		if (binaryInputDataPoints.size() > 0) {
+			binaryInputDataPoints.remove(binaryInputDataPoints.size() - 1);
+		}
+	}
+	
+	public void removeBinaryOutputDataPoint() {
+		if (binaryOutputDataPoints.size() > 0) {
+			binaryOutputDataPoints.remove(binaryOutputDataPoints.size() - 1);
 		}
 	}
 }

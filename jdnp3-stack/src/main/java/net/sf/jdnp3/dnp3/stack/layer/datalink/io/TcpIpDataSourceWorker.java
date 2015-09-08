@@ -70,6 +70,7 @@ public class TcpIpDataSourceWorker implements Runnable {
 					SelectionKey selectionKey = iterator.next();
 					SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
 					ConcurrentLinkedDeque<Byte> dataBuffer = (ConcurrentLinkedDeque<Byte>) selectionKey.attachment();
+					// FIXME IMPL If this fails the key should still be deleted.
 					int count = socketChannel.read(byteBuffer);
 					if (count < 0) {
 						selectionKey.cancel();
@@ -92,17 +93,7 @@ public class TcpIpDataSourceWorker implements Runnable {
 				}
 			} catch (Exception e) {
 				logger.error("Failed during read loop.", e);
-				tryCloseSelector();
-				return;
 			}
-		}
-	}
-
-	private void tryCloseSelector() {
-		try {
-			selector.close();
-		} catch (IOException e) {
-			logger.error("Failed to close selector.", e);
 		}
 	}
 }
