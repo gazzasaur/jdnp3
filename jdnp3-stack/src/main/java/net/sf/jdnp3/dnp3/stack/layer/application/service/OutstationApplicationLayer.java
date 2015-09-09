@@ -48,11 +48,18 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayerImpl;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class OutstationApplicationLayer implements ApplicationLayer {
+	private Logger logger = LoggerFactory.getLogger(OutstationApplicationLayer.class);
+	
 	private List<EventObjectInstance> pendingEvents = new ArrayList<>();
 	private List<OutstationApplicationRequestHandler> outstationRequestHandlers = new ArrayList<>();
 	
 	private DataLinkLayer dataLinkLayer = null;
+	private InternalStatusProvider internalStatusProvider = null;
 	private TransportLayer transportLayer = new TransportLayerImpl();
 	private OutstationEventQueue eventQueue = new OutstationEventQueue();
 	
@@ -87,6 +94,10 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		this.decoder = decoder;
 	}
 	
+	public void setInternalStatusProvider(InternalStatusProvider internalStatusProvider) {
+		this.internalStatusProvider = internalStatusProvider;
+	}
+	
 	public void dataReceived(List<Byte> data) {
 		List<ObjectInstance> responseObjects = new ArrayList<>();
 		ApplicationFragmentRequest request = decoder.decode(data);
@@ -118,7 +129,14 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		ApplicationFragmentResponse response = new ApplicationFragmentResponse();
 		ApplicationFragmentResponseHeader applicationResponseHeader = response.getHeader();
 		applicationResponseHeader.setFunctionCode(FunctionCode.RESPONSE);
-		applicationResponseHeader.getInternalIndicatorField().setDeviceRestart(false);
+		if (internalStatusProvider != null) {
+			try {
+				BeanUtils.copyProperties(applicationResponseHeader.getInternalIndicatorField(), internalStatusProvider);
+			} catch (Exception e) {
+				applicationResponseHeader.getInternalIndicatorField().setDeviceTrouble(true);
+				logger.error("Cannot copy IIN properties.", e);
+			}
+		}
 		applicationResponseHeader.getApplicationControl().setConfirmationRequired(false);
 		applicationResponseHeader.getApplicationControl().setFirstFragmentOfMessage(true);
 		applicationResponseHeader.getApplicationControl().setFinalFragmentOfMessage(true);

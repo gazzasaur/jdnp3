@@ -40,6 +40,7 @@ public class GenericWebSocket implements DatabaseListener {
 		this.session = session;
 		DatabaseManagerProvider.getDatabaseManager().addDatabaseListener(this);
 		
+		this.valueChanged(DatabaseManagerProvider.getDatabaseManager().getInternalIndicatorsDataPoint());
 		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryInputDataPoints();
 		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
 			this.valueChanged(binaryDataPoint);

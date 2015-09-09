@@ -38,6 +38,6 @@ public class MessageHandlerRegistry {
 				return messageHandler;
 			}
 		}
-		throw new IllegalStateException("No message handler found.");
+		throw new IllegalStateException("No message handler found: " + message);
 	}
 }

@@ -18,6 +18,7 @@ package net.sf.jdnp3.ui.web.outstation.database;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,16 +73,41 @@ public class DatabaseManager {
 		}
 	}
 	
+	public InternalIndicatorsDataPoint getInternalIndicatorsDataPoint() {
+		synchronized (database) {
+			return Cloner.standard().deepClone(database.getIndicatorsDataPoint());
+		}
+	}
+	
 	public List<AnalogInputDataPoint> getAnalogInputDataPoints() {
-		return Cloner.standard().deepClone(database.getAnalogInputDataPoints());
+		synchronized (database) {
+			return Cloner.standard().deepClone(database.getAnalogInputDataPoints());
+		}
 	}
 	
 	public List<BinaryInputDataPoint> getBinaryInputDataPoints() {
-		return Cloner.standard().deepClone(database.getBinaryInputDataPoints());
+		synchronized (database) {
+			return Cloner.standard().deepClone(database.getBinaryInputDataPoints());
+		}
 	}
 	
 	public List<BinaryOutputDataPoint> getBinaryOutputDataPoints() {
-		return Cloner.standard().deepClone(database.getBinaryOutputDataPoints());
+		synchronized (database) {
+			return Cloner.standard().deepClone(database.getBinaryOutputDataPoints());
+		}
+	}
+	
+	public void setInternalIndicatorDataPoint(InternalIndicatorsDataPoint dataPoint) {
+		try {
+			synchronized (database) {
+				BeanUtils.copyProperties(database.getIndicatorsDataPoint(), dataPoint);
+			}
+		} catch (Exception e) {
+			logger.error("Cannot set IIN bits.", e);
+		}
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.valueChanged(dataPoint);
+		}
 	}
 	
 	public void setAnalogInputDataPoint(AnalogInputDataPoint analogDataPoint) {

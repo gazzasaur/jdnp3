@@ -21,9 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
+	private InternalIndicatorsDataPoint indicatorsDataPoint = new InternalIndicatorsDataPoint();
 	private List<AnalogInputDataPoint> analogInputDataPoints = new ArrayList<>();
 	private List<BinaryInputDataPoint> binaryInputDataPoints = new ArrayList<>();
 	private List<BinaryOutputDataPoint> binaryOutputDataPoints = new ArrayList<>();
+
+	public InternalIndicatorsDataPoint getIndicatorsDataPoint() {
+		return indicatorsDataPoint;
+	}
 
 	public List<AnalogInputDataPoint> getAnalogInputDataPoints() {
 		return unmodifiableList(analogInputDataPoints);

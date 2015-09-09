@@ -25,6 +25,7 @@ import net.sf.jdnp3.dnp3.service.outstation.adaptor.BinaryInputStaticReadRequest
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class0ReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class1ReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.CrobRequestAdaptor;
+import net.sf.jdnp3.dnp3.service.outstation.adaptor.InternalIndicatorWriteRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.BinaryInputStaticObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class0ObjectTypeDecoder;
@@ -40,15 +41,21 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFr
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationLayer;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationRequestHandler;
 
 public class OutstationFactory {
+	private InternalStatusProvider internalStatusProvider = null;
 	private List<ObjectTypeDecoder> decoders = new ArrayList<>();
 	private List<OutstationRequestHandlerAdaptor> adaptors = new ArrayList<>();
 	private Map<Class<? extends ObjectInstance>, ObjectType> mapping = new HashMap<>();
 	private List<OutstationRequestHandler> outstationRequestHandlers = new ArrayList<>();
 	private List<OutstationApplicationRequestHandler> outstationApplicationRequestHandlers = new ArrayList<>();
+	
+	public void setInternalStatusProvider(InternalStatusProvider internalStatusProvider) {
+		this.internalStatusProvider = internalStatusProvider;
+	}
 	
 	public void addOutstationRequestHandlerAdaptor(OutstationRequestHandlerAdaptor adaptor) {
 		adaptors.add(adaptor);
@@ -76,6 +83,7 @@ public class OutstationFactory {
 		adaptors.add(new Class0ReadRequestAdaptor());
 		adaptors.add(new Class1ReadRequestAdaptor());
 		adaptors.add(new CrobRequestAdaptor());
+		adaptors.add(new InternalIndicatorWriteRequestAdaptor());
 	}
 	
 	public void addStandardObjectTypeDecoders() {
@@ -100,13 +108,18 @@ public class OutstationFactory {
 		OutstationApplicationLayer outstationApplicationLayer = new OutstationApplicationLayer();
 		outstationApplicationLayer.setDecoder(applicationFragmentRequestDecoder);
 		
+		if (internalStatusProvider != null) {
+			outstationApplicationLayer.setInternalStatusProvider(internalStatusProvider);
+		}
+		internalStatusProvider = null;
+		
 		OutstationAdaptionLayer outstationAdaptionLayer = new OutstationAdaptionLayerImpl();
 		outstationApplicationLayer.addRequestHandler(outstationAdaptionLayer);
 		for (OutstationRequestHandlerAdaptor adaptor : adaptors) {
 			outstationAdaptionLayer.addOutstationRequestHandlerAdaptor(adaptor);
 		}
 		adaptors.clear();
-
+		
 		OutstationImpl outstation = new OutstationImpl();
 		outstation.setOutstationApplicationLayer(outstationApplicationLayer);
 		outstation.setOutstationAdaptionLayer(outstationAdaptionLayer);
