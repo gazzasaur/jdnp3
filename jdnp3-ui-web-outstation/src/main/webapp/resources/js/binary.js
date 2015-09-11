@@ -10,6 +10,22 @@ jdnp3.binary.ATTRIBUTE_MAP.remoteForced = 'rf';
 jdnp3.binary.ATTRIBUTE_MAP.chatterFilter = 'cf';
 jdnp3.binary.ATTRIBUTE_MAP.communicationsLost = 'cl';
 
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP = {}
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.SUCCESS = 'Success';
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.TIMEOUT = 'Timeout';
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.NO_SELECT = 'No Select';
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.FORMAT_ERROR = 'Format Error';
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.NOT_SUPPORTED = 'Not Supported';
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.ALREADY_ACTIVE = 'Already Active';
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.HARDWARE_ERROR = 'Hardware Error';
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.LOCAL = 'Local';
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.TOO_MANY_OBJS = 'Too Many Objects';
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.NOT_AUTHORIZED = 'Not Authorised';
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.AUTOMATION_INHIBIT = 'Automation Inhibit';
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.PROCESSING_LIMITED = 'Processing Limited';
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.OUT_OF_RANGE = 'Out of Range';
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.NON_PARTICIPATING = 'Non-Participating';
+
 jdnp3.binary.getBinaryInput = function(id) {
 	if (!/bi-(\d+)/g.exec(id)) {
 		throw "Element " + id + " is not a valid binary input.";
@@ -105,14 +121,16 @@ jdnp3.binary.getBinaryOutput = function(id) {
 			'type': 'binaryOutputPoint',
 			'index': index,
 	};
-	 
+
 	if (!$('[id$=bo-' + index + '-state]').length) {
 		throw "Element " + id + " does not exist.";
 	}
 	for (var property in jdnp3.binary.ATTRIBUTE_MAP) {
 		data[property] = $('[id$=bo-' + index + '-' + jdnp3.binary.ATTRIBUTE_MAP[property] + ']').prop('checked')  ? true : false;
 	}
-	
+
+	data.statusCode = $('[id$=bo-status-options' + index + '] span').html();
+
 	return data;
 }
 
@@ -121,6 +139,12 @@ jdnp3.binary.setBinaryOutput = function(binaryDataPoint) {
 		var id = 'bo-' + binaryDataPoint.index;
 		if (binaryDataPoint.hasOwnProperty(property) && property in jdnp3.binary.ATTRIBUTE_MAP) {
 			$("[id$=" + id + "-" + jdnp3.binary.ATTRIBUTE_MAP[property] + "]").prop('checked', binaryDataPoint[property])
+		}
+
+		if (binaryDataPoint.statusCode in jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP) {
+			$('[id$=bo-status-options' + binaryDataPoint.index + '] span').html(jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP[binaryDataPoint.statusCode]);
+		} else {
+			$('[id$=bo-status-options' + binaryDataPoint.index + '] span').html(binaryDataPoint.statusCode);
 		}
 	}
 }

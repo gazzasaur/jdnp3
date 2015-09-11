@@ -19,7 +19,7 @@
 		<h:outputScript library="js" name="analog.js" />
 		
 		<div style="font-size: 0px;">
-			<div class="text-field" onclick="$('[id$=ai-#{cc.attrs.point.index}-newvalue]').val($('[id$=ai-#{cc.attrs.point.index}-value]').html()); PF('ai-value#{cc.attrs.point.index}').show(); $('[id$=ai-#{cc.attrs.point.index}-newvalue]').select();">
+			<div style="cursor: pointer;" class="text-field" title="Value" onclick="$('[id$=ai-#{cc.attrs.point.index}-newvalue]').val($('[id$=ai-#{cc.attrs.point.index}-value]').html()); PF('ai-value#{cc.attrs.point.index}').show(); $('[id$=ai-#{cc.attrs.point.index}-newvalue]').select();">
 				<h:outputText id="ai-#{cc.attrs.point.index}-value" styleClass="text-field-value" title="Value" />
 			</div>
 			<j:dipswitch id="ai-#{cc.attrs.point.index}-re" title="Reference Error" abbreviation="RE" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'referenceError', !jdnp3.analog.getAnalog('ai-#{cc.attrs.point.index}').referenceError)" disabled="true" />

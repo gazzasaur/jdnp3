@@ -16,7 +16,9 @@
 package net.sf.jdnp3.ui.web.outstation.message.ws.model;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.StatusCode.SUCCESS;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StatusCode;
 
 public class BinaryOutputMessage implements Message {
 	private String type = "binaryOutputPoint";
@@ -32,6 +34,8 @@ public class BinaryOutputMessage implements Message {
 	private boolean localForced = false;
 	private boolean remoteForced = false;
 	private boolean communicationsLost = false;
+	
+	private StatusCode statusCode = SUCCESS;
 	
 	public String getType() {
 		return type;
@@ -123,5 +127,13 @@ public class BinaryOutputMessage implements Message {
 
 	public void setStaticType(ObjectType staticType) {
 		this.staticType = staticType;
+	}
+
+	public StatusCode getStatusCode() {
+		return statusCode;
+	}
+
+	public void setStatusCode(StatusCode statusCode) {
+		this.statusCode = statusCode;
 	}
 }

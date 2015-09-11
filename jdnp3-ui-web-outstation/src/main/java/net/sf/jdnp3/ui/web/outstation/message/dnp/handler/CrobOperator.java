@@ -15,13 +15,19 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.dnp.handler;
 
+import java.util.List;
+
 import net.sf.jdnp3.dnp3.service.outstation.handler.CrobRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.CrobObjectInstance;
+import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 
 public class CrobOperator implements CrobRequestHandler {
 	public CrobObjectInstance doDirectOperate(CrobObjectInstance crobObjectInstance) {
-		System.out.println("doDirectOperate " + crobObjectInstance);
+		List<BinaryOutputDataPoint> binaryOutputDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryOutputDataPoints();
+		if (binaryOutputDataPoints.size() > crobObjectInstance.getIndex()) {
+			crobObjectInstance.setStatusCode(binaryOutputDataPoints.get((int) crobObjectInstance.getIndex()).getStatusCode());
+		}
 		return crobObjectInstance;
 	}
-
 }

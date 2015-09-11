@@ -66,9 +66,9 @@ public class App {
 		
 		Logger logger = LoggerFactory.getLogger(App.class);
 		
-		DatabaseManagerProvider.getDatabaseManager().setBinaryInputDatabaseSize(10);
-		DatabaseManagerProvider.getDatabaseManager().setAnalogInputDatabaseSize(10);
-		DatabaseManagerProvider.getDatabaseManager().setBinaryOutputDatabaseSize(10);
+		DatabaseManagerProvider.getDatabaseManager().setBinaryInputDatabaseSize(3);
+		DatabaseManagerProvider.getDatabaseManager().setAnalogInputDatabaseSize(3);
+		DatabaseManagerProvider.getDatabaseManager().setBinaryOutputDatabaseSize(3);
 		
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new HeartbeatMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new InternalIndicatorsMessageHandler());
