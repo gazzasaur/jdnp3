@@ -17,17 +17,17 @@ package net.sf.jdnp3.ui.web.outstation.message.dnp.handler;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.Class2ReadRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.Class3ReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.EventObjectInstanceSelector;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
-public class Class2Reader implements Class2ReadRequestHandler {
+public class Class3Reader implements Class3ReadRequestHandler {
 	public List<ObjectInstance> doReadClass(OutstationEventQueue outstationEventQueue) {
 		EventObjectInstanceSelector selector = new EventObjectInstanceSelector() {
 			public boolean select(EventObjectInstance eventObjectInstance) {
-				return eventObjectInstance.getEventClass() == 2;
+				return eventObjectInstance.getEventClass() == 3;
 			}
 		};
 		return outstationEventQueue.request(selector);
@@ -36,7 +36,7 @@ public class Class2Reader implements Class2ReadRequestHandler {
 	public List<ObjectInstance> doReadClass(OutstationEventQueue outstationEventQueue, long returnLimit) {
 		EventObjectInstanceSelector selector = new EventObjectInstanceSelector() {
 			public boolean select(EventObjectInstance eventObjectInstance) {
-				return eventObjectInstance.getEventClass() == 2;
+				return eventObjectInstance.getEventClass() == 3;
 			}
 		};
 		return outstationEventQueue.request(selector, returnLimit);

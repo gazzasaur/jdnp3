@@ -61,6 +61,17 @@ getDataPointIndex = function(id) {
 	return parseInt(regexArray[1]);
 }
 
+requestChangeSingleAttributeValue = function(type, attribute, value) {
+	scheduler.addTask(function() {
+		var data = {
+			type: type,
+			attribute: attribute,
+			value: value
+		};
+		webSocket.send(JSON.stringify(data));
+	}, 0);
+}
+
 requestChangeAttributeValue = function(id, attribute, value) {
 	scheduler.addTask(function() {
 		var objectId = /([a-z]+)-(\d+)/g.exec(id);

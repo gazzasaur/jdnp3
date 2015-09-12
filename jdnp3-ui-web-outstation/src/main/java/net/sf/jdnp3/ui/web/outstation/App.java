@@ -33,6 +33,7 @@ import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.BinaryInputStaticReade
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class0Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class1Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class2Reader;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class3Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.CrobOperator;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.InternalIndicatorWriter;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistry;
@@ -43,7 +44,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputEventMessage
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryOutputMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.HeartbeatMessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.ws.handler.InternalIndicatorsMessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.InternalIndicatorMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistryProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.AnalogInputEventMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.AnalogInputMessage;
@@ -51,6 +52,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputEventMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.HeartbeatMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.InternalIndicatorMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.InternalIndicatorsMessage;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -71,8 +73,10 @@ public class App {
 		DatabaseManagerProvider.getDatabaseManager().setAnalogInputDatabaseSize(3);
 		DatabaseManagerProvider.getDatabaseManager().setBinaryOutputDatabaseSize(3);
 		
+		DatabaseInternalIndicatorProvider internalIndicatorProvider = new DatabaseInternalIndicatorProvider();
+		
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new HeartbeatMessageHandler());
-		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new InternalIndicatorsMessageHandler());
+		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new InternalIndicatorMessageHandler(internalIndicatorProvider));
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputEventMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryOutputMessageHandler());
@@ -83,13 +87,12 @@ public class App {
 		registry.register("heartbeat", HeartbeatMessage.class);
 		registry.register("binaryInputEvent", BinaryInputEventMessage.class);
 		registry.register("analogInputEvent", AnalogInputEventMessage.class);
+		registry.register("internalIndicator", InternalIndicatorMessage.class);
 		registry.register("internalIndicators", InternalIndicatorsDataPoint.class, InternalIndicatorsMessage.class);
 		registry.register("binaryInputPoint", BinaryInputDataPoint.class, BinaryInputMessage.class);
 		registry.register("binaryOutputPoint", BinaryOutputDataPoint.class, BinaryOutputMessage.class);
 		registry.register("analogInputPoint", AnalogInputDataPoint.class, AnalogInputMessage.class);
-		
-		DatabaseInternalIndicatorProvider internalIndicatorProvider = new DatabaseInternalIndicatorProvider();
-		
+				
 		OutstationFactory outstationFactory = new OutstationFactory();
 		outstationFactory.addStandardOutstationRequestHandlerAdaptors();
 		outstationFactory.addStandardObjectTypeDecoders();
@@ -100,6 +103,7 @@ public class App {
 		outstation.addRequestHandler(new Class0Reader());
 		outstation.addRequestHandler(new Class1Reader());
 		outstation.addRequestHandler(new Class2Reader());
+		outstation.addRequestHandler(new Class3Reader());
 		outstation.addRequestHandler(new CrobOperator());
 		outstation.addRequestHandler(new InternalIndicatorWriter(internalIndicatorProvider));
 		
