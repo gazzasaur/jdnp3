@@ -43,19 +43,19 @@
 					</p:panel>
 				</div>
 				<div style="text-align: center; display: inline-block;">
-					<p:panel header="Analog Input">
+					<p:panel header="Binary Output">
 						<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-							<c:forEach var="point" items="#{uiPointDatabase.analogInputDataPoints}">
-								<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:analogInput point="#{point}" />
+							<c:forEach var="point" items="#{uiPointDatabase.binaryOutputDataPoints}">
+								<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:binaryOutput point="#{point}" />
 							</c:forEach>
 						</p:panelGrid>
 					</p:panel>
 				</div>
 				<div style="text-align: center; display: inline-block;">
-					<p:panel header="Binary Output">
+					<p:panel header="Analog Input">
 						<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-							<c:forEach var="point" items="#{uiPointDatabase.binaryOutputDataPoints}">
-								<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:binaryOutput point="#{point}" />
+							<c:forEach var="point" items="#{uiPointDatabase.analogInputDataPoints}">
+								<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:analogInput point="#{point}" />
 							</c:forEach>
 						</p:panelGrid>
 					</p:panel>

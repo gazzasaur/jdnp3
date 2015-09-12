@@ -17,17 +17,44 @@ package net.sf.jdnp3.dnp3.stack.layer.application.service;
 
 public interface InternalStatusProvider {
 	public boolean isBroadcast();
+	public void setBroadcast(boolean value);
+	
 	public boolean isClass1Events();
+	public void setClass1Events(boolean value);
+
 	public boolean isClass2Events();
+	public void setClass2Events(boolean value);
+	
 	public boolean isClass3Events();
+	public void setClass3Events(boolean value);
+	
 	public boolean isNeedTime();
+	public void setNeedTime(boolean value);
+	
 	public boolean isLocalControl();
+	public void setLocalControl(boolean value);
+	
 	public boolean isDeviceTrouble();
+	public void setDeviceTrouble(boolean value);
+	
 	public boolean isDeviceRestart();
+	public void setDeviceRestart(boolean value);
+	
 	public boolean isNoFunctionCodeSupport();
+	public void setNoFunctionCodeSupport(boolean value);
+	
 	public boolean isObjectUnknown();
+	public void setObjectUnknown(boolean value);
+	
 	public boolean isParameterError();
+	public void setParameterError(boolean value);
+	
 	public boolean isEventBufferOverflow();
+	public void setEventBufferOverflow(boolean value);
+	
 	public boolean isAlreadyExecuting();
+	public void setAlreadyExecuting(boolean value);
+	
 	public boolean isConfigurationCorrupt();
+	public void setConfigurationCorrupt(boolean value);
 }

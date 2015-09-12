@@ -32,6 +32,7 @@ import net.sf.jdnp3.ui.web.outstation.database.InternalIndicatorsDataPoint;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.BinaryInputStaticReader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class0Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class1Reader;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class2Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.CrobOperator;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.InternalIndicatorWriter;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistry;
@@ -87,17 +88,20 @@ public class App {
 		registry.register("binaryOutputPoint", BinaryOutputDataPoint.class, BinaryOutputMessage.class);
 		registry.register("analogInputPoint", AnalogInputDataPoint.class, AnalogInputMessage.class);
 		
+		DatabaseInternalIndicatorProvider internalIndicatorProvider = new DatabaseInternalIndicatorProvider();
+		
 		OutstationFactory outstationFactory = new OutstationFactory();
 		outstationFactory.addStandardOutstationRequestHandlerAdaptors();
 		outstationFactory.addStandardObjectTypeDecoders();
-		outstationFactory.setInternalStatusProvider(new DatabaseInternalIndicatorProvider());
+		outstationFactory.setInternalStatusProvider(internalIndicatorProvider);
 		
 		Outstation outstation = outstationFactory.createOutstation();
 		outstation.addRequestHandler(new BinaryInputStaticReader());
 		outstation.addRequestHandler(new Class0Reader());
 		outstation.addRequestHandler(new Class1Reader());
+		outstation.addRequestHandler(new Class2Reader());
 		outstation.addRequestHandler(new CrobOperator());
-		outstation.addRequestHandler(new InternalIndicatorWriter());
+		outstation.addRequestHandler(new InternalIndicatorWriter(internalIndicatorProvider));
 		
 		DatabaseManagerProvider.getDatabaseManager().addEventListener(new EventListener() {
 			public void eventReceived(DataPoint dataPoint) {

@@ -24,6 +24,7 @@ import net.sf.jdnp3.dnp3.service.outstation.adaptor.BinaryInputEventReadRequestA
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.BinaryInputStaticReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class0ReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class1ReadRequestAdaptor;
+import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class2ReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.CrobRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.InternalIndicatorWriteRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
@@ -82,6 +83,7 @@ public class OutstationFactory {
 		adaptors.add(new BinaryInputEventReadRequestAdaptor());
 		adaptors.add(new Class0ReadRequestAdaptor());
 		adaptors.add(new Class1ReadRequestAdaptor());
+		adaptors.add(new Class2ReadRequestAdaptor());
 		adaptors.add(new CrobRequestAdaptor());
 		adaptors.add(new InternalIndicatorWriteRequestAdaptor());
 	}

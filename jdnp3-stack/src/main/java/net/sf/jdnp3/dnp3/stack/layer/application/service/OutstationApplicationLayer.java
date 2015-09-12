@@ -96,6 +96,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	
 	public void setInternalStatusProvider(InternalStatusProvider internalStatusProvider) {
 		this.internalStatusProvider = internalStatusProvider;
+		eventQueue.setInternalStatusProvider(internalStatusProvider);
 	}
 	
 	public void dataReceived(List<Byte> data) {

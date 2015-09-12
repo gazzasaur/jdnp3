@@ -22,18 +22,26 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstanc
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class OutstationEventQueue implements ConfirmationListener {
+	private InternalStatusProvider internalStatusProvider = null;
 	private List<EventObjectInstance> events = new ArrayList<>();
 	private List<EventObjectInstance> pendingConfirmation = new ArrayList<>();
+	
+	public synchronized void setInternalStatusProvider(InternalStatusProvider internalStatusProvider) {
+		this.internalStatusProvider = internalStatusProvider;
+		
+	}
 	
 	public synchronized void addEvent(EventObjectInstance eventObjectInstance) {
 		for (int i = 0; i < events.size(); ++i) {
 			EventObjectInstance current = events.get(i);
 			if (eventObjectInstance.getTimestamp() < current.getTimestamp()) {
 				events.add(i, eventObjectInstance);
+				setInternalStatus();
 				return;
 			}
 		}
 		events.add(eventObjectInstance);
+		setInternalStatus();
 	}
 
 	public synchronized List<ObjectInstance> request(EventObjectInstanceSelector selector) {
@@ -64,6 +72,7 @@ public class OutstationEventQueue implements ConfirmationListener {
 	public synchronized void confirm(EventObjectInstance eventObjectInstance) {
 		events.remove(eventObjectInstance);
 		pendingConfirmation.remove(eventObjectInstance);
+		setInternalStatus();
 	}
 
 	public synchronized void timedOut(EventObjectInstance eventObjectInstance) {
@@ -72,5 +81,20 @@ public class OutstationEventQueue implements ConfirmationListener {
 
 	public synchronized void cancelled(EventObjectInstance eventObjectInstance) {
 		pendingConfirmation.remove(eventObjectInstance);
+	}
+	
+	private void setInternalStatus() {
+		if (internalStatusProvider == null) {
+			return;
+		}
+		boolean classEvents[] = {false, false, false};
+		for (EventObjectInstance eventObjectInstance : events) {
+			if (eventObjectInstance.getEventClass() >= 1 && eventObjectInstance.getEventClass() <= 3) {
+				classEvents[eventObjectInstance.getEventClass() - 1] = true;
+			}
+		}
+		internalStatusProvider.setClass1Events(classEvents[0]);
+		internalStatusProvider.setClass2Events(classEvents[1]);
+		internalStatusProvider.setClass3Events(classEvents[2]);
 	}
 }
