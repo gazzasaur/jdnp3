@@ -142,6 +142,17 @@ public class App {
 		outstation.setDataLinkLayer(dataLink);
 		dataLink.enable();
 		
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					Thread.sleep(30000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				System.exit(0);
+			}
+		}).start();
+		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("jetty-config.xml");
 		try {
 			Server server = context.getBean(Server.class);

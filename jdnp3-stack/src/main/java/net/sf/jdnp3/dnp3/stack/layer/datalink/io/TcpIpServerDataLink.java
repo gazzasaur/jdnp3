@@ -33,6 +33,8 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.decoder.DataLinkFrameDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.decoder.DataLinkFrameDecoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.encoder.DataLinkFrameEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.encoder.DataLinkFrameEncoderImpl;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.io.pump.DataPumpListener;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.io.pump.DataPumpWorker;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode;
@@ -46,6 +48,8 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 	private static final int CHARACTER_TIMEOUT = 2000;
 
 	private Logger logger = LoggerFactory.getLogger(TcpIpServerDataLink.class);
+	
+	DataPumpWorker tcpDataPumpWorker = new DataPumpWorker();
 	
 	private volatile SocketChannel socketChannel = null;
 	private DataLinkFrameEncoder encoder = new DataLinkFrameEncoderImpl();
@@ -63,6 +67,8 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 	
 	public void enable() {
 		if (thread == null) {
+			new Thread(tcpDataPumpWorker).start();
+
 			thread = new Thread(this);
 			thread.start();
 		}
@@ -78,7 +84,7 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 		dataLinkFrame.setData(data);
 		
 		if (socketChannel != null) {
-			TcpIpDataPumpProvider.getTcpIpDataPump().sendData(socketChannel, encoder.encode(dataLinkFrame));
+			tcpDataPumpWorker.sendData(socketChannel, encoder.encode(dataLinkFrame));
 		}
 	}
 	
@@ -98,26 +104,50 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 	}
 	
 	private void tryRun() {
-		ServerSocketChannel serverSocketChannel = null;
-		
 		try {
+			ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+			serverSocketChannel.configureBlocking(false);
+			serverSocketChannel.bind(new InetSocketAddress(20000));
+			serverSocketChannel.accept();
+			
+			tcpDataPumpWorker.registerServerChannel(serverSocketChannel, new DataPumpListener() {
+				public void connected() {
+					try {
+						SocketChannel acceptedChannel = serverSocketChannel.accept();
+						acceptedChannel.configureBlocking(false);
+						socketChannel = acceptedChannel;
+					} catch (IOException e) {
+						logger.error("Failed to set the socket channel to non-blocking.", e);
+					}
+					tcpDataPumpWorker.registerChannel(socketChannel, new DataPumpListener() {
+						public void connected() {
+						}
+						
+						public void disconnected() {
+						}
+						
+						public void dataReceived(List<Byte> data) {
+							inputDataBuffer.addAll(data);
+							synchronized (inputDataBuffer) {
+								inputDataBuffer.notify();
+							}
+						}
+					});
+				}
+
+				public void disconnected() {
+				}
+
+				public void dataReceived(List<Byte> data) {
+				}
+			});
+			
 			DataLinkFrameHeader dataLinkFrameHeader = new DataLinkFrameHeader();
 			
 			lastDrop = new Date().getTime();
 			while (true) {
-				if (socketChannel == null || !socketChannel.isConnected()) {
-					socketChannel = null;
-					serverSocketChannel = ServerSocketChannel.open();
-					serverSocketChannel.bind(new InetSocketAddress(20000));
-					socketChannel = serverSocketChannel.accept();
-					socketChannel.configureBlocking(false);
-					serverSocketChannel.close();
-					serverSocketChannel = null;
-					
-					TcpIpDataPumpProvider.getTcpIpDataPump().registerSource(socketChannel, inputDataBuffer);
-				}
 				synchronized (inputDataBuffer) {
-					inputDataBuffer.wait(1000);
+					inputDataBuffer.wait(100);
 				}
 				while (!inputDataBuffer.isEmpty()) {
 					frameBuffer.add(inputDataBuffer.poll());
@@ -146,13 +176,6 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 			}
 		} catch (IOException | InterruptedException e) {
 			logger.error("Stream failure.", e);
-			if (serverSocketChannel != null) {
-				try {
-					serverSocketChannel.close();
-				} catch (IOException ioe) {
-					logger.warn("Cannot close server socket.", ioe);
-				}
-			}
 			if (socketChannel != null) {
 				try {
 					socketChannel.close();
