@@ -28,6 +28,8 @@ import java.util.Date;
 import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.decoder.DataLinkFrameDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.decoder.DataLinkFrameDecoderImpl;
@@ -47,6 +49,8 @@ import org.slf4j.LoggerFactory;
 public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 	private static final int CHARACTER_TIMEOUT = 2000;
 
+	private ExecutorService executorService = Executors.newWorkStealingPool(2);
+	
 	private Logger logger = LoggerFactory.getLogger(TcpIpServerDataLink.class);
 	
 	DataPumpWorker tcpDataPumpWorker = new DataPumpWorker();
@@ -89,7 +93,7 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 	}
 	
 	public void run() {
-		while (true) {
+//		while (true) {
 			try {
 				tryRun();
 			} catch (Exception e) {
@@ -100,8 +104,10 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 			} catch (InterruptedException ei) {
 				logger.error("Failed during read sleep loop.", ei);
 			}
-		}
+//		}
 	}
+	
+	Runnable r;
 	
 	private void tryRun() {
 		try {
@@ -109,6 +115,7 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 			serverSocketChannel.configureBlocking(false);
 			serverSocketChannel.bind(new InetSocketAddress(20000));
 			serverSocketChannel.accept();
+			
 			
 			tcpDataPumpWorker.registerServerChannel(serverSocketChannel, new DataPumpListener() {
 				public void connected() {
@@ -128,9 +135,7 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 						
 						public void dataReceived(List<Byte> data) {
 							inputDataBuffer.addAll(data);
-							synchronized (inputDataBuffer) {
-								inputDataBuffer.notify();
-							}
+							executorService.execute(r);
 						}
 					});
 				}
@@ -145,36 +150,53 @@ public class TcpIpServerDataLink implements Runnable, DataLinkLayer {
 			DataLinkFrameHeader dataLinkFrameHeader = new DataLinkFrameHeader();
 			
 			lastDrop = new Date().getTime();
-			while (true) {
-				synchronized (inputDataBuffer) {
-					inputDataBuffer.wait(100);
-				}
-				while (!inputDataBuffer.isEmpty()) {
-					frameBuffer.add(inputDataBuffer.poll());
-				}
-				try {
-					if (detector.detectHeader(dataLinkFrameHeader, frameBuffer) && headerLengthToRawLength(dataLinkFrameHeader.getLength()) <= frameBuffer.size()) {
-						frameReceived(frameBuffer);
-						frameBuffer = new ArrayList<>(frameBuffer.subList(headerLengthToRawLength(dataLinkFrameHeader.getLength()), frameBuffer.size()));
+			
+			r = new Runnable() {
+				private boolean running = false;
+				
+				public void run() {
+					synchronized (inputDataBuffer) {
+						if (running) {
+							return;
+						}
+						running = true;
+					}
+
+					while (true) {
+					synchronized (inputDataBuffer) {
+						if (inputDataBuffer.isEmpty()) {
+							running = false;
+							return;
+						}
+					}
+					while (!inputDataBuffer.isEmpty()) {
+						frameBuffer.add(inputDataBuffer.poll());
+					}
+					try {
+						if (detector.detectHeader(dataLinkFrameHeader, frameBuffer) && headerLengthToRawLength(dataLinkFrameHeader.getLength()) <= frameBuffer.size()) {
+							frameReceived(frameBuffer);
+							frameBuffer = new ArrayList<>(frameBuffer.subList(headerLengthToRawLength(dataLinkFrameHeader.getLength()), frameBuffer.size()));
+							lastDrop = new Date().getTime();
+						}
+					} catch (Exception e) {
+						logger.warn("Error found on stream.", e);
+						performRapidDrop(frameBuffer);
+					}
+					if (frameBuffer.size() == 0) {
 						lastDrop = new Date().getTime();
 					}
-				} catch (Exception e) {
-					logger.warn("Error found on stream.", e);
-					performRapidDrop(frameBuffer);
+					if (new Date().getTime() - lastDrop > CHARACTER_TIMEOUT) {
+						logger.warn("Timeout on stream.");
+						performRapidDrop(frameBuffer);
+					}
+					if (frameBuffer.size() > maximumReceiveDataSize) {
+						logger.warn("Receive buffer has exceeded max size.");
+						performRapidDrop(frameBuffer);
+					}
 				}
-				if (frameBuffer.size() == 0) {
-					lastDrop = new Date().getTime();
 				}
-				if (new Date().getTime() - lastDrop > CHARACTER_TIMEOUT) {
-					logger.warn("Timeout on stream.");
-					performRapidDrop(frameBuffer);
-				}
-				if (frameBuffer.size() > maximumReceiveDataSize) {
-					logger.warn("Receive buffer has exceeded max size.");
-					performRapidDrop(frameBuffer);
-				}
-			}
-		} catch (IOException | InterruptedException e) {
+			};
+		} catch (Exception e) {
 			logger.error("Stream failure.", e);
 			if (socketChannel != null) {
 				try {
