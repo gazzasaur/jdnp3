@@ -28,12 +28,12 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.encoder.DataLinkFrameEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.encoder.DataLinkFrameEncoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkConsumer;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkService;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkServiceBinding;
+import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.nio.DataPumpWorker;
 
 public class TcpServerDataLinkService implements DataLinkService, DataLinkLayer {

@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.stack.layer.datalink.service.core;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.MessageProperties;
+import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public interface DataLinkListener {
 	public void receiveData(MessageProperties messageProperties, List<Byte> data);

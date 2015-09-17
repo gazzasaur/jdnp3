@@ -20,8 +20,8 @@ import java.nio.channels.SocketChannel;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.ChannelId;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
+import net.sf.jdnp3.dnp3.stack.message.ChannelId;
 import net.sf.jdnp3.dnp3.stack.nio.DataPumpListener;
 import net.sf.jdnp3.dnp3.stack.nio.DataPumpWorker;
 

@@ -19,11 +19,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-import net.sf.jdnp3.dnp3.stack.layer.datalink.io.DataLinkDigester;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.ChannelId;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.decoder.DataLinkDigester;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
+import net.sf.jdnp3.dnp3.stack.message.ChannelId;
+import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.nio.DataPumpListener;
 
 import org.slf4j.Logger;
@@ -56,16 +56,14 @@ public class SocketChannelDataPumpListener implements DataPumpListener {
 		executorService.execute(new Runnable() {
 			public void run() {
 				try {
-					synchronized (dataLinkListener) {
-						if (dataLinkDigester.digest(data)) {
-							MessageProperties messageProperties =new MessageProperties();
-							DataLinkFrame dataLinkFrame = dataLinkDigester.getDataLinkFrame();
-							messageProperties.setChannelId(channelId);
-							messageProperties.setTimeReceived(new Date().getTime());
-							messageProperties.setSourceAddress(dataLinkFrame.getDataLinkFrameHeader().getSource());
-							messageProperties.setDestinationAddress(dataLinkFrame.getDataLinkFrameHeader().getDestination());
-							dataLinkListener.receiveData(messageProperties, dataLinkFrame.getData());
-						}
+					if (dataLinkDigester.digest(data)) {
+						MessageProperties messageProperties =new MessageProperties();
+						DataLinkFrame dataLinkFrame = dataLinkDigester.getDataLinkFrame();
+						messageProperties.setChannelId(channelId);
+						messageProperties.setTimeReceived(new Date().getTime());
+						messageProperties.setSourceAddress(dataLinkFrame.getDataLinkFrameHeader().getSource());
+						messageProperties.setDestinationAddress(dataLinkFrame.getDataLinkFrameHeader().getDestination());
+						dataLinkListener.receiveData(messageProperties, dataLinkFrame.getData());
 					}
 				} catch (Exception e) {
 					logger.error("Failed to process message.", e);

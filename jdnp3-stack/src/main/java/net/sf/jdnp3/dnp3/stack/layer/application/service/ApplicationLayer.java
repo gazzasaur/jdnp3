@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.service;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.MessageProperties;
+import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public interface ApplicationLayer {
 	public void dataReceived(MessageProperties messageProperties, List<Byte> data);

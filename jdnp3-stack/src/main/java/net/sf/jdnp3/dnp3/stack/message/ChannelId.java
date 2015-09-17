@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.io;
+package net.sf.jdnp3.dnp3.stack.message;
 
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
-
-public interface DataLinkFrameHandler {
-	void frameReceived(DataLinkFrame frame);
+public interface ChannelId {
 }

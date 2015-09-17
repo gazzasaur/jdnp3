@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.model;
+package net.sf.jdnp3.dnp3.stack.message;
 
-public class ChannelIdConstants implements ChannelId {
-	public static final ChannelId SELF_CHANNEL_ID = new BasicChannelId();
+public class BasicChannelId implements ChannelId {
 }

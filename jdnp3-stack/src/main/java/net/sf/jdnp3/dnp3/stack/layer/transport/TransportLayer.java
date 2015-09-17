@@ -18,9 +18,9 @@ package net.sf.jdnp3.dnp3.stack.layer.transport;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationLayer;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
+import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public interface TransportLayer extends DataLinkListener {
 	public void sendData(MessageProperties messageProperties, List<Byte> data);

@@ -21,8 +21,8 @@ import java.util.Deque;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationLayer;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
+import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public class TransportLayerImpl implements TransportLayer {
 	private int maximumTransmissionUnit = 250;

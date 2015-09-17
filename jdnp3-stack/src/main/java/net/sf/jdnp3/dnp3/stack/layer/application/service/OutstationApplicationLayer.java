@@ -44,10 +44,10 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstanc
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.SynchronisedCtoObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayerImpl;
+import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;

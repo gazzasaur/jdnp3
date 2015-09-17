@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.io;
+package net.sf.jdnp3.dnp3.stack.layer.datalink.decoder;
 
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkFrameUtils.headerLengthToRawLength;
 
@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.datalink.decoder.DataLinkFrameDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.decoder.DataLinkFrameDecoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode;

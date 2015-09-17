@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.BasicChannelId;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.ChannelId;
+import net.sf.jdnp3.dnp3.stack.message.BasicChannelId;
+import net.sf.jdnp3.dnp3.stack.message.ChannelId;
 
 public class ChannelManager {
 	private Map<ChannelId, SocketChannel> connectedSocketChanels = new ConcurrentHashMap<>();

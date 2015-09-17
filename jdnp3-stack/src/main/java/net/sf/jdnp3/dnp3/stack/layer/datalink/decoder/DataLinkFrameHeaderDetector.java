@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.io;
+package net.sf.jdnp3.dnp3.stack.layer.datalink.decoder;
 
 import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkConstants.DNP3_START_BYTE;
