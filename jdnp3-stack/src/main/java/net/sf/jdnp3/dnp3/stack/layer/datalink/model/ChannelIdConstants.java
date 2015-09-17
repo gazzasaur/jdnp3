@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.io.pump;
+package net.sf.jdnp3.dnp3.stack.layer.datalink.model;
 
-import java.nio.channels.SelectableChannel;
-
-public interface DataPumpTransceiver {
-	public boolean read(SelectableChannel selectableChannel, DataPumpItem dataPumpItem);
-	public boolean write(SelectableChannel selectableChannel, DataPumpItem dataPumpItem);
+public class ChannelIdConstants implements ChannelId {
+	public static final ChannelId SELF_CHANNEL_ID = new BasicChannelId();
 }

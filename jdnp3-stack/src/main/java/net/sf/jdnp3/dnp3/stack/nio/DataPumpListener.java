@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.service;
+package net.sf.jdnp3.dnp3.stack.nio;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.MessageProperties;
-
-public interface ApplicationLayer {
-	public void dataReceived(MessageProperties messageProperties, List<Byte> data);
+public interface DataPumpListener {
+	public void connected();
+	public void disconnected();
+	public void dataReceived(List<Byte> data);
 }

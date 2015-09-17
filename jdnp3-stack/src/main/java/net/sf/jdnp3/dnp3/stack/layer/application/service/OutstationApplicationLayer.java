@@ -44,7 +44,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstanc
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.SynchronisedCtoObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.model.MessageProperties;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayerImpl;
 
@@ -99,7 +100,12 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		eventQueue.setInternalStatusProvider(internalStatusProvider);
 	}
 	
-	public void dataReceived(List<Byte> data) {
+	public void dataReceived(MessageProperties messageProperties, List<Byte> data) {
+		// FIXME IMPL Will also have to account for Broadcast.
+		int source = messageProperties.getSourceAddress();
+		messageProperties.setSourceAddress(messageProperties.getDestinationAddress());
+		messageProperties.setDestinationAddress(source);
+		
 		List<ObjectInstance> responseObjects = new ArrayList<>();
 		ApplicationFragmentRequest request = decoder.decode(data);
 
@@ -149,7 +155,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			for (ObjectFragment objectFragment : request.getObjectFragments()) {
 				response.addObjectFragment(objectFragment);
 			}
-			transportLayer.sendData(new ApplicationFragmentResponseEncoderImpl().encode(response));
+			transportLayer.sendData(messageProperties, new ApplicationFragmentResponseEncoderImpl().encode(response));
 			return;
 		}
 		
@@ -207,6 +213,6 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			response.addObjectFragment(result.getObjectFragment());
 		}
 		
-		transportLayer.sendData(new ApplicationFragmentResponseEncoderImpl().encode(response));
+		transportLayer.sendData(messageProperties, new ApplicationFragmentResponseEncoderImpl().encode(response));
 	}
 }

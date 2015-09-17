@@ -13,12 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.io.pump;
+package net.sf.jdnp3.dnp3.stack.layer.datalink.service.core;
 
-import java.util.List;
+public interface DataLinkServiceBinding {
 
-public interface DataPumpListener {
-	public void connected();
-	public void disconnected();
-	public void dataReceived(List<Byte> data);
 }

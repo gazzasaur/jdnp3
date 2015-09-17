@@ -21,7 +21,8 @@ import java.util.Deque;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationLayer;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.DataLinkLayer;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.model.MessageProperties;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 
 public class TransportLayerImpl implements TransportLayer {
 	private int maximumTransmissionUnit = 250;
@@ -36,7 +37,7 @@ public class TransportLayerImpl implements TransportLayer {
 	private TransportSegmentEncoder encoder = new TransportSegmentEncoderImpl();
 	private TransportSegmentDecoder decoder = new TransportSegmentDecoderImpl();
 
-	public synchronized void sendData(List<Byte> data) {
+	public synchronized void sendData(MessageProperties messageProperties, List<Byte> data) {
 		if (dataLinkLayer == null) {
 			throw new IllegalStateException("Cannot transmit data.  No DataLinkLayer has been defined.");
 		}
@@ -55,11 +56,11 @@ public class TransportLayerImpl implements TransportLayer {
 			transportSegment.setData(new ArrayList<Byte>(data.subList(i * (maximumTransmissionUnit - 1), ((i + 1) * (maximumTransmissionUnit - 1) > data.size()) ? data.size() : ((i + 1) * (maximumTransmissionUnit - 1)))));
 			sequenceNumber %= 64;
 			
-			dataLinkLayer.sendData(2, 1, false, encoder.encode(transportSegment));
+			dataLinkLayer.sendData(messageProperties, false, encoder.encode(transportSegment));
 		}
 	}
 
-	public void receiveData(List<Byte> data) {
+	public void receiveData(MessageProperties messageProperties, List<Byte> data) {
 		if (data.equals(lastTransportSegment)) {
 			return;
 		}
@@ -72,7 +73,7 @@ public class TransportLayerImpl implements TransportLayer {
 			lastTransportSegment = new ArrayList<>(data);
 			
 			if (transportSegment.getTransportHeader().isFinalSegment()) {
-				applicationLayer.dataReceived(new ArrayList<Byte>(receiveBuffer));
+				applicationLayer.dataReceived(messageProperties, new ArrayList<Byte>(receiveBuffer));
 				receiveBuffer = new ArrayDeque<Byte>();
 			}
 		} else if (receiveBuffer != null) {
@@ -82,7 +83,7 @@ public class TransportLayerImpl implements TransportLayer {
 				lastTransportSegment = new ArrayList<>(data);
 				
 				if (transportSegment.getTransportHeader().isFinalSegment()) {
-					applicationLayer.dataReceived(new ArrayList<Byte>(receiveBuffer));
+					applicationLayer.dataReceived(messageProperties, new ArrayList<Byte>(receiveBuffer));
 					receiveBuffer = new ArrayDeque<Byte>();
 				}
 			}

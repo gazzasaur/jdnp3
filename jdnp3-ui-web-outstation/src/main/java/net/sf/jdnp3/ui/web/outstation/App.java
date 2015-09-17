@@ -16,12 +16,15 @@
 package net.sf.jdnp3.ui.web.outstation;
 
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationFactory;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.io.TcpIpServerDataLink;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.TcpServerDataLinkService;
+import net.sf.jdnp3.dnp3.stack.nio.DataPumpWorker;
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
@@ -137,10 +140,17 @@ public class App {
 			}
 		});
 		
-		TcpIpServerDataLink dataLink = new TcpIpServerDataLink();
-
-		outstation.setDataLinkLayer(dataLink);
-		dataLink.enable();
+		DataPumpWorker dataPumpWorker = new DataPumpWorker();
+		new Thread(dataPumpWorker).start();
+		
+		ExecutorService executorService = Executors.newFixedThreadPool(2);
+		
+		TcpServerDataLinkService dataLinkService = new TcpServerDataLinkService();
+		dataLinkService.setExecutorService(executorService);
+		dataLinkService.setDataPump(dataPumpWorker);
+		
+		outstation.setDataLinkLayer(dataLinkService);
+		dataLinkService.start();
 		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("jetty-config.xml");
 		try {

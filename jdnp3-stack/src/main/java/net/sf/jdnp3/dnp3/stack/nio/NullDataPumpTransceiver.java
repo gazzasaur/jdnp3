@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.service;
+package net.sf.jdnp3.dnp3.stack.nio;
 
-import java.util.List;
+import java.nio.channels.SelectableChannel;
 
-public interface DataLinkLayer {
-	void sendData(int source, int destination, boolean master, List<Byte> data);
-	
-	public int getMtu();
-	
-	void addDataLinkLayerListener(DataLinkListener listener);
-	void removeDataLinkLayerListener(DataLinkListener listener);
+public class NullDataPumpTransceiver implements DataPumpTransceiver {
+	public boolean read(SelectableChannel selectableChannel, DataPumpItem dataPumpItem) {
+		throw new UnsupportedOperationException();
+	}
+
+	public boolean write(SelectableChannel selectableChannel, DataPumpItem dataPumpItem) {
+		throw new UnsupportedOperationException();
+	}
 }

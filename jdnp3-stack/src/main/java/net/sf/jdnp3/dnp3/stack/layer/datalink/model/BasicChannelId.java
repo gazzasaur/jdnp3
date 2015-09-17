@@ -13,12 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.service;
+package net.sf.jdnp3.dnp3.stack.layer.datalink.model;
 
-import java.util.List;
-
-import net.sf.jdnp3.dnp3.stack.layer.datalink.model.MessageProperties;
-
-public interface ApplicationLayer {
-	public void dataReceived(MessageProperties messageProperties, List<Byte> data);
+public class BasicChannelId implements ChannelId {
 }

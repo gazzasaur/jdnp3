@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.service;
+package net.sf.jdnp3.dnp3.stack.layer.datalink.service.core;
 
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.datalink.model.MessageProperties;
+
 public interface DataLinkListener {
-	public void receiveData(List<Byte> data);
+	public void receiveData(MessageProperties messageProperties, List<Byte> data);
 }

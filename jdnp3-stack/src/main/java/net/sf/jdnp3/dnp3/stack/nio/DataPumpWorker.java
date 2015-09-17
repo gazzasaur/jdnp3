@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.io.pump;
+package net.sf.jdnp3.dnp3.stack.nio;
 
 import java.io.IOException;
 import java.nio.channels.SelectableChannel;
@@ -47,6 +47,8 @@ public class DataPumpWorker implements Runnable {
 				selector.wakeup();
 				if (!selectableChannel.isRegistered()) {
 					selectableChannel.register(selector, SelectionKey.OP_ACCEPT, new DataPumpItem(0, new NullDataPumpTransceiver(), dataPumpListener));
+				} else {
+					logger.warn("Cannot register a socket channel that is already registered.");
 				}
 			}
 		} catch (Exception e) {
@@ -60,6 +62,8 @@ public class DataPumpWorker implements Runnable {
 				selector.wakeup();
 				if (!socketChannel.isRegistered()) {
 					socketChannel.register(selector, SelectionKey.OP_READ, new DataPumpItem(65535, new SocketChannelDataPumpTransceiver(), dataListener));
+				} else {
+					logger.warn("Cannot register a socket channel that is already registered.");
 				}
 			}
 		} catch (Exception e) {
@@ -109,8 +113,10 @@ public class DataPumpWorker implements Runnable {
 					if (selectionKey.isReadable()) {
 						try {
 							if (!dataPumpTransceiver.read(selectionKey.channel(), dataPumpItem)) {
+								logger.info("Removing closed socket from data pump.");
 								selectionKey.cancel();
 								selectionKey.channel().close();
+								dataPumpListener.disconnected();
 								continue;
 							}
 						} catch (Exception e) {
