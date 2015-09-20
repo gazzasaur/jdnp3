@@ -15,6 +15,8 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server;
 
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.MASTER_TO_OUTSTATION;
+
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -63,6 +65,7 @@ public class SocketChannelDataPumpListener implements DataPumpListener {
 						messageProperties.setTimeReceived(new Date().getTime());
 						messageProperties.setSourceAddress(dataLinkFrame.getDataLinkFrameHeader().getSource());
 						messageProperties.setDestinationAddress(dataLinkFrame.getDataLinkFrameHeader().getDestination());
+						messageProperties.setMaster(dataLinkFrame.getDataLinkFrameHeader().getDirection().equals(MASTER_TO_OUTSTATION));
 						dataLinkListener.receiveData(messageProperties, dataLinkFrame.getData());
 					}
 				} catch (Exception e) {

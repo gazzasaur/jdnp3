@@ -24,6 +24,9 @@ import net.sf.jdnp3.dnp3.service.outstation.core.OutstationFactory;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.TcpServerDataLinkService;
+import net.sf.jdnp3.dnp3.stack.layer.transport.ApplicationTransportBindingAdaptor;
+import net.sf.jdnp3.dnp3.stack.layer.transport.DataLinkTransportBindingAdaptor;
+import net.sf.jdnp3.dnp3.stack.layer.transport.SimpleSynchronisedTransportBinding;
 import net.sf.jdnp3.dnp3.stack.nio.DataPumpWorker;
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
@@ -65,7 +68,54 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+/**
+ * For the first build, multiple outstations must be implemented.
+ * A proper App Layer to DataLink layer must also be developed.
+ * 
+ * Complete BinaryOutput type:
+ * - Add the ability to create events.
+ * - Add the ability to create control events.
+ * - Counter for the number of control events received.
+ * - Ability to choose return attributes including preferred encoding.
+ * - The ability to auto-update upon successfuly control request.
+ * 
+ * All types:
+ * - The ability to send automatic events when a user changes the value from the web page/
+ * 
+ * Output types:
+ * - The ability to send automatic events when a master changes the value.
+ * - The ability to send automatic control events when a master changes the value.
+ * 
+ * Each outstation requires:
+ * - 1x DatabaseManager
+ * - 1x DatabaseInternalIndicatorProvider (There has got to be a better name than provider, perhaps register).
+ * 
+ * Thing that must become multiple Outstation aware:
+ * - All Message handlers
+ * - All Generic Messages
+ * 
+ * Need the addition of:
+ * - An outstation registry.
+ * 
+ * Update the web page.
+ * - One new websocket per outstation.  Must register/subscribe interest to an outstation.
+ * - Select Substation and Device from drop down.  Saves screen real-estate.
+ * 
+ * Near future:
+ * - Add a JSON API.
+ * - Develop python modules to control JSON interface. 
+ * 
+ * Wish list:
+ * - Subsystem interface to control data pump and other subsystems.
+ * - Data pump should stop after 3 successive failures.
+ * - Keep a history of the 10 most recent visits (requires a dynamic list and session state).
+ * - Add per outstation message log.
+ * 
+ * Sandpit (Only by popular demand/A long way off):
+ * - Ability to change scheme in Runtime.
+ */
 public class App {
+	
 	public static void main(String[] args) {
 		SLF4JBridgeHandler.removeHandlersForRootLogger();
 		SLF4JBridgeHandler.install();
@@ -73,8 +123,8 @@ public class App {
 		Logger logger = LoggerFactory.getLogger(App.class);
 		
 		DatabaseManagerProvider.getDatabaseManager().setBinaryInputDatabaseSize(3);
-		DatabaseManagerProvider.getDatabaseManager().setAnalogInputDatabaseSize(3);
 		DatabaseManagerProvider.getDatabaseManager().setBinaryOutputDatabaseSize(3);
+		DatabaseManagerProvider.getDatabaseManager().setAnalogInputDatabaseSize(3);
 		
 		DatabaseInternalIndicatorProvider internalIndicatorProvider = new DatabaseInternalIndicatorProvider();
 		
@@ -95,7 +145,7 @@ public class App {
 		registry.register("binaryInputPoint", BinaryInputDataPoint.class, BinaryInputMessage.class);
 		registry.register("binaryOutputPoint", BinaryOutputDataPoint.class, BinaryOutputMessage.class);
 		registry.register("analogInputPoint", AnalogInputDataPoint.class, AnalogInputMessage.class);
-				
+
 		OutstationFactory outstationFactory = new OutstationFactory();
 		outstationFactory.addStandardOutstationRequestHandlerAdaptors();
 		outstationFactory.addStandardObjectTypeDecoders();
@@ -149,7 +199,13 @@ public class App {
 		dataLinkService.setExecutorService(executorService);
 		dataLinkService.setDataPump(dataPumpWorker);
 		
-		outstation.setDataLinkLayer(dataLinkService);
+		SimpleSynchronisedTransportBinding transportBinding = new SimpleSynchronisedTransportBinding();
+		DataLinkTransportBindingAdaptor dataLinkBinding = new DataLinkTransportBindingAdaptor(transportBinding);
+		ApplicationTransportBindingAdaptor applicationBinding = new ApplicationTransportBindingAdaptor(transportBinding);
+		dataLinkService.addDataLinkLayerListener(dataLinkBinding);
+		outstation.setApplicationTransport(applicationBinding);
+		transportBinding.setApplicationLayer(2, outstation.getApplicationLayer());
+		transportBinding.setDataLinkLayer(dataLinkService);
 		dataLinkService.start();
 		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("jetty-config.xml");

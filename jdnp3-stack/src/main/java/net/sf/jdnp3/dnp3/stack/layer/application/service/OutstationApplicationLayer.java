@@ -45,8 +45,6 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.SynchronisedCtoObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
-import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayer;
-import net.sf.jdnp3.dnp3.stack.layer.transport.TransportLayerImpl;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -56,27 +54,24 @@ import org.slf4j.LoggerFactory;
 public class OutstationApplicationLayer implements ApplicationLayer {
 	private Logger logger = LoggerFactory.getLogger(OutstationApplicationLayer.class);
 	
+	private int mtu = 2048;
 	private List<EventObjectInstance> pendingEvents = new ArrayList<>();
 	private List<OutstationApplicationRequestHandler> outstationRequestHandlers = new ArrayList<>();
 	
 	private DataLinkLayer dataLinkLayer = null;
 	private InternalStatusProvider internalStatusProvider = null;
-	private TransportLayer transportLayer = new TransportLayerImpl();
 	private OutstationEventQueue eventQueue = new OutstationEventQueue();
 	
+	private ApplicationTransport applicationTransport;
 	private ApplicationFragmentRequestDecoder decoder = null;
-	
 	private DefaultObjectTypeMapping defaultObjectTypeMapping = new DefaultObjectTypeMapping();
 
 	public DataLinkLayer getDataLinkLayer() {
 		return dataLinkLayer;
 	}
 
-	public void setDataLinkLayer(DataLinkLayer dataLinkLayer) {
-		this.dataLinkLayer = dataLinkLayer;
-		this.dataLinkLayer.addDataLinkLayerListener(transportLayer);
-		this.transportLayer.setDataLinkLater(dataLinkLayer);
-		this.transportLayer.setApplicationLayer(this);
+	public void setApplicationTransport(ApplicationTransport applicationTransport) {
+		this.applicationTransport = applicationTransport;
 	}
 	
 	public void addRequestHandler(OutstationApplicationRequestHandler outstationRequestHandler) {
@@ -101,10 +96,18 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	}
 	
 	public void dataReceived(MessageProperties messageProperties, List<Byte> data) {
+		if (applicationTransport == null) {
+			throw new IllegalStateException("No ApplicationTransport has been defined.");
+		}
+		
 		// FIXME IMPL Will also have to account for Broadcast.
+		if (!messageProperties.isMaster()) {
+			return;
+		}
 		int source = messageProperties.getSourceAddress();
 		messageProperties.setSourceAddress(messageProperties.getDestinationAddress());
 		messageProperties.setDestinationAddress(source);
+		messageProperties.setMaster(false);
 		
 		List<ObjectInstance> responseObjects = new ArrayList<>();
 		ApplicationFragmentRequest request = decoder.decode(data);
@@ -155,7 +158,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			for (ObjectFragment objectFragment : request.getObjectFragments()) {
 				response.addObjectFragment(objectFragment);
 			}
-			transportLayer.sendData(messageProperties, new ApplicationFragmentResponseEncoderImpl().encode(response));
+			applicationTransport.sendData(messageProperties, new ApplicationFragmentResponseEncoderImpl().encode(response));
 			return;
 		}
 		
@@ -213,6 +216,15 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			response.addObjectFragment(result.getObjectFragment());
 		}
 		
-		transportLayer.sendData(messageProperties, new ApplicationFragmentResponseEncoderImpl().encode(response));
+		applicationTransport.sendData(messageProperties, new ApplicationFragmentResponseEncoderImpl().encode(response));
 	}
+
+	public int getMtu() {
+		return mtu;
+	}
+
+	public void setMtu(int mtu) {
+		this.mtu = mtu;
+	}
+
 }

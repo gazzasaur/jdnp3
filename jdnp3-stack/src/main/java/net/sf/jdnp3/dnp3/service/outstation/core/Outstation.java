@@ -17,12 +17,14 @@ package net.sf.jdnp3.dnp3.service.outstation.core;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationLayer;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationTransport;
 
 public interface Outstation {
 	public void addRequestHandler(OutstationRequestHandler requestHandler);
 	public void removeRequestHandler(OutstationRequestHandler requestHandler);
 	
+	public ApplicationLayer getApplicationLayer();
 	public void sendEvent(EventObjectInstance eventObjectInstance);
-	public void setDataLinkLayer(DataLinkLayer dataLink);
+	public void setApplicationTransport(ApplicationTransport applicationTransport);
 }

@@ -13,17 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.service.core;
+package net.sf.jdnp3.dnp3.stack.layer.transport;
 
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
-public interface DataLinkLayer {
-	public int getMtu();
-	public void sendData(MessageProperties messageProperties, List<Byte> encode);
-	
-	public void addDataLinkLayerListener(DataLinkListener listener);
-	public void removeDataLinkLayerListener(DataLinkListener listener);
+public class DataLinkTransportBindingAdaptor implements DataLinkListener {
+	private TransportBinding transportBinding;
 
+	public DataLinkTransportBindingAdaptor(TransportBinding transportBinding) {
+		this.transportBinding = transportBinding;
+	}
+	
+	public void receiveData(MessageProperties messageProperties, List<Byte> data) {
+		transportBinding.receiveDataLinkData(messageProperties, data);
+	}
 }

@@ -20,5 +20,6 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public interface ApplicationLayer {
+	public int getMtu();
 	public void dataReceived(MessageProperties messageProperties, List<Byte> data);
 }

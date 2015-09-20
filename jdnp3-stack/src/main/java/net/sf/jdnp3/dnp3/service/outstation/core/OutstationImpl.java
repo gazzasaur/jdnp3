@@ -20,8 +20,9 @@ import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationLayer;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationTransport;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationLayer;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 
 public class OutstationImpl implements Outstation {
 	private OutstationAdaptionLayer outstationAdaptionLayer;
@@ -49,7 +50,11 @@ public class OutstationImpl implements Outstation {
 		outstationApplicationLayer.getOutstationEventQueue().addEvent(eventObjectInstance);
 	}
 
-	public void setDataLinkLayer(DataLinkLayer dataLink) {
-		outstationApplicationLayer.setDataLinkLayer(dataLink);
+	public void setApplicationTransport(ApplicationTransport applicationTransport) {
+		outstationApplicationLayer.setApplicationTransport(applicationTransport);
+	}
+
+	public ApplicationLayer getApplicationLayer() {
+		return outstationApplicationLayer;
 	}
 }

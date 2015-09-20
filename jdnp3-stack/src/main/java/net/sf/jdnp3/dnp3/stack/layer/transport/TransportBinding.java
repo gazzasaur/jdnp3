@@ -19,19 +19,12 @@ import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationLayer;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
-public interface TransportLayer extends DataLinkListener {
-	public void sendData(MessageProperties messageProperties, List<Byte> data);
-	public void receiveData(MessageProperties messageProperties, List<Byte> data);
+public interface TransportBinding {
+	public void receiveDataLinkData(MessageProperties messageProperties, List<Byte> data);
+	public void receiveApplicationData(MessageProperties messageProperties, List<Byte> data);
 	
-	public int getMaximumReceiveDataSize();
-	public void setMaximumReceiveDataSize(int size);
-	
-	public int getMaximumTransmissionUnit();
-	public void setMaximumTransmissionUnit(int size);
-	
-	public void setDataLinkLater(DataLinkLayer dataLinkLayer);
-	public void setApplicationLayer(ApplicationLayer applicationLayer);
+	public void setApplicationLayer(int address, ApplicationLayer applicationLayer);
+	public void setDataLinkLayer(DataLinkLayer dataLinkLayer);
 }

@@ -77,7 +77,7 @@ public class TcpServerDataLinkService implements DataLinkService, DataLinkLayer 
 	}
 
 	public DataLinkServiceBinding bind(DataLinkConsumer dataLinkConsumer) {
-		return null;
+		throw new UnsupportedOperationException();
 	}	
 
 	public void addDataLinkLayerListener(DataLinkListener dataLinkListener) {
@@ -88,13 +88,13 @@ public class TcpServerDataLinkService implements DataLinkService, DataLinkLayer 
 		dataLinkListeners.remove(listener);
 	}
 
-	public void sendData(MessageProperties messageProperties, boolean master, List<Byte> data) {
+	public void sendData(MessageProperties messageProperties, List<Byte> data) {
 		DataLinkFrame dataLinkFrame = new DataLinkFrame();
 		dataLinkFrame.getDataLinkFrameHeader().setPrimary(true);
 		dataLinkFrame.getDataLinkFrameHeader().setSource(messageProperties.getSourceAddress());
 		dataLinkFrame.getDataLinkFrameHeader().setDestination(messageProperties.getDestinationAddress());
 		dataLinkFrame.getDataLinkFrameHeader().setFunctionCode(FunctionCode.UNCONFIRMED_USER_DATA);
-		dataLinkFrame.getDataLinkFrameHeader().setDirection((master) ? MASTER_TO_OUTSTATION : OUTSTATION_TO_MASTER);
+		dataLinkFrame.getDataLinkFrameHeader().setDirection((messageProperties.isMaster()) ? MASTER_TO_OUTSTATION : OUTSTATION_TO_MASTER);
 		dataLinkFrame.setData(data);
 		List<Byte> frameData = dataLinkFrameEncoder.encode(dataLinkFrame);
 

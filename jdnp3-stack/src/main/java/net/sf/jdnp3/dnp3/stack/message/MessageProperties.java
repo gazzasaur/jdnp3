@@ -19,6 +19,7 @@ public class MessageProperties {
 	private int sourceAddress;
 	private int destinationAddress;
 	
+	private boolean master;
 	private long timeReceived;
 	private ChannelId channelId;
 	
@@ -52,6 +53,14 @@ public class MessageProperties {
 
 	public void setChannelId(ChannelId channelId) {
 		this.channelId = channelId;
+	}
+
+	public boolean isMaster() {
+		return master;
+	}
+
+	public void setMaster(boolean master) {
+		this.master = master;
 	}
 	
 	

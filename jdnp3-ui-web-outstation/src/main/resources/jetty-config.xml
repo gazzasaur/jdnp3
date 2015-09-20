@@ -14,7 +14,7 @@
 		<property name="handler" ref="webAppContext" />
 	</bean>
 	
-		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetClass" value="org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer" />
 		<property name="targetMethod" value="configureContext" />
 		<property name="arguments">

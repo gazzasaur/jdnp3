@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="databaseManager" class="net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider" factory-method="getDatabaseManager" />
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="databaseManager" />
+		<property name="targetMethod" value="setBinaryInputDatabaseSize" />
+		<property name="arguments">
+			<list>
+				<value type="java.lang.Integer">4</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="databaseManager" />
+		<property name="targetMethod" value="setBinaryOutputDatabaseSize" />
+		<property name="arguments">
+			<list>
+				<value type="java.lang.Integer">1</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="databaseManager" />
+		<property name="targetMethod" value="setAnalogInputDatabaseSize" />
+		<property name="arguments">
+			<list>
+				<value type="java.lang.Integer">2</value>
+			</list>
+		</property>
+	</bean>
+	
+	
+</beans>
