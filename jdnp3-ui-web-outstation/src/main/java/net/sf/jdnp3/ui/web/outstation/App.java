@@ -15,7 +15,9 @@
  */
 package net.sf.jdnp3.ui.web.outstation;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -32,9 +34,11 @@ import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.database.EventListener;
 import net.sf.jdnp3.ui.web.outstation.database.InternalIndicatorsDataPoint;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.AnalogInputStaticReader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.BinaryInputStaticReader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class0Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class1Reader;
@@ -70,7 +74,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * For the first build, multiple outstations must be implemented.
- * A proper App Layer to DataLink layer must also be developed.
  * 
  * Complete BinaryOutput type:
  * - Add the ability to create events.
@@ -85,21 +88,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Output types:
  * - The ability to send automatic events when a master changes the value.
  * - The ability to send automatic control events when a master changes the value.
- * 
- * Each outstation requires:
- * - 1x DatabaseManager
- * - 1x DatabaseInternalIndicatorProvider (There has got to be a better name than provider, perhaps register).
- * 
- * Thing that must become multiple Outstation aware:
- * - All Message handlers
- * - All Generic Messages
- * 
- * Need the addition of:
- * - An outstation registry.
- * 
- * Update the web page.
- * - One new websocket per outstation.  Must register/subscribe interest to an outstation.
- * - Select Substation and Device from drop down.  Saves screen real-estate.
  * 
  * Near future:
  * - Add a JSON API.
@@ -122,14 +110,8 @@ public class App {
 		
 		Logger logger = LoggerFactory.getLogger(App.class);
 		
-		DatabaseManagerProvider.getDatabaseManager().setBinaryInputDatabaseSize(3);
-		DatabaseManagerProvider.getDatabaseManager().setBinaryOutputDatabaseSize(3);
-		DatabaseManagerProvider.getDatabaseManager().setAnalogInputDatabaseSize(3);
-		
-		DatabaseInternalIndicatorProvider internalIndicatorProvider = new DatabaseInternalIndicatorProvider();
-		
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new HeartbeatMessageHandler());
-		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new InternalIndicatorMessageHandler(internalIndicatorProvider));
+		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new InternalIndicatorMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputEventMessageHandler());
 		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryOutputMessageHandler());
@@ -146,21 +128,43 @@ public class App {
 		registry.register("binaryOutputPoint", BinaryOutputDataPoint.class, BinaryOutputMessage.class);
 		registry.register("analogInputPoint", AnalogInputDataPoint.class, AnalogInputMessage.class);
 
+		DataPumpWorker dataPumpWorker = new DataPumpWorker();
+		new Thread(dataPumpWorker).start();
+		
+		ExecutorService executorService = Executors.newFixedThreadPool(2);
+		
+		List<TcpServerDataLinkService> dataLinkServices = new ArrayList<>();
+		for (int i = 0; i < 10000; ++i) {
+			TcpServerDataLinkService dataLinkService = new TcpServerDataLinkService();
+			dataLinkService.setExecutorService(executorService);
+			dataLinkService.setDataPump(dataPumpWorker);
+			dataLinkService.setPort(30000 + i);
+			dataLinkService.start();
+			dataLinkServices.add(dataLinkService);
+		}
+
+		for (int i = 0; i < 10000; ++i) {
+		DatabaseManager databaseManager = DatabaseManagerProvider.registerDevice("PS" + i, "PP1");
+		databaseManager.setBinaryInputDatabaseSize(3);
+		databaseManager.setBinaryOutputDatabaseSize(3);
+		databaseManager.setAnalogInputDatabaseSize(3);
+		
 		OutstationFactory outstationFactory = new OutstationFactory();
 		outstationFactory.addStandardOutstationRequestHandlerAdaptors();
 		outstationFactory.addStandardObjectTypeDecoders();
-		outstationFactory.setInternalStatusProvider(internalIndicatorProvider);
+		outstationFactory.setInternalStatusProvider(databaseManager.getInternalStatusProvider());
 		
 		Outstation outstation = outstationFactory.createOutstation();
-		outstation.addRequestHandler(new BinaryInputStaticReader());
-		outstation.addRequestHandler(new Class0Reader());
+		outstation.addRequestHandler(new BinaryInputStaticReader(databaseManager));
+		outstation.addRequestHandler(new AnalogInputStaticReader(databaseManager));
+		outstation.addRequestHandler(new Class0Reader(databaseManager));
 		outstation.addRequestHandler(new Class1Reader());
 		outstation.addRequestHandler(new Class2Reader());
 		outstation.addRequestHandler(new Class3Reader());
-		outstation.addRequestHandler(new CrobOperator());
-		outstation.addRequestHandler(new InternalIndicatorWriter(internalIndicatorProvider));
+		outstation.addRequestHandler(new CrobOperator(databaseManager));
+		outstation.addRequestHandler(new InternalIndicatorWriter(databaseManager.getInternalStatusProvider()));
 		
-		DatabaseManagerProvider.getDatabaseManager().addEventListener(new EventListener() {
+		databaseManager.addEventListener(new EventListener() {
 			public void eventReceived(DataPoint dataPoint) {
 				if (dataPoint instanceof BinaryInputDataPoint) {
 					BinaryInputEventObjectInstance binaryInputEventObjectInstance = new BinaryInputEventObjectInstance();
@@ -189,24 +193,15 @@ public class App {
 				}
 			}
 		});
-		
-		DataPumpWorker dataPumpWorker = new DataPumpWorker();
-		new Thread(dataPumpWorker).start();
-		
-		ExecutorService executorService = Executors.newFixedThreadPool(2);
-		
-		TcpServerDataLinkService dataLinkService = new TcpServerDataLinkService();
-		dataLinkService.setExecutorService(executorService);
-		dataLinkService.setDataPump(dataPumpWorker);
-		
+				
 		SimpleSynchronisedTransportBinding transportBinding = new SimpleSynchronisedTransportBinding();
 		DataLinkTransportBindingAdaptor dataLinkBinding = new DataLinkTransportBindingAdaptor(transportBinding);
 		ApplicationTransportBindingAdaptor applicationBinding = new ApplicationTransportBindingAdaptor(transportBinding);
-		dataLinkService.addDataLinkLayerListener(dataLinkBinding);
+		dataLinkServices.get(i).addDataLinkLayerListener(dataLinkBinding);
 		outstation.setApplicationTransport(applicationBinding);
 		transportBinding.setApplicationLayer(2, outstation.getApplicationLayer());
-		transportBinding.setDataLinkLayer(dataLinkService);
-		dataLinkService.start();
+		transportBinding.setDataLinkLayer(dataLinkServices.get(i));
+		}
 		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("jetty-config.xml");
 		try {

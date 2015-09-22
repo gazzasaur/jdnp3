@@ -18,7 +18,6 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
 import net.sf.jdnp3.ui.web.outstation.GenericWebSocket;
 import net.sf.jdnp3.ui.web.outstation.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.InternalIndicatorMessage;
@@ -31,12 +30,6 @@ import org.slf4j.LoggerFactory;
 public class InternalIndicatorMessageHandler implements MessageHandler {
 	private Logger logger = LoggerFactory.getLogger(InternalIndicatorMessageHandler.class);
 	private static final List<String> TRUSTED_ATTRIBUTES = Arrays.asList("broadcast", "class1Events", "class2Events", "class3Events", "needTime", "localControl", "deviceTrouble", "deviceRestart", "noFunctionCodeSupport", "objectUnknown", "parameterError", "eventBufferOverflow", "alreadyExecuting", "configurationCorrupt");
-	
-	private InternalStatusProvider internalStatusProvider;
-	
-	public InternalIndicatorMessageHandler(InternalStatusProvider internalStatusProvider) {
-		this.internalStatusProvider = internalStatusProvider;
-	}
 	
 	public boolean canHandle(Message message) {
 		return message instanceof InternalIndicatorMessage;
@@ -54,7 +47,7 @@ public class InternalIndicatorMessageHandler implements MessageHandler {
 		}
 		
 		try {
-			BeanUtils.setProperty(internalStatusProvider, specificMessage.getAttribute(), specificMessage.isValue());
+			BeanUtils.setProperty(genericWebSocket.getDatabaseManager().getInternalStatusProvider(), specificMessage.getAttribute(), specificMessage.isValue());
 		} catch (Exception e) {
 			logger.error("Failed to set IIN flag.", e);
 		}

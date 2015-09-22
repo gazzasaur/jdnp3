@@ -18,7 +18,6 @@ package net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
 import net.sf.jdnp3.dnp3.stack.message.ChannelId;
@@ -33,14 +32,12 @@ public class ServerSocketChannelDataPumpListener implements DataPumpListener {
 	
 	private DataPumpWorker dataPump;
 	private ChannelManager channelManager;
-	private ExecutorService executorService;
 	private DataLinkListener dataLinkListener;
 	private ServerSocketChannel serverSocketChannel;
 
-	public ServerSocketChannelDataPumpListener(DataPumpWorker dataPump, ExecutorService executorService, ChannelManager channelManager, ServerSocketChannel serverSocketChannel, DataLinkListener dataLinkListener) {
+	public ServerSocketChannelDataPumpListener(DataPumpWorker dataPump, ChannelManager channelManager, ServerSocketChannel serverSocketChannel, DataLinkListener dataLinkListener) {
 		this.dataPump = dataPump;
 		this.channelManager = channelManager;
-		this.executorService = executorService;
 		this.dataLinkListener = dataLinkListener;
 		this.serverSocketChannel = serverSocketChannel;
 	}
@@ -52,7 +49,7 @@ public class ServerSocketChannelDataPumpListener implements DataPumpListener {
 			socketChannel.configureBlocking(false);
 			
 			ChannelId channelId = channelManager.addChannel(socketChannel);
-			dataPump.registerChannel(socketChannel, new SocketChannelDataPumpListener(channelId, executorService, channelManager, dataLinkListener));
+			dataPump.registerChannel(socketChannel, new SocketChannelDataPumpListener(channelId, channelManager, dataLinkListener));
 		} catch (Exception e) {
 			logger.error("Failed to accept client socket.", e);
 			try {

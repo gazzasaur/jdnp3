@@ -4,6 +4,7 @@ import static java.lang.String.format;
 
 import java.util.List;
 
+import javax.websocket.CloseReason;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -17,6 +18,7 @@ import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseListener;
+import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageDecoder;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistry;
@@ -34,22 +36,42 @@ public class GenericWebSocket implements DatabaseListener {
 	private Logger logger = LoggerFactory.getLogger(GenericWebSocket.class);
 	
 	private Session session;
+	private DatabaseManager databaseManager;
 	
 	@OnOpen
 	public void onConnect(Session session, EndpointConfig endpointConfig) {
-		this.session = session;
-		DatabaseManagerProvider.getDatabaseManager().addDatabaseListener(this);
+		if (!session.getRequestParameterMap().containsKey("stationCode") || !session.getRequestParameterMap().containsKey("deviceCode")) {
+			String reason = "A stationCode and deviceCode must be defined.";
+			tryCloseSession(session, reason);
+			logger.warn(reason);
+			return;
+		}
 		
-		this.valueChanged(DatabaseManagerProvider.getDatabaseManager().getInternalIndicatorsDataPoint());
-		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryInputDataPoints();
+		String stationCode = session.getRequestParameterMap().get("stationCode").get(0);
+		String deviceCode = session.getRequestParameterMap().get("deviceCode").get(0);
+		try {
+			databaseManager = DatabaseManagerProvider.getDatabaseManager(stationCode, deviceCode);
+		} catch (Exception e) {
+			String reason = format("Cannot from station %s and device %s.", stationCode, deviceCode);
+			tryCloseSession(session, reason);
+			logger.warn(reason);
+			return;
+		}
+		databaseManager.addDatabaseListener(this);
+		
+		this.session = session;
+    	session.setMaxIdleTimeout(0);
+    	
+		this.valueChanged(databaseManager.getInternalIndicatorsDataPoint());
+		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
 			this.valueChanged(binaryDataPoint);
 		}
-		List<BinaryOutputDataPoint> binaryOutputDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryOutputDataPoints();
+		List<BinaryOutputDataPoint> binaryOutputDataPoints = databaseManager.getBinaryOutputDataPoints();
 		for (BinaryOutputDataPoint binaryDataPoint : binaryOutputDataPoints) {
 			this.valueChanged(binaryDataPoint);
 		}
-		List<AnalogInputDataPoint> analogDataPoints = DatabaseManagerProvider.getDatabaseManager().getAnalogInputDataPoints();
+		List<AnalogInputDataPoint> analogDataPoints = databaseManager.getAnalogInputDataPoints();
 		for (AnalogInputDataPoint analogDataPoint : analogDataPoints) {
 			this.valueChanged(analogDataPoint);
 		}
@@ -64,10 +86,16 @@ public class GenericWebSocket implements DatabaseListener {
 	
     @OnClose
     public void onClose(Session session) {
+    	if (databaseManager != null) {
+    		databaseManager.removeDatabaseListener(this);
+    	}
     }
     
     @OnError
     public void onError(Session session, Throwable throwable) {
+    	if (databaseManager != null) {
+    		databaseManager.removeDatabaseListener(this);
+    	}
     	logger.error("Websocket Error", throwable);
     }
     
@@ -92,6 +120,22 @@ public class GenericWebSocket implements DatabaseListener {
 			}
 		} else {
 			logger.warn(format("Data point type %s has not been mapped to a message.", dataPoint.getClass()));
+		}
+	}
+	
+	public DatabaseManager getDatabaseManager() {
+		if (databaseManager == null) {
+			throw new IllegalStateException("No database manager has been subscribed to.");
+		}
+		return databaseManager;
+	}
+
+	private void tryCloseSession(Session session, String reason) {
+		try {
+			CloseReason closeReason = new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, reason);
+			session.close(closeReason);
+		} catch (Exception e) {
+			logger.error("Failed to close session.", e);
 		}
 	}
 }

@@ -20,7 +20,6 @@ import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.OUTSTATION_
 
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -40,7 +39,7 @@ public class TcpServerDataLinkService implements DataLinkService, DataLinkLayer 
 	private static final int MTU = 249;
 	
 	private int mtu = MTU;
-	private List<DataLinkListener> dataLinkListeners = new ArrayList<>();
+	private MultiDataLinkListener multiDataLinkListener = new MultiDataLinkListener();
 	private DataLinkFrameEncoder dataLinkFrameEncoder = new DataLinkFrameEncoderImpl();
 	
 	private ExecutorService executorService = null;
@@ -65,8 +64,8 @@ public class TcpServerDataLinkService implements DataLinkService, DataLinkLayer 
 		if (executorService == null) {
 			throw new IllegalStateException("No executor service has been defined.");
 		}
-		ServerSocketChannel serverSocketChannel = TcpServerDataLinkServiceConnector.create(host, port);
-		dataPump.registerServerChannel(serverSocketChannel, new ServerSocketChannelDataPumpListener(dataPump, executorService, channelManager, serverSocketChannel, dataLinkListeners.get(0)));
+		ServerSocketChannel serverSocketChannel = TcpServerDataLinkServiceConnector.create(getHost(), getPort());
+		dataPump.registerServerChannel(serverSocketChannel, new ServerSocketChannelDataPumpListener(dataPump, channelManager, serverSocketChannel, multiDataLinkListener));
 	}
 
 	public void stop() {
@@ -81,11 +80,11 @@ public class TcpServerDataLinkService implements DataLinkService, DataLinkLayer 
 	}	
 
 	public void addDataLinkLayerListener(DataLinkListener dataLinkListener) {
-		dataLinkListeners.add(dataLinkListener);
+		multiDataLinkListener.addDataLinkListener(dataLinkListener);
 	}
 
-	public void removeDataLinkLayerListener(DataLinkListener listener) {
-		dataLinkListeners.remove(listener);
+	public void removeDataLinkLayerListener(DataLinkListener dataLinkListener) {
+		multiDataLinkListener.removeDataLinkListener(dataLinkListener);
 	}
 
 	public void sendData(MessageProperties messageProperties, List<Byte> data) {
@@ -107,7 +106,24 @@ public class TcpServerDataLinkService implements DataLinkService, DataLinkLayer 
 	}
 
 	public void setExecutorService(ExecutorService executorService) {
+		multiDataLinkListener.setExecutorService(executorService);
 		this.executorService = executorService;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
 	}
 
 }

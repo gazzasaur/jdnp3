@@ -20,11 +20,18 @@ import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
 
 public class Class0Reader implements Class0ReadRequestHandler {
-	private AnalogInputStaticReader analogInputStaticReader = new AnalogInputStaticReader();
-	private BinaryInputStaticReader binaryInputStaticReader = new BinaryInputStaticReader();
-	private BinaryOutputStaticReader binaryOutputStaticReader = new BinaryOutputStaticReader();
+	private AnalogInputStaticReader analogInputStaticReader;
+	private BinaryInputStaticReader binaryInputStaticReader;
+	private BinaryOutputStaticReader binaryOutputStaticReader;
+	
+	public Class0Reader(DatabaseManager databaseManager) {
+		analogInputStaticReader = new AnalogInputStaticReader(databaseManager);
+		binaryInputStaticReader = new BinaryInputStaticReader(databaseManager);
+		binaryOutputStaticReader = new BinaryOutputStaticReader(databaseManager);
+	}
 	
 	public List<ObjectInstance> doReadClass() {
 		List<ObjectInstance> points = new ArrayList<>();

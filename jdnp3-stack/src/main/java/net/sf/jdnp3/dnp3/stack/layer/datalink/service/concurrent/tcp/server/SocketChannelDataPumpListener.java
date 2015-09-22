@@ -19,7 +19,6 @@ import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.MASTER_TO_O
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.decoder.DataLinkDigester;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
@@ -36,14 +35,12 @@ public class SocketChannelDataPumpListener implements DataPumpListener {
 	
 	private ChannelId channelId;
 	private ChannelManager channelManager;
-	private ExecutorService executorService;
 	private DataLinkListener dataLinkListener;
 	private DataLinkDigester dataLinkDigester = new DataLinkDigester();
 
-	public SocketChannelDataPumpListener(ChannelId channelId, ExecutorService executorService, ChannelManager channelManager, DataLinkListener dataLinkListener) {
+	public SocketChannelDataPumpListener(ChannelId channelId, ChannelManager channelManager, DataLinkListener dataLinkListener) {
 		this.channelId = channelId;
 		this.channelManager = channelManager;
-		this.executorService = executorService;
 		this.dataLinkListener = dataLinkListener;
 	}
 	
@@ -55,23 +52,19 @@ public class SocketChannelDataPumpListener implements DataPumpListener {
 	}
 
 	public void dataReceived(List<Byte> data) {
-		executorService.execute(new Runnable() {
-			public void run() {
-				try {
-					if (dataLinkDigester.digest(data)) {
-						MessageProperties messageProperties =new MessageProperties();
-						DataLinkFrame dataLinkFrame = dataLinkDigester.getDataLinkFrame();
-						messageProperties.setChannelId(channelId);
-						messageProperties.setTimeReceived(new Date().getTime());
-						messageProperties.setSourceAddress(dataLinkFrame.getDataLinkFrameHeader().getSource());
-						messageProperties.setDestinationAddress(dataLinkFrame.getDataLinkFrameHeader().getDestination());
-						messageProperties.setMaster(dataLinkFrame.getDataLinkFrameHeader().getDirection().equals(MASTER_TO_OUTSTATION));
-						dataLinkListener.receiveData(messageProperties, dataLinkFrame.getData());
-					}
-				} catch (Exception e) {
-					logger.error("Failed to process message.", e);
-				}
+		try {
+			if (dataLinkDigester.digest(data)) {
+				MessageProperties messageProperties =new MessageProperties();
+				DataLinkFrame dataLinkFrame = dataLinkDigester.getDataLinkFrame();
+				messageProperties.setChannelId(channelId);
+				messageProperties.setTimeReceived(new Date().getTime());
+				messageProperties.setSourceAddress(dataLinkFrame.getDataLinkFrameHeader().getSource());
+				messageProperties.setDestinationAddress(dataLinkFrame.getDataLinkFrameHeader().getDestination());
+				messageProperties.setMaster(dataLinkFrame.getDataLinkFrameHeader().getDirection().equals(MASTER_TO_OUTSTATION));
+				dataLinkListener.receiveData(messageProperties, dataLinkFrame.getData());
 			}
-		});
+		} catch (Exception e) {
+			logger.error("Failed to process message.", e);
+		}
 	}
 }

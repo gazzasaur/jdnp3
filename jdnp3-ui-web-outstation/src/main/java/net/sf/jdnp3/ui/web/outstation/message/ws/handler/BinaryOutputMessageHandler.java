@@ -18,7 +18,6 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 import net.sf.jdnp3.ui.web.outstation.GenericWebSocket;
 import net.sf.jdnp3.ui.web.outstation.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
@@ -42,7 +41,7 @@ public class BinaryOutputMessageHandler implements MessageHandler {
 		BinaryOutputDataPoint binaryDataPoint = new BinaryOutputDataPoint();
 		try {
 			BeanUtils.copyProperties(binaryDataPoint, binaryOutputMessage);
-			DatabaseManagerProvider.getDatabaseManager().setBinaryOutputDataPoint(binaryDataPoint);
+			genericWebSocket.getDatabaseManager().setBinaryOutputDataPoint(binaryDataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

@@ -20,11 +20,17 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.service.outstation.handler.CrobRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.CrobObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
+import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
 
 public class CrobOperator implements CrobRequestHandler {
+	private DatabaseManager databaseManager;
+
+	public CrobOperator(DatabaseManager databaseManager) {
+		this.databaseManager = databaseManager;
+	}
+	
 	public CrobObjectInstance doDirectOperate(CrobObjectInstance crobObjectInstance) {
-		List<BinaryOutputDataPoint> binaryOutputDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryOutputDataPoints();
+		List<BinaryOutputDataPoint> binaryOutputDataPoints = databaseManager.getBinaryOutputDataPoints();
 		if (binaryOutputDataPoints.size() > crobObjectInstance.getIndex()) {
 			crobObjectInstance.setStatusCode(binaryOutputDataPoints.get((int) crobObjectInstance.getIndex()).getStatusCode());
 		}

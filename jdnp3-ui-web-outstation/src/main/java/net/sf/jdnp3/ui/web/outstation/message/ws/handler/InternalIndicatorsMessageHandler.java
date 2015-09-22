@@ -17,7 +17,7 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 
 import net.sf.jdnp3.ui.web.outstation.GenericWebSocket;
 import net.sf.jdnp3.ui.web.outstation.MessageHandler;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
+import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.InternalIndicatorsDataPoint;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.InternalIndicatorsMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
@@ -28,6 +28,12 @@ import org.slf4j.LoggerFactory;
 
 public class InternalIndicatorsMessageHandler implements MessageHandler {
 	private Logger logger = LoggerFactory.getLogger(InternalIndicatorsMessageHandler.class);
+	
+	private DatabaseManager databaseManager;
+	
+	public InternalIndicatorsMessageHandler(DatabaseManager databaseManager) {
+		this.databaseManager = databaseManager;
+	}
 	
 	public boolean canHandle(Message message) {
 		return message instanceof InternalIndicatorsMessage;
@@ -41,7 +47,7 @@ public class InternalIndicatorsMessageHandler implements MessageHandler {
 		InternalIndicatorsDataPoint dataPoint = new InternalIndicatorsDataPoint();
 		try {
 			BeanUtils.copyProperties(dataPoint, specificMessage);
-			DatabaseManagerProvider.getDatabaseManager().setInternalIndicatorDataPoint(dataPoint);
+			databaseManager.setInternalIndicatorDataPoint(dataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

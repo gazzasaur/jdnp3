@@ -21,14 +21,20 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.service.outstation.handler.BinaryInputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
+import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
 
 import org.apache.commons.beanutils.BeanUtils;
 
 public class BinaryInputStaticReader implements BinaryInputStaticReadRequestHandler {
+	private DatabaseManager databaseManager;
+
+	public BinaryInputStaticReader(DatabaseManager databaseManager) {
+		this.databaseManager = databaseManager;
+	}
+	
 	public List<BinaryInputStaticObjectInstance> doReadStatics(long startIndex, long stopIndex) {
 		List<BinaryInputStaticObjectInstance> points = new ArrayList<>();
-		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryInputDataPoints();
+		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 
 		for (long i = startIndex; i <= stopIndex; ++i) {
 			BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
@@ -44,7 +50,7 @@ public class BinaryInputStaticReader implements BinaryInputStaticReadRequestHand
 
 	public List<BinaryInputStaticObjectInstance> doReadStatics() {
 		List<BinaryInputStaticObjectInstance> points = new ArrayList<>();
-		List<BinaryInputDataPoint> binaryDataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryInputDataPoints();
+		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 
 		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
 			BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();

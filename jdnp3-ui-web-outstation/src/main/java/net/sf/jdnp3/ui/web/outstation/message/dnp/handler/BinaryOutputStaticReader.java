@@ -21,14 +21,20 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.service.outstation.handler.BinaryOutputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryOutputStaticObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
+import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
 
 import org.apache.commons.beanutils.BeanUtils;
 
 public class BinaryOutputStaticReader implements BinaryOutputStaticReadRequestHandler {
+	private DatabaseManager databaseManager;
+
+	public BinaryOutputStaticReader(DatabaseManager databaseManager) {
+		this.databaseManager = databaseManager;
+	}
+	
 	public List<BinaryOutputStaticObjectInstance> doReadStatics(long startIndex, long stopIndex) {
 		List<BinaryOutputStaticObjectInstance> points = new ArrayList<>();
-		List<BinaryOutputDataPoint> dataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryOutputDataPoints();
+		List<BinaryOutputDataPoint> dataPoints = databaseManager.getBinaryOutputDataPoints();
 
 		for (long i = startIndex; i <= stopIndex; ++i) {
 			BinaryOutputStaticObjectInstance staticObjectInstance = new BinaryOutputStaticObjectInstance();
@@ -44,7 +50,7 @@ public class BinaryOutputStaticReader implements BinaryOutputStaticReadRequestHa
 
 	public List<BinaryOutputStaticObjectInstance> doReadStatics() {
 		List<BinaryOutputStaticObjectInstance> points = new ArrayList<>();
-		List<BinaryOutputDataPoint> dataPoints = DatabaseManagerProvider.getDatabaseManager().getBinaryOutputDataPoints();
+		List<BinaryOutputDataPoint> dataPoints = databaseManager.getBinaryOutputDataPoints();
 
 		for (BinaryOutputDataPoint dataPoint : dataPoints) {
 			BinaryOutputStaticObjectInstance staticObjectInstance = new BinaryOutputStaticObjectInstance();

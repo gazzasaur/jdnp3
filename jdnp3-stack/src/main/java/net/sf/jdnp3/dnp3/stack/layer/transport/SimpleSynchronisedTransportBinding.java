@@ -33,7 +33,7 @@ public class SimpleSynchronisedTransportBinding implements TransportBinding {
 		validate();
 		TransportSegment transportSegment = transportSegmentDecoder.decode(data);
 		if (transportSegmentDigester.digestData(messageProperties, transportSegment, data)) {
-			applicationLayer.dataReceived(messageProperties, data);
+			applicationLayer.dataReceived(messageProperties, transportSegmentDigester.pollData());
 		}
 	}
 

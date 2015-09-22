@@ -18,7 +18,6 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 import net.sf.jdnp3.ui.web.outstation.GenericWebSocket;
 import net.sf.jdnp3.ui.web.outstation.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.AnalogInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
@@ -42,7 +41,7 @@ public class AnalogInputMessageHandler implements MessageHandler {
 		AnalogInputDataPoint analogDataPoint = new AnalogInputDataPoint();
 		try {
 			BeanUtils.copyProperties(analogDataPoint, analogInputMessage);
-			DatabaseManagerProvider.getDatabaseManager().setAnalogInputDataPoint(analogDataPoint);
+			genericWebSocket.getDatabaseManager().setAnalogInputDataPoint(analogDataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

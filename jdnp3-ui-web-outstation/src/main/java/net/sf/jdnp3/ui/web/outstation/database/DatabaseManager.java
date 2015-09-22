@@ -18,6 +18,9 @@ package net.sf.jdnp3.ui.web.outstation.database;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
+import net.sf.jdnp3.ui.web.outstation.DatabaseInternalIndicatorProvider;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +33,12 @@ public class DatabaseManager {
 	private Database database = new Database();
 	private List<EventListener> eventListeners = new ArrayList<>();
 	private List<DatabaseListener> databaseListeners = new ArrayList<>();
-	
+	private InternalStatusProvider internalStatusProvider = new DatabaseInternalIndicatorProvider(this);
+
+	public InternalStatusProvider getInternalStatusProvider() {
+		return internalStatusProvider;
+	}
+
 	public void setAnalogInputDatabaseSize(int size) {
 		synchronized (database) {
 			while (database.getAnalogInputDataPoints().size() > size) {

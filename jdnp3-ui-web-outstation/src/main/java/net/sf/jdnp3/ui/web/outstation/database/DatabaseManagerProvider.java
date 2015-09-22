@@ -15,10 +15,28 @@
  */
 package net.sf.jdnp3.ui.web.outstation.database;
 
+import static java.lang.String.format;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class DatabaseManagerProvider {
-	private static DatabaseManager databaseManager = new DatabaseManager();
+	private static Map<String, Map<String, DatabaseManager>> databaseManagers = new HashMap<String, Map<String, DatabaseManager>>();
 	
-	public static DatabaseManager getDatabaseManager() {
-		return databaseManager;
+	public synchronized static DatabaseManager getDatabaseManager(String stationCode, String deviceCode) {
+		if (databaseManagers.containsKey(stationCode) && databaseManagers.get(stationCode).containsKey(deviceCode)) {
+			return databaseManagers.get(stationCode).get(deviceCode);
+		}
+		throw new IllegalArgumentException(format("No device could be found for station %s device %s.", stationCode, deviceCode));
+	}
+	
+	public synchronized static DatabaseManager registerDevice(String stationCode, String deviceCode) {
+		if (!databaseManagers.containsKey(stationCode)) {
+			databaseManagers.put(stationCode, new HashMap<>());
+		}
+		if (!databaseManagers.get(stationCode).containsKey(deviceCode)) {
+			databaseManagers.get(stationCode).put(deviceCode, new DatabaseManager());
+		}
+		return databaseManagers.get(stationCode).get(deviceCode);
 	}
 }

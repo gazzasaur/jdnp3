@@ -21,14 +21,20 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.service.outstation.handler.AnalogInputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
+import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
 
 import org.apache.commons.beanutils.BeanUtils;
 
 public class AnalogInputStaticReader implements AnalogInputStaticReadRequestHandler {
+	private DatabaseManager databaseManager;
+
+	public AnalogInputStaticReader(DatabaseManager databaseManager) {
+		this.databaseManager = databaseManager;
+	}
+	
 	public List<AnalogInputStaticObjectInstance> doReadStatics(long startIndex, long stopIndex) {
 		List<AnalogInputStaticObjectInstance> points = new ArrayList<>();
-		List<AnalogInputDataPoint> dataPoints = DatabaseManagerProvider.getDatabaseManager().getAnalogInputDataPoints();
+		List<AnalogInputDataPoint> dataPoints = databaseManager.getAnalogInputDataPoints();
 
 		for (long i = startIndex; i <= stopIndex; ++i) {
 			AnalogInputStaticObjectInstance analogInputStaticObjectInstance = new AnalogInputStaticObjectInstance();
@@ -44,7 +50,7 @@ public class AnalogInputStaticReader implements AnalogInputStaticReadRequestHand
 
 	public List<AnalogInputStaticObjectInstance> doReadStatics() {
 		List<AnalogInputStaticObjectInstance> points = new ArrayList<>();
-		List<AnalogInputDataPoint> dataPoints = DatabaseManagerProvider.getDatabaseManager().getAnalogInputDataPoints();
+		List<AnalogInputDataPoint> dataPoints = databaseManager.getAnalogInputDataPoints();
 
 		for (AnalogInputDataPoint analogDataPoint : dataPoints) {
 			AnalogInputStaticObjectInstance analogInputStaticObjectInstance = new AnalogInputStaticObjectInstance();

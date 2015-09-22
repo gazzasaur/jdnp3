@@ -17,7 +17,6 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 
 import net.sf.jdnp3.ui.web.outstation.GenericWebSocket;
 import net.sf.jdnp3.ui.web.outstation.MessageHandler;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputEventMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
@@ -31,6 +30,6 @@ public class BinaryInputEventMessageHandler implements MessageHandler {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 		BinaryInputEventMessage binaryInputEventMessage = (BinaryInputEventMessage) message;
-		DatabaseManagerProvider.getDatabaseManager().triggerBinaryInputEvent(binaryInputEventMessage.getIndex());
+		genericWebSocket.getDatabaseManager().triggerBinaryInputEvent(binaryInputEventMessage.getIndex());
 	}
 }

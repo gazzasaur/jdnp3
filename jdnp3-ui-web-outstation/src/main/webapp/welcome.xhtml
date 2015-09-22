@@ -22,9 +22,8 @@
 		<h:outputStylesheet library="css" name="general.css" />
 	</f:facet>
 
-	<f:view>
+	<f:view transient="true">
 		<h:form>
-			<p:remoteCommand name="updatePage" update="page" />
 			<p:outputPanel id="page">
 				<div style="text-align: center; display: block;">
 					<p:panel header="Internal Indicators">
@@ -36,7 +35,7 @@
 				<div style="text-align: center; display: inline-block;">
 					<p:panel header="Binary Input">
 						<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-							<c:forEach var="point" items="#{uiPointDatabase.binaryInputDataPoints}">
+							<c:forEach var="point" items="#{uiPointDatabase.getBinaryInputDataPoints(param['stationCode'], param['deviceCode'])}">
 								<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:binaryInput point="#{point}" />
 							</c:forEach>
 						</p:panelGrid>
@@ -45,7 +44,7 @@
 				<div style="text-align: center; display: inline-block;">
 					<p:panel header="Binary Output">
 						<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-							<c:forEach var="point" items="#{uiPointDatabase.binaryOutputDataPoints}">
+							<c:forEach var="point" items="#{uiPointDatabase.getBinaryOutputDataPoints(param['stationCode'], param['deviceCode'])}">
 								<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:binaryOutput point="#{point}" />
 							</c:forEach>
 						</p:panelGrid>
@@ -54,7 +53,7 @@
 				<div style="text-align: center; display: inline-block;">
 					<p:panel header="Analog Input">
 						<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-							<c:forEach var="point" items="#{uiPointDatabase.analogInputDataPoints}">
+							<c:forEach var="point" items="#{uiPointDatabase.getAnalogInputDataPoints(param['stationCode'], param['deviceCode'])}">
 								<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:analogInput point="#{point}" />
 							</c:forEach>
 						</p:panelGrid>
