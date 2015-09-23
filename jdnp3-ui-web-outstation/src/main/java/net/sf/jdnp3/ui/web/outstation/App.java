@@ -18,8 +18,6 @@ package net.sf.jdnp3.ui.web.outstation;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationFactory;
@@ -29,7 +27,6 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.TcpS
 import net.sf.jdnp3.dnp3.stack.layer.transport.ApplicationTransportBindingAdaptor;
 import net.sf.jdnp3.dnp3.stack.layer.transport.DataLinkTransportBindingAdaptor;
 import net.sf.jdnp3.dnp3.stack.layer.transport.SimpleSynchronisedTransportBinding;
-import net.sf.jdnp3.dnp3.stack.nio.DataPumpWorker;
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
@@ -128,79 +125,68 @@ public class App {
 		registry.register("binaryOutputPoint", BinaryOutputDataPoint.class, BinaryOutputMessage.class);
 		registry.register("analogInputPoint", AnalogInputDataPoint.class, AnalogInputMessage.class);
 
-		DataPumpWorker dataPumpWorker = new DataPumpWorker();
-		new Thread(dataPumpWorker).start();
+		ClassPathXmlApplicationContext loadContext = new ClassPathXmlApplicationContext("outstation-config.xml");
+		List<TcpServerDataLinkService> dataLinkServices = new ArrayList<>(loadContext.getBeansOfType(TcpServerDataLinkService.class).values());
+		loadContext.close();
 		
-		ExecutorService executorService = Executors.newFixedThreadPool(2);
-		
-		List<TcpServerDataLinkService> dataLinkServices = new ArrayList<>();
-		for (int i = 0; i < 10000; ++i) {
-			TcpServerDataLinkService dataLinkService = new TcpServerDataLinkService();
-			dataLinkService.setExecutorService(executorService);
-			dataLinkService.setDataPump(dataPumpWorker);
-			dataLinkService.setPort(30000 + i);
-			dataLinkService.start();
-			dataLinkServices.add(dataLinkService);
-		}
-
-		for (int i = 0; i < 10000; ++i) {
-		DatabaseManager databaseManager = DatabaseManagerProvider.registerDevice("PS" + i, "PP1");
-		databaseManager.setBinaryInputDatabaseSize(3);
-		databaseManager.setBinaryOutputDatabaseSize(3);
-		databaseManager.setAnalogInputDatabaseSize(3);
-		
-		OutstationFactory outstationFactory = new OutstationFactory();
-		outstationFactory.addStandardOutstationRequestHandlerAdaptors();
-		outstationFactory.addStandardObjectTypeDecoders();
-		outstationFactory.setInternalStatusProvider(databaseManager.getInternalStatusProvider());
-		
-		Outstation outstation = outstationFactory.createOutstation();
-		outstation.addRequestHandler(new BinaryInputStaticReader(databaseManager));
-		outstation.addRequestHandler(new AnalogInputStaticReader(databaseManager));
-		outstation.addRequestHandler(new Class0Reader(databaseManager));
-		outstation.addRequestHandler(new Class1Reader());
-		outstation.addRequestHandler(new Class2Reader());
-		outstation.addRequestHandler(new Class3Reader());
-		outstation.addRequestHandler(new CrobOperator(databaseManager));
-		outstation.addRequestHandler(new InternalIndicatorWriter(databaseManager.getInternalStatusProvider()));
-		
-		databaseManager.addEventListener(new EventListener() {
-			public void eventReceived(DataPoint dataPoint) {
-				if (dataPoint instanceof BinaryInputDataPoint) {
-					BinaryInputEventObjectInstance binaryInputEventObjectInstance = new BinaryInputEventObjectInstance();
-					try {
-						BinaryInputDataPoint binaryDataPoint = (BinaryInputDataPoint) dataPoint;
-						BeanUtils.copyProperties(binaryInputEventObjectInstance, binaryDataPoint);
-						binaryInputEventObjectInstance.setTimestamp(new Date().getTime());
-						binaryInputEventObjectInstance.setEventClass(binaryDataPoint.getEventClass());
-						binaryInputEventObjectInstance.setRequestedType(binaryDataPoint.getEventType());
-						outstation.sendEvent(binaryInputEventObjectInstance);
-					} catch (Exception e) {
-						logger.error("Failed to send event.", e);
-					}
-				} else if (dataPoint instanceof AnalogInputDataPoint) {
-					AnalogInputEventObjectInstance analogInputEventObjectInstance = new AnalogInputEventObjectInstance();
-					try {
-						AnalogInputDataPoint analogDataPoint = (AnalogInputDataPoint) dataPoint;
-						BeanUtils.copyProperties(analogInputEventObjectInstance, analogDataPoint);
-						analogInputEventObjectInstance.setTimestamp(new Date().getTime());
-						analogInputEventObjectInstance.setEventClass(analogDataPoint.getEventClass());
-						analogInputEventObjectInstance.setRequestedType(analogDataPoint.getEventType());
-						outstation.sendEvent(analogInputEventObjectInstance);
-					} catch (Exception e) {
-						logger.error("Failed to send event.", e);
+		for (int i = 0; i < 1000; ++i) {
+			DatabaseManager databaseManager = DatabaseManagerProvider.registerDevice("PS" + i, "PP1");
+			databaseManager.setBinaryInputDatabaseSize(3);
+			databaseManager.setBinaryOutputDatabaseSize(3);
+			databaseManager.setAnalogInputDatabaseSize(3);
+			
+			OutstationFactory outstationFactory = new OutstationFactory();
+			outstationFactory.addStandardOutstationRequestHandlerAdaptors();
+			outstationFactory.addStandardObjectTypeDecoders();
+			outstationFactory.setInternalStatusProvider(databaseManager.getInternalStatusProvider());
+			
+			Outstation outstation = outstationFactory.createOutstation();
+			outstation.addRequestHandler(new BinaryInputStaticReader(databaseManager));
+			outstation.addRequestHandler(new AnalogInputStaticReader(databaseManager));
+			outstation.addRequestHandler(new Class0Reader(databaseManager));
+			outstation.addRequestHandler(new Class1Reader());
+			outstation.addRequestHandler(new Class2Reader());
+			outstation.addRequestHandler(new Class3Reader());
+			outstation.addRequestHandler(new CrobOperator(databaseManager));
+			outstation.addRequestHandler(new InternalIndicatorWriter(databaseManager.getInternalStatusProvider()));
+			
+			databaseManager.addEventListener(new EventListener() {
+				public void eventReceived(DataPoint dataPoint) {
+					if (dataPoint instanceof BinaryInputDataPoint) {
+						BinaryInputEventObjectInstance binaryInputEventObjectInstance = new BinaryInputEventObjectInstance();
+						try {
+							BinaryInputDataPoint binaryDataPoint = (BinaryInputDataPoint) dataPoint;
+							BeanUtils.copyProperties(binaryInputEventObjectInstance, binaryDataPoint);
+							binaryInputEventObjectInstance.setTimestamp(new Date().getTime());
+							binaryInputEventObjectInstance.setEventClass(binaryDataPoint.getEventClass());
+							binaryInputEventObjectInstance.setRequestedType(binaryDataPoint.getEventType());
+							outstation.sendEvent(binaryInputEventObjectInstance);
+						} catch (Exception e) {
+							logger.error("Failed to send event.", e);
+						}
+					} else if (dataPoint instanceof AnalogInputDataPoint) {
+						AnalogInputEventObjectInstance analogInputEventObjectInstance = new AnalogInputEventObjectInstance();
+						try {
+							AnalogInputDataPoint analogDataPoint = (AnalogInputDataPoint) dataPoint;
+							BeanUtils.copyProperties(analogInputEventObjectInstance, analogDataPoint);
+							analogInputEventObjectInstance.setTimestamp(new Date().getTime());
+							analogInputEventObjectInstance.setEventClass(analogDataPoint.getEventClass());
+							analogInputEventObjectInstance.setRequestedType(analogDataPoint.getEventType());
+							outstation.sendEvent(analogInputEventObjectInstance);
+						} catch (Exception e) {
+							logger.error("Failed to send event.", e);
+						}
 					}
 				}
-			}
-		});
-				
-		SimpleSynchronisedTransportBinding transportBinding = new SimpleSynchronisedTransportBinding();
-		DataLinkTransportBindingAdaptor dataLinkBinding = new DataLinkTransportBindingAdaptor(transportBinding);
-		ApplicationTransportBindingAdaptor applicationBinding = new ApplicationTransportBindingAdaptor(transportBinding);
-		dataLinkServices.get(i).addDataLinkLayerListener(dataLinkBinding);
-		outstation.setApplicationTransport(applicationBinding);
-		transportBinding.setApplicationLayer(2, outstation.getApplicationLayer());
-		transportBinding.setDataLinkLayer(dataLinkServices.get(i));
+			});
+					
+			SimpleSynchronisedTransportBinding transportBinding = new SimpleSynchronisedTransportBinding();
+			DataLinkTransportBindingAdaptor dataLinkBinding = new DataLinkTransportBindingAdaptor(transportBinding);
+			ApplicationTransportBindingAdaptor applicationBinding = new ApplicationTransportBindingAdaptor(transportBinding);
+			dataLinkServices.get(0).addDataLinkLayerListener(dataLinkBinding);
+			outstation.setApplicationTransport(applicationBinding);
+			transportBinding.setApplicationLayer(i+2, outstation.getApplicationLayer());
+			transportBinding.setDataLinkLayer(dataLinkServices.get(0));
 		}
 		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("jetty-config.xml");

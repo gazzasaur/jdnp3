@@ -31,6 +31,7 @@ public class DataPumpWorker implements Runnable {
 	private Logger logger = LoggerFactory.getLogger(DataPumpWorker.class);
 	
 	private Selector selector;
+	private boolean running = false;
 	private Object selectionLock = new Object();
 	
 	public DataPumpWorker() {
@@ -85,7 +86,8 @@ public class DataPumpWorker implements Runnable {
 	}
 
 	public void run() {
-		while (true) {
+		running = true;
+		while (running) {
 			try {
 				synchronized (selectionLock) {
 				}
@@ -145,6 +147,7 @@ public class DataPumpWorker implements Runnable {
 				}
 			} catch (Exception e) {
 				logger.error("Failed during read loop.", e);
+				running = false;
 			}
 		}
 	}

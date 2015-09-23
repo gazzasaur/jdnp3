@@ -22,6 +22,7 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public class SimpleSynchronisedTransportBinding implements TransportBinding {
+	private int address;
 	private DataLinkLayer dataLinkLayer;
 	private ApplicationLayer applicationLayer;
 	private TransportSegmentEncoder transportSegmentEncoder = new TransportSegmentEncoderImpl();
@@ -31,6 +32,9 @@ public class SimpleSynchronisedTransportBinding implements TransportBinding {
 
 	public synchronized void receiveDataLinkData(MessageProperties messageProperties, List<Byte> data) {
 		validate();
+		if (address != messageProperties.getDestinationAddress()) {
+			return;
+		}
 		TransportSegment transportSegment = transportSegmentDecoder.decode(data);
 		if (transportSegmentDigester.digestData(messageProperties, transportSegment, data)) {
 			applicationLayer.dataReceived(messageProperties, transportSegmentDigester.pollData());
@@ -46,6 +50,7 @@ public class SimpleSynchronisedTransportBinding implements TransportBinding {
 	}
 	
 	public synchronized void setApplicationLayer(int address, ApplicationLayer applicationLayer) {
+		this.address = address;
 		this.applicationLayer = applicationLayer;
 		transportSegmentDigester.setApplicationMtu(applicationLayer.getMtu());
 	}

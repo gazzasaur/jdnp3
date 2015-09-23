@@ -3,37 +3,43 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
-	<bean id="databaseManager" class="net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider" factory-method="getDatabaseManager" />
-	
-	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="targetObject" ref="databaseManager" />
-		<property name="targetMethod" value="setBinaryInputDatabaseSize" />
-		<property name="arguments">
-			<list>
-				<value type="java.lang.Integer">4</value>
-			</list>
-		</property>
+	<bean id="executorService" class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
+		<constructor-arg value="2" />
 	</bean>
 	
+	<bean id="dataPump" class="net.sf.jdnp3.dnp3.stack.nio.DataPump" />
 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="targetObject" ref="databaseManager" />
-		<property name="targetMethod" value="setBinaryOutputDatabaseSize" />
-		<property name="arguments">
-			<list>
-				<value type="java.lang.Integer">1</value>
-			</list>
-		</property>
-	</bean>
-
-	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="targetObject" ref="databaseManager" />
-		<property name="targetMethod" value="setAnalogInputDatabaseSize" />
-		<property name="arguments">
-			<list>
-				<value type="java.lang.Integer">2</value>
-			</list>
-		</property>
+		<property name="targetObject" ref="dataPump" />
+		<property name="targetMethod" value="start" />
 	</bean>
 	
+	<bean id="dataLinkService-20000" class="net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.TcpServerDataLinkService">
+		<property name="executorService" ref="executorService" />
+		<property name="dataPump" ref="dataPump" />
+		<property name="port" value="20000" />
+	</bean>
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="dataLinkService-20000" />
+		<property name="targetMethod" value="start" />
+	</bean>
 	
+	<bean id="dataLinkService-20001" class="net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.TcpServerDataLinkService">
+		<property name="executorService" ref="executorService" />
+		<property name="dataPump" ref="dataPump" />
+		<property name="port" value="20001" />
+	</bean>
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="dataLinkService-20001" />
+		<property name="targetMethod" value="start" />
+	</bean>
+	
+	<bean id="dataLinkService-20002" class="net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.TcpServerDataLinkService">
+		<property name="executorService" ref="executorService" />
+		<property name="dataPump" ref="dataPump" />
+		<property name="port" value="20002" />
+	</bean>
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="dataLinkService-20002" />
+		<property name="targetMethod" value="start" />
+	</bean>
 </beans>

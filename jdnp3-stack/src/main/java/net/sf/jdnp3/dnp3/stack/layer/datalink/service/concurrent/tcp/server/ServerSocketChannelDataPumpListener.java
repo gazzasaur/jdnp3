@@ -21,8 +21,8 @@ import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
 import net.sf.jdnp3.dnp3.stack.message.ChannelId;
+import net.sf.jdnp3.dnp3.stack.nio.DataPump;
 import net.sf.jdnp3.dnp3.stack.nio.DataPumpListener;
-import net.sf.jdnp3.dnp3.stack.nio.DataPumpWorker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +30,12 @@ import org.slf4j.LoggerFactory;
 public class ServerSocketChannelDataPumpListener implements DataPumpListener {
 	private Logger logger = LoggerFactory.getLogger(ServerSocketChannelDataPumpListener.class);
 	
-	private DataPumpWorker dataPump;
+	private DataPump dataPump;
 	private ChannelManager channelManager;
 	private DataLinkListener dataLinkListener;
 	private ServerSocketChannel serverSocketChannel;
 
-	public ServerSocketChannelDataPumpListener(DataPumpWorker dataPump, ChannelManager channelManager, ServerSocketChannel serverSocketChannel, DataLinkListener dataLinkListener) {
+	public ServerSocketChannelDataPumpListener(DataPump dataPump, ChannelManager channelManager, ServerSocketChannel serverSocketChannel, DataLinkListener dataLinkListener) {
 		this.dataPump = dataPump;
 		this.channelManager = channelManager;
 		this.dataLinkListener = dataLinkListener;
