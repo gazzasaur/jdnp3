@@ -15,8 +15,8 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 
-import net.sf.jdnp3.ui.web.outstation.GenericWebSocket;
-import net.sf.jdnp3.ui.web.outstation.MessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceWebSocket;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputEventMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
@@ -25,11 +25,11 @@ public class BinaryInputEventMessageHandler implements MessageHandler {
 		return message instanceof BinaryInputEventMessage;
 	}
 
-	public void processMessage(GenericWebSocket genericWebSocket, Message message) {
+	public void processMessage(DeviceWebSocket webSocket, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 		BinaryInputEventMessage binaryInputEventMessage = (BinaryInputEventMessage) message;
-		genericWebSocket.getDatabaseManager().triggerBinaryInputEvent(binaryInputEventMessage.getIndex());
+		webSocket.getDatabaseManager().triggerBinaryInputEvent(binaryInputEventMessage.getIndex());
 	}
 }

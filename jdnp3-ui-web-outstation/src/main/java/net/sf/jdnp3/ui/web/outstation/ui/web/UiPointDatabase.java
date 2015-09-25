@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation;
+package net.sf.jdnp3.ui.web.outstation.ui.web;
 
 import static java.lang.String.format;
 
@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
@@ -38,7 +39,11 @@ public class UiPointDatabase {
 	private Logger logger = LoggerFactory.getLogger(UiPointDatabase.class);
 	
 	public List<UiPoint> getBinaryInputDataPoints(String stationCode, String deviceCode) {
-		if (stationCode != null && deviceCode != null) {
+		if (FacesContext.getCurrentInstance().isPostback()) {
+			return new ArrayList<>();
+		}
+		
+		if (stationCode != null && deviceCode != null && !stationCode.isEmpty() && !deviceCode.isEmpty()) {
 			try {
 				DatabaseManagerProvider.getDatabaseManager(stationCode, deviceCode);
 				List<BinaryInputDataPoint> dataPoints = DatabaseManagerProvider.getDatabaseManager(stationCode, deviceCode).getBinaryInputDataPoints();
@@ -52,7 +57,11 @@ public class UiPointDatabase {
 	}
 
 	public List<UiPoint> getBinaryOutputDataPoints(String stationCode, String deviceCode) {
-		if (stationCode != null && deviceCode != null) {
+		if (FacesContext.getCurrentInstance().isPostback()) {
+			return new ArrayList<>();
+		}
+
+		if (stationCode != null && deviceCode != null && !stationCode.isEmpty() && !deviceCode.isEmpty()) {
 			try {
 				DatabaseManagerProvider.getDatabaseManager(stationCode, deviceCode);
 				List<BinaryOutputDataPoint> dataPoints = DatabaseManagerProvider.getDatabaseManager(stationCode, deviceCode).getBinaryOutputDataPoints();
@@ -66,7 +75,11 @@ public class UiPointDatabase {
 	}
 
 	public List<UiPoint> getAnalogInputDataPoints(String stationCode, String deviceCode) {
-		if (stationCode != null && deviceCode != null) {
+		if (FacesContext.getCurrentInstance().isPostback()) {
+			return new ArrayList<>();
+		}
+
+		if (stationCode != null && deviceCode != null && !stationCode.isEmpty() && !deviceCode.isEmpty()) {
 			try {
 				DatabaseManagerProvider.getDatabaseManager(stationCode, deviceCode);
 				List<AnalogInputDataPoint> dataPoints = DatabaseManagerProvider.getDatabaseManager(stationCode, deviceCode).getAnalogInputDataPoints();

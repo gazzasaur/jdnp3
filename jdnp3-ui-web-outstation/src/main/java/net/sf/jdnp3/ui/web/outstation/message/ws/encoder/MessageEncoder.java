@@ -1,4 +1,4 @@
-package net.sf.jdnp3.ui.web.outstation;
+package net.sf.jdnp3.ui.web.outstation.message.ws.encoder;
 
 import javax.websocket.EncodeException;
 import javax.websocket.Encoder;

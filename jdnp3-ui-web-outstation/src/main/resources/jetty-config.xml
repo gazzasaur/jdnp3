@@ -33,7 +33,7 @@
 		<property name="targetMethod" value="addEndpoint" />
 		<property name="arguments">
 			<list>
-				<value type="java.lang.Class">net.sf.jdnp3.ui.web.outstation.GenericWebSocket</value>
+				<value type="java.lang.Class">net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceWebSocket</value>
 			</list>
 		</property>
 	</bean>

@@ -18,7 +18,7 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jdnp3.ui.web.outstation.MessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
 public class MessageHandlerRegistry {

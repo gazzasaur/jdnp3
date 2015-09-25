@@ -17,7 +17,9 @@ package net.sf.jdnp3.ui.web.outstation.database;
 
 import static java.lang.String.format;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DatabaseManagerProvider {
@@ -38,5 +40,17 @@ public class DatabaseManagerProvider {
 			databaseManagers.get(stationCode).put(deviceCode, new DatabaseManager());
 		}
 		return databaseManagers.get(stationCode).get(deviceCode);
+	}
+
+	public synchronized static List<String> getStationNames() {
+		return new ArrayList<>(databaseManagers.keySet());
+	}
+
+	public synchronized static List<String> getDeviceNames(String station) {
+		Map<String, DatabaseManager> devices = databaseManagers.get(station);
+		if (devices != null) {
+			return new ArrayList<>(devices.keySet());
+		}
+		return new ArrayList<>();
 	}
 }

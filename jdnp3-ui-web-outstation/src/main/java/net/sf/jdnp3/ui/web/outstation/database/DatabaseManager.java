@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
-import net.sf.jdnp3.ui.web.outstation.DatabaseInternalIndicatorProvider;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;

@@ -15,10 +15,10 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 
-import net.sf.jdnp3.ui.web.outstation.GenericWebSocket;
-import net.sf.jdnp3.ui.web.outstation.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.InternalIndicatorsDataPoint;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceWebSocket;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.InternalIndicatorsMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
@@ -39,7 +39,7 @@ public class InternalIndicatorsMessageHandler implements MessageHandler {
 		return message instanceof InternalIndicatorsMessage;
 	}
 
-	public void processMessage(GenericWebSocket genericWebSocket, Message message) {
+	public void processMessage(DeviceWebSocket webSocket, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}

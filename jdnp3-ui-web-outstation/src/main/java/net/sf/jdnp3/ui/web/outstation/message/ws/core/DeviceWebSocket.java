@@ -1,4 +1,4 @@
-package net.sf.jdnp3.ui.web.outstation;
+package net.sf.jdnp3.ui.web.outstation.message.ws.core;
 
 import static java.lang.String.format;
 
@@ -23,17 +23,19 @@ import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageDecoder;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistry;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistryProvider;
+import net.sf.jdnp3.ui.web.outstation.message.ws.encoder.MessageEncoder;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistry;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistryProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.ModelChangedMessage;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@ServerEndpoint(value="/secure/ws/general", encoders=MessageEncoder.class, decoders=GenericMessageDecoder.class, configurator=GenericWebSocketConfigurator.class)
-public class GenericWebSocket implements DatabaseListener {
-	private Logger logger = LoggerFactory.getLogger(GenericWebSocket.class);
+@ServerEndpoint(value="/ws/device", encoders=MessageEncoder.class, decoders=GenericMessageDecoder.class, configurator=DeviceWebSocketConfigurator.class)
+public class DeviceWebSocket implements DatabaseListener {
+	private Logger logger = LoggerFactory.getLogger(DeviceWebSocket.class);
 	
 	private Session session;
 	private DatabaseManager databaseManager;

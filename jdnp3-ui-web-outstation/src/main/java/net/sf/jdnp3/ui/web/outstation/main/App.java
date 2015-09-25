@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation;
+package net.sf.jdnp3.ui.web.outstation.main;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -179,7 +179,7 @@ public class App {
 					}
 				}
 			});
-					
+
 			SimpleSynchronisedTransportBinding transportBinding = new SimpleSynchronisedTransportBinding();
 			DataLinkTransportBindingAdaptor dataLinkBinding = new DataLinkTransportBindingAdaptor(transportBinding);
 			ApplicationTransportBindingAdaptor applicationBinding = new ApplicationTransportBindingAdaptor(transportBinding);

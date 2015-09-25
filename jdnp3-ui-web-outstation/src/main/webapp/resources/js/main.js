@@ -21,7 +21,7 @@ EVENT_MESSAGE_REGISTRY.bi = 'binaryInputEvent';
 EVENT_MESSAGE_REGISTRY.ai = 'analogInputEvent';
 
 $(document).ready(function() {
-	var location = document.location.toString().replace(/\bhttp/,'ws').replace(/\/\/.*/,'//') + window.location.host + '/secure/ws/general' + window.location.search;
+	var location = document.location.toString().replace(/\bhttp/,'ws').replace(/\/\/.*/,'//') + window.location.host + '/ws/device' + window.location.search;
 	webSocket = new WebSocket(location);
 	
 	webSocket.onopen = function() {

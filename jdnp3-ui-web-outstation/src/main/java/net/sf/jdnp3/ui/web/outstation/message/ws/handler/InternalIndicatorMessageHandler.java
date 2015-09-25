@@ -18,8 +18,8 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.jdnp3.ui.web.outstation.GenericWebSocket;
-import net.sf.jdnp3.ui.web.outstation.MessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceWebSocket;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.InternalIndicatorMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
 
@@ -35,7 +35,7 @@ public class InternalIndicatorMessageHandler implements MessageHandler {
 		return message instanceof InternalIndicatorMessage;
 	}
 
-	public void processMessage(GenericWebSocket genericWebSocket, Message message) {
+	public void processMessage(DeviceWebSocket webSocket, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
@@ -47,7 +47,7 @@ public class InternalIndicatorMessageHandler implements MessageHandler {
 		}
 		
 		try {
-			BeanUtils.setProperty(genericWebSocket.getDatabaseManager().getInternalStatusProvider(), specificMessage.getAttribute(), specificMessage.isValue());
+			BeanUtils.setProperty(webSocket.getDatabaseManager().getInternalStatusProvider(), specificMessage.getAttribute(), specificMessage.isValue());
 		} catch (Exception e) {
 			logger.error("Failed to set IIN flag.", e);
 		}

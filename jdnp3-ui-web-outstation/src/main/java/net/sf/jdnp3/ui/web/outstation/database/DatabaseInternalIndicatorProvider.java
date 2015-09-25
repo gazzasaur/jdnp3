@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation;
+package net.sf.jdnp3.ui.web.outstation.database;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.database.InternalIndicatorsDataPoint;
 
 public class DatabaseInternalIndicatorProvider implements InternalStatusProvider {
 	private DatabaseManager databaseManager;
