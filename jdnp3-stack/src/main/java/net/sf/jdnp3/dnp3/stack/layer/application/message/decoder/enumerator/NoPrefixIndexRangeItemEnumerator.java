@@ -13,14 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
 
-public interface ObjectTypeDecoder {
-	public boolean canDecode(ObjectFragmentDecoderContext decoderContext);
-	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data);
+public class NoPrefixIndexRangeItemEnumerator implements ItemEnumerator {
+	private long index;
+	private IndexRange range;
+	
+	public NoPrefixIndexRangeItemEnumerator(IndexRange range) {
+		this.range = range;
+		index = range.getStartIndex() - 1;
+	}
+	
+	public boolean hasNext() {
+		return index != range.getStopIndex();
+	}
+	
+	public long next(List<Byte> data) {
+		if (!this.hasNext()) {
+			throw new IllegalStateException("No items remain.");
+		}
+		return ++index;
+	}
 }

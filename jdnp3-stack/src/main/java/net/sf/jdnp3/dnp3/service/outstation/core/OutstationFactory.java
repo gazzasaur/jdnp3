@@ -29,7 +29,6 @@ import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class3ReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.CrobRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.InternalIndicatorWriteRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.BinaryInputStaticObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class0ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class1ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class2ObjectTypeDecoder;
@@ -91,7 +90,6 @@ public class OutstationFactory {
 	}
 	
 	public void addStandardObjectTypeDecoders() {
-		decoders.add(new BinaryInputStaticObjectTypeDecoder());
 		decoders.add(new Class0ObjectTypeDecoder());
 		decoders.add(new Class1ObjectTypeDecoder());
 		decoders.add(new Class2ObjectTypeDecoder());

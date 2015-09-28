@@ -13,27 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.ui.web.outstation.channel;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
-public class NullObjectInstance implements ObjectInstance {
-	private long index = 0;
-	private ObjectType objectType = ObjectTypeConstants.ANY;
-	
-	public long getIndex() {
-		return index;
-	}
-	
-	public void setIndex(long index) {
-		this.index = index;
-	}
-	
-	public ObjectType getRequestedType() {
-		return objectType;
+public class DataLinkManager {
+	public int getBindingCount() {
+		return 0;
 	}
 
-	public void setRequestedType(ObjectType objectType) {
-		this.objectType = objectType;
+	public int getConnectionCount() {
+		return 0;
 	}
 }

@@ -13,27 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import java.util.List;
 
-public class NullObjectInstance implements ObjectInstance {
-	private long index = 0;
-	private ObjectType objectType = ObjectTypeConstants.ANY;
-	
-	public long getIndex() {
-		return index;
+public class NoPrefixCountRangeItemEnumerator implements ItemEnumerator {
+	public boolean hasNext() {
+		return false;
 	}
 	
-	public void setIndex(long index) {
-		this.index = index;
-	}
-	
-	public ObjectType getRequestedType() {
-		return objectType;
-	}
-
-	public void setRequestedType(ObjectType objectType) {
-		this.objectType = objectType;
+	public long next(List<Byte> data) {
+		throw new UnsupportedOperationException("No items exist for this combination.");
 	}
 }

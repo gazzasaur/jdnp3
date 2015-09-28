@@ -21,7 +21,6 @@ import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.trim;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.range.RangeDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
@@ -36,14 +35,15 @@ public class ObjectFragmentDecoder {
 		this.objectFragmentDataDecoder = objectFragmentDataDecoder;
 	}
 	
-	public void decode(FunctionCode functionCode, ObjectFragment objectFragment, List<Byte> data) {
+	public void decode(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment, List<Byte> data) {
 		objectFragment.getObjectFragmentHeader().setObjectType(new ObjectType((int) getInteger(0, 1, data), (int) getInteger(1, 1, data)));
+		decoderContext.setObjectType(objectFragment.getObjectFragmentHeader().getObjectType());
 		trim(2, data);
 		
 		qualifierDecoder.decode(objectFragment.getObjectFragmentHeader().getQualifierField(), data);
 		rangeDecoder.decode(objectFragment.getObjectFragmentHeader(), data);
 		prefixTypeDecoder.decode(objectFragment.getObjectFragmentHeader());
 		
-		objectFragmentDataDecoder.decode(functionCode, objectFragment, data);
+		objectFragmentDataDecoder.decode(decoderContext, objectFragment, data);
 	}
 }

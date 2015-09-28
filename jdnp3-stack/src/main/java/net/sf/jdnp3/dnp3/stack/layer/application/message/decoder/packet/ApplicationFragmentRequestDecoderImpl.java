@@ -32,9 +32,12 @@ public class ApplicationFragmentRequestDecoderImpl implements ApplicationFragmen
 		ApplicationFragmentRequest applicationFragmentRequest = new ApplicationFragmentRequest();
 		decoder.decode(applicationFragmentRequest, data);
 		
+		ObjectFragmentDecoderContext decoderContext = new ObjectFragmentDecoderContext();
+		decoderContext.setFunctionCode(applicationFragmentRequest.getHeader().getFunctionCode());
+		
 		while (data.size() > 0) {
 			ObjectFragment objectFragment = new ObjectFragment();
-			objectFragmentDecoder.decode(applicationFragmentRequest.getHeader().getFunctionCode(), objectFragment, data);
+			objectFragmentDecoder.decode(decoderContext, objectFragment, data);
 			applicationFragmentRequest.addObjectFragment(objectFragment);
 		}
 		

@@ -19,39 +19,36 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeC
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.InternalIndicatorBitObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class InternalIndicatorBitObjectTypeDecoder implements ObjectTypeDecoder {
-	public boolean canDecode(FunctionCode functionCode, ObjectFragment objectFragment) {
-		return functionCode.equals(FunctionCode.WRITE)
-				&& objectFragment.getObjectFragmentHeader().getObjectType().equals(INTERNAL_INDICATIONS_PACKED)
-				&& objectFragment.getObjectFragmentHeader().getPrefixType() instanceof NoPrefixType
-				&& objectFragment.getObjectFragmentHeader().getRange() instanceof IndexRange;
+	public boolean canDecode(ObjectFragmentDecoderContext decoderContext) {
+		return decoderContext.getObjectType().equals(INTERNAL_INDICATIONS_PACKED);
 	}
 
-	public void decode(FunctionCode functionCode, ObjectFragment objectFragment, List<Byte> data) {
-		if (!this.canDecode(functionCode, objectFragment)) {
+	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data) {
+		if (!this.canDecode(decoderContext)) {
 			throw new IllegalArgumentException("Cannot decode data.");
 		}
-		IndexRange indexRange = (IndexRange) objectFragment.getObjectFragmentHeader().getRange();
 		
-		int dataSize = 1;
-		if (indexRange.getStartIndex() < 8 && indexRange.getStopIndex() > 7) {
-			dataSize = 2;
+		long value = DataUtils.getInteger(0, 1, data);
+		if (decoderContext.getCurrentIndex() > 7) {
+			value = DataUtils.getInteger(0, 1, data);
 		}
-		long value = DataUtils.getInteger(0, dataSize, data);
-		DataUtils.trim(dataSize, data);
 		
-		for (long i = indexRange.getStartIndex(); i <= indexRange.getStopIndex(); ++i) {
-			InternalIndicatorBitObjectInstance objectInstance = new InternalIndicatorBitObjectInstance();
-			objectInstance.setIndex(i);
-			objectInstance.setActive((value & (1 << i)) != 0);
-			objectFragment.addObjectInstance(objectInstance);
+		InternalIndicatorBitObjectInstance objectInstance = new InternalIndicatorBitObjectInstance();
+		objectInstance.setIndex(decoderContext.getCurrentIndex());
+		objectInstance.setActive((value & (1 << decoderContext.getCurrentIndex())) != 0);
+		
+		if (decoderContext.isLastItem()) {
+			DataUtils.trim(1, data);
+			if (decoderContext.getStartIndex() < 8 && decoderContext.getCurrentIndex() > 7) {
+				DataUtils.trim(1, data);
+			}
 		}
+		return objectInstance;
 	}
 }

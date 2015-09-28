@@ -15,25 +15,39 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
 
+import static java.util.Collections.unmodifiableList;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
-public class NullObjectInstance implements ObjectInstance {
-	private long index = 0;
-	private ObjectType objectType = ObjectTypeConstants.ANY;
-	
+public class GenericObjectInstance implements ObjectInstance {
+	private long index;
+	private ObjectType requestedType;
+	private List<Byte> data = new ArrayList<>();
+
 	public long getIndex() {
 		return index;
 	}
-	
+
 	public void setIndex(long index) {
 		this.index = index;
 	}
-	
+
 	public ObjectType getRequestedType() {
-		return objectType;
+		return requestedType;
 	}
 
-	public void setRequestedType(ObjectType objectType) {
-		this.objectType = objectType;
+	public void setRequestedType(ObjectType requestedType) {
+		this.requestedType = requestedType;
+	}
+	
+	public List<Byte> getData() {
+		return unmodifiableList(data);
+	}
+
+	public void setData(List<Byte> returnData) {
+		data = new ArrayList<>(data);
 	}
 }

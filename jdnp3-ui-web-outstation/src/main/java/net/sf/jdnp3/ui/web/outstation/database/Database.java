@@ -49,6 +49,13 @@ public class Database {
 		analogInputDataPoints.add(analogDataPoint);
 	}
 	
+	public void addAnalogInputDataPoint(String name) {
+		AnalogInputDataPoint analogDataPoint = new AnalogInputDataPoint();
+		analogDataPoint.setIndex(analogInputDataPoints.size());
+		analogDataPoint.setName(name);
+		analogInputDataPoints.add(analogDataPoint);
+	}
+	
 	public void addBinaryInputDataPoint() {
 		BinaryInputDataPoint binaryDataPoint = new BinaryInputDataPoint();
 		binaryDataPoint.setIndex(binaryInputDataPoints.size());

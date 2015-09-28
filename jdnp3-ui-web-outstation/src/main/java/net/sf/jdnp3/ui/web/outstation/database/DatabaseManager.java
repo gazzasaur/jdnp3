@@ -51,7 +51,18 @@ public class DatabaseManager {
 			databaseListener.modelChanged();
 		}
 	}
-	
+
+	public void addAnalogInputDataPoints(String... names) {
+		synchronized (database) {
+			for (String name : names) {
+				database.addAnalogInputDataPoint(name);
+			}
+		}
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.modelChanged();
+		}
+	}
+
 	public void setBinaryInputDatabaseSize(int size) {
 		synchronized (database) {
 			while (database.getBinaryInputDataPoints().size() > size) {

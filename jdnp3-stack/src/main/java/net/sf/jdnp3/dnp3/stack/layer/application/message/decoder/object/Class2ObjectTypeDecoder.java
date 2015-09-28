@@ -15,33 +15,18 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DISABLE_UNSOLICITED;
-import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.ENABLE_UNSOLICITED;
-import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.READ;
-
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.Class2ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
 
 public class Class2ObjectTypeDecoder implements ObjectTypeDecoder {
-	public boolean canDecode(FunctionCode functionCode, ObjectFragment objectFragment) {
-		return (functionCode.equals(READ) || functionCode.equals(ENABLE_UNSOLICITED) || functionCode.equals(DISABLE_UNSOLICITED))
-				&& objectFragment.getObjectFragmentHeader().getObjectType().equals(ObjectTypeConstants.CLASS_2)
-				&& objectFragment.getObjectFragmentHeader().getPrefixType() instanceof NoPrefixType
-				&& (objectFragment.getObjectFragmentHeader().getRange() instanceof NoRange
-						|| objectFragment.getObjectFragmentHeader().getRange() instanceof CountRange);
+	public boolean canDecode(ObjectFragmentDecoderContext decoderContext) {
+		return decoderContext.getObjectType().equals(ObjectTypeConstants.CLASS_0);
 	}
 	
-	public void decode(FunctionCode functionCode, ObjectFragment objectFragment, List<Byte> data) {
-		if (!this.canDecode(functionCode, objectFragment)) {
-			throw new IllegalArgumentException("Unable to decode data.");
-		}
-		objectFragment.addObjectInstance(new Class2ObjectInstance());
+	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data) {
+		throw new UnsupportedOperationException("Object does not contain data.");
 	}
 }

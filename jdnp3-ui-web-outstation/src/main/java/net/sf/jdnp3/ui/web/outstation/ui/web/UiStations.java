@@ -24,6 +24,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 
 import org.slf4j.Logger;
@@ -37,6 +38,26 @@ public class UiStations {
 	private String station = "";
 	private String device = "";
 	
+	public int getStationCount() {
+		return DatabaseManagerProvider.getStationCount();
+	}
+	
+	public int getDeviceCount() {
+		return DatabaseManagerProvider.getDeviceCount();
+	}
+	
+	public int getDataLinkCount() {
+		return DataLinkManagerProvider.getDataLinkManagerCount();
+	}
+
+	public int getDataLinkConnectionCount() {
+		return DataLinkManagerProvider.getDataLinkConnectionCount();
+	}
+
+	public int getDataLinkBindingCount() {
+		return DataLinkManagerProvider.getDataLinkBindingCount();
+	}
+
 	public List<String> getStations() {
 		List<String> stationNames = DatabaseManagerProvider.getStationNames();
 		Collections.sort(stationNames);

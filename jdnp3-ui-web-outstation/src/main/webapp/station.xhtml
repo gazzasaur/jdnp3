@@ -9,58 +9,56 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:j="http://sf.net/jdnp3/facelets"
 	xmlns:jdnp3="http://java.sun.com/jsf/composite/jdnp3">
-<h:head>
-	<h:outputScript library="js" name="schedule.js" />
-	<h:outputScript library="js" name="analog.js" />
-	<h:outputScript library="js" name="binary.js" />
-	<h:outputScript library="js" name="iin.js" />
-	<h:outputScript library="js" name="main.js" />
-</h:head>
+<h:head />
 
 <h:body>
 	<f:facet name="last">
 		<h:outputStylesheet library="css" name="general.css" />
 	</f:facet>
 
-	<f:view transient="true">
-		<h:form>
-			<p:outputPanel id="page">
-				<div style="text-align: center; display: block;">
-					<p:panel header="Internal Indicators">
-						<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-							<jdnp3:internalIndicators id="iin" index="0" />
-						</p:panelGrid>
-					</p:panel>
-				</div>
-				<div style="text-align: center; display: inline-block;">
-					<p:panel header="Binary Input">
-						<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-							<c:forEach var="point" items="#{uiPointDatabase.getBinaryInputDataPoints(param['stationCode'], param['deviceCode'])}">
-								<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:binaryInput point="#{point}" />
-							</c:forEach>
-						</p:panelGrid>
-					</p:panel>
-				</div>
-				<div style="text-align: center; display: inline-block;">
-					<p:panel header="Binary Output">
-						<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-							<c:forEach var="point" items="#{uiPointDatabase.getBinaryOutputDataPoints(param['stationCode'], param['deviceCode'])}">
-								<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:binaryOutput point="#{point}" />
-							</c:forEach>
-						</p:panelGrid>
-					</p:panel>
-				</div>
-				<div style="text-align: center; display: inline-block;">
-					<p:panel header="Analog Input">
-						<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-							<c:forEach var="point" items="#{uiPointDatabase.getAnalogInputDataPoints(param['stationCode'], param['deviceCode'])}">
-								<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:analogInput point="#{point}" />
-							</c:forEach>
-						</p:panelGrid>
-					</p:panel>
-				</div>
-			</p:outputPanel>
-		</h:form>
+	<f:view>
+		<p:layout>
+			<p:layoutUnit position="west" resizable="true" size="250" minSize="200" maxSize="300">
+				<p:panel header="Device Selection" style="overflow: hidden;">
+					<h:form>
+						<p:tree value="#{uiStationTree.root}" var="node">
+							<p:treeNode>
+								<h:outputText value="#{node}" />
+							</p:treeNode>
+							
+							<p:treeNode type="leaf">
+								<h:commandLink target="_blank" value="#{node.device}" action="#{node.submit}" />
+							</p:treeNode>
+						</p:tree>
+					</h:form>
+				</p:panel>
+			</p:layoutUnit>
+			
+			<p:layoutUnit position="center">
+				<p:panel header="Overview">
+					<p:panelGrid columns="2">
+						<p:outputLabel value="Stations: " />
+						<h:outputText value="#{uiStations.stationCount}" />
+						<p:outputLabel value="Devices: " />
+						<h:outputText value="#{uiStations.deviceCount}" />
+					</p:panelGrid>
+				</p:panel>
+				<p:panel header="Channels">
+					<p:panelGrid columns="2">
+						<p:outputLabel value="Channels: " />
+						<h:outputText value="#{uiStations.dataLinkCount}" />
+						<p:outputLabel value="Connections: " />
+						<h:outputText value="#{uiStations.dataLinkConnectionCount}" />
+						<p:outputLabel value="Bindings: " />
+						<h:outputText value="#{uiStations.dataLinkBindingCount}" />
+					</p:panelGrid>
+				</p:panel>
+				<p:panel header="Bindings">
+					<p:panelGrid columns="2">
+					</p:panelGrid>
+				</p:panel>
+			</p:layoutUnit>
+		</p:layout>
 	</f:view>
 </h:body>
 </html>

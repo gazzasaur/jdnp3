@@ -18,12 +18,26 @@ package net.sf.jdnp3.ui.web.outstation.database;
 import static java.lang.String.format;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class DatabaseManagerProvider {
-	private static Map<String, Map<String, DatabaseManager>> databaseManagers = new HashMap<String, Map<String, DatabaseManager>>();
+	private static Map<String, Map<String, DatabaseManager>> databaseManagers = new HashMap<>();
+	
+	public synchronized static int getStationCount() {
+		return databaseManagers.size();
+	}
+
+	public synchronized static int getDeviceCount() {
+		int total = 0;
+		Collection<Map<String, DatabaseManager>> values = databaseManagers.values();
+		for (Map<String, DatabaseManager> map : values) {
+			total += map.size();
+		}
+		return total;
+	}
 	
 	public synchronized static DatabaseManager getDatabaseManager(String stationCode, String deviceCode) {
 		if (databaseManagers.containsKey(stationCode) && databaseManagers.get(stationCode).containsKey(deviceCode)) {

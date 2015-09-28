@@ -130,7 +130,7 @@ public class App {
 		loadContext.close();
 		
 		for (int i = 0; i < 1000; ++i) {
-			DatabaseManager databaseManager = DatabaseManagerProvider.registerDevice("PS" + i, "PP1");
+			DatabaseManager databaseManager = DatabaseManagerProvider.registerDevice("PS & " + i, "PP1");
 			databaseManager.setBinaryInputDatabaseSize(3);
 			databaseManager.setBinaryOutputDatabaseSize(3);
 			databaseManager.setAnalogInputDatabaseSize(3);

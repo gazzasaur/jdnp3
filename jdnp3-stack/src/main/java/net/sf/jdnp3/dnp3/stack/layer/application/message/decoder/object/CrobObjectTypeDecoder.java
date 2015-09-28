@@ -20,41 +20,26 @@ import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getInteger;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.CrobObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.OperationType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StatusCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TripCloseCode;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class CrobObjectTypeDecoder implements ObjectTypeDecoder {
-	public boolean canDecode(FunctionCode functionCode, ObjectFragment objectFragment) {
-		return (functionCode.equals(FunctionCode.DIRECT_OPERATE))
-				&& objectFragment.getObjectFragmentHeader().getObjectType().equals(CROB)
-				&& objectFragment.getObjectFragmentHeader().getPrefixType() instanceof IndexPrefixType
-				&& objectFragment.getObjectFragmentHeader().getRange() instanceof CountRange;
+	public boolean canDecode(ObjectFragmentDecoderContext decoderContext) {
+		return decoderContext.getObjectType().equals(CROB);
 	}
 	
-	public void decode(FunctionCode functionCode, ObjectFragment objectFragment, List<Byte> data) {
-		if (!this.canDecode(functionCode, objectFragment)) {
+	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data) {
+		if (!this.canDecode(decoderContext)) {
 			throw new IllegalArgumentException("Unable to decode data.");
 		}
-		CountRange countRange = (CountRange)objectFragment.getObjectFragmentHeader().getRange();
-		for (int i = 0; i < countRange.getCount(); ++i) {
-			parseInstance(objectFragment, data);
-		}
-	}
-
-	private void parseInstance(ObjectFragment objectFragment, List<Byte> data) {
-		int prefixOctetCount = objectFragment.getObjectFragmentHeader().getPrefixType().getOctetCount();
-		long index = DataUtils.getInteger(0, prefixOctetCount, data);
-		DataUtils.trim(prefixOctetCount, data);
 		
 		CrobObjectInstance crob = new CrobObjectInstance();
-		crob.setIndex(index);
+		crob.setIndex(decoderContext.getCurrentIndex());
 		
 		long firstByte = DataUtils.getInteger(0, 1, data);
 		long lastByte = DataUtils.getInteger(10, 1, data);
@@ -89,7 +74,7 @@ public class CrobObjectTypeDecoder implements ObjectTypeDecoder {
 		crob.setOnTime(getInteger(2, 4, data));
 		crob.setOffTime(getInteger(6, 4, data));
 		
-		objectFragment.addObjectInstance(crob);
-		DataUtils.trim(objectFragment.getObjectFragmentHeader().getPrefixType().getOctetCount() + 11, data);
+		DataUtils.trim(11, data);
+		return crob;
 	}
 }
