@@ -15,8 +15,36 @@
  */
 package net.sf.jdnp3.ui.web.outstation.channel;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
+import net.sf.jdnp3.dnp3.stack.layer.transport.ApplicationTransportBindingAdaptor;
+import net.sf.jdnp3.dnp3.stack.layer.transport.DataLinkTransportBindingAdaptor;
+import net.sf.jdnp3.dnp3.stack.layer.transport.SimpleSynchronisedTransportBinding;
+import net.sf.jdnp3.dnp3.stack.layer.transport.TransportBinding;
+
 
 public class DataLinkManager {
+	private DataLinkLayer dataLinkLayer;
+	private List<TransportBinding> transportBindings = new ArrayList<>();
+	
+	public void bind(int address, Outstation outstation) {
+		SimpleSynchronisedTransportBinding transportBinding = new SimpleSynchronisedTransportBinding();
+		DataLinkTransportBindingAdaptor dataLinkBinding = new DataLinkTransportBindingAdaptor(transportBinding);
+		ApplicationTransportBindingAdaptor applicationBinding = new ApplicationTransportBindingAdaptor(transportBinding);
+		dataLinkLayer.addDataLinkLayerListener(dataLinkBinding);
+		outstation.setApplicationTransport(applicationBinding);
+		transportBinding.setApplicationLayer(address, outstation.getApplicationLayer());
+		transportBinding.setDataLinkLayer(dataLinkLayer);
+		transportBindings.add(transportBinding);
+	}
+
+	public void setDataLinkLayer(DataLinkLayer dataLinkLayer) {
+		this.dataLinkLayer = dataLinkLayer;
+	}
+	
 	public int getBindingCount() {
 		return 0;
 	}

@@ -15,6 +15,8 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType;
@@ -23,8 +25,20 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 
-public class ItemEnumeratorList {
-	public static ItemEnumerator getEnumerator(PrefixType prefixType, Range range) {
+public class StandardItemEnumeratorFactory implements ItemEnumeratorFactory {
+	public boolean hasFactory(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment) {
+		try {
+			this.createEnumerator(decoderContext, objectFragment);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+	
+	public ItemEnumerator createEnumerator(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment) {
+		PrefixType prefixType = objectFragment.getObjectFragmentHeader().getPrefixType();
+		Range range = objectFragment.getObjectFragmentHeader().getRange();
+		
 		if (prefixType instanceof NoPrefixType) {
 			if (range instanceof CountRange) {
 				return new NoPrefixCountRangeItemEnumerator();
@@ -35,9 +49,9 @@ public class ItemEnumeratorList {
 			}
 		} else if (prefixType instanceof IndexPrefixType) {
 			if (range instanceof CountRange) {
-				return new IndexPrefixCountRangeItemEnumerator(prefixType, (CountRange) range);
+				return new IndexPrefixCountRangeItemEnumerator((IndexPrefixType) prefixType, (CountRange) range);
 			}
 		}
-		throw new IllegalArgumentException(String.format("No enumerator exist for the prefix type %s and range type %s.", prefixType.getClass(), range.getClass()));
+		throw new IllegalArgumentException(String.format("No enumerator exist for the prefix type %s and range type %s.", decoderContext.getClass(), objectFragment.getClass()));
 	}
 }

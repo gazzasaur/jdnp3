@@ -63,10 +63,24 @@ public class Database {
 		binaryInputDataPoints.add(binaryDataPoint);
 	}
 	
+	public void addBinaryInputDataPoint(String name) {
+		BinaryInputDataPoint binaryDataPoint = new BinaryInputDataPoint();
+		binaryDataPoint.setIndex(binaryInputDataPoints.size());
+		binaryDataPoint.setName(name);
+		binaryInputDataPoints.add(binaryDataPoint);
+	}
+	
 	public void addBinaryOutputDataPoint() {
 		BinaryOutputDataPoint binaryDataPoint = new BinaryOutputDataPoint();
 		binaryDataPoint.setIndex(binaryOutputDataPoints.size());
 		binaryDataPoint.setName("Point " + binaryOutputDataPoints.size());
+		binaryOutputDataPoints.add(binaryDataPoint);
+	}
+	
+	public void addBinaryOutputDataPoint(String name) {
+		BinaryOutputDataPoint binaryDataPoint = new BinaryOutputDataPoint();
+		binaryDataPoint.setIndex(binaryOutputDataPoints.size());
+		binaryDataPoint.setName(name);
 		binaryOutputDataPoints.add(binaryDataPoint);
 	}
 	

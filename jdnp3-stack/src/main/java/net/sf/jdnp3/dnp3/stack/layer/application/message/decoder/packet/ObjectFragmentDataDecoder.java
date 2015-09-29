@@ -19,14 +19,16 @@ import static java.util.Arrays.asList;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DIRECT_OPERATE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DIRECT_OPERATE_NR;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.OPERATE;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.RESPONSE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.SELECT;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.UNSOLICITED_RESPONSE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.WRITE;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.ItemEnumerator;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.ItemEnumeratorList;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.ItemEnumeratorFactory;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
@@ -35,18 +37,33 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.NullObjectInstance;
 
 public class ObjectFragmentDataDecoder {
-	private static final List<FunctionCode> CONTAINS_DATA = asList(WRITE, SELECT, OPERATE, DIRECT_OPERATE, DIRECT_OPERATE_NR);
+	private static final List<FunctionCode> CONTAINS_DATA = asList(WRITE, SELECT, OPERATE, DIRECT_OPERATE, DIRECT_OPERATE_NR, RESPONSE, UNSOLICITED_RESPONSE);
 	
 	private List<ObjectTypeDecoder> objectTypeDecoders = new ArrayList<>();
+	private List<ItemEnumeratorFactory> itemEnumeratorFactories = new ArrayList<>();
 	
 	public void addObjectTypeDecoder(ObjectTypeDecoder objectTypeDecoder) {
 		objectTypeDecoders.add(objectTypeDecoder);
 	}
-	
+
+	public void addItemEnumeratorFactory(ItemEnumeratorFactory itemEnumeratorFactory) {
+		itemEnumeratorFactories.add(itemEnumeratorFactory);
+	}
+
 	public void decode(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment, List<Byte> data) {
 		Range range = objectFragment.getObjectFragmentHeader().getRange();
 		PrefixType prefixType = objectFragment.getObjectFragmentHeader().getPrefixType();
-		ItemEnumerator itemEnumerator = ItemEnumeratorList.getEnumerator(prefixType, range);
+		
+		ItemEnumerator itemEnumerator = null;
+		for (ItemEnumeratorFactory itemEnumeratorFactory : itemEnumeratorFactories) {
+			if (itemEnumeratorFactory.hasFactory(decoderContext, objectFragment)) {
+				itemEnumerator = itemEnumeratorFactory.createEnumerator(decoderContext, objectFragment);
+				break;
+			}
+		}
+		if (itemEnumerator == null) {
+			throw new IllegalArgumentException(String.format("Cannot enumerate over ObjectType %s, PrefixType %s and Range %s.", objectFragment.getObjectFragmentHeader().getObjectType(), prefixType, range));
+		}
 		
 		for (ObjectTypeDecoder objectTypeDecoder : objectTypeDecoders) {
 			if (objectTypeDecoder.canDecode(decoderContext)) {

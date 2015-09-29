@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.service.core;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator;
 
-public interface DataLinkService {
-	public int getMtu();
-	public void setMtu(int mtu);
-	
-	public void start();
-	public void stop();
-	public boolean isRunning();
-	
-	public DataLinkServiceBinding bind(DataLinkConsumer dataLinkConsumer);
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
+
+public interface ItemEnumeratorFactory {
+	public boolean hasFactory(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment);
+	public ItemEnumerator createEnumerator(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment);
 }

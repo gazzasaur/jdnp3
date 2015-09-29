@@ -15,18 +15,17 @@
  */
 package net.sf.jdnp3.ui.web.outstation.main;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationFactory;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.TcpServerDataLinkService;
-import net.sf.jdnp3.dnp3.stack.layer.transport.ApplicationTransportBindingAdaptor;
-import net.sf.jdnp3.dnp3.stack.layer.transport.DataLinkTransportBindingAdaptor;
-import net.sf.jdnp3.dnp3.stack.layer.transport.SimpleSynchronisedTransportBinding;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
+import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManager;
+import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
@@ -126,18 +125,23 @@ public class App {
 		registry.register("analogInputPoint", AnalogInputDataPoint.class, AnalogInputMessage.class);
 
 		ClassPathXmlApplicationContext loadContext = new ClassPathXmlApplicationContext("outstation-config.xml");
-		List<TcpServerDataLinkService> dataLinkServices = new ArrayList<>(loadContext.getBeansOfType(TcpServerDataLinkService.class).values());
+		Map<String, DataLinkLayer> dataLinkServices = loadContext.getBeansOfType(DataLinkLayer.class);
 		loadContext.close();
+		for (Entry<String, DataLinkLayer> entry : dataLinkServices.entrySet()) {
+			DataLinkManager dataLinkManager = DataLinkManagerProvider.registerDataLink(entry.getKey());
+			dataLinkManager.setDataLinkLayer(entry.getValue());
+		}
 		
 		for (int i = 0; i < 1000; ++i) {
-			DatabaseManager databaseManager = DatabaseManagerProvider.registerDevice("PS & " + i, "PP1");
-			databaseManager.setBinaryInputDatabaseSize(3);
-			databaseManager.setBinaryOutputDatabaseSize(3);
-			databaseManager.setAnalogInputDatabaseSize(3);
+			DatabaseManager databaseManager = DatabaseManagerProvider.registerDevice("Pump Station " + i, "Primary Pump 1");
+			databaseManager.addBinaryInputDataPoints("Running", "Low Fuel", "Non-Urgent Fail", "Urgent Fail");
+			databaseManager.addBinaryOutputDataPoints("Operate");
+			databaseManager.addAnalogInputDataPoints("Speed", "Volume");
 			
 			OutstationFactory outstationFactory = new OutstationFactory();
-			outstationFactory.addStandardOutstationRequestHandlerAdaptors();
 			outstationFactory.addStandardObjectTypeDecoders();
+			outstationFactory.addStandardItemEnumeratorFactories();
+			outstationFactory.addStandardOutstationRequestHandlerAdaptors();
 			outstationFactory.setInternalStatusProvider(databaseManager.getInternalStatusProvider());
 			
 			Outstation outstation = outstationFactory.createOutstation();
@@ -180,13 +184,6 @@ public class App {
 				}
 			});
 
-			SimpleSynchronisedTransportBinding transportBinding = new SimpleSynchronisedTransportBinding();
-			DataLinkTransportBindingAdaptor dataLinkBinding = new DataLinkTransportBindingAdaptor(transportBinding);
-			ApplicationTransportBindingAdaptor applicationBinding = new ApplicationTransportBindingAdaptor(transportBinding);
-			dataLinkServices.get(0).addDataLinkLayerListener(dataLinkBinding);
-			outstation.setApplicationTransport(applicationBinding);
-			transportBinding.setApplicationLayer(i+2, outstation.getApplicationLayer());
-			transportBinding.setDataLinkLayer(dataLinkServices.get(0));
 		}
 		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("jetty-config.xml");

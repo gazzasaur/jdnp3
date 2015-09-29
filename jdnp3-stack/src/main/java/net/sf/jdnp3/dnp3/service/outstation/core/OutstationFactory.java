@@ -29,6 +29,8 @@ import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class3ReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.CrobRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.InternalIndicatorWriteRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.ItemEnumeratorFactory;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.StandardItemEnumeratorFactory;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class0ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class1ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class2ObjectTypeDecoder;
@@ -50,6 +52,7 @@ public class OutstationFactory {
 	private InternalStatusProvider internalStatusProvider = null;
 	private List<ObjectTypeDecoder> decoders = new ArrayList<>();
 	private List<OutstationRequestHandlerAdaptor> adaptors = new ArrayList<>();
+	private List<ItemEnumeratorFactory> itemEnumeratorFactories = new ArrayList<>();
 	private Map<Class<? extends ObjectInstance>, ObjectType> mapping = new HashMap<>();
 	private List<OutstationRequestHandler> outstationRequestHandlers = new ArrayList<>();
 	private List<OutstationApplicationRequestHandler> outstationApplicationRequestHandlers = new ArrayList<>();
@@ -89,6 +92,10 @@ public class OutstationFactory {
 		adaptors.add(new InternalIndicatorWriteRequestAdaptor());
 	}
 	
+	public void addStandardItemEnumeratorFactories() {
+		itemEnumeratorFactories.add(new StandardItemEnumeratorFactory());
+	}
+	
 	public void addStandardObjectTypeDecoders() {
 		decoders.add(new Class0ObjectTypeDecoder());
 		decoders.add(new Class1ObjectTypeDecoder());
@@ -104,6 +111,11 @@ public class OutstationFactory {
 			objectFragmentDataDecoder.addObjectTypeDecoder(decoder);
 		}
 		decoders.clear();
+		
+		for (ItemEnumeratorFactory itemEnumeratorFactory : itemEnumeratorFactories) {
+			objectFragmentDataDecoder.addItemEnumeratorFactory(itemEnumeratorFactory);
+		}
+		itemEnumeratorFactories.clear();
 		
 		ObjectFragmentDecoder objectFragmentDecoder = new ObjectFragmentDecoder(objectFragmentDataDecoder);
 		ApplicationFragmentRequestDecoder applicationFragmentRequestDecoder = new ApplicationFragmentRequestDecoderImpl(objectFragmentDecoder);

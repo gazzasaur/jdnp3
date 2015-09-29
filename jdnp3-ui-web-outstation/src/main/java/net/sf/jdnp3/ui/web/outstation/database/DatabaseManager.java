@@ -76,6 +76,17 @@ public class DatabaseManager {
 			databaseListener.modelChanged();
 		}
 	}
+
+	public void addBinaryInputDataPoints(String... names) {
+		synchronized (database) {
+			for (String name : names) {
+				database.addBinaryInputDataPoint(name);
+			}
+		}
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.modelChanged();
+		}
+	}
 	
 	public void setBinaryOutputDatabaseSize(int size) {
 		synchronized (database) {
@@ -84,6 +95,17 @@ public class DatabaseManager {
 			}
 			while (database.getBinaryOutputDataPoints().size() < size) {
 				database.addBinaryOutputDataPoint();
+			}
+		}
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.modelChanged();
+		}
+	}
+	
+	public void addBinaryOutputDataPoints(String... names) {
+		synchronized (database) {
+			for (String name : names) {
+				database.addBinaryOutputDataPoint(name);
 			}
 		}
 		for (DatabaseListener databaseListener : databaseListeners) {

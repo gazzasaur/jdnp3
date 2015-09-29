@@ -20,15 +20,15 @@ import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.trim;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
 
 public class IndexPrefixCountRangeItemEnumerator implements ItemEnumerator {
 	private long count = 0;
 	private CountRange range;
-	private PrefixType prefixType;
+	private IndexPrefixType prefixType;
 	
-	public IndexPrefixCountRangeItemEnumerator(PrefixType prefixType, CountRange range) {
+	public IndexPrefixCountRangeItemEnumerator(IndexPrefixType prefixType, CountRange range) {
 		this.range = range;
 		this.prefixType = prefixType;
 	}
