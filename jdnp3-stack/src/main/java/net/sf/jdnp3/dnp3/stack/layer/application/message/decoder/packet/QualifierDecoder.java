@@ -23,6 +23,11 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecif
 
 public class QualifierDecoder {
 	public void decode(QualifierField qualifierField, List<Byte> data) {
+		for (Byte dataByte : data) {
+			System.out.print(String.format("%02X", dataByte));
+		}
+		System.out.println();
+		
 		byte value = data.remove(0);
 		int prefixCodeValue = (value >> 4) & 0x07;
 		int rangeSpecifierCodeValue = value & 0x0F;

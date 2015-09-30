@@ -60,6 +60,8 @@ public class ObjectTypeConstants {
 	public static ObjectType CROB_EVENT_ANY = new ObjectType(13, 0);
 	public static ObjectType CROB_EVENT_WITHOUT_TIME = new ObjectType(13, 1);
 	public static ObjectType CROB_EVENT_ABSOLUTE_TIME = new ObjectType(13, 2);
+	
+	public static ObjectType TIME_AND_DATE_ABSOLUTE_TIME = new ObjectType(50, 1);
 
 	public static ObjectType SYNCHRONISED_CTO = new ObjectType(51, 1);
 	public static ObjectType UNSYNCHRONISED_CTO = new ObjectType(51, 2);

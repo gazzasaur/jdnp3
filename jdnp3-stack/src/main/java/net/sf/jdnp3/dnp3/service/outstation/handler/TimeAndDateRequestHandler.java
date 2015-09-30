@@ -13,25 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator;
+package net.sf.jdnp3.dnp3.service.outstation.handler;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeAndDateObjectInstance;
 
-public class NoPrefixCountRangeItemEnumerator implements ItemEnumerator {
-	private long size = 0;
-	private long index = 0;
-
-	public NoPrefixCountRangeItemEnumerator(CountRange range) {
-		size = range.getCount();
-	}
-
-	public boolean hasNext() {
-		return index < size;
-	}
-	
-	public long next(List<Byte> data) {
-		return index++;
-	}
+public interface TimeAndDateRequestHandler extends OutstationRequestHandler {
+	public List<TimeAndDateObjectInstance> doReadTime(long count);
+	public void doWriteTime(TimeAndDateObjectInstance timeAndDateObjectInstance);
 }

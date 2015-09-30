@@ -40,8 +40,9 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.B
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryOutputStaticFlagsObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryOutputStaticPackedObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.CrobObjectTypeEncoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.cto.SynchronisedCtoObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
+import time.SynchronisedCtoObjectTypeEncoder;
+import time.TimeAndDateObjectTypeEncoder;
 
 public class ObjectTypeEncoderConstants {
 	@SuppressWarnings("serial")
@@ -75,5 +76,7 @@ public class ObjectTypeEncoderConstants {
 		this.add(new AnalogInputEventFloat64AbsoluteTimeObjectTypeEncoder());
 
 		this.add(new SynchronisedCtoObjectTypeEncoder());
+		
+		this.add(new TimeAndDateObjectTypeEncoder());
 	}};
 }

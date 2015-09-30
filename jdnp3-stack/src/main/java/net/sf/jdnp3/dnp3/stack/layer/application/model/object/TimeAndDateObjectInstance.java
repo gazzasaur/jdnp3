@@ -15,24 +15,37 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
 
-import static java.util.Collections.unmodifiableList;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.TIME_AND_DATE_ABSOLUTE_TIME;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
-public class GenericObjectInstance implements ObjectInstance {
-	private long index;
-	private ObjectType requestedType;
-	private List<Byte> data = new ArrayList<>();
-
+public class TimeAndDateObjectInstance implements StaticObjectInstance {
+	private long index = 0;
+	private long interval = 0;
+	private long timestamp = 0;
+	private ObjectType requestedType = TIME_AND_DATE_ABSOLUTE_TIME;
+	
 	public long getIndex() {
 		return index;
 	}
-
+	
 	public void setIndex(long index) {
 		this.index = index;
+	}
+
+	public long getInterval() {
+		return interval;
+	}
+
+	public void setInterval(long interval) {
+		this.interval = interval;
+	}
+
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public ObjectType getRequestedType() {
@@ -41,13 +54,5 @@ public class GenericObjectInstance implements ObjectInstance {
 
 	public void setRequestedType(ObjectType requestedType) {
 		this.requestedType = requestedType;
-	}
-	
-	public List<Byte> getData() {
-		return unmodifiableList(data);
-	}
-
-	public void setData(List<Byte> returnData) {
-		data = new ArrayList<>(data);
 	}
 }

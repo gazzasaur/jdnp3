@@ -28,6 +28,7 @@ import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class2ReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class3ReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.CrobRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.InternalIndicatorWriteRequestAdaptor;
+import net.sf.jdnp3.dnp3.service.outstation.adaptor.TimeAndDateRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.ItemEnumeratorFactory;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.StandardItemEnumeratorFactory;
@@ -38,6 +39,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.Class3Ob
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.CrobObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.InternalIndicatorBitObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.ObjectTypeDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.TimeAndDateObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDataDecoder;
@@ -89,9 +91,14 @@ public class OutstationFactory {
 		adaptors.add(new Class2ReadRequestAdaptor());
 		adaptors.add(new Class3ReadRequestAdaptor());
 		adaptors.add(new CrobRequestAdaptor());
+		adaptors.add(new TimeAndDateRequestAdaptor());
 		adaptors.add(new InternalIndicatorWriteRequestAdaptor());
 	}
 	
+	public void addItemEnumeratorFactory(ItemEnumeratorFactory itemEnumeratorFactory) {
+		itemEnumeratorFactories.add(itemEnumeratorFactory);
+	}
+
 	public void addStandardItemEnumeratorFactories() {
 		itemEnumeratorFactories.add(new StandardItemEnumeratorFactory());
 	}
@@ -102,6 +109,7 @@ public class OutstationFactory {
 		decoders.add(new Class2ObjectTypeDecoder());
 		decoders.add(new Class3ObjectTypeDecoder());
 		decoders.add(new CrobObjectTypeDecoder());
+		decoders.add(new TimeAndDateObjectTypeDecoder());
 		decoders.add(new InternalIndicatorBitObjectTypeDecoder());
 	}
 

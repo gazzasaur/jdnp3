@@ -13,32 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic;
+package time;
+
+import static java.lang.String.format;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.SYNCHRONISED_CTO;
+import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
 
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.GenericObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.SynchronisedCtoObjectInstance;
 
-public class GenericObjectTypeEncoder implements ObjectTypeEncoder {
-	private ObjectType expectedObjectType;
-	private FunctionCode expectedFunctionCode;
-
-	public GenericObjectTypeEncoder(FunctionCode expectedFunctionCode, ObjectType expectedObjectType) {
-		this.expectedObjectType = expectedObjectType;
-		this.expectedFunctionCode = expectedFunctionCode;
-	}
-	
+public class SynchronisedCtoObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(expectedFunctionCode)
-				&& expectedObjectType.equals(objectType);
+		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(SYNCHRONISED_CTO);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
-		GenericObjectInstance genericObjectInstance = new GenericObjectInstance();
-		data.addAll(genericObjectInstance.getData());
+		if (!this.canEncode(context.getFunctionCode(), context.getObjectType())) {
+			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
+		}
+		
+		SynchronisedCtoObjectInstance synchronisedCtoObjectInstance = (SynchronisedCtoObjectInstance) objectInstance;
+		context.setCommonTimeOfOccurrance(synchronisedCtoObjectInstance.getTimestamp());
+		addInteger(synchronisedCtoObjectInstance.getTimestamp(), 6, data);
 	}
 }

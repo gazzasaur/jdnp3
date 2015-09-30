@@ -41,7 +41,7 @@ public class StandardItemEnumeratorFactory implements ItemEnumeratorFactory {
 		
 		if (prefixType instanceof NoPrefixType) {
 			if (range instanceof CountRange) {
-				return new NoPrefixCountRangeItemEnumerator();
+				return new NoPrefixCountRangeItemEnumerator((CountRange) range);
 			} else if (range instanceof IndexRange) {
 				return new NoPrefixIndexRangeItemEnumerator((IndexRange) range);
 			} else if (range instanceof NoRange) {

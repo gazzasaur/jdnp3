@@ -65,8 +65,10 @@ public class ObjectFragmentDataDecoder {
 			throw new IllegalArgumentException(String.format("Cannot enumerate over ObjectType %s, PrefixType %s and Range %s.", objectFragment.getObjectFragmentHeader().getObjectType(), prefixType, range));
 		}
 		
+		boolean decoded = false;
 		for (ObjectTypeDecoder objectTypeDecoder : objectTypeDecoders) {
 			if (objectTypeDecoder.canDecode(decoderContext)) {
+				decoded = true;
 				boolean firstPass = true;
 				
 				while (itemEnumerator.hasNext()) {
@@ -87,7 +89,11 @@ public class ObjectFragmentDataDecoder {
 						objectFragment.addObjectInstance(nullObjectInstance);
 					}
 				}
+				break;
 			}
+		}
+		if (!decoded) {
+			throw new IllegalArgumentException(String.format("Cannot decode object of type %s.", objectFragment.getObjectFragmentHeader().getObjectType()));
 		}
 	}
 }

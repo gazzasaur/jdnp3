@@ -42,6 +42,7 @@ import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class2Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class3Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.CrobOperator;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.InternalIndicatorWriter;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.TimeAndDateHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistry;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistryProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.AnalogInputEventMessageHandler;
@@ -132,13 +133,14 @@ public class App {
 			dataLinkManager.setDataLinkLayer(entry.getValue());
 		}
 		
-		for (int i = 0; i < 1000; ++i) {
+		for (int i = 31; i < 32; ++i) {
 			DatabaseManager databaseManager = DatabaseManagerProvider.registerDevice("Pump Station " + i, "Primary Pump 1");
 			databaseManager.addBinaryInputDataPoints("Running", "Low Fuel", "Non-Urgent Fail", "Urgent Fail");
 			databaseManager.addBinaryOutputDataPoints("Operate");
 			databaseManager.addAnalogInputDataPoints("Speed", "Volume");
 			
 			OutstationFactory outstationFactory = new OutstationFactory();
+//			outstationFactory.addObjectTypeDecoder(new GenericObjectTypeDecoder(new ObjectType(70, 1), length, replacementData));
 			outstationFactory.addStandardObjectTypeDecoders();
 			outstationFactory.addStandardItemEnumeratorFactories();
 			outstationFactory.addStandardOutstationRequestHandlerAdaptors();
@@ -151,6 +153,7 @@ public class App {
 			outstation.addRequestHandler(new Class1Reader());
 			outstation.addRequestHandler(new Class2Reader());
 			outstation.addRequestHandler(new Class3Reader());
+			outstation.addRequestHandler(new TimeAndDateHandler());
 			outstation.addRequestHandler(new CrobOperator(databaseManager));
 			outstation.addRequestHandler(new InternalIndicatorWriter(databaseManager.getInternalStatusProvider()));
 			
@@ -183,7 +186,9 @@ public class App {
 					}
 				}
 			});
-
+			
+			DataLinkManager dataLinkManager = DataLinkManagerProvider.getDataLinkManager("dataLinkService-20000");
+			dataLinkManager.bind(i, outstation);
 		}
 		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("jetty-config.xml");
