@@ -140,7 +140,6 @@ public class App {
 			databaseManager.addAnalogInputDataPoints("Speed", "Volume");
 			
 			OutstationFactory outstationFactory = new OutstationFactory();
-//			outstationFactory.addObjectTypeDecoder(new GenericObjectTypeDecoder(new ObjectType(70, 1), length, replacementData));
 			outstationFactory.addStandardObjectTypeDecoders();
 			outstationFactory.addStandardItemEnumeratorFactories();
 			outstationFactory.addStandardOutstationRequestHandlerAdaptors();
@@ -188,7 +187,7 @@ public class App {
 			});
 			
 			DataLinkManager dataLinkManager = DataLinkManagerProvider.getDataLinkManager("dataLinkService-20000");
-			dataLinkManager.bind(i, outstation);
+			dataLinkManager.bind(3, outstation);
 		}
 		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("jetty-config.xml");

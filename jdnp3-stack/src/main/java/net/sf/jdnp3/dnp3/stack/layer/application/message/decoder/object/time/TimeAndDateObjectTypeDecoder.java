@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.time;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.TIME_AND_DATE_ABSOLUTE_TIME;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getInteger;
@@ -21,6 +21,7 @@ import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.trim;
 
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeAndDateObjectInstance;

@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object;
+package net.sf.jdnp3.dnp3.service.outstation.handler;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StaticObjectInstance;
 
-public interface ObjectTypeDecoder {
-	public boolean canDecode(ObjectFragmentDecoderContext decoderContext);
-	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data);
+public interface StaticReadRequestHandler<E extends StaticObjectInstance> extends OutstationRequestHandler {
+	public List<E> readStatics();
+	public List<E> readStatic(long index);
+	public List<E> readStatics(long startIndex, long stopIndex);
+
+	public Class<E> getObjectInstanceClass();
 }

@@ -35,9 +35,9 @@ public class Class0Reader implements Class0ReadRequestHandler {
 	
 	public List<ObjectInstance> doReadClass() {
 		List<ObjectInstance> points = new ArrayList<>();
-		points.addAll(binaryInputStaticReader.doReadStatics());
-		points.addAll(analogInputStaticReader.doReadStatics());
-		points.addAll(binaryOutputStaticReader.doReadStatics());
+		points.addAll(binaryInputStaticReader.readStatics());
+		points.addAll(analogInputStaticReader.readStatics());
+		points.addAll(binaryOutputStaticReader.readStatics());
 
 		return points;
 	}

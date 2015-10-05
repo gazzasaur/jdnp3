@@ -15,30 +15,20 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
 
-import static java.util.Arrays.asList;
-import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DIRECT_OPERATE;
-import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DIRECT_OPERATE_NR;
-import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.OPERATE;
-import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.RESPONSE;
-import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.SELECT;
-import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.UNSOLICITED_RESPONSE;
-import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.WRITE;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.ItemEnumerator;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.ItemEnumeratorFactory;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.ObjectTypeDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ObjectTypeDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCodeUtils;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.NullObjectInstance;
 
 public class ObjectFragmentDataDecoder {
-	private static final List<FunctionCode> CONTAINS_DATA = asList(WRITE, SELECT, OPERATE, DIRECT_OPERATE, DIRECT_OPERATE_NR, RESPONSE, UNSOLICITED_RESPONSE);
-	
 	private List<ObjectTypeDecoder> objectTypeDecoders = new ArrayList<>();
 	private List<ItemEnumeratorFactory> itemEnumeratorFactories = new ArrayList<>();
 	
@@ -80,9 +70,9 @@ public class ObjectFragmentDataDecoder {
 					decoderContext.setCurrentIndex(index);
 					decoderContext.setLastItem(!itemEnumerator.hasNext());
 					
-					if (CONTAINS_DATA.contains(decoderContext.getFunctionCode())) {
+					if (FunctionCodeUtils.hasObjectInstanceData(decoderContext.getFunctionCode())) {
 						objectFragment.addObjectInstance(objectTypeDecoder.decode(decoderContext, data));
-					} else {
+					} else if (objectFragment.getObjectFragmentHeader().getPrefixType() instanceof IndexPrefixType) {
 						NullObjectInstance nullObjectInstance = new NullObjectInstance();
 						nullObjectInstance.setIndex(index);
 						nullObjectInstance.setRequestedType(objectFragment.getObjectFragmentHeader().getObjectType());

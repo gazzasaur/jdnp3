@@ -13,20 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.time;
+
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.TIME_DELAY_FINE;
 
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeDelayObjectInstance;
+import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
-public class Class0ObjectTypeDecoder implements ObjectTypeDecoder {
+public class TimeDelayCoarseObjectTypeDecoder implements ObjectTypeDecoder {
 	public boolean canDecode(ObjectFragmentDecoderContext decoderContext) {
-		return decoderContext.getObjectType().equals(ObjectTypeConstants.CLASS_0);
+		return decoderContext.getObjectType().equals(TIME_DELAY_FINE);
 	}
 	
 	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data) {
-		throw new UnsupportedOperationException("Object does not contain data.");
+		if (!this.canDecode(decoderContext)) {
+			throw new IllegalArgumentException("Unable to decode data.");
+		}
+		
+		TimeDelayObjectInstance timeDelay = new TimeDelayObjectInstance();
+		timeDelay.setIndex(decoderContext.getCurrentIndex());
+		timeDelay.setRequestedType(decoderContext.getObjectType());
+		timeDelay.setTimestamp(DataUtils.getInteger(0, 2, data));
+		
+		DataUtils.trim(2, data);
+		return timeDelay;
 	}
 }

@@ -15,7 +15,13 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.handler;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
+import java.util.List;
 
-public interface BinaryInputEventReadRequestHandler extends EventReadRequestHandler<BinaryInputEventObjectInstance> {
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
+
+public interface EventReadRequestHandler<E extends EventObjectInstance> extends OutstationRequestHandler {
+	public List<E> readEvents();
+	public List<E> readEvents(long returnLimit);
+	
+	public Class<E> getObjectInstanceClass();
 }

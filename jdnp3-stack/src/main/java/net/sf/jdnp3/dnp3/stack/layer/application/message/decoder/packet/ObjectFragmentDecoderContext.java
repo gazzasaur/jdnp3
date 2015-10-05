@@ -76,5 +76,4 @@ public class ObjectFragmentDecoderContext {
 	public void setLastItem(boolean lastItem) {
 		this.lastItem = lastItem;
 	}
-
 }

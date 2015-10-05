@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic;
 
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
 
-public class Class1ObjectTypeDecoder implements ObjectTypeDecoder {
-	public boolean canDecode(ObjectFragmentDecoderContext decoderContext) {
-		return decoderContext.getObjectType().equals(ObjectTypeConstants.CLASS_0);
-	}
-	
-	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data) {
-		throw new UnsupportedOperationException("Object does not contain data.");
-	}
+public interface ObjectTypeDecoder {
+	public boolean canDecode(ObjectFragmentDecoderContext decoderContext);
+	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data);
 }

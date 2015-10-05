@@ -15,11 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.handler;
 
-import java.util.List;
-
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
 
-public interface AnalogInputStaticReadRequestHandler extends OutstationRequestHandler {
-	public List<AnalogInputStaticObjectInstance> doReadStatics();
-	public List<AnalogInputStaticObjectInstance> doReadStatics(long startIndex, long stopIndex);
+public interface AnalogInputStaticReadRequestHandler extends StaticReadRequestHandler<AnalogInputStaticObjectInstance> {
 }

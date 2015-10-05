@@ -32,7 +32,7 @@ public class BinaryInputStaticReader implements BinaryInputStaticReadRequestHand
 		this.databaseManager = databaseManager;
 	}
 	
-	public List<BinaryInputStaticObjectInstance> doReadStatics(long startIndex, long stopIndex) {
+	public List<BinaryInputStaticObjectInstance> readStatics(long startIndex, long stopIndex) {
 		List<BinaryInputStaticObjectInstance> points = new ArrayList<>();
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 
@@ -48,7 +48,7 @@ public class BinaryInputStaticReader implements BinaryInputStaticReadRequestHand
 		return points;
 	}
 
-	public List<BinaryInputStaticObjectInstance> doReadStatics() {
+	public List<BinaryInputStaticObjectInstance> readStatics() {
 		List<BinaryInputStaticObjectInstance> points = new ArrayList<>();
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 
@@ -62,5 +62,25 @@ public class BinaryInputStaticReader implements BinaryInputStaticReadRequestHand
 			}
 		}
 		return points;
+	}
+
+	public List<BinaryInputStaticObjectInstance> readStatic(long index) {
+		List<BinaryInputStaticObjectInstance> points = new ArrayList<>();
+		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
+
+		if (index < points.size()) {
+			BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
+			try {
+				BeanUtils.copyProperties(binaryInputStaticObjectInstance, binaryDataPoints.get((int) index));
+				points.add(binaryInputStaticObjectInstance);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return points;
+	}
+
+	public Class<BinaryInputStaticObjectInstance> getObjectInstanceClass() {
+		return BinaryInputStaticObjectInstance.class;
 	}
 }

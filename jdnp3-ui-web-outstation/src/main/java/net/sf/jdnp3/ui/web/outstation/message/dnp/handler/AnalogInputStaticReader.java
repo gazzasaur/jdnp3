@@ -32,7 +32,7 @@ public class AnalogInputStaticReader implements AnalogInputStaticReadRequestHand
 		this.databaseManager = databaseManager;
 	}
 	
-	public List<AnalogInputStaticObjectInstance> doReadStatics(long startIndex, long stopIndex) {
+	public List<AnalogInputStaticObjectInstance> readStatics(long startIndex, long stopIndex) {
 		List<AnalogInputStaticObjectInstance> points = new ArrayList<>();
 		List<AnalogInputDataPoint> dataPoints = databaseManager.getAnalogInputDataPoints();
 
@@ -48,7 +48,7 @@ public class AnalogInputStaticReader implements AnalogInputStaticReadRequestHand
 		return points;
 	}
 
-	public List<AnalogInputStaticObjectInstance> doReadStatics() {
+	public List<AnalogInputStaticObjectInstance> readStatics() {
 		List<AnalogInputStaticObjectInstance> points = new ArrayList<>();
 		List<AnalogInputDataPoint> dataPoints = databaseManager.getAnalogInputDataPoints();
 
@@ -62,5 +62,25 @@ public class AnalogInputStaticReader implements AnalogInputStaticReadRequestHand
 			}
 		}
 		return points;
+	}
+
+	public List<AnalogInputStaticObjectInstance> readStatic(long index) {
+		List<AnalogInputStaticObjectInstance> points = new ArrayList<>();
+		List<AnalogInputDataPoint> dataPoints = databaseManager.getAnalogInputDataPoints();
+
+		if (index < dataPoints.size()) {
+			AnalogInputStaticObjectInstance analogInputStaticObjectInstance = new AnalogInputStaticObjectInstance();
+			try {
+				BeanUtils.copyProperties(analogInputStaticObjectInstance, dataPoints.get((int) index));
+				points.add(analogInputStaticObjectInstance);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return points;
+	}
+
+	public Class<AnalogInputStaticObjectInstance> getObjectInstanceClass() {
+		return AnalogInputStaticObjectInstance.class;
 	}
 }

@@ -110,11 +110,6 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		messageProperties.setMaster(false);
 		
 		List<ObjectInstance> responseObjects = new ArrayList<>();
-		
-		for (Byte dataByte : data) {
-			System.out.print(String.format("%02x", dataByte));
-		}
-		System.out.println();
 		ApplicationFragmentRequest request = decoder.decode(data);
 
 		if (request.getHeader().getFunctionCode() == FunctionCode.CONFIRM) {

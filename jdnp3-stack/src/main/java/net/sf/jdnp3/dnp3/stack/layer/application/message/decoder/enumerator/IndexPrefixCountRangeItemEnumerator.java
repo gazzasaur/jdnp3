@@ -25,16 +25,16 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
 
 public class IndexPrefixCountRangeItemEnumerator implements ItemEnumerator {
 	private long count = 0;
-	private CountRange range;
-	private IndexPrefixType prefixType;
+	private CountRange countRange;
+	private IndexPrefixType indexPrefixType;
 	
-	public IndexPrefixCountRangeItemEnumerator(IndexPrefixType prefixType, CountRange range) {
-		this.range = range;
-		this.prefixType = prefixType;
+	public IndexPrefixCountRangeItemEnumerator(IndexPrefixType indexPrefixType, CountRange countRange) {
+		this.countRange = countRange;
+		this.indexPrefixType = indexPrefixType;
 	}
 	
 	public boolean hasNext() {
-		return count < range.getCount();
+		return count < countRange.getCount();
 	}
 	
 	public long next(List<Byte> data) {
@@ -42,8 +42,8 @@ public class IndexPrefixCountRangeItemEnumerator implements ItemEnumerator {
 			throw new IllegalStateException("No items remain.");
 		}
 		++count;
-		long index = getInteger(0, prefixType.getOctetCount(), data);
-		trim(prefixType.getOctetCount(), data);
+		long index = getInteger(0, indexPrefixType.getOctetCount(), data);
+		trim(indexPrefixType.getOctetCount(), data);
 		return index;
 	}
 }

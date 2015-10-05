@@ -8,7 +8,8 @@
 8. Create a RequestHandler and RequestAdaptor (if required)
 9. Register the event as using relative time (if required).  This currently sits in the OutstationApplicationLayer but must move.
 
-The way it i encoded as a list is determined by the type (currently hard coded in the OutstationApplicationLayer using the Interfaces, no need to alter when a new type is added).
+The way it is encoded as a list is determined by the type (currently hard coded in the OutstationApplicationLayer using the Interfaces, no need to alter when a new type is added).
 - CTO is encoded as a single item.
 - Statics are encoded as a range.
 - All other types (Events) are encoded as an index.
+

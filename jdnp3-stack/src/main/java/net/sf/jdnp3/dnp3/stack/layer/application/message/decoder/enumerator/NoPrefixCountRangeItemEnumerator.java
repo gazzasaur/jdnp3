@@ -32,6 +32,9 @@ public class NoPrefixCountRangeItemEnumerator implements ItemEnumerator {
 	}
 	
 	public long next(List<Byte> data) {
+		if (!this.hasNext()) {
+			throw new IllegalStateException("No items remain.");
+		}
 		return index++;
 	}
 }

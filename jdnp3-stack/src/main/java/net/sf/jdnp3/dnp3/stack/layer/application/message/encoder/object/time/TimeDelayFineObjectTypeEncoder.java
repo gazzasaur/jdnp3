@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package time;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.time;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.SYNCHRONISED_CTO;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.TIME_DELAY_FINE;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
 
 import java.util.List;
@@ -26,11 +26,11 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFr
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.SynchronisedCtoObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeDelayObjectInstance;
 
-public class SynchronisedCtoObjectTypeEncoder implements ObjectTypeEncoder {
+public class TimeDelayFineObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(SYNCHRONISED_CTO);
+		return objectType.equals(TIME_DELAY_FINE);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
@@ -38,8 +38,7 @@ public class SynchronisedCtoObjectTypeEncoder implements ObjectTypeEncoder {
 			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
 		
-		SynchronisedCtoObjectInstance synchronisedCtoObjectInstance = (SynchronisedCtoObjectInstance) objectInstance;
-		context.setCommonTimeOfOccurrance(synchronisedCtoObjectInstance.getTimestamp());
-		addInteger(synchronisedCtoObjectInstance.getTimestamp(), 6, data);
+		TimeDelayObjectInstance specificInstance = (TimeDelayObjectInstance) objectInstance;
+		addInteger(specificInstance.getTimestamp(), 2, data);
 	}
 }

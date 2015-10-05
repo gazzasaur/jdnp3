@@ -20,14 +20,16 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 public class ObjectTypeConstants {
 	public static ObjectType ANY = new ObjectType(-1, -1);
 	
-	public static ObjectType BINARY_INPUT_STATIC_ANY = new ObjectType(1, 0);
-	public static ObjectType BINARY_INPUT_STATIC_PACKED = new ObjectType(1, 1);
-	public static ObjectType BINARY_INPUT_STATIC_FLAGS = new ObjectType(1, 2);
-
-	public static ObjectType BINARY_INPUT_EVENT_ANY = new ObjectType(2, 0);
-	public static ObjectType BINARY_INPUT_EVENT_WITHOUT_TIME = new ObjectType(2, 1);
-	public static ObjectType BINARY_INPUT_EVENT_ABSOLUTE_TIME = new ObjectType(2, 2);
-	public static ObjectType BINARY_INPUT_EVENT_RELATIVE_TIME = new ObjectType(2, 3);
+	public static int BINARY_INPUT_STATIC_GROUP = 1;
+	public static ObjectType BINARY_INPUT_STATIC_ANY = new ObjectType(BINARY_INPUT_STATIC_GROUP, 0);
+	public static ObjectType BINARY_INPUT_STATIC_PACKED = new ObjectType(BINARY_INPUT_STATIC_GROUP, 1);
+	public static ObjectType BINARY_INPUT_STATIC_FLAGS = new ObjectType(BINARY_INPUT_STATIC_GROUP, 2);
+	
+	public static int BINARY_INPUT_EVENT_GROUP = 2;
+	public static ObjectType BINARY_INPUT_EVENT_ANY = new ObjectType(BINARY_INPUT_EVENT_GROUP, 0);
+	public static ObjectType BINARY_INPUT_EVENT_WITHOUT_TIME = new ObjectType(BINARY_INPUT_EVENT_GROUP, 1);
+	public static ObjectType BINARY_INPUT_EVENT_ABSOLUTE_TIME = new ObjectType(BINARY_INPUT_EVENT_GROUP, 2);
+	public static ObjectType BINARY_INPUT_EVENT_RELATIVE_TIME = new ObjectType(BINARY_INPUT_EVENT_GROUP, 3);
 	
 	public static ObjectType ANALOG_INPUT_STATIC_ANY = new ObjectType(30, 0);
 	public static ObjectType ANALOG_INPUT_STATIC_INT32 = new ObjectType(30, 1);
@@ -65,6 +67,8 @@ public class ObjectTypeConstants {
 
 	public static ObjectType SYNCHRONISED_CTO = new ObjectType(51, 1);
 	public static ObjectType UNSYNCHRONISED_CTO = new ObjectType(51, 2);
+	
+	public static ObjectType TIME_DELAY_FINE = new ObjectType(52, 2);
 
 	public static ObjectType CLASS_0 = new ObjectType(60, 1);
 	public static ObjectType CLASS_1 = new ObjectType(60, 2);
