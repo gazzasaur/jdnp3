@@ -28,12 +28,10 @@ import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManager;
 import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.database.EventListener;
-import net.sf.jdnp3.ui.web.outstation.database.InternalIndicatorsDataPoint;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.AnalogInputStaticReader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.BinaryInputStaticReader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class0Reader;
@@ -43,24 +41,6 @@ import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class3Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.CrobOperator;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.InternalIndicatorWriter;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.TimeAndDateHandler;
-import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistry;
-import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistryProvider;
-import net.sf.jdnp3.ui.web.outstation.message.ws.handler.AnalogInputEventMessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.ws.handler.AnalogInputMessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputEventMessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputMessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryOutputMessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.ws.handler.HeartbeatMessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.ws.handler.InternalIndicatorMessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistryProvider;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.AnalogInputEventMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.AnalogInputMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputEventMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryOutputMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.HeartbeatMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.InternalIndicatorMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.InternalIndicatorsMessage;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.eclipse.jetty.server.Server;
@@ -107,24 +87,6 @@ public class App {
 		
 		Logger logger = LoggerFactory.getLogger(App.class);
 		
-		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new HeartbeatMessageHandler());
-		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new InternalIndicatorMessageHandler());
-		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputMessageHandler());
-		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryInputEventMessageHandler());
-		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new BinaryOutputMessageHandler());
-		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new AnalogInputMessageHandler());
-		MessageHandlerRegistryProvider.getMessageHandlerRegistry().registerHandler(new AnalogInputEventMessageHandler());
-		
-		GenericMessageRegistry registry = GenericMessageRegistryProvider.getRegistry();
-		registry.register("heartbeat", HeartbeatMessage.class);
-		registry.register("binaryInputEvent", BinaryInputEventMessage.class);
-		registry.register("analogInputEvent", AnalogInputEventMessage.class);
-		registry.register("internalIndicator", InternalIndicatorMessage.class);
-		registry.register("internalIndicators", InternalIndicatorsDataPoint.class, InternalIndicatorsMessage.class);
-		registry.register("binaryInputPoint", BinaryInputDataPoint.class, BinaryInputMessage.class);
-		registry.register("binaryOutputPoint", BinaryOutputDataPoint.class, BinaryOutputMessage.class);
-		registry.register("analogInputPoint", AnalogInputDataPoint.class, AnalogInputMessage.class);
-
 		ClassPathXmlApplicationContext loadContext = new ClassPathXmlApplicationContext("outstation-config.xml");
 		Map<String, DataLinkLayer> dataLinkServices = loadContext.getBeansOfType(DataLinkLayer.class);
 		loadContext.close();

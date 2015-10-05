@@ -3,6 +3,170 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
+	<bean id="messageHandlerRegistry" class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistryProvider" factory-method="getMessageHandlerRegistry" />
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.HeartbeatMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.InternalIndicatorMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputEventMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryOutputMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.AnalogInputMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.AnalogInputEventMessageHandler" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="genericMessageRegistry" class="net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistryProvider" factory-method="getRegistry" />
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>heartbeat</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.HeartbeatMessage</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>binaryInputEvent</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputEventMessage</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>analogInputEvent</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.AnalogInputEventMessage</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>internalIndicator</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.InternalIndicatorMessage</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>internalIndicators</value>
+				<value>net.sf.jdnp3.ui.web.outstation.database.InternalIndicatorsDataPoint</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.InternalIndicatorsMessage</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>binaryInputPoint</value>
+				<value>net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputMessage</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>binaryOutputPoint</value>
+				<value>net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryOutputMessage</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>analogInputPoint</value>
+				<value>net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.AnalogInputMessage</value>
+			</list>
+		</property>
+	</bean>
+
 	<bean id="webAppContext" class="org.eclipse.jetty.webapp.WebAppContext">
 		<property name="contextPath" value="/" />
 		<property name="resourceBase" value="src/main/webapp/" />
