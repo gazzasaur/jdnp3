@@ -15,11 +15,15 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.service;
 
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.CONFIRM;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DELAY_MEASURE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DIRECT_OPERATE;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.RESPONSE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_EVENT_RELATIVE_TIME;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
@@ -44,6 +48,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstanc
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.SynchronisedCtoObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeDelayObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
@@ -123,7 +128,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		List<ObjectInstance> responseObjects = new ArrayList<>();
 		ApplicationFragmentRequest request = decoder.decode(data);
 
-		if (request.getHeader().getFunctionCode() == FunctionCode.CONFIRM) {
+		if (request.getHeader().getFunctionCode() == CONFIRM) {
 			for (EventObjectInstance eventObjectInstance : pendingEvents) {
 				eventQueue.confirm(eventObjectInstance);
 			}
@@ -136,6 +141,13 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			pendingEvents.clear();
 		}
 		
+		if (request.getHeader().getFunctionCode() == DELAY_MEASURE) {
+			TimeDelayObjectInstance timeDelayObjectInstance = new TimeDelayObjectInstance();
+			timeDelayObjectInstance.setIndex(1);
+			timeDelayObjectInstance.setTimestamp(2*(new Date().getTime() - messageProperties.getTimeReceived()));
+			responseObjects.add(new TimeDelayObjectInstance());
+		}
+
 		for (ObjectFragment objectFragment : request.getObjectFragments()) {
 			for (OutstationApplicationRequestHandler handler : outstationRequestHandlers) {
 				if (handler.canHandle(request.getHeader().getFunctionCode(), objectFragment)) {
@@ -149,7 +161,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		
 		ApplicationFragmentResponse response = new ApplicationFragmentResponse();
 		ApplicationFragmentResponseHeader applicationResponseHeader = response.getHeader();
-		applicationResponseHeader.setFunctionCode(FunctionCode.RESPONSE);
+		applicationResponseHeader.setFunctionCode(RESPONSE);
 		if (internalStatusProvider != null) {
 			try {
 				BeanUtils.copyProperties(applicationResponseHeader.getInternalIndicatorField(), internalStatusProvider);
@@ -220,6 +232,8 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			if (replyObjects.get(0) instanceof StaticObjectInstance) {
 				packer = indexPacker;
 			} else if (replyObjects.get(0) instanceof CtoObjectInstance) {
+				packer = singlePacker;
+			} else if (replyObjects.get(0) instanceof TimeDelayObjectInstance) {
 				packer = singlePacker;
 			}
 			

@@ -21,12 +21,19 @@ import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.TimeAndDateRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeAndDateObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TimeAndDateHandler implements TimeAndDateRequestHandler {
 	private Logger logger = LoggerFactory.getLogger(TimeAndDateHandler.class);
+	
+	private InternalStatusProvider internalStatusProvider;
+	
+	public TimeAndDateHandler(InternalStatusProvider internalStatusProvider) {
+		this.internalStatusProvider = internalStatusProvider;
+	}
 	
 	public List<TimeAndDateObjectInstance> doReadTime(long count) {
 		TimeAndDateObjectInstance timeAndDateObjectInstance = new TimeAndDateObjectInstance();
@@ -36,5 +43,6 @@ public class TimeAndDateHandler implements TimeAndDateRequestHandler {
 
 	public void doWriteTime(TimeAndDateObjectInstance timeAndDateObjectInstance) {
 		logger.info("Write Time: " + new Date(timeAndDateObjectInstance.getTimestamp()));
+		internalStatusProvider.setNeedTime(false);
 	}
 }

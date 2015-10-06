@@ -15,14 +15,12 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.TIME_AND_DATE_ABSOLUTE_TIME;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
-public class TimeDelayObjectInstance implements StaticObjectInstance {
+public class TimeDelayObjectInstance implements ObjectInstance {
 	private long index = 0;
-	private long interval = 0;
 	private long timestamp = 0;
-	private ObjectType requestedType = TIME_AND_DATE_ABSOLUTE_TIME;
+	private ObjectType requestedType = ObjectTypeConstants.TIME_DELAY_FINE;
 	
 	public long getIndex() {
 		return index;
@@ -30,14 +28,6 @@ public class TimeDelayObjectInstance implements StaticObjectInstance {
 	
 	public void setIndex(long index) {
 		this.index = index;
-	}
-
-	public long getInterval() {
-		return interval;
-	}
-
-	public void setInterval(long interval) {
-		this.interval = interval;
 	}
 
 	public long getTimestamp() {

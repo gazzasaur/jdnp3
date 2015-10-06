@@ -68,6 +68,7 @@ public class ObjectTypeConstants {
 	public static ObjectType SYNCHRONISED_CTO = new ObjectType(51, 1);
 	public static ObjectType UNSYNCHRONISED_CTO = new ObjectType(51, 2);
 	
+	public static ObjectType TIME_DELAY_COARSE = new ObjectType(52, 1);
 	public static ObjectType TIME_DELAY_FINE = new ObjectType(52, 2);
 
 	public static ObjectType CLASS_0 = new ObjectType(60, 1);

@@ -22,10 +22,12 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticO
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryOutputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeDelayObjectInstance;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// FIXME IMPL Update this to avoid hard coding the helpers.
 public class ObjectInstanceTypeRationaliser {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -34,6 +36,7 @@ public class ObjectInstanceTypeRationaliser {
 		this.put(BinaryInputStaticObjectInstance.class, new BinaryInputStaticTypeRationaliserHelper());
 		this.put(BinaryOutputStaticObjectInstance.class, new BinaryOutputStaticTypeRationaliserHelper());
 		this.put(AnalogInputStaticObjectInstance.class, new AnalogInputStaticTypeRationaliserHelper());
+		this.put(TimeDelayObjectInstance.class, new TimeDelayTypeRationaliserHelper());
 	}};
 	
 	public void rationaliseType(ObjectInstance objectInstance) {

@@ -43,6 +43,7 @@ public class SingleObjectFragmentPacker implements ObjectFragmentPacker {
 		ObjectInstance firstInstance = objectInstances.get(0);
 		ObjectType objectType = firstInstance.getRequestedType();
 		ObjectTypeEncoder objectTypeEncoder = null;
+		// FIXME IMPL This should not be hard coded.
 		for (ObjectTypeEncoder encoder : OBJECT_TYPE_ENCODERS) {
 			if (encoder.canEncode(context.getFunctionCode(), objectType)) {
 				objectTypeEncoder = encoder;

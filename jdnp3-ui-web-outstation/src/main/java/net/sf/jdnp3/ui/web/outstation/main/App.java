@@ -44,8 +44,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  * For the first build, multiple outstations must be implemented.
  * 
- * Use a Function handler rather than hard code in OutstationApplicationLayer.
- * 
  * Complete BinaryOutput type:
  * - Add the ability to create events.
  * - Add the ability to create control events.
@@ -107,8 +105,8 @@ public class App {
 			outstation.addRequestHandler(new Class1Reader());
 			outstation.addRequestHandler(new Class2Reader());
 			outstation.addRequestHandler(new Class3Reader());
-			outstation.addRequestHandler(new TimeAndDateHandler());
 			outstation.addRequestHandler(new CrobOperator(databaseManager));
+			outstation.addRequestHandler(new TimeAndDateHandler(databaseManager.getInternalStatusProvider()));
 			outstation.addRequestHandler(new InternalIndicatorWriter(databaseManager.getInternalStatusProvider()));
 			
 			databaseManager.addEventListener(new BinaryInputEventListener(outstation));
