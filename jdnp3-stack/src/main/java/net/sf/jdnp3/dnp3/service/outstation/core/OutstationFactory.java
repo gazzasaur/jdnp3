@@ -15,6 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.core;
 
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectTypeEncoderConstants.OBJECT_TYPE_ENCODERS;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_STATIC_GROUP;
 
 import java.util.ArrayList;
@@ -47,6 +48,10 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.Applicat
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDataDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoderImpl;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
@@ -58,6 +63,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationRe
 
 public class OutstationFactory {
 	private InternalStatusProvider internalStatusProvider = null;
+	private List<ObjectTypeEncoder> encoders = new ArrayList<>();
 	private List<ObjectTypeDecoder> decoders = new ArrayList<>();
 	private List<OutstationRequestHandlerAdaptor> adaptors = new ArrayList<>();
 	private List<ItemEnumeratorFactory> itemEnumeratorFactories = new ArrayList<>();
@@ -79,6 +85,10 @@ public class OutstationFactory {
 
 	public void addOutstationApplicationRequestHandler(OutstationApplicationRequestHandler handler) {
 		outstationApplicationRequestHandlers.add(handler);
+	}
+	
+	public void addObjectTypeEncoder(ObjectTypeEncoder objectTypeEncoder) {
+		encoders.add(objectTypeEncoder);
 	}
 	
 	public void addObjectTypeDecoder(ObjectTypeDecoder objectTypeDecoder) {
@@ -109,6 +119,10 @@ public class OutstationFactory {
 		itemEnumeratorFactories.add(new StandardItemEnumeratorFactory());
 	}
 	
+	public void addStandardObjectTypeEncoders() {
+		encoders.addAll(OBJECT_TYPE_ENCODERS);
+	}
+	
 	public void addStandardObjectTypeDecoders() {
 		decoders.add(new BinaryInputStaticFlagsObjectTypeDecoder());
 		decoders.add(new Class0ObjectTypeDecoder());
@@ -121,6 +135,12 @@ public class OutstationFactory {
 	}
 
 	public Outstation createOutstation() {
+		ObjectFragmentEncoder objectFragmentEncoder = new ObjectFragmentEncoder();
+		for (ObjectTypeEncoder encoder : encoders) {
+			objectFragmentEncoder.addObjectTypeEncoder(encoder);
+		}
+		encoders.clear();
+		
 		ObjectFragmentDataDecoder objectFragmentDataDecoder = new ObjectFragmentDataDecoder();
 		for (ObjectTypeDecoder decoder : decoders) {
 			objectFragmentDataDecoder.addObjectTypeDecoder(decoder);
@@ -133,8 +153,10 @@ public class OutstationFactory {
 		itemEnumeratorFactories.clear();
 		
 		ObjectFragmentDecoder objectFragmentDecoder = new ObjectFragmentDecoder(objectFragmentDataDecoder);
+		ApplicationFragmentResponseEncoder applicationFragmentResponseEncoder = new ApplicationFragmentResponseEncoderImpl(objectFragmentEncoder);
 		ApplicationFragmentRequestDecoder applicationFragmentRequestDecoder = new ApplicationFragmentRequestDecoderImpl(objectFragmentDecoder);
 		OutstationApplicationLayer outstationApplicationLayer = new OutstationApplicationLayer();
+		outstationApplicationLayer.setEncoder(applicationFragmentResponseEncoder);
 		outstationApplicationLayer.setDecoder(applicationFragmentRequestDecoder);
 		
 		if (internalStatusProvider != null) {

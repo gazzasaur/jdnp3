@@ -22,8 +22,12 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.Applicatio
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 
 public class ApplicationFragmentRequestEncoderImpl implements ApplicationFragmentRequestEncoder {
+	private ObjectFragmentEncoder objectFragmentEncoder;
 	private ApplicationFragmentRequestHeaderEncoder applicationHeaderEncoder = new ApplicationFragmentRequestHeaderEncoder();
-	private ObjectFragmentEncoder objectFragmentEncoder = new ObjectFragmentEncoder();
+	
+	public ApplicationFragmentRequestEncoderImpl(ObjectFragmentEncoder objectFragmentEncoder) {
+		this.objectFragmentEncoder = objectFragmentEncoder;
+	}
 	
 	public List<Byte> encode(ApplicationFragmentRequest fragment) {
 		List<Byte> data = new ArrayList<>();

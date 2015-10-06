@@ -29,7 +29,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFr
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFragmentPackerContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFragmentPackerResult;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.SingleObjectFragmentPacker;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoderImpl;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.DefaultObjectTypeMapping;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.ObjectInstanceSorter;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.ObjectInstanceTypeRationaliser;
@@ -64,6 +64,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	
 	private ApplicationTransport applicationTransport;
 	private ApplicationFragmentRequestDecoder decoder = null;
+	private ApplicationFragmentResponseEncoder encoder = null;
 	private DefaultObjectTypeMapping defaultObjectTypeMapping = new DefaultObjectTypeMapping();
 
 	public DataLinkLayer getDataLinkLayer() {
@@ -86,6 +87,10 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		return eventQueue;
 	}
 	
+	public void setEncoder(ApplicationFragmentResponseEncoder encoder) {
+		this.encoder = encoder;
+	}
+	
 	public void setDecoder(ApplicationFragmentRequestDecoder decoder) {
 		this.decoder = decoder;
 	}
@@ -98,6 +103,12 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	public void dataReceived(MessageProperties messageProperties, List<Byte> data) {
 		if (applicationTransport == null) {
 			throw new IllegalStateException("No ApplicationTransport has been defined.");
+		}
+		if (encoder == null) {
+			throw new IllegalStateException("An encoder must be specified.");
+		}
+		if (decoder == null) {
+			throw new IllegalStateException("A decoder must be specified.");
 		}
 		
 		// FIXME IMPL Will also have to account for Broadcast.
@@ -158,7 +169,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			for (ObjectFragment objectFragment : request.getObjectFragments()) {
 				response.addObjectFragment(objectFragment);
 			}
-			applicationTransport.sendData(messageProperties, new ApplicationFragmentResponseEncoderImpl().encode(response));
+			applicationTransport.sendData(messageProperties, encoder.encode(response));
 			return;
 		}
 		
@@ -216,7 +227,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			response.addObjectFragment(result.getObjectFragment());
 		}
 		
-		applicationTransport.sendData(messageProperties, new ApplicationFragmentResponseEncoderImpl().encode(response));
+		applicationTransport.sendData(messageProperties, encoder.encode(response));
 	}
 
 	public int getMtu() {

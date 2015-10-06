@@ -15,23 +15,18 @@
  */
 package net.sf.jdnp3.ui.web.outstation.main;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationFactory;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputEventObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManager;
 import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
-import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.DataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.AnalogInputEventListener;
+import net.sf.jdnp3.ui.web.outstation.database.BinaryInputEventListener;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
-import net.sf.jdnp3.ui.web.outstation.database.EventListener;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.AnalogInputStaticReader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.BinaryInputStaticReader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class0Reader;
@@ -42,15 +37,14 @@ import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.CrobOperator;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.InternalIndicatorWriter;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.TimeAndDateHandler;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.eclipse.jetty.server.Server;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * For the first build, multiple outstations must be implemented.
+ * 
+ * Use a Function handler rather than hard code in OutstationApplicationLayer.
  * 
  * Complete BinaryOutput type:
  * - Add the ability to create events.
@@ -85,8 +79,6 @@ public class App {
 		SLF4JBridgeHandler.removeHandlersForRootLogger();
 		SLF4JBridgeHandler.install();
 		
-		Logger logger = LoggerFactory.getLogger(App.class);
-		
 		ClassPathXmlApplicationContext loadContext = new ClassPathXmlApplicationContext("outstation-config.xml");
 		Map<String, DataLinkLayer> dataLinkServices = loadContext.getBeansOfType(DataLinkLayer.class);
 		loadContext.close();
@@ -102,6 +94,7 @@ public class App {
 			databaseManager.addAnalogInputDataPoints("Speed", "Volume");
 			
 			OutstationFactory outstationFactory = new OutstationFactory();
+			outstationFactory.addStandardObjectTypeEncoders();
 			outstationFactory.addStandardObjectTypeDecoders();
 			outstationFactory.addStandardItemEnumeratorFactories();
 			outstationFactory.addStandardOutstationRequestHandlerAdaptors();
@@ -118,35 +111,8 @@ public class App {
 			outstation.addRequestHandler(new CrobOperator(databaseManager));
 			outstation.addRequestHandler(new InternalIndicatorWriter(databaseManager.getInternalStatusProvider()));
 			
-			databaseManager.addEventListener(new EventListener() {
-				public void eventReceived(DataPoint dataPoint) {
-					if (dataPoint instanceof BinaryInputDataPoint) {
-						BinaryInputEventObjectInstance binaryInputEventObjectInstance = new BinaryInputEventObjectInstance();
-						try {
-							BinaryInputDataPoint binaryDataPoint = (BinaryInputDataPoint) dataPoint;
-							BeanUtils.copyProperties(binaryInputEventObjectInstance, binaryDataPoint);
-							binaryInputEventObjectInstance.setTimestamp(new Date().getTime());
-							binaryInputEventObjectInstance.setEventClass(binaryDataPoint.getEventClass());
-							binaryInputEventObjectInstance.setRequestedType(binaryDataPoint.getEventType());
-							outstation.sendEvent(binaryInputEventObjectInstance);
-						} catch (Exception e) {
-							logger.error("Failed to send event.", e);
-						}
-					} else if (dataPoint instanceof AnalogInputDataPoint) {
-						AnalogInputEventObjectInstance analogInputEventObjectInstance = new AnalogInputEventObjectInstance();
-						try {
-							AnalogInputDataPoint analogDataPoint = (AnalogInputDataPoint) dataPoint;
-							BeanUtils.copyProperties(analogInputEventObjectInstance, analogDataPoint);
-							analogInputEventObjectInstance.setTimestamp(new Date().getTime());
-							analogInputEventObjectInstance.setEventClass(analogDataPoint.getEventClass());
-							analogInputEventObjectInstance.setRequestedType(analogDataPoint.getEventType());
-							outstation.sendEvent(analogInputEventObjectInstance);
-						} catch (Exception e) {
-							logger.error("Failed to send event.", e);
-						}
-					}
-				}
-			});
+			databaseManager.addEventListener(new BinaryInputEventListener(outstation));
+			databaseManager.addEventListener(new AnalogInputEventListener(outstation));
 			
 			DataLinkManager dataLinkManager = DataLinkManagerProvider.getDataLinkManager("dataLinkService-20000");
 			dataLinkManager.bind(3, outstation);

@@ -16,8 +16,8 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectTypeEncoderConstants.OBJECT_TYPE_ENCODERS;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectFragmentHeaderEncoder;
@@ -27,6 +27,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class ObjectFragmentEncoder {
+	private List<ObjectTypeEncoder> objectTypeEncoders = new ArrayList<>();
 	private ObjectFragmentHeaderEncoder objectFragmentHeaderEncoder = new ObjectFragmentHeaderEncoder();
 	
 	public void encode(ObjectFragmentEncoderContext context, ObjectFragment objectFragment, List<Byte> data) {
@@ -38,7 +39,7 @@ public class ObjectFragmentEncoder {
 		}
 		
 		ObjectTypeEncoder objectTypeEncoder = null;
-		for (ObjectTypeEncoder encoder : OBJECT_TYPE_ENCODERS) {
+		for (ObjectTypeEncoder encoder : objectTypeEncoders) {
 			if (encoder.canEncode(context.getFunctionCode(), context.getObjectType())) {
 				objectTypeEncoder = encoder;
 			}
@@ -52,5 +53,10 @@ public class ObjectFragmentEncoder {
 			PrefixTypeEncoder.encode(prefixType, objectInstance, data);
 			objectTypeEncoder.encode(context, objectInstance, data);
 		}
+	}
+	
+	public void addObjectTypeEncoder(ObjectTypeEncoder objectTypeEncoder) {
+		objectTypeEncoders.add(objectTypeEncoder);
+		
 	}
 }
