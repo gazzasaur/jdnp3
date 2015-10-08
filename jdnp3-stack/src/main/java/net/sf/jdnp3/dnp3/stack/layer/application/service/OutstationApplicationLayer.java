@@ -148,6 +148,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			responseObjects.add(new TimeDelayObjectInstance());
 		}
 
+		// FIXME IMPL Raise DNP3 error if it cannot be handled.
 		for (ObjectFragment objectFragment : request.getObjectFragments()) {
 			for (OutstationApplicationRequestHandler handler : outstationRequestHandlers) {
 				if (handler.canHandle(request.getHeader().getFunctionCode(), objectFragment)) {

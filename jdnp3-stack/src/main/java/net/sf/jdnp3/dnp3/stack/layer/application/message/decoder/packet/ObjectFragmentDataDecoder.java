@@ -46,7 +46,7 @@ public class ObjectFragmentDataDecoder {
 		
 		ItemEnumerator itemEnumerator = null;
 		for (ItemEnumeratorFactory itemEnumeratorFactory : itemEnumeratorFactories) {
-			if (itemEnumeratorFactory.hasFactory(decoderContext, objectFragment)) {
+			if (itemEnumeratorFactory.hasEnumerator(decoderContext, objectFragment)) {
 				itemEnumerator = itemEnumeratorFactory.createEnumerator(decoderContext, objectFragment);
 				break;
 			}

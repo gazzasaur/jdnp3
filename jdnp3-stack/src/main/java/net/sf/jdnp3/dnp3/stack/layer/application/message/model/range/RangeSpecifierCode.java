@@ -28,7 +28,7 @@ public enum RangeSpecifierCode {
 	ONE_OCTET_OBJECT_COUNT(0x07, 1),
 	TWO_OCTET_OBJECT_COUNT(0x08, 2),
 	FOUR_OCTET_OBJECT_COUNT(0x09, 4),
-	VARIABLE_FORMAT_QUALIFIER(0x0B, 0); // FIXME IMPL Really???
+	VARIABLE_FORMAT_QUALIFIER(0x0B, 2);
 	
 	private final int code;
 	private final int octetCount;

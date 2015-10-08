@@ -26,7 +26,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 
 public class StandardItemEnumeratorFactory implements ItemEnumeratorFactory {
-	public boolean hasFactory(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment) {
+	public boolean hasEnumerator(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment) {
 		try {
 			this.createEnumerator(decoderContext, objectFragment);
 		} catch (Exception e) {
