@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.exception.UnknownObjectException;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.CountRangeObjectFragmentPacker;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.IndexRangeObjectFragmentPacker;
@@ -115,18 +116,39 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		if (decoder == null) {
 			throw new IllegalStateException("A decoder must be specified.");
 		}
+		data = new ArrayList<>(data);
 		
 		// FIXME IMPL Will also have to account for Broadcast.
 		if (!messageProperties.isMaster()) {
 			return;
 		}
-		int source = messageProperties.getSourceAddress();
-		messageProperties.setSourceAddress(messageProperties.getDestinationAddress());
-		messageProperties.setDestinationAddress(source);
-		messageProperties.setMaster(false);
+		MessageProperties returnMessageProperties = new MessageProperties();
+		returnMessageProperties.setSourceAddress(messageProperties.getDestinationAddress());
+		returnMessageProperties.setDestinationAddress(messageProperties.getSourceAddress());
+		returnMessageProperties.setTimeReceived(messageProperties.getTimeReceived());
+		returnMessageProperties.setChannelId(messageProperties.getChannelId());
 		
 		List<ObjectInstance> responseObjects = new ArrayList<>();
-		ApplicationFragmentRequest request = decoder.decode(data);
+		
+		ApplicationFragmentRequest request = new ApplicationFragmentRequest();
+		try {
+			decoder.decode(request, data);
+		} catch (UnknownObjectException unknownObjectException) {
+			logger.error(unknownObjectException.getMessage(), unknownObjectException);
+			if (request.getHeader().getApplicationControl().getSequenceNumber() >= 0) {
+				ApplicationFragmentResponse response = new ApplicationFragmentResponse();
+				ApplicationFragmentResponseHeader applicationResponseHeader = response.getHeader();
+				applicationResponseHeader.setFunctionCode(RESPONSE);
+				applicationResponseHeader.getInternalIndicatorField().setObjectUnknown(true);
+				applicationResponseHeader.getApplicationControl().setConfirmationRequired(false);
+				applicationResponseHeader.getApplicationControl().setFirstFragmentOfMessage(true);
+				applicationResponseHeader.getApplicationControl().setFinalFragmentOfMessage(true);
+				applicationResponseHeader.getApplicationControl().setUnsolicitedResponse(false);
+				applicationResponseHeader.getApplicationControl().setSequenceNumber(request.getHeader().getApplicationControl().getSequenceNumber());
+				applicationTransport.sendData(returnMessageProperties, encoder.encode(response));
+			}
+			return;
+		}
 
 		if (request.getHeader().getFunctionCode() == CONFIRM) {
 			for (EventObjectInstance eventObjectInstance : pendingEvents) {
@@ -144,7 +166,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		if (request.getHeader().getFunctionCode() == DELAY_MEASURE) {
 			TimeDelayObjectInstance timeDelayObjectInstance = new TimeDelayObjectInstance();
 			timeDelayObjectInstance.setIndex(1);
-			timeDelayObjectInstance.setTimestamp(2*(new Date().getTime() - messageProperties.getTimeReceived()));
+			timeDelayObjectInstance.setTimestamp(2*(new Date().getTime() - returnMessageProperties.getTimeReceived()));
 			responseObjects.add(new TimeDelayObjectInstance());
 		}
 
@@ -175,14 +197,13 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		applicationResponseHeader.getApplicationControl().setFirstFragmentOfMessage(true);
 		applicationResponseHeader.getApplicationControl().setFinalFragmentOfMessage(true);
 		applicationResponseHeader.getApplicationControl().setUnsolicitedResponse(false);
-		applicationResponseHeader.getApplicationControl().setConfirmationRequired(true);
 		applicationResponseHeader.getApplicationControl().setSequenceNumber(request.getHeader().getApplicationControl().getSequenceNumber());
 		
 		if (request.getHeader().getFunctionCode().equals(DIRECT_OPERATE)) {
 			for (ObjectFragment objectFragment : request.getObjectFragments()) {
 				response.addObjectFragment(objectFragment);
 			}
-			applicationTransport.sendData(messageProperties, encoder.encode(response));
+			applicationTransport.sendData(returnMessageProperties, encoder.encode(response));
 			return;
 		}
 		
@@ -202,6 +223,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		CtoObjectInstance ctoObjectInstance = null;
 		for (ObjectInstance objectInstance : responseObjects) {
 			if (objectInstance instanceof EventObjectInstance) {
+				applicationResponseHeader.getApplicationControl().setConfirmationRequired(true);
 				EventObjectInstance eventObjectInstance = (EventObjectInstance) objectInstance;
 				if (relativeTimeTypes.contains(eventObjectInstance.getRequestedType()) && (ctoObjectInstance == null || Math.abs(ctoObjectInstance.getTimestamp() - eventObjectInstance.getTimestamp()) > 32767)) {
 					// FIXME Possibly consider unsynchronised.
@@ -242,7 +264,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			response.addObjectFragment(result.getObjectFragment());
 		}
 		
-		applicationTransport.sendData(messageProperties, encoder.encode(response));
+		applicationTransport.sendData(returnMessageProperties, encoder.encode(response));
 	}
 
 	public int getMtu() {

@@ -20,7 +20,7 @@ public class ApplicationControlField {
 	private boolean finalFragmentOfMessage = false;
 	private boolean confirmationRequired = false;
 	private boolean unsolicitedResponse = false;
-	private int sequenceNumber = 0;
+	private int sequenceNumber = -1;
 	
 	public boolean isFirstFragmentOfMessage() {
 		return firstFragmentOfMessage;

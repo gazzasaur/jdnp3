@@ -32,12 +32,12 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class BinaryInputStaticFlagsObjectTypeDecoder implements ObjectTypeDecoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_INPUT_STATIC_FLAGS);
+		return functionCode.equals(objectType.equals(BINARY_INPUT_STATIC_FLAGS));
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
 		if (!this.canEncode(context.getFunctionCode(), context.getObjectType())) {
-			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
+			throw new IllegalArgumentException(format("Cannot decode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
 
 		BinaryInputStaticObjectInstance specificInstance = (BinaryInputStaticObjectInstance) objectInstance;

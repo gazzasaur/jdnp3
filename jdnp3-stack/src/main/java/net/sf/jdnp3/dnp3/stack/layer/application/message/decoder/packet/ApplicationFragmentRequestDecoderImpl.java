@@ -28,8 +28,7 @@ public class ApplicationFragmentRequestDecoderImpl implements ApplicationFragmen
 		this.objectFragmentDecoder = objectFragmentDecoder;
 	}
 	
-	public ApplicationFragmentRequest decode(List<Byte> data) {
-		ApplicationFragmentRequest applicationFragmentRequest = new ApplicationFragmentRequest();
+	public ApplicationFragmentRequest decode(ApplicationFragmentRequest applicationFragmentRequest, List<Byte> data) {
 		decoder.decode(applicationFragmentRequest, data);
 		
 		ObjectFragmentDecoderContext decoderContext = new ObjectFragmentDecoderContext();

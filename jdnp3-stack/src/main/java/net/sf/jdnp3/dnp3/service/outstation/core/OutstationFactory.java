@@ -16,6 +16,7 @@
 package net.sf.jdnp3.dnp3.service.outstation.core;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectTypeEncoderConstants.OBJECT_TYPE_ENCODERS;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_STATIC_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_STATIC_GROUP;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.Class2ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.Class3ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.InternalIndicatorBitObjectTypeDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.NoDataObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.time.TimeAndDateObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
@@ -125,6 +127,7 @@ public class OutstationFactory {
 	
 	public void addStandardObjectTypeDecoders() {
 		decoders.add(new BinaryInputStaticFlagsObjectTypeDecoder());
+		decoders.add(new NoDataObjectTypeDecoder(BINARY_INPUT_STATIC_ANY));
 		decoders.add(new Class0ObjectTypeDecoder());
 		decoders.add(new Class1ObjectTypeDecoder());
 		decoders.add(new Class2ObjectTypeDecoder());

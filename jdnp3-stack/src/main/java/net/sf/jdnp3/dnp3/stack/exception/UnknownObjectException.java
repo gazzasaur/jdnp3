@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
+package net.sf.jdnp3.dnp3.stack.exception;
 
-import java.util.List;
-
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentRequest;
-
-public interface ApplicationFragmentRequestDecoder {
-	public ApplicationFragmentRequest decode(ApplicationFragmentRequest request, List<Byte> data);
+@SuppressWarnings("serial")
+public class UnknownObjectException extends Dnp3Exception {
+	public UnknownObjectException(String message) {
+		super(message);
+	}
 }

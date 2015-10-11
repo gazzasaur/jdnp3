@@ -18,6 +18,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.exception.UnknownObjectException;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.ItemEnumerator;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.ItemEnumeratorFactory;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ObjectTypeDecoder;
@@ -55,35 +56,34 @@ public class ObjectFragmentDataDecoder {
 			throw new IllegalArgumentException(String.format("Cannot enumerate over ObjectType %s, PrefixType %s and Range %s.", objectFragment.getObjectFragmentHeader().getObjectType(), prefixType, range));
 		}
 		
-		boolean decoded = false;
-		for (ObjectTypeDecoder objectTypeDecoder : objectTypeDecoders) {
-			if (objectTypeDecoder.canDecode(decoderContext)) {
-				decoded = true;
-				boolean firstPass = true;
-				
-				while (itemEnumerator.hasNext()) {
-					long index = itemEnumerator.next(data);
-					if (firstPass) {
-						firstPass = false;
-						decoderContext.setStartIndex(index);
-					}
-					decoderContext.setCurrentIndex(index);
-					decoderContext.setLastItem(!itemEnumerator.hasNext());
-					
-					if (FunctionCodeUtils.hasObjectInstanceData(decoderContext.getFunctionCode())) {
-						objectFragment.addObjectInstance(objectTypeDecoder.decode(decoderContext, data));
-					} else if (objectFragment.getObjectFragmentHeader().getPrefixType() instanceof IndexPrefixType) {
-						NullObjectInstance nullObjectInstance = new NullObjectInstance();
-						nullObjectInstance.setIndex(index);
-						nullObjectInstance.setRequestedType(objectFragment.getObjectFragmentHeader().getObjectType());
-						objectFragment.addObjectInstance(nullObjectInstance);
-					}
-				}
-				break;
+		ObjectTypeDecoder objectTypeDecoder = null;
+		for (ObjectTypeDecoder decoder : objectTypeDecoders) {
+			if (decoder.canDecode(decoderContext)) {
+				objectTypeDecoder = decoder;
 			}
 		}
-		if (!decoded) {
-			throw new IllegalArgumentException(String.format("Cannot decode object of type %s.", objectFragment.getObjectFragmentHeader().getObjectType()));
+		if (objectTypeDecoder == null) {
+			throw new UnknownObjectException("Unknown object: " + decoderContext.getObjectType());
+		}
+		
+		boolean firstPass = true;
+		while (itemEnumerator.hasNext()) {
+			long index = itemEnumerator.next(data);
+			if (firstPass) {
+				firstPass = false;
+				decoderContext.setStartIndex(index);
+			}
+			decoderContext.setCurrentIndex(index);
+			decoderContext.setLastItem(!itemEnumerator.hasNext());
+					
+			if (FunctionCodeUtils.hasObjectInstanceData(decoderContext.getFunctionCode())) {
+				objectFragment.addObjectInstance(objectTypeDecoder.decode(decoderContext, data));
+			} else if (objectFragment.getObjectFragmentHeader().getPrefixType() instanceof IndexPrefixType) {
+				NullObjectInstance nullObjectInstance = new NullObjectInstance();
+				nullObjectInstance.setIndex(index);
+				nullObjectInstance.setRequestedType(objectFragment.getObjectFragmentHeader().getObjectType());
+				objectFragment.addObjectInstance(nullObjectInstance);
+			}
 		}
 	}
 }
