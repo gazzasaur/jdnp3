@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="pumpStationFactory" class="net.sf.jdnp3.ui.web.outstation.main.DeviceFactory">
+		<property name="binaryInputDataPoints">
+			<list>
+				<value>Running</value>
+				<value>Low Fuel</value>
+				<value>Non-Urgent Fail</value>
+				<value>Urgent Fail</value>
+			</list>
+		</property>
+		<property name="binaryOutputDataPoints">
+			<list>
+				<value>Operate</value>
+			</list>
+		</property>
+		<property name="analogInputDataPoints">
+			<list>
+				<value>Speed</value>
+				<value>Volume</value>
+			</list>
+		</property>
+	</bean>
+</beans>

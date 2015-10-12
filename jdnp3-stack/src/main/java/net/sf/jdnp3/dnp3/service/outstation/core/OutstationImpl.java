@@ -57,4 +57,8 @@ public class OutstationImpl implements Outstation {
 	public ApplicationLayer getApplicationLayer() {
 		return outstationApplicationLayer;
 	}
+
+	public void setPrimaryAddress(int address) {
+		outstationApplicationLayer.setPrimaryAddress(address);
+	}
 }

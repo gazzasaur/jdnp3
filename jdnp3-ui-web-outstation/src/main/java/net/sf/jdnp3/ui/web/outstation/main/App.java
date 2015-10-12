@@ -15,28 +15,6 @@
  */
 package net.sf.jdnp3.ui.web.outstation.main;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
-import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
-import net.sf.jdnp3.dnp3.service.outstation.core.OutstationFactory;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
-import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManager;
-import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
-import net.sf.jdnp3.ui.web.outstation.database.AnalogInputEventListener;
-import net.sf.jdnp3.ui.web.outstation.database.BinaryInputEventListener;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.AnalogInputStaticReader;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.BinaryInputStaticReader;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class0Reader;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class1Reader;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class2Reader;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class3Reader;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.CrobOperator;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.InternalIndicatorWriter;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.TimeAndDateHandler;
-
 import org.eclipse.jetty.server.Server;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -72,59 +50,22 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * - Ability to change scheme in Runtime.
  */
 public class App {
-	
 	public static void main(String[] args) {
 		SLF4JBridgeHandler.removeHandlersForRootLogger();
 		SLF4JBridgeHandler.install();
 		
 		ClassPathXmlApplicationContext loadContext = new ClassPathXmlApplicationContext("outstation-config.xml");
-		Map<String, DataLinkLayer> dataLinkServices = loadContext.getBeansOfType(DataLinkLayer.class);
 		loadContext.close();
-		for (Entry<String, DataLinkLayer> entry : dataLinkServices.entrySet()) {
-			DataLinkManager dataLinkManager = DataLinkManagerProvider.registerDataLink(entry.getKey());
-			dataLinkManager.setDataLinkLayer(entry.getValue());
-		}
-		
-		for (int i = 31; i < 32; ++i) {
-			DatabaseManager databaseManager = DatabaseManagerProvider.registerDevice("Pump Station " + i, "Primary Pump 1");
-			databaseManager.addBinaryInputDataPoints("Running", "Low Fuel", "Non-Urgent Fail", "Urgent Fail");
-			databaseManager.addBinaryOutputDataPoints("Operate");
-			databaseManager.addAnalogInputDataPoints("Speed", "Volume");
-			
-			OutstationFactory outstationFactory = new OutstationFactory();
-			outstationFactory.addStandardObjectTypeEncoders();
-			outstationFactory.addStandardObjectTypeDecoders();
-			outstationFactory.addStandardItemEnumeratorFactories();
-			outstationFactory.addStandardOutstationRequestHandlerAdaptors();
-			outstationFactory.setInternalStatusProvider(databaseManager.getInternalStatusProvider());
-			
-			Outstation outstation = outstationFactory.createOutstation();
-			outstation.addRequestHandler(new BinaryInputStaticReader(databaseManager));
-			outstation.addRequestHandler(new AnalogInputStaticReader(databaseManager));
-			outstation.addRequestHandler(new Class0Reader(databaseManager));
-			outstation.addRequestHandler(new Class1Reader());
-			outstation.addRequestHandler(new Class2Reader());
-			outstation.addRequestHandler(new Class3Reader());
-			outstation.addRequestHandler(new CrobOperator(databaseManager));
-			outstation.addRequestHandler(new TimeAndDateHandler(databaseManager.getInternalStatusProvider()));
-			outstation.addRequestHandler(new InternalIndicatorWriter(databaseManager.getInternalStatusProvider()));
-			
-			databaseManager.addEventListener(new BinaryInputEventListener(outstation));
-			databaseManager.addEventListener(new AnalogInputEventListener(outstation));
-			
-			DataLinkManager dataLinkManager = DataLinkManagerProvider.getDataLinkManager("dataLinkService-20000");
-			dataLinkManager.bind(3, outstation);
-		}
 		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("jetty-config.xml");
 		try {
 			Server server = context.getBean(Server.class);
+			context.close();
 			server.start();
 			server.join();
 		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
 			context.close();
+			e.printStackTrace();
 		}
 	}
 }

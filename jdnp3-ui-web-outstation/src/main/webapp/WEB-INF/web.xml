@@ -40,6 +40,15 @@
 		<servlet-name>faces</servlet-name>
 		<url-pattern>*.jsf</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>restapi</servlet-name>
+		<servlet-class>net.sf.jdnp3.ui.web.outstation.ui.web.RestApiServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>restapi</servlet-name>
+		<url-pattern>/servlet/restapi</url-pattern>
+	</servlet-mapping>
 	
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

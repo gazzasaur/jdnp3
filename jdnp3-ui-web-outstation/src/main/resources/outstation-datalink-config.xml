@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="dataLinkFactory" class="net.sf.jdnp3.ui.web.outstation.main.DataLinkFactory">
+		<property name="executorService" ref="executorService" />
+		<property name="dataPump" ref="dataPump" />
+	</bean>
+	
+	<bean id="20000" factory-bean="dataLinkFactory" factory-method="create">
+		<constructor-arg name="name" value="20000" />
+		<constructor-arg name="port" value="20000" />
+	</bean>
+</beans>

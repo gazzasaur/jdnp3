@@ -24,6 +24,7 @@ public interface Outstation {
 	public void addRequestHandler(OutstationRequestHandler requestHandler);
 	public void removeRequestHandler(OutstationRequestHandler requestHandler);
 	
+	public void setPrimaryAddress(int address);
 	public ApplicationLayer getApplicationLayer();
 	public void sendEvent(EventObjectInstance eventObjectInstance);
 	public void setApplicationTransport(ApplicationTransport applicationTransport);

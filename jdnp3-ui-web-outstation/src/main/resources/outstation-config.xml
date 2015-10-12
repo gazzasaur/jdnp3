@@ -13,14 +13,13 @@
 		<property name="targetMethod" value="start" />
 	</bean>
 	
-	<bean id="dataLinkService-20000" class="net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.TcpServerDataLinkService">
-		<property name="executorService" ref="executorService" />
-		<property name="dataPump" ref="dataPump" />
-		<property name="port" value="20000" />
-	</bean>
-	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="targetObject" ref="dataLinkService-20000" />
-		<property name="targetMethod" value="start" />
-	</bean>
+	<import resource="classpath*:/outstation-datalink-config.xml" />
+	<import resource="classpath*:/outstation-factory-config.xml" />
 	
+	<bean id="station-1-pump-1" factory-bean="pumpStationFactory" factory-method="create">
+		<constructor-arg name="siteName" value="Pump Station 1" />
+		<constructor-arg name="deviceName" value="Pump 1" />
+		<constructor-arg name="dataLink" ref="20000" />
+		<constructor-arg name="address" value="3" />
+	</bean>
 </beans>

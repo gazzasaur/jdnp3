@@ -61,6 +61,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	private Logger logger = LoggerFactory.getLogger(OutstationApplicationLayer.class);
 	
 	private int mtu = 2048;
+	private int address = 2;
 	private List<EventObjectInstance> pendingEvents = new ArrayList<>();
 	private List<OutstationApplicationRequestHandler> outstationRequestHandlers = new ArrayList<>();
 	
@@ -118,15 +119,20 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		}
 		data = new ArrayList<>(data);
 		
-		// FIXME IMPL Will also have to account for Broadcast.
 		if (!messageProperties.isMaster()) {
 			return;
 		}
+		boolean broadcast = false;
 		MessageProperties returnMessageProperties = new MessageProperties();
 		returnMessageProperties.setSourceAddress(messageProperties.getDestinationAddress());
 		returnMessageProperties.setDestinationAddress(messageProperties.getSourceAddress());
 		returnMessageProperties.setTimeReceived(messageProperties.getTimeReceived());
 		returnMessageProperties.setChannelId(messageProperties.getChannelId());
+		
+		if (messageProperties.getSourceAddress() >= 65533) {
+			messageProperties.setSourceAddress(address);
+			broadcast = true;
+		}
 		
 		List<ObjectInstance> responseObjects = new ArrayList<>();
 		
@@ -140,6 +146,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 				ApplicationFragmentResponseHeader applicationResponseHeader = response.getHeader();
 				applicationResponseHeader.setFunctionCode(RESPONSE);
 				applicationResponseHeader.getInternalIndicatorField().setObjectUnknown(true);
+				applicationResponseHeader.getInternalIndicatorField().setBroadcast(broadcast);
 				applicationResponseHeader.getApplicationControl().setConfirmationRequired(false);
 				applicationResponseHeader.getApplicationControl().setFirstFragmentOfMessage(true);
 				applicationResponseHeader.getApplicationControl().setFinalFragmentOfMessage(true);
@@ -193,6 +200,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 				logger.error("Cannot copy IIN properties.", e);
 			}
 		}
+		applicationResponseHeader.getInternalIndicatorField().setBroadcast(applicationResponseHeader.getInternalIndicatorField().isBroadcast() || broadcast);
 		applicationResponseHeader.getApplicationControl().setConfirmationRequired(false);
 		applicationResponseHeader.getApplicationControl().setFirstFragmentOfMessage(true);
 		applicationResponseHeader.getApplicationControl().setFinalFragmentOfMessage(true);
@@ -267,6 +275,10 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		applicationTransport.sendData(returnMessageProperties, encoder.encode(response));
 	}
 
+	public void setPrimaryAddress(int address) {
+		this.address  = address;
+	}
+
 	public int getMtu() {
 		return mtu;
 	}
@@ -274,5 +286,4 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	public void setMtu(int mtu) {
 		this.mtu = mtu;
 	}
-
 }
