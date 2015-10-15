@@ -122,4 +122,10 @@ public class Database {
 			binaryOutputDataPoints.remove(binaryOutputDataPoints.size() - 1);
 		}
 	}
+
+	public void clear() {
+		binaryInputDataPoints.clear();
+		binaryOutputDataPoints.clear();
+		analogInputDataPoints.clear();
+	}
 }

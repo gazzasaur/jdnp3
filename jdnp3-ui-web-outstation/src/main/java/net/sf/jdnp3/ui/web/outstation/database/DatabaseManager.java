@@ -202,6 +202,15 @@ public class DatabaseManager {
 			eventListener.eventReceived(binaryDataPoint);
 		}
 	}
+
+	public void clear() {
+		synchronized (database) {
+			database.clear();
+		}
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.modelChanged();
+		}
+	}
 	
 	public void addDatabaseListener(DatabaseListener databaseListener) {
 		databaseListeners.add(databaseListener);

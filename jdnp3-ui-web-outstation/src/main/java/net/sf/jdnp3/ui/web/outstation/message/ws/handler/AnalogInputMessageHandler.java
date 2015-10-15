@@ -16,7 +16,7 @@
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceWebSocket;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.AnalogInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
@@ -32,7 +32,7 @@ public class AnalogInputMessageHandler implements MessageHandler {
 		return message instanceof AnalogInputMessage;
 	}
 
-	public void processMessage(DeviceWebSocket webSocket, Message message) {
+	public void processMessage(DeviceManager webSocket, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}

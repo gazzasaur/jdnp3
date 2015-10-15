@@ -34,7 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ServerEndpoint(value="/ws/device", encoders=MessageEncoder.class, decoders=GenericMessageDecoder.class, configurator=DeviceWebSocketConfigurator.class)
-public class DeviceWebSocket implements DatabaseListener {
+public class DeviceWebSocket implements DeviceManager, DatabaseListener {
 	private Logger logger = LoggerFactory.getLogger(DeviceWebSocket.class);
 	
 	private Session session;
