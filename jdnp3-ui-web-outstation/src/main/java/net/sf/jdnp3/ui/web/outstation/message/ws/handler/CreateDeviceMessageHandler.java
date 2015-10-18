@@ -15,8 +15,12 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 
+import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManager;
+import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
+import net.sf.jdnp3.ui.web.outstation.main.DeviceFactory;
+import net.sf.jdnp3.ui.web.outstation.main.DeviceFactoryRegistry;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.CreateDeviceMessage;
@@ -38,9 +42,15 @@ public class CreateDeviceMessageHandler implements MessageHandler {
 		if (ObjectUtils.defaultIfNull(specificMessage.getSiteCode(), "").isEmpty() || ObjectUtils.defaultIfNull(specificMessage.getSiteCode(), "").isEmpty()) {
 			throw new IllegalArgumentException("A siteCode and deviceCode must be specified.");
 		}
-
-		DatabaseManager databaseManager = DatabaseManagerProvider.registerDevice(specificMessage.getSiteCode(), specificMessage.getDeviceCode());
-		databaseManager.clear();
+		
+		DataLinkManager dataLinkManager = DataLinkManagerProvider.getDataLinkManager(specificMessage.getDataLink());
+		DeviceFactory deviceFactory = DeviceFactoryRegistry.getFactory(specificMessage.getDeviceFactory());
+		
+		String siteCode = specificMessage.getSiteCode();
+		String deviceCode = specificMessage.getDeviceCode();
+		deviceFactory.create(siteCode, deviceCode, dataLinkManager, specificMessage.getPrimaryAddress());
+		DatabaseManager databaseManager = DatabaseManagerProvider.getDatabaseManager(siteCode, deviceCode);
+		
 		databaseManager.addBinaryInputDataPoints(specificMessage.getBinaryInputPoints().toArray(new String[0]));
 		databaseManager.addBinaryOutputDataPoints(specificMessage.getBinaryOutputPoints().toArray(new String[0]));
 		databaseManager.addAnalogInputDataPoints(specificMessage.getAnalogInputPoints().toArray(new String[0]));

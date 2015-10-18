@@ -70,7 +70,7 @@ public class DeviceFactory {
 		databaseManager.addEventListener(new AnalogInputEventListener(outstation));
 		
 		outstation.setPrimaryAddress(address);
-		dataLink.bind(3, outstation);
+		dataLink.bind(address, outstation);
 		
 		return outstation;
 	}

@@ -20,8 +20,11 @@ import java.util.List;
 
 public class CreateDeviceMessage implements Message {
 	private String type = "createDevice";
+	private String dataLink = "";
 	private String siteCode = "";
 	private String deviceCode = "";
+	private int primaryAddress = 0;
+	private String deviceFactory = "";
 	
 	private List<String> binaryInputPoints = new ArrayList<>();
 	private List<String> binaryOutputPoints = new ArrayList<>();
@@ -69,5 +72,29 @@ public class CreateDeviceMessage implements Message {
 
 	public void setAnalogInputPoints(List<String> analogInputPoints) {
 		this.analogInputPoints = analogInputPoints;
+	}
+
+	public int getPrimaryAddress() {
+		return primaryAddress;
+	}
+
+	public void setPrimaryAddress(int primaryAddress) {
+		this.primaryAddress = primaryAddress;
+	}
+
+	public String getDeviceFactory() {
+		return deviceFactory;
+	}
+
+	public void setDeviceFactory(String deviceFactory) {
+		this.deviceFactory = deviceFactory;
+	}
+
+	public String getDataLink() {
+		return dataLink;
+	}
+
+	public void setDataLink(String dataLink) {
+		this.dataLink = dataLink;
 	}
 }

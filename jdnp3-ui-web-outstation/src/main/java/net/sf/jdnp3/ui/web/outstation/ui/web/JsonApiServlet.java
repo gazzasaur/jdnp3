@@ -16,6 +16,7 @@
 package net.sf.jdnp3.ui.web.outstation.ui.web;
 
 import static java.lang.String.format;
+import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 import java.io.IOException;
 
@@ -64,7 +65,7 @@ public class JsonApiServlet extends HttpServlet implements DeviceManager {
 		} catch (Exception e) {
 		}
 		
-		String jsonData = IOUtils.toString(request.getInputStream());
+		String jsonData = defaultIfNull(IOUtils.toString(request.getInputStream()), "");
 		GenericMessageDecoder decoder = new GenericMessageDecoder();
 		Message message;
 		try {

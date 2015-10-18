@@ -15,6 +15,9 @@
  */
 package net.sf.jdnp3.ui.web.outstation.main;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.eclipse.jetty.server.Server;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -55,6 +58,10 @@ public class App {
 		SLF4JBridgeHandler.install();
 		
 		ClassPathXmlApplicationContext loadContext = new ClassPathXmlApplicationContext("outstation-config.xml");
+		Map<String, DeviceFactory> deviceFactories = loadContext.getBeansOfType(DeviceFactory.class);
+		for (Entry<String, DeviceFactory> entry : deviceFactories.entrySet()) {
+			DeviceFactoryRegistry.registerFactory(entry.getKey(), entry.getValue());
+		}
 		loadContext.close();
 		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("jetty-config.xml");
