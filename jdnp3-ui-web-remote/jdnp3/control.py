@@ -1,16 +1,21 @@
 import json
+import time
+import random
+import urllib
 import urllib2
 import exceptions
 
 def CREATE_DATA():
     return {
         'type': 'createDevice',
-        'dataLink': '20000',
-        'siteCode': 'asdf',
-        'deviceCode': 'fdsa',
-        'deviceFactory': 'pumpStationFactory',
-        'primaryAddress': '5',
-        'binaryInputPoints': ['ASDF', 'FDSA'],
+        'dataLink': '',
+        'siteCode': '',
+        'deviceCode': '',
+        'deviceFactory': '',
+        'primaryAddress': '',
+        'binaryInputPoints': [],
+        'binaryOutputPoints': [],
+        'analogInputPoints': [],
     }
 
 class Control:
@@ -27,10 +32,22 @@ class Control:
         data['binaryInputPoints'] = binaryInputPoints
         data['binaryOutputPoints'] = binaryOutputPoints
         data['analogInputPoints'] = analogInputPoints
-        self.postMessage(data)
+        return self.postMessage(data)
+        
+    def getOutstation(self, site, device):
+        data = {'type': 'getDevice'}
+        return self.sendMessage(site, device, data)
+
+        
+    def sendMessage(self, site, device, data):
+        query = [('siteCode', site), ('deviceCode', device)]
+        return self.postMessage(data, query)
     
-    def postMessage(self, data):
-        request = urllib2.Request(self.url, json.dumps(data), {'Content-Type': 'application/json'})
+    def postMessage(self, data, query=None):
+        url = self.url
+        if query:
+            url += '?' + urllib.urlencode(query)
+        request = urllib2.Request(url, json.dumps(data), {'Content-Type': 'application/json'})
         response = urllib2.urlopen(request)
         code = response.getcode()
     
@@ -43,4 +60,35 @@ class Control:
                 raise exceptions.RuntimeError(data['reason'])
             else:
                 raise exceptions.RuntimeError('Cannot decode data.')
-    
+        return data
+
+class AutoControl:
+    def __init__(self, control, site, device):
+        self.control = control
+        self.analogInputController = {}
+        self.device = control.getOutstation(site, device)
+        
+    def randomiseAnalogInput(self, index, mean, standardDeviation):
+        if (not self.analogInputController[str(index)]):
+            pass
+        
+class AnalogInputController:
+    def __init__(self, value, standardDeviation=0, rampValue=None, rampTime=None, rounding=2):
+        self.value = value
+        self.rounding = rounding
+        self.standardDeviation = standardDeviation
+        self.rampValue = rampValue if (rampValue) else value
+        self.rampStart = 1000*time.time()
+        self.rampFinish = (1000*time.time() + rampTime) if (rampTime) else self.rampStart
+        
+    def fetchValue(self):
+        if (self.rampStart != self.rampFinish):
+            currentTime = min(1000*time.time(), self.rampFinish)
+            self.value = (self.rampValue - self.value)*(currentTime - self.rampStart)/(self.rampFinish - self.rampStart) + self.value
+            self.rampStart = currentTime
+            
+        return int(pow(10.0, self.rounding)*random.gauss(self.value, self.standardDeviation))/pow(10.0, self.rounding)
+        
+    def isComplete(self):
+        return self.rampStart == self.rampFinish
+        

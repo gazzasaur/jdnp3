@@ -29,6 +29,16 @@
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
 			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.GetDeviceMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
 				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.InternalIndicatorMessageHandler" />
 			</list>
 		</property>
@@ -103,6 +113,18 @@
 			<list>
 				<value>createDevice</value>
 				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.CreateDeviceMessage</value>
+			</list>
+		</property>
+	</bean>
+
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>getDevice</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.GetDeviceMessage</value>
 			</list>
 		</property>
 	</bean>
