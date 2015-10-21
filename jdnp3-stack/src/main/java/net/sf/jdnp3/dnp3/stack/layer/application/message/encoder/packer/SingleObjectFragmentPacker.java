@@ -30,9 +30,16 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.CtoObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeDelayObjectInstance;
 
 public class SingleObjectFragmentPacker implements ObjectFragmentPacker {
+	public boolean canPack(Class<? extends ObjectInstance> clazz) {
+		return CtoObjectInstance.class.isAssignableFrom(clazz) ||
+				TimeDelayObjectInstance.class.isAssignableFrom(clazz);
+	}
+	
 	public ObjectFragmentPackerResult pack(ObjectFragmentPackerContext context, List<ObjectInstance> objectInstances) {
 		if (objectInstances.size() < 1) {
 			throw new IllegalArgumentException("Cannot create an object fragment of size 0.");

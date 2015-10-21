@@ -20,5 +20,6 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public interface ObjectFragmentPacker {
+	public boolean canPack(Class<? extends ObjectInstance> clazz);
 	public ObjectFragmentPackerResult pack(ObjectFragmentPackerContext context, List<ObjectInstance> objectInstances);
 }

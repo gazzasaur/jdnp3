@@ -51,6 +51,10 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.Applicat
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDataDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.CountRangeObjectFragmentPacker;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.IndexRangeObjectFragmentPacker;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFragmentPacker;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.SingleObjectFragmentPacker;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoder;
@@ -67,6 +71,7 @@ public class OutstationFactory {
 	private InternalStatusProvider internalStatusProvider = null;
 	private List<ObjectTypeEncoder> encoders = new ArrayList<>();
 	private List<ObjectTypeDecoder> decoders = new ArrayList<>();
+	private List<ObjectFragmentPacker> packers = new ArrayList<>();
 	private List<OutstationRequestHandlerAdaptor> adaptors = new ArrayList<>();
 	private List<ItemEnumeratorFactory> itemEnumeratorFactories = new ArrayList<>();
 	private Map<Class<? extends ObjectInstance>, ObjectType> mapping = new HashMap<>();
@@ -75,6 +80,10 @@ public class OutstationFactory {
 	
 	public void setInternalStatusProvider(InternalStatusProvider internalStatusProvider) {
 		this.internalStatusProvider = internalStatusProvider;
+	}
+	
+	public void addObjectFragmentPacker(ObjectFragmentPacker packer) {
+		packers.add(packer);
 	}
 	
 	public void addOutstationRequestHandlerAdaptor(OutstationRequestHandlerAdaptor adaptor) {
@@ -99,6 +108,12 @@ public class OutstationFactory {
 	
 	public void addObjectTypeMapping(Class<? extends ObjectInstance> clazz, ObjectType objectType) {
 		mapping.put(clazz, objectType);
+	}
+	
+	public void addStandardObjectFragmentPackers() {
+		packers.add(new CountRangeObjectFragmentPacker());
+		packers.add(new IndexRangeObjectFragmentPacker());
+		packers.add(new SingleObjectFragmentPacker());
 	}
 	
 	public void addStandardOutstationRequestHandlerAdaptors() {
@@ -166,6 +181,11 @@ public class OutstationFactory {
 			outstationApplicationLayer.setInternalStatusProvider(internalStatusProvider);
 		}
 		internalStatusProvider = null;
+		
+		for (ObjectFragmentPacker packer : packers) {
+			outstationApplicationLayer.addObjectFragmentPacker(packer);
+		}
+		packers.clear();
 		
 		OutstationAdaptionLayer outstationAdaptionLayer = new OutstationAdaptionLayerImpl();
 		outstationApplicationLayer.addRequestHandler(outstationAdaptionLayer);

@@ -31,8 +31,13 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierF
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StaticObjectInstance;
 
 public class IndexRangeObjectFragmentPacker implements ObjectFragmentPacker {
+	public boolean canPack(Class<? extends ObjectInstance> clazz) {
+		return StaticObjectInstance.class.isAssignableFrom(clazz);
+	}
+
 	public ObjectFragmentPackerResult pack(ObjectFragmentPackerContext context, List<ObjectInstance> objectInstances) {
 		if (objectInstances.size() < 1) {
 			throw new IllegalArgumentException("Cannot create an object fragment of size 0.");

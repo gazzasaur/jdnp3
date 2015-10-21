@@ -30,9 +30,14 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class CountRangeObjectFragmentPacker implements ObjectFragmentPacker {
+	public boolean canPack(Class<? extends ObjectInstance> clazz) {
+		return EventObjectInstance.class.isAssignableFrom(clazz);
+	}
+	
 	public ObjectFragmentPackerResult pack(ObjectFragmentPackerContext context, List<ObjectInstance> objectInstances) {
 		if (objectInstances.size() < 1) {
 			throw new IllegalArgumentException("Cannot create an object fragment of size 0.");

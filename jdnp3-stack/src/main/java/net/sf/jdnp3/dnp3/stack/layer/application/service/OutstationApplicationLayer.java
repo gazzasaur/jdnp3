@@ -28,12 +28,9 @@ import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.exception.UnknownObjectException;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.CountRangeObjectFragmentPacker;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.IndexRangeObjectFragmentPacker;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFragmentPacker;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFragmentPackerContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFragmentPackerResult;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.SingleObjectFragmentPacker;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.DefaultObjectTypeMapping;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.ObjectInstanceSorter;
@@ -47,7 +44,6 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.CtoObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.SynchronisedCtoObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeDelayObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
@@ -72,6 +68,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	private ApplicationTransport applicationTransport;
 	private ApplicationFragmentRequestDecoder decoder = null;
 	private ApplicationFragmentResponseEncoder encoder = null;
+	private List<ObjectFragmentPacker> packers = new ArrayList<>();
 	private DefaultObjectTypeMapping defaultObjectTypeMapping = new DefaultObjectTypeMapping();
 
 	public DataLinkLayer getDataLinkLayer() {
@@ -88,6 +85,10 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	
 	public void addDefaultObjectTypeMapping(Class<? extends ObjectInstance> clazz, ObjectType defaultMapping) {
 		defaultObjectTypeMapping.addMapping(clazz, defaultMapping);
+	}
+	
+	public void addObjectFragmentPacker(ObjectFragmentPacker packer) {
+		packers.add(packer);
 	}
 	
 	public OutstationEventQueue getOutstationEventQueue() {
@@ -246,10 +247,6 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			replyObjects.add(objectInstance);
 		}
 		
-		ObjectFragmentPacker singlePacker = new SingleObjectFragmentPacker();
-		ObjectFragmentPacker indexPacker = new IndexRangeObjectFragmentPacker();
-		ObjectFragmentPacker countPacker = new CountRangeObjectFragmentPacker();
-		
 		ObjectFragmentPackerContext context = new ObjectFragmentPackerContext();
 		context.setFreeSpace(2048);
 		context.setTimeReference(0);
@@ -259,13 +256,14 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 				context.setTimeReference(((CtoObjectInstance)replyObjects.get(0)).getTimestamp());
 			}
 			
-			ObjectFragmentPacker packer = countPacker;
-			if (replyObjects.get(0) instanceof StaticObjectInstance) {
-				packer = indexPacker;
-			} else if (replyObjects.get(0) instanceof CtoObjectInstance) {
-				packer = singlePacker;
-			} else if (replyObjects.get(0) instanceof TimeDelayObjectInstance) {
-				packer = singlePacker;
+			ObjectFragmentPacker packer = null;
+			for (ObjectFragmentPacker objectFragmentPacker : packers) {
+				if (objectFragmentPacker.canPack(replyObjects.get(0).getClass())){
+					packer = objectFragmentPacker;
+				}
+			}
+			if (packer == null) {
+				throw new IllegalStateException("No packer found for type: " + replyObjects.get(0).getClass());
 			}
 			
 			ObjectFragmentPackerResult result = packer.pack(context, replyObjects);

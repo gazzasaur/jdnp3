@@ -51,6 +51,7 @@ public class DeviceFactory {
 		OutstationFactory outstationFactory = new OutstationFactory();
 		outstationFactory.addStandardObjectTypeEncoders();
 		outstationFactory.addStandardObjectTypeDecoders();
+		outstationFactory.addStandardObjectFragmentPackers();
 		outstationFactory.addStandardItemEnumeratorFactories();
 		outstationFactory.addStandardOutstationRequestHandlerAdaptors();
 		outstationFactory.setInternalStatusProvider(databaseManager.getInternalStatusProvider());
