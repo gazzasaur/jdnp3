@@ -40,7 +40,7 @@ public class ByteDataObjectTypeDecoder implements ObjectTypeDecoder {
 	}
 	
 	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data) {
-		List<Byte> actualData = data.subList(0, expectedData.size());
+		List<Byte> actualData = new ArrayList<>(data.subList(0, expectedData.size()));
 		trim(expectedData.size(), data);
 		
 		if (actualData.equals(expectedData)) {

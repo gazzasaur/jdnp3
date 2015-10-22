@@ -28,6 +28,13 @@ public class CustomSingleEnumeratorFactory implements ItemEnumeratorFactory {
 	private Class<? extends Range> rangeClass;
 	private Class<? extends PrefixType> prefixTypeClass;
 	
+	public CustomSingleEnumeratorFactory(ObjectType objectType, FunctionCode functionCode, Class<? extends Range> rangeClass, Class<? extends PrefixType> prefixTypeClass) {
+		this.objectType = objectType;
+		this.rangeClass = rangeClass;
+		this.functionCode = functionCode;
+		this.prefixTypeClass = prefixTypeClass;
+	}
+	
 	public boolean hasEnumerator(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment) {
 		return (functionCode.equals(decoderContext.getFunctionCode()) &&
 				objectType.equals(decoderContext.getObjectType()) &&

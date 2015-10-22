@@ -22,15 +22,14 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ByteDataObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class ByteDataObjectTypeEncoder implements ObjectTypeEncoder {
-	private List<Byte> data;
 	private ObjectType objectType;
 
-	private ByteDataObjectTypeEncoder(ObjectType objectType, List<Byte> data) {
+	public ByteDataObjectTypeEncoder(ObjectType objectType) {
 		this.objectType = objectType;
-		this.data = data;
 	}
 	
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
@@ -41,6 +40,7 @@ public class ByteDataObjectTypeEncoder implements ObjectTypeEncoder {
 		if (!this.canEncode(context.getFunctionCode(), context.getObjectType())) {
 			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
-		data.addAll(this.data);
+		ByteDataObjectInstance specificInstance = (ByteDataObjectInstance) objectInstance;
+		data.addAll(specificInstance.getData());
 	}
 }

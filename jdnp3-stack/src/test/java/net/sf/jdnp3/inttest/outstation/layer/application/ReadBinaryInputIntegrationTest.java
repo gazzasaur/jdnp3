@@ -132,6 +132,7 @@ public class ReadBinaryInputIntegrationTest {
 		factory.setInternalStatusProvider(mockInternalStatusProvider);
 		factory.addStandardOutstationRequestHandlerAdaptors();
 		factory.addStandardItemEnumeratorFactories();
+		factory.addStandardObjectFragmentPackers();
 		factory.addStandardObjectTypeDecoders();
 		factory.addStandardObjectTypeEncoders();
 		outstation = factory.createOutstation();

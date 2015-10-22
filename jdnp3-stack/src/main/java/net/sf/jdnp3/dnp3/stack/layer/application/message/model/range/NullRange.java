@@ -13,22 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator;
+package net.sf.jdnp3.dnp3.stack.layer.application.message.model.range;
 
-import java.util.List;
-
-public class CustomSingleEnumerator implements ItemEnumerator {
-	private boolean next = true;
-	
-	public boolean hasNext() {
-		return next;
-	}
-	
-	public long next(List<Byte> data) {
-		if (next) {
-			next = false;
-			return 1;
-		}
-		throw new IllegalStateException("No items remain.");
-	}
+public class NullRange implements Range {
 }

@@ -24,6 +24,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.range.RangeEnco
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragmentHeader;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NullRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 
 public class ObjectFragmentHeaderEncoder {
@@ -31,12 +32,15 @@ public class ObjectFragmentHeaderEncoder {
 	private QualifierEncoder qualifierEncoder = new QualifierEncoder();
 	
 	public void encode(ObjectFragmentHeader header, List<Byte> data) {
-		Range range = header.getRange();
 		ObjectType objectType = header.getObjectType();
-		QualifierField qualifierField = header.getQualifierField();
-		
 		addInteger(objectType.getGroup(), 1, data);
 		addInteger(objectType.getVariation(), 1, data);
+		
+		Range range = header.getRange();
+		if (range instanceof NullRange) {
+			return;
+		}
+		QualifierField qualifierField = header.getQualifierField();
 		qualifierEncoder.encode(qualifierField, data);
 		rangeEncoder.encode(range, qualifierField.getRangeSpecifierCode().getOctetCount(), data);
 	}
