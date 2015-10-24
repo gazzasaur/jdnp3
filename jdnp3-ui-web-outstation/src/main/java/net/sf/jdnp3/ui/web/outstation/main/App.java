@@ -39,10 +39,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * - The ability to send automatic events when a master changes the value.
  * - The ability to send automatic control events when a master changes the value.
  * 
- * Near future:
- * - Add a JSON API.
- * - Develop python modules to control JSON interface. 
- * 
  * Wish list:
  * - Subsystem interface to control data pump and other subsystems.
  * - Data pump should stop after 3 successive failures.

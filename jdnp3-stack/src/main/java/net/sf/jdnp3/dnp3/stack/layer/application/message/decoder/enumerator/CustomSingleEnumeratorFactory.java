@@ -36,10 +36,10 @@ public class CustomSingleEnumeratorFactory implements ItemEnumeratorFactory {
 	}
 	
 	public boolean hasEnumerator(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment) {
-		return (functionCode.equals(decoderContext.getFunctionCode()) &&
-				objectType.equals(decoderContext.getObjectType()) &&
-				objectFragment.getObjectFragmentHeader().getRange().getClass().equals(rangeClass) &&
-				objectFragment.getObjectFragmentHeader().getPrefixType().getClass().equals(prefixTypeClass));
+		return (functionCode.equals(decoderContext.getFunctionCode())
+				&& objectType.equals(decoderContext.getObjectType())
+				&& objectFragment.getObjectFragmentHeader().getRange().getClass().equals(rangeClass)
+				&& objectFragment.getObjectFragmentHeader().getPrefixType().getClass().equals(prefixTypeClass));
 	}
 	
 	public ItemEnumerator createEnumerator(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment) {

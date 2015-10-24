@@ -32,7 +32,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class BinaryInputStaticFlagsObjectTypeDecoder implements ObjectTypeDecoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(objectType.equals(BINARY_INPUT_STATIC_FLAGS));
+		return objectType.equals(BINARY_INPUT_STATIC_FLAGS);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {

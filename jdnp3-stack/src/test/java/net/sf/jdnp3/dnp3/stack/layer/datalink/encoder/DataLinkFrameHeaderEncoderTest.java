@@ -49,7 +49,7 @@ public class DataLinkFrameHeaderEncoderTest {
 	private int randomSource;
 	private int randomDestination;
 	private byte randomControlField;
-	
+
 	@Before
 	public void setup() {
 		randomCrc = random.nextInt();

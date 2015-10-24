@@ -37,8 +37,7 @@
 						<filter>
 							<artifact>*:*</artifact>
 							<excludes>
-								<exclude>jetty.xml</exclude>
-								<exclude>logback.xml</exclude>
+								<exclude>/src/main/resources/*</exclude>
 								<exclude>META-INF/*.SF</exclude>
 								<exclude>META-INF/*.DSA</exclude>
 								<exclude>META-INF/*.RSA</exclude>

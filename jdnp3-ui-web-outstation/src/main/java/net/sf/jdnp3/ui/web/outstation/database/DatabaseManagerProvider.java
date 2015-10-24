@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.LoggerFactory;
+
 public class DatabaseManagerProvider {
 	private static Map<String, Map<String, DatabaseManager>> databaseManagers = new HashMap<>();
 	
@@ -50,10 +52,23 @@ public class DatabaseManagerProvider {
 		if (!databaseManagers.containsKey(stationCode)) {
 			databaseManagers.put(stationCode, new HashMap<>());
 		}
-		if (!databaseManagers.get(stationCode).containsKey(deviceCode)) {
-			databaseManagers.get(stationCode).put(deviceCode, new DatabaseManager());
+		if (databaseManagers.get(stationCode).containsKey(deviceCode)) {
+			LoggerFactory.getLogger(DatabaseManagerProvider.class).warn(format("Replacing device %s:%s."));
 		}
+		databaseManagers.get(stationCode).put(deviceCode, new DatabaseManager());
 		return databaseManagers.get(stationCode).get(deviceCode);
+	}
+	
+	public synchronized static void unregisterDevice(String stationCode, String deviceCode) {
+		if (!databaseManagers.containsKey(stationCode)) {
+			return;
+		}
+		if (databaseManagers.get(stationCode).containsKey(deviceCode)) {
+			databaseManagers.get(stationCode).remove(deviceCode);
+		}
+		if (databaseManagers.get(stationCode).isEmpty()) {
+			databaseManagers.remove(stationCode);
+		}
 	}
 
 	public synchronized static List<String> getStationNames() {

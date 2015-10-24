@@ -21,13 +21,14 @@ import java.util.List;
 
 public class TransportSegmentEncoderImpl implements TransportSegmentEncoder {
 	public List<Byte> encode(TransportSegment transportSegment) {
-		List<Byte> data = new ArrayList<>();
 		BitSet flags = new BitSet();
 		flags.set(7, transportSegment.getTransportHeader().isFinalSegment());
 		flags.set(6, transportSegment.getTransportHeader().isFirstSegment());
 		byte[] rawFlags = flags.toByteArray();
 		byte value = (rawFlags.length > 0) ? rawFlags[0] : 0;
 		value |= transportSegment.getTransportHeader().getSequenceNumber();
+		
+		List<Byte> data = new ArrayList<>();
 		data.add(value);
 		data.addAll(transportSegment.getData());
 		return data;

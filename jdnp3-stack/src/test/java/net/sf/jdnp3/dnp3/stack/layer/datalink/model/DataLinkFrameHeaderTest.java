@@ -27,7 +27,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(JMockit.class)
 public class DataLinkFrameHeaderTest {
-	private List<String> PROPERTIES = Arrays.asList("source", "destination", "length", "checkSum", "primary", "direction", "functionCode");
+	private static final List<String> PROPERTIES = Arrays.asList("source", "destination", "length", "checkSum", "primary", "direction", "functionCode");
 	
 	@Test
 	public void testGettersAndSetters() {

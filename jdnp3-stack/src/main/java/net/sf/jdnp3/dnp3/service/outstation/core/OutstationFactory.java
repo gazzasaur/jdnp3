@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class0ReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class1ReadRequestAdaptor;
@@ -208,8 +209,8 @@ public class OutstationFactory {
 		}
 		outstationRequestHandlers.clear();
 		
-		for (Class<? extends ObjectInstance> clazz : mapping.keySet()) {
-			outstationApplicationLayer.addDefaultObjectTypeMapping(clazz, mapping.get(clazz));
+		for (Entry<Class<? extends ObjectInstance>, ObjectType> entry : mapping.entrySet()) {
+			outstationApplicationLayer.addDefaultObjectTypeMapping(entry.getKey(), entry.getValue());
 		}
 		
 		return outstation;

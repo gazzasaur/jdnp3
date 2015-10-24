@@ -87,9 +87,9 @@ public class CustomTypeIntegrationTest {
 	
 	private void buildOutstation() {
 		OutstationFactory factory = new OutstationFactory();
-		factory.addOutstationApplicationRequestHandler(new ByteDataOutstationApplicationRequestHandler(new ObjectType(70, 1), FunctionCode.WRITE, asList(toObject(parseHexBinary("1B01290700000000007F0080000000000000000000000000000000000000000000000009004944")))));
+		factory.addOutstationApplicationRequestHandler(new ByteDataOutstationApplicationRequestHandler());
 		factory.addObjectTypeEncoder(new ByteDataObjectTypeEncoder(new ObjectType(70, 1)));
-		factory.addObjectTypeDecoder(new ByteDataObjectTypeDecoder(new ObjectType(70, 1), asList(toObject(parseHexBinary("290700000000007F0080000000000000000000000000000000000000000000000009004944")))));
+		factory.addObjectTypeDecoder(new ByteDataObjectTypeDecoder(new ObjectType(70, 1), "290700000000007F0080000000000000000000000000000000000000000000000009004944", "1B01290700000000007F0080000000000000000000000000000000000000000000000009004944"));
 		factory.addItemEnumeratorFactory(new CustomSingleEnumeratorFactory(new ObjectType(70, 1), FunctionCode.WRITE, VariableFormatQualifierRange.class, IndexPrefixType.class));
 		factory.addObjectFragmentPacker(new CustomSingleObjectFragmentPacker(ByteDataObjectInstance.class, 42));
 		factory.setInternalStatusProvider(mockInternalStatusProvider);

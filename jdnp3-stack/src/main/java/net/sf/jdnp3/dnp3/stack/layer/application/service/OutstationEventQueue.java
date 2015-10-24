@@ -87,7 +87,7 @@ public class OutstationEventQueue implements ConfirmationListener {
 		if (internalStatusProvider == null) {
 			return;
 		}
-		boolean classEvents[] = {false, false, false};
+		boolean[] classEvents = {false, false, false};
 		for (EventObjectInstance eventObjectInstance : events) {
 			if (eventObjectInstance.getEventClass() >= 1 && eventObjectInstance.getEventClass() <= 3) {
 				classEvents[eventObjectInstance.getEventClass() - 1] = true;

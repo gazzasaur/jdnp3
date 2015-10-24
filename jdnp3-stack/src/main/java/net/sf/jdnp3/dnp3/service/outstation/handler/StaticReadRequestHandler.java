@@ -20,8 +20,9 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StaticObjectInstance;
 
 public interface StaticReadRequestHandler<E extends StaticObjectInstance> extends OutstationRequestHandler {
-	public List<E> readStatics();
 	public List<E> readStatic(long index);
+	
+	public List<E> readStatics();
 	public List<E> readStatics(long startIndex, long stopIndex);
 
 	public Class<E> getObjectInstanceClass();

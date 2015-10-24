@@ -94,30 +94,18 @@ public class CrobObjectInstance implements ObjectInstance {
 		this.tripCloseCode = tripCloseCode;
 	}
 
-	/**
-	 * @return the clear
-	 */
 	public boolean isClear() {
 		return clear;
 	}
 
-	/**
-	 * @param clear the clear to set
-	 */
 	public void setClear(boolean clear) {
 		this.clear = clear;
 	}
 
-	/**
-	 * @return the queue
-	 */
 	public boolean isQueue() {
 		return queue;
 	}
 
-	/**
-	 * @param queue the queue to set
-	 */
 	public void setQueue(boolean queue) {
 		this.queue = queue;
 	}

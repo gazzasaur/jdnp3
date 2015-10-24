@@ -16,7 +16,10 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic;
 
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
+import static javax.xml.bind.DatatypeConverter.parseHexBinary;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.trim;
+import static org.apache.commons.lang3.ArrayUtils.toObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +32,12 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 public class ByteDataObjectTypeDecoder implements ObjectTypeDecoder {
 	private ObjectType objectType;
 	private List<Byte> expectedData;
+	private List<Byte> responseData;
 	
-	public ByteDataObjectTypeDecoder(ObjectType objectType, List<Byte> expectedData) {
+	public ByteDataObjectTypeDecoder(ObjectType objectType, String expectedData, String responseData) {
 		this.objectType = objectType;
-		this.expectedData = new ArrayList<>(expectedData);
+		this.expectedData = new ArrayList<>(asList(toObject(parseHexBinary(expectedData))));
+		this.responseData = new ArrayList<>(asList(toObject(parseHexBinary(responseData))));
 	}
 	
 	public boolean canDecode(ObjectFragmentDecoderContext decoderContext) {
@@ -45,7 +50,8 @@ public class ByteDataObjectTypeDecoder implements ObjectTypeDecoder {
 		
 		if (actualData.equals(expectedData)) {
 			ByteDataObjectInstance objectInstance = new ByteDataObjectInstance();
-			objectInstance.setData(expectedData);
+			objectInstance.setData(new ArrayList<>(responseData));
+			objectInstance.setRequestedType(objectType);
 			return objectInstance;
 		}
 		throw new IllegalArgumentException(format("Actual data %s does not match expeced data %s.", actualData, expectedData));

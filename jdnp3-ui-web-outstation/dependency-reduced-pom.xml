@@ -27,8 +27,7 @@
             <filter>
               <artifact>*:*</artifact>
               <excludes>
-                <exclude>jetty.xml</exclude>
-                <exclude>logback.xml</exclude>
+                <exclude>/src/main/resources/*</exclude>
                 <exclude>META-INF/*.SF</exclude>
                 <exclude>META-INF/*.DSA</exclude>
                 <exclude>META-INF/*.RSA</exclude>
@@ -83,6 +82,7 @@
   </dependencies>
   <properties>
     <org.eclipse.jetty.version>9.3.1.v20150714</org.eclipse.jetty.version>
+    <commons-io.version>2.4</commons-io.version>
     <uk.com.robust-it.cloning.version>1.9.2</uk.com.robust-it.cloning.version>
     <org.primefaces.version>5.2</org.primefaces.version>
     <commons-codec.version>1.10</commons-codec.version>

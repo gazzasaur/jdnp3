@@ -18,10 +18,17 @@ package net.sf.jdnp3.ui.web.outstation.main;
 import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.service.outstation.core.ByteDataOutstationApplicationRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationFactory;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.CustomSingleEnumeratorFactory;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ByteDataObjectTypeDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ByteDataObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.CustomSingleObjectFragmentPacker;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ByteDataObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManager;
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputEventListener;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputEventListener;
@@ -38,6 +45,7 @@ import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.InternalIndicatorWrite
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.TimeAndDateHandler;
 
 public class DeviceFactory {
+	private List<CustomType> customTypes = new ArrayList<>();
 	private List<String> binaryInputDataPoints = new ArrayList<>();
 	private List<String> binaryOutputDataPoints = new ArrayList<>();
 	private List<String> analogInputDataPoints = new ArrayList<>();
@@ -49,6 +57,15 @@ public class DeviceFactory {
 		databaseManager.addAnalogInputDataPoints(analogInputDataPoints.toArray(new String[0]));
 		
 		OutstationFactory outstationFactory = new OutstationFactory();
+		
+		outstationFactory.addOutstationApplicationRequestHandler(new ByteDataOutstationApplicationRequestHandler());
+		for (CustomType customType : customTypes) {
+			outstationFactory.addObjectTypeEncoder(new ByteDataObjectTypeEncoder(customType.getObjectType()));
+			outstationFactory.addObjectTypeDecoder(new ByteDataObjectTypeDecoder(customType.getObjectType(), customType.getExpectedData(), customType.getResponseData()));
+			outstationFactory.addItemEnumeratorFactory(new CustomSingleEnumeratorFactory(customType.getObjectType(), customType.getFunctionCode(), customType.getRangeClass(), customType.getPrefixTypeClass()));
+			outstationFactory.addObjectFragmentPacker(new CustomSingleObjectFragmentPacker(ByteDataObjectInstance.class, customType.getResponseData().length()));
+		}
+		
 		outstationFactory.addStandardObjectTypeEncoders();
 		outstationFactory.addStandardObjectTypeDecoders();
 		outstationFactory.addStandardObjectFragmentPackers();
@@ -86,5 +103,9 @@ public class DeviceFactory {
 
 	public void setAnalogInputDataPoints(String... analogInputDataPoints) {
 		this.analogInputDataPoints = asList(analogInputDataPoints);
+	}
+	
+	public void setCustomTypes(CustomType... customTypes) {
+		this.customTypes = Arrays.asList(customTypes);
 	}
 }
