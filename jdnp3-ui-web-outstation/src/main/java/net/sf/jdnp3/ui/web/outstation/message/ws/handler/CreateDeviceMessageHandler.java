@@ -17,8 +17,6 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler;
 
 import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManager;
 import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.main.DeviceFactory;
 import net.sf.jdnp3.ui.web.outstation.main.DeviceFactoryRegistry;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
@@ -48,11 +46,6 @@ public class CreateDeviceMessageHandler implements MessageHandler {
 		
 		String siteCode = specificMessage.getSiteCode();
 		String deviceCode = specificMessage.getDeviceCode();
-		deviceFactory.create(siteCode, deviceCode, dataLinkManager, specificMessage.getPrimaryAddress());
-		DatabaseManager databaseManager = DatabaseManagerProvider.getDatabaseManager(siteCode, deviceCode);
-		
-		databaseManager.addBinaryInputDataPoints(specificMessage.getBinaryInputPoints().toArray(new String[0]));
-		databaseManager.addBinaryOutputDataPoints(specificMessage.getBinaryOutputPoints().toArray(new String[0]));
-		databaseManager.addAnalogInputDataPoints(specificMessage.getAnalogInputPoints().toArray(new String[0]));
+		deviceFactory.create(siteCode, deviceCode, dataLinkManager, specificMessage.getPrimaryAddress(), specificMessage.getExtendedConfiguration());
 	}
 }

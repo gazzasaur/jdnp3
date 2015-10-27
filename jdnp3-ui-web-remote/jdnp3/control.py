@@ -13,9 +13,11 @@ def CREATE_DATA():
         'deviceCode': '',
         'deviceFactory': '',
         'primaryAddress': '',
-        'binaryInputPoints': [],
-        'binaryOutputPoints': [],
-        'analogInputPoints': [],
+        'extendedConfiguration': {
+            'binaryInputPoints': [],
+            'binaryOutputPoints': [],
+            'analogInputPoints': [],
+        },
     }
 
 class Control:
@@ -29,9 +31,9 @@ class Control:
         data['deviceCode'] = device
         data['primaryAddress'] = address
         data['deviceFactory'] = deviceFactory
-        data['binaryInputPoints'] = binaryInputPoints
-        data['binaryOutputPoints'] = binaryOutputPoints
-        data['analogInputPoints'] = analogInputPoints
+        data['extendedConfiguration']['binaryInputPoints'] = binaryInputPoints
+        data['extendedConfiguration']['binaryOutputPoints'] = binaryOutputPoints
+        data['extendedConfiguration']['analogInputPoints'] = analogInputPoints
         return self.postMessage(data)
         
     def getOutstation(self, site, device):

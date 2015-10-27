@@ -21,6 +21,7 @@ import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public interface DataLinkLayer {
 	public int getMtu();
+	public int getConnectionCount();
 	public void sendData(MessageProperties messageProperties, List<Byte> encode);
 	
 	public void addDataLinkLayerListener(DataLinkListener listener);

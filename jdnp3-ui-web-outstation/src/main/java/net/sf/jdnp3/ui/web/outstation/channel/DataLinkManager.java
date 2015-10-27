@@ -25,7 +25,6 @@ import net.sf.jdnp3.dnp3.stack.layer.transport.DataLinkTransportBindingAdaptor;
 import net.sf.jdnp3.dnp3.stack.layer.transport.SimpleSynchronisedTransportBinding;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportBinding;
 
-
 public class DataLinkManager {
 	private DataLinkLayer dataLinkLayer;
 	private List<TransportBinding> transportBindings = new ArrayList<>();
@@ -46,10 +45,10 @@ public class DataLinkManager {
 	}
 	
 	public int getBindingCount() {
-		return 0;
+		return transportBindings.size();
 	}
 
 	public int getConnectionCount() {
-		return 0;
+		return this.dataLinkLayer.getConnectionCount();
 	}
 }

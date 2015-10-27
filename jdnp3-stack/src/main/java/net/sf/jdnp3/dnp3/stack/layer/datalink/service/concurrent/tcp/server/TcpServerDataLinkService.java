@@ -126,4 +126,7 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 		this.port = port;
 	}
 
+	public int getConnectionCount() {
+		return channelManager.getChannels().size();
+	}
 }

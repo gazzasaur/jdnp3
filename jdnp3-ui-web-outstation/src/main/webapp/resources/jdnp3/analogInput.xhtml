@@ -43,7 +43,7 @@
 		<p:dialog header="Analog Input Value #{cc.attrs.point.index}" widgetVar="ai-value#{cc.attrs.point.index}" modal="true">
 			<p:outputPanel>
 				<div class="text-field">
-					<h:inputText id="ai-#{cc.attrs.point.index}-newvalue" style="border: none;" styleClass="text-field-value" title="Value" onkeypress="if (event.keyCode == 13) {if ($('[id$=ai-#{cc.attrs.point.index}-newvalue]').val() == 'MAX') $('[id$=ai-#{cc.attrs.point.index}-newvalue]').val(Number.MAX_VALUE); if ($('[id$=ai-#{cc.attrs.point.index}-newvalue]').val() == 'MIN') $('[id$=ai-#{cc.attrs.point.index}-newvalue]').val(-1*Number.MAX_VALUE); requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'value', $('[id$=ai-#{cc.attrs.point.index}-newvalue]').val());} else if (event.keyCode == 27) {PF('ai-value#{cc.attrs.point.index}').hide();}" />
+					<h:inputText id="ai-#{cc.attrs.point.index}-newvalue" style="border: none;" styleClass="text-field-value" title="Value" onkeypress="if (event.keyCode == 13) {if ($('[id$=ai-#{cc.attrs.point.index}-newvalue]').val() == 'MAX') $('[id$=ai-#{cc.attrs.point.index}-newvalue]').val(Number.MAX_VALUE); if ($('[id$=ai-#{cc.attrs.point.index}-newvalue]').val() == 'MIN') $('[id$=ai-#{cc.attrs.point.index}-newvalue]').val(-1*Number.MAX_VALUE); requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'value', $('[id$=ai-#{cc.attrs.point.index}-newvalue]').val()); PF('ai-value#{cc.attrs.point.index}').hide();} else if (event.keyCode == 27) {PF('ai-value#{cc.attrs.point.index}').hide();}" />
 				</div>
 			</p:outputPanel>
 			<p:outputPanel>

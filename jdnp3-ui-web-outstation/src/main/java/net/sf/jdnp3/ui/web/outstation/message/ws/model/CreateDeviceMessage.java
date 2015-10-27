@@ -15,8 +15,7 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.sf.jdnp3.ui.web.outstation.main.ExtendedConfiguration;
 
 public class CreateDeviceMessage implements Message {
 	private String type = "createDevice";
@@ -25,10 +24,8 @@ public class CreateDeviceMessage implements Message {
 	private String deviceCode = "";
 	private int primaryAddress = 0;
 	private String deviceFactory = "";
-	
-	private List<String> binaryInputPoints = new ArrayList<>();
-	private List<String> binaryOutputPoints = new ArrayList<>();
-	private List<String> analogInputPoints = new ArrayList<>();
+
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
 	public String getType() {
 		return type;
@@ -48,30 +45,6 @@ public class CreateDeviceMessage implements Message {
 
 	public void setDeviceCode(String deviceCode) {
 		this.deviceCode = deviceCode;
-	}
-
-	public List<String> getBinaryInputPoints() {
-		return binaryInputPoints;
-	}
-
-	public void setBinaryInputPoints(List<String> binaryInputPoints) {
-		this.binaryInputPoints = binaryInputPoints;
-	}
-
-	public List<String> getBinaryOutputPoints() {
-		return binaryOutputPoints;
-	}
-
-	public void setBinaryOutputPoints(List<String> binaryOutputPoints) {
-		this.binaryOutputPoints = binaryOutputPoints;
-	}
-
-	public List<String> getAnalogInputPoints() {
-		return analogInputPoints;
-	}
-
-	public void setAnalogInputPoints(List<String> analogInputPoints) {
-		this.analogInputPoints = analogInputPoints;
 	}
 
 	public int getPrimaryAddress() {
@@ -96,5 +69,13 @@ public class CreateDeviceMessage implements Message {
 
 	public void setDataLink(String dataLink) {
 		this.dataLink = dataLink;
+	}
+
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
 	}
 }

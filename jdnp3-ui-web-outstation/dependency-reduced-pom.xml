@@ -27,7 +27,8 @@
             <filter>
               <artifact>*:*</artifact>
               <excludes>
-                <exclude>/src/main/resources/*</exclude>
+                <exclude>readme.txt</exclude>
+                <exclude>*.xml</exclude>
                 <exclude>META-INF/*.SF</exclude>
                 <exclude>META-INF/*.DSA</exclude>
                 <exclude>META-INF/*.RSA</exclude>
@@ -49,7 +50,7 @@
         </executions>
         <configuration>
           <descriptor>src/assembly/bin.xml</descriptor>
-          <finalName>jdnp3-ui-web-outstation-archive-${pom.version}</finalName>
+          <finalName>jdnp3-ui-web-outstation-archive-${project.version}</finalName>
         </configuration>
       </plugin>
     </plugins>
