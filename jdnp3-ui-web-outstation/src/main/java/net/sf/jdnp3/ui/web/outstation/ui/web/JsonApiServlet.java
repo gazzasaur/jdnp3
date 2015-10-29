@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
+import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageDecoder;
@@ -61,7 +61,7 @@ public class JsonApiServlet extends HttpServlet implements DeviceManager {
 			return;
 		}
 		try {
-			databaseManager = DatabaseManagerProvider.getDatabaseManager(siteCode, deviceCode);
+			databaseManager = DeviceProvider.getDevice(siteCode, deviceCode).getDatabaseManager();
 		} catch (Exception e) {
 		}
 		

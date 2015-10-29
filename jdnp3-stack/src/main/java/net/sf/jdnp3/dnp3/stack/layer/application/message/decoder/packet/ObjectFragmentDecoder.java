@@ -18,8 +18,10 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getInteger;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.trim;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ByteDataObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.range.RangeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
@@ -30,12 +32,27 @@ public class ObjectFragmentDecoder {
 	private RangeDecoder rangeDecoder = new RangeDecoder();
 	private QualifierDecoder qualifierDecoder = new QualifierDecoder();
 	private PrefixTypeDecoder prefixTypeDecoder = new PrefixTypeDecoder();
+	private List<ByteDataObjectTypeDecoder> customDecoders = new ArrayList<>();
 	
 	public ObjectFragmentDecoder(ObjectFragmentDataDecoder objectFragmentDataDecoder) {
 		this.objectFragmentDataDecoder = objectFragmentDataDecoder;
 	}
 	
+	public void addCustomDecoder(ByteDataObjectTypeDecoder decoder) {
+		customDecoders.add(decoder);
+	}
+	
 	public void decode(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment, List<Byte> data) {
+		for (ByteDataObjectTypeDecoder customDecoder : customDecoders) {
+			customDecoder.canDecode(decoderContext, data);
+			
+			if (customDecoder.canDecode(decoderContext, data)) {
+				objectFragment.addObjectInstance(customDecoder.decode(decoderContext, data));
+				decoderContext.setLastItem(true);
+				return;
+			}
+		}
+		
 		objectFragment.getObjectFragmentHeader().setObjectType(new ObjectType((int) getInteger(0, 1, data), (int) getInteger(1, 1, data)));
 		decoderContext.setObjectType(objectFragment.getObjectFragmentHeader().getObjectType());
 		trim(2, data);

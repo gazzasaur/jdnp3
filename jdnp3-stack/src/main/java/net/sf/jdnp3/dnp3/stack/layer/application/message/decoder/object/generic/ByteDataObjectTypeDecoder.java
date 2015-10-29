@@ -15,9 +15,9 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic;
 
-import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static javax.xml.bind.DatatypeConverter.parseHexBinary;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CUSTOM;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.trim;
 import static org.apache.commons.lang3.ArrayUtils.toObject;
 
@@ -25,35 +25,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ByteDataObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
-public class ByteDataObjectTypeDecoder implements ObjectTypeDecoder {
-	private ObjectType objectType;
+public class ByteDataObjectTypeDecoder {
 	private List<Byte> expectedData;
 	private List<Byte> responseData;
+	private FunctionCode functionCode;
 	
-	public ByteDataObjectTypeDecoder(ObjectType objectType, String expectedData, String responseData) {
-		this.objectType = objectType;
+	public ByteDataObjectTypeDecoder(FunctionCode functionCode, String expectedData, String responseData) {
+		this.functionCode = functionCode;
 		this.expectedData = new ArrayList<>(asList(toObject(parseHexBinary(expectedData))));
 		this.responseData = new ArrayList<>(asList(toObject(parseHexBinary(responseData))));
 	}
-	
-	public boolean canDecode(ObjectFragmentDecoderContext decoderContext) {
-		return decoderContext.getObjectType().equals(objectType);
+
+	public boolean canDecode(ObjectFragmentDecoderContext decoderContext, List<Byte> data) {
+		return functionCode.equals(decoderContext.getFunctionCode()) && (data.size() >= expectedData.size()) && expectedData.equals(data.subList(0, expectedData.size()));
 	}
 	
 	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data) {
-		List<Byte> actualData = new ArrayList<>(data.subList(0, expectedData.size()));
+		for (Byte dataByte : data) {
+			System.out.print(String.format("%02X", dataByte));
+		}
+		System.out.println();
+		
+		if (!this.canDecode(decoderContext, data)) {
+			throw new IllegalArgumentException("Cannot decode data.");
+		}
+		
 		trim(expectedData.size(), data);
 		
-		if (actualData.equals(expectedData)) {
-			ByteDataObjectInstance objectInstance = new ByteDataObjectInstance();
-			objectInstance.setData(new ArrayList<>(responseData));
-			objectInstance.setRequestedType(objectType);
-			return objectInstance;
-		}
-		throw new IllegalArgumentException(format("Actual data %s does not match expeced data %s.", actualData, expectedData));
+		ByteDataObjectInstance objectInstance = new ByteDataObjectInstance();
+		objectInstance.setData(new ArrayList<>(responseData));
+		objectInstance.setRequestedType(CUSTOM);
+		return objectInstance;
 	}
 }

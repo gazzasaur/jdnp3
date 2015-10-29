@@ -22,7 +22,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
+import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
 
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -37,11 +37,11 @@ public class UiStationTree {
     	
         root = new DefaultTreeNode("Root", null);
         
-        List<String> stationNames = DatabaseManagerProvider.getStationNames();
+        List<String> stationNames = DeviceProvider.getStationNames();
         Collections.sort(stationNames);
         
         for (String station : stationNames) {
-        	List<String> deviceNames = DatabaseManagerProvider.getDeviceNames(station);
+        	List<String> deviceNames = DeviceProvider.getDeviceNames(station);
         	Collections.sort(deviceNames);
         	
             TreeNode stationNode = new DefaultTreeNode(station, root);

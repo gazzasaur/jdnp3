@@ -28,7 +28,7 @@ import net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
+import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +45,7 @@ public class UiPointDatabase {
 		
 		if (stationCode != null && deviceCode != null && !stationCode.isEmpty() && !deviceCode.isEmpty()) {
 			try {
-				DatabaseManagerProvider.getDatabaseManager(stationCode, deviceCode);
-				List<BinaryInputDataPoint> dataPoints = DatabaseManagerProvider.getDatabaseManager(stationCode, deviceCode).getBinaryInputDataPoints();
+				List<BinaryInputDataPoint> dataPoints = DeviceProvider.getDevice(stationCode, deviceCode).getDatabaseManager().getBinaryInputDataPoints();
 				return convert(dataPoints);
 			} catch (Exception e) {
 				logger.error("Failed to fetch data points.", e);
@@ -63,8 +62,7 @@ public class UiPointDatabase {
 
 		if (stationCode != null && deviceCode != null && !stationCode.isEmpty() && !deviceCode.isEmpty()) {
 			try {
-				DatabaseManagerProvider.getDatabaseManager(stationCode, deviceCode);
-				List<BinaryOutputDataPoint> dataPoints = DatabaseManagerProvider.getDatabaseManager(stationCode, deviceCode).getBinaryOutputDataPoints();
+				List<BinaryOutputDataPoint> dataPoints = DeviceProvider.getDevice(stationCode, deviceCode).getDatabaseManager().getBinaryOutputDataPoints();
 				return convert(dataPoints);
 			} catch (Exception e) {
 				logger.error("Failed to fetch data points.", e);
@@ -81,8 +79,7 @@ public class UiPointDatabase {
 
 		if (stationCode != null && deviceCode != null && !stationCode.isEmpty() && !deviceCode.isEmpty()) {
 			try {
-				DatabaseManagerProvider.getDatabaseManager(stationCode, deviceCode);
-				List<AnalogInputDataPoint> dataPoints = DatabaseManagerProvider.getDatabaseManager(stationCode, deviceCode).getAnalogInputDataPoints();
+				List<AnalogInputDataPoint> dataPoints = DeviceProvider.getDevice(stationCode, deviceCode).getDatabaseManager().getAnalogInputDataPoints();
 				return convert(dataPoints);
 			} catch (Exception e) {
 				logger.error("Failed to fetch data points.", e);

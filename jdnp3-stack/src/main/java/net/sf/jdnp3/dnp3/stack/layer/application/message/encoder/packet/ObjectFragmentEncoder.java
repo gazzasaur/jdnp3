@@ -20,17 +20,26 @@ import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ByteDataObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectFragmentHeaderEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
 
 public class ObjectFragmentEncoder {
 	private List<ObjectTypeEncoder> objectTypeEncoders = new ArrayList<>();
+	private ByteDataObjectTypeEncoder byteDataObjectTypeEncoder = new ByteDataObjectTypeEncoder();
 	private ObjectFragmentHeaderEncoder objectFragmentHeaderEncoder = new ObjectFragmentHeaderEncoder();
 	
 	public void encode(ObjectFragmentEncoderContext context, ObjectFragment objectFragment, List<Byte> data) {
+		if (context.getObjectType().equals(ObjectTypeConstants.CUSTOM) && objectFragment.getObjectInstances().size() == 1) {
+			ObjectInstance objectInstance = objectFragment.getObjectInstances().get(0);
+			byteDataObjectTypeEncoder.encode(objectInstance, data);
+			return;
+		}
+		
 		objectFragmentHeaderEncoder.encode(objectFragment.getObjectFragmentHeader(), data);
 		PrefixType prefixType = objectFragment.getObjectFragmentHeader().getPrefixType();
 		

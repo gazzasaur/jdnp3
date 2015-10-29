@@ -39,6 +39,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.Item
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.StandardItemEnumeratorFactory;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.binary.BinaryInputStaticFlagsObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.binary.CrobObjectTypeDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ByteDataObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.Class0ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.Class1ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.Class2ObjectTypeDecoder;
@@ -53,6 +54,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFr
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.CountRangeObjectFragmentPacker;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.CustomSingleObjectFragmentPacker;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.IndexRangeObjectFragmentPacker;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFragmentPacker;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.SingleObjectFragmentPacker;
@@ -62,6 +64,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFr
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ByteDataObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
@@ -73,6 +76,7 @@ public class OutstationFactory {
 	private List<ObjectTypeEncoder> encoders = new ArrayList<>();
 	private List<ObjectTypeDecoder> decoders = new ArrayList<>();
 	private List<ObjectFragmentPacker> packers = new ArrayList<>();
+	private List<ByteDataObjectTypeDecoder> customDecoders = new ArrayList<>();
 	private List<OutstationRequestHandlerAdaptor> adaptors = new ArrayList<>();
 	private List<ItemEnumeratorFactory> itemEnumeratorFactories = new ArrayList<>();
 	private Map<Class<? extends ObjectInstance>, ObjectType> mapping = new HashMap<>();
@@ -106,6 +110,10 @@ public class OutstationFactory {
 	public void addObjectTypeDecoder(ObjectTypeDecoder objectTypeDecoder) {
 		decoders.add(objectTypeDecoder);
 	}
+
+	public void addCustomDecoder(ByteDataObjectTypeDecoder byteDataObjectTypeDecoder) {
+		customDecoders.add(byteDataObjectTypeDecoder);
+	}
 	
 	public void addObjectTypeMapping(Class<? extends ObjectInstance> clazz, ObjectType objectType) {
 		mapping.put(clazz, objectType);
@@ -115,6 +123,7 @@ public class OutstationFactory {
 		packers.add(new CountRangeObjectFragmentPacker());
 		packers.add(new IndexRangeObjectFragmentPacker());
 		packers.add(new SingleObjectFragmentPacker());
+		packers.add(new CustomSingleObjectFragmentPacker(ByteDataObjectInstance.class));
 	}
 	
 	public void addStandardOutstationRequestHandlerAdaptors() {
@@ -177,6 +186,11 @@ public class OutstationFactory {
 		OutstationApplicationLayer outstationApplicationLayer = new OutstationApplicationLayer();
 		outstationApplicationLayer.setEncoder(applicationFragmentResponseEncoder);
 		outstationApplicationLayer.setDecoder(applicationFragmentRequestDecoder);
+		
+		for (ByteDataObjectTypeDecoder customDecoder : customDecoders) {
+			objectFragmentDecoder.addCustomDecoder(customDecoder);
+		}
+		customDecoders.clear();
 		
 		if (internalStatusProvider != null) {
 			outstationApplicationLayer.setInternalStatusProvider(internalStatusProvider);

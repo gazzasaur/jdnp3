@@ -15,31 +15,13 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic;
 
-import static java.lang.String.format;
-
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ByteDataObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
-public class ByteDataObjectTypeEncoder implements ObjectTypeEncoder {
-	private ObjectType objectType;
-
-	public ByteDataObjectTypeEncoder(ObjectType objectType) {
-		this.objectType = objectType;
-	}
-	
-	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(FunctionCode.RESPONSE) && this.objectType.equals(objectType);
-	}
-
-	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
-		if (!this.canEncode(context.getFunctionCode(), context.getObjectType())) {
-			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
-		}
+public class ByteDataObjectTypeEncoder {
+	public void encode(ObjectInstance objectInstance, List<Byte> data) {
 		ByteDataObjectInstance specificInstance = (ByteDataObjectInstance) objectInstance;
 		data.addAll(specificInstance.getData());
 	}

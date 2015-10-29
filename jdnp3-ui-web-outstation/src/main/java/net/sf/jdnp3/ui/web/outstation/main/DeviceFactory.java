@@ -25,10 +25,7 @@ import java.util.Map;
 import net.sf.jdnp3.dnp3.service.outstation.core.ByteDataOutstationApplicationRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationFactory;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.CustomSingleEnumeratorFactory;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ByteDataObjectTypeDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ByteDataObjectTypeEncoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.CustomSingleObjectFragmentPacker;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.LengthPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
@@ -39,12 +36,10 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.VariableFormatQualifierRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.VirtualAddressRange;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ByteDataObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManager;
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputEventListener;
 import net.sf.jdnp3.ui.web.outstation.database.BinaryInputEventListener;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.AnalogInputStaticReader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.BinaryInputStaticReader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.Class0Reader;
@@ -81,7 +76,11 @@ public class DeviceFactory {
 	}
 
 	public Outstation create(String siteName, String deviceName, DataLinkManager dataLink, int address, ExtendedConfiguration extendedConfiguration) {
-		DatabaseManager databaseManager = DatabaseManagerProvider.registerDevice(siteName, deviceName);
+		OutstationDevice outstationDevice = new OutstationDevice();
+		outstationDevice.setSite(siteName);
+		outstationDevice.setDevice(deviceName);
+		
+		DatabaseManager databaseManager = new DatabaseManager();
 		databaseManager.addBinaryInputDataPoints(binaryInputDataPoints.toArray(new String[0]));
 		databaseManager.addBinaryOutputDataPoints(binaryOutputDataPoints.toArray(new String[0]));
 		databaseManager.addAnalogInputDataPoints(analogInputDataPoints.toArray(new String[0]));
@@ -92,9 +91,9 @@ public class DeviceFactory {
 		
 		OutstationFactory outstationFactory = new OutstationFactory();
 		for (CustomType customType : extendedConfiguration.getCustomTypes()) {
-			Class<? extends Range> rangeClass = rangeClassMapping.get(customType.getRange());
+			Class<? extends Range> rangeClass = rangeClassMapping.get(customType.getRangeClass());
 			if (rangeClass == null) {
-				throw new IllegalArgumentException("No range found for requested type " + customType.getRange());
+				throw new IllegalArgumentException("No range found for requested type " + customType.getRangeClass());
 			}
 			
 			Class<? extends PrefixType> prefixTypeClass = prefixTypeClassMapping.get(customType.getPrefixType());
@@ -102,10 +101,7 @@ public class DeviceFactory {
 				throw new IllegalArgumentException("No prefix type found for requested type " + customType.getPrefixType());
 			}
 			
-			outstationFactory.addObjectTypeEncoder(new ByteDataObjectTypeEncoder(customType.getObjectType()));
-			outstationFactory.addObjectTypeDecoder(new ByteDataObjectTypeDecoder(customType.getObjectType(), customType.getExpectedData(), customType.getResponseData()));
-			outstationFactory.addItemEnumeratorFactory(new CustomSingleEnumeratorFactory(customType.getObjectType(), customType.getFunctionCode(), rangeClass, prefixTypeClass));
-			outstationFactory.addObjectFragmentPacker(new CustomSingleObjectFragmentPacker(ByteDataObjectInstance.class, customType.getResponseData().length()));
+			outstationFactory.addCustomDecoder(new ByteDataObjectTypeDecoder(customType.getFunctionCode(), customType.getExpectedData(), customType.getResponseData()));
 		}
 		
 		outstationFactory.addOutstationApplicationRequestHandler(new ByteDataOutstationApplicationRequestHandler());
@@ -131,6 +127,10 @@ public class DeviceFactory {
 		databaseManager.addEventListener(new AnalogInputEventListener(outstation));
 		
 		outstation.setPrimaryAddress(address);
+		outstationDevice.setOutstation(outstation);
+		outstationDevice.setDatabaseManager(databaseManager);
+		DeviceProvider.registerDevice(outstationDevice);
+		
 		dataLink.bind(address, outstation);
 		
 		return outstation;

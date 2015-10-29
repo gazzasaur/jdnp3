@@ -19,6 +19,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 
 public class ObjectTypeConstants {
 	public static ObjectType ANY = new ObjectType(-1, -1);
+	public static ObjectType CUSTOM = new ObjectType(-100, -100);
 	
 	public static int BINARY_INPUT_STATIC_GROUP = 1;
 	public static ObjectType BINARY_INPUT_STATIC_ANY = new ObjectType(BINARY_INPUT_STATIC_GROUP, 0);

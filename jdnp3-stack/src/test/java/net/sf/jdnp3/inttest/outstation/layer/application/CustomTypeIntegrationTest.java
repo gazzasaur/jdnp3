@@ -18,6 +18,7 @@ package net.sf.jdnp3.inttest.outstation.layer.application;
 import static java.util.Arrays.asList;
 import static javax.xml.bind.DatatypeConverter.parseHexBinary;
 import static javax.xml.bind.DatatypeConverter.printHexBinary;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.WRITE;
 import static org.apache.commons.lang3.ArrayUtils.toObject;
 import static org.apache.commons.lang3.ArrayUtils.toPrimitive;
 import static org.hamcrest.CoreMatchers.is;
@@ -30,14 +31,8 @@ import mockit.integration.junit4.JMockit;
 import net.sf.jdnp3.dnp3.service.outstation.core.ByteDataOutstationApplicationRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationFactory;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.CustomSingleEnumeratorFactory;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ByteDataObjectTypeDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ByteDataObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.CustomSingleObjectFragmentPacker;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.VariableFormatQualifierRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ByteDataObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationTransport;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
@@ -82,16 +77,14 @@ public class CustomTypeIntegrationTest {
 		}};
 		List<Byte> data = asList(toObject(parseHexBinary("C30246011B01290700000000007F0080000000000000000000000000000000000000000000000009004944")));
 		outstation.getApplicationLayer().dataReceived(dummyMessageProperties, data);
-		assertThat(transportData, is("C381000046011B01290700000000007F0080000000000000000000000000000000000000000000000009004944"));
+		assertThat(transportData, is("C381000046011B01290700000000007F00800000000000000009005065"));
 	}
 	
 	private void buildOutstation() {
 		OutstationFactory factory = new OutstationFactory();
 		factory.addOutstationApplicationRequestHandler(new ByteDataOutstationApplicationRequestHandler());
-		factory.addObjectTypeEncoder(new ByteDataObjectTypeEncoder(new ObjectType(70, 1)));
-		factory.addObjectTypeDecoder(new ByteDataObjectTypeDecoder(new ObjectType(70, 1), "290700000000007F0080000000000000000000000000000000000000000000000009004944", "1B01290700000000007F0080000000000000000000000000000000000000000000000009004944"));
-		factory.addItemEnumeratorFactory(new CustomSingleEnumeratorFactory(new ObjectType(70, 1), FunctionCode.WRITE, VariableFormatQualifierRange.class, IndexPrefixType.class));
-		factory.addObjectFragmentPacker(new CustomSingleObjectFragmentPacker(ByteDataObjectInstance.class, 42));
+		factory.addCustomDecoder(new ByteDataObjectTypeDecoder(WRITE, "46011B01290700000000007F0080000000000000000000000000000000000000000000000009004944", "46011B01290700000000007F00800000000000000009005065"));
+		factory.addObjectFragmentPacker(new CustomSingleObjectFragmentPacker(ByteDataObjectInstance.class));
 		factory.setInternalStatusProvider(mockInternalStatusProvider);
 		factory.addStandardOutstationRequestHandlerAdaptors();
 		factory.addStandardItemEnumeratorFactories();

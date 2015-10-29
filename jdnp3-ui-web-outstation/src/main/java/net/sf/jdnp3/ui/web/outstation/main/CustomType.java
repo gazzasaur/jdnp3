@@ -21,8 +21,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 public class CustomType {
 	private String expectedData = "";
 	private String responseData = "";
-	private String range = "NoRange";
-	private String prefixType = "NoPrefix";
+	private String rangeClass = "NoRange";
+	private String prefixType = "NoPrefixType";
 	private ObjectType objectType = new ObjectType(-1, -1);
 	private FunctionCode functionCode = FunctionCode.WRITE;
 	
@@ -58,19 +58,19 @@ public class CustomType {
 		this.functionCode = functionCode;
 	}
 
-	public String getRange() {
-		return range;
-	}
-
-	public void setRange(String range) {
-		this.range = range;
-	}
-
 	public String getPrefixType() {
 		return prefixType;
 	}
 
 	public void setPrefixType(String prefixType) {
 		this.prefixType = prefixType;
+	}
+
+	public String getRangeClass() {
+		return rangeClass;
+	}
+
+	public void setRangeClass(String rangeClass) {
+		this.rangeClass = rangeClass;
 	}
 }

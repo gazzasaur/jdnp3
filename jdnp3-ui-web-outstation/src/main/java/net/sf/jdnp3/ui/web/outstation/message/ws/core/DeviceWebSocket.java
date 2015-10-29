@@ -19,7 +19,7 @@ import net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseListener;
 import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManagerProvider;
+import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageDecoder;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistry;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistryProvider;
@@ -52,7 +52,7 @@ public class DeviceWebSocket implements DeviceManager, DatabaseListener {
 		String stationCode = session.getRequestParameterMap().get("stationCode").get(0);
 		String deviceCode = session.getRequestParameterMap().get("deviceCode").get(0);
 		try {
-			databaseManager = DatabaseManagerProvider.getDatabaseManager(stationCode, deviceCode);
+			databaseManager = DeviceProvider.getDevice(stationCode, deviceCode).getDatabaseManager();
 		} catch (Exception e) {
 			String reason = format("Cannot from station %s and device %s.", stationCode, deviceCode);
 			tryCloseSession(session, reason);

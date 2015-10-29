@@ -18,21 +18,18 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.QualifierFieldCalculator;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NullRange;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ByteDataObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
 
 public class CustomSingleObjectFragmentPacker implements ObjectFragmentPacker {
-	private int expectedSize;
 	private Class<? extends ObjectInstance> targetClass;
 
-	public CustomSingleObjectFragmentPacker(Class<? extends ObjectInstance> targetClass, int expectedSize) {
+	public CustomSingleObjectFragmentPacker(Class<? extends ObjectInstance> targetClass) {
 		this.targetClass = targetClass;
-		this.expectedSize = expectedSize;
 	}
 	
 	public boolean canPack(Class<? extends ObjectInstance> clazz) {
@@ -61,15 +58,13 @@ public class CustomSingleObjectFragmentPacker implements ObjectFragmentPacker {
 		encoderContext.setFunctionCode(context.getFunctionCode());
 		encoderContext.setObjectType(objectType);
 		
-		if (expectedSize < context.getFreeSpace()) {
+		ByteDataObjectInstance specificInstance = (ByteDataObjectInstance) objectInstances.get(0);
+		if (specificInstance.getData().size() < context.getFreeSpace()) {
 			objectInstances.remove(0);
 			objectFragment.addObjectInstance(firstInstance);
 		} else {
 			result.setAtCapacity(true);
 		}
-		
-		QualifierField qualifierField = QualifierFieldCalculator.calculate(noPrefixType, nullRange);
-		objectFragment.getObjectFragmentHeader().setQualifierField(qualifierField);
 		
 		result.setObjectFragment(objectFragment);
 		return result;
