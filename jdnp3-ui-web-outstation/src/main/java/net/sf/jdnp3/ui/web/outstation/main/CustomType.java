@@ -17,18 +17,14 @@ package net.sf.jdnp3.ui.web.outstation.main;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 
 public class CustomType {
 	private String expectedData = "";
 	private String responseData = "";
+	private String range = "NoRange";
+	private String prefixType = "NoPrefix";
 	private ObjectType objectType = new ObjectType(-1, -1);
 	private FunctionCode functionCode = FunctionCode.WRITE;
-	private Class<? extends Range> rangeClass = NoRange.class;
-	private Class<? extends PrefixType> prefixTypeClass = NoPrefixType.class;
 	
 	public String getExpectedData() {
 		return expectedData;
@@ -62,19 +58,19 @@ public class CustomType {
 		this.functionCode = functionCode;
 	}
 
-	public Class<? extends Range> getRangeClass() {
-		return rangeClass;
+	public String getRange() {
+		return range;
 	}
 
-	public void setRangeClass(Class<? extends Range> rangeClass) {
-		this.rangeClass = rangeClass;
+	public void setRange(String range) {
+		this.range = range;
 	}
 
-	public Class<? extends PrefixType> getPrefixTypeClass() {
-		return prefixTypeClass;
+	public String getPrefixType() {
+		return prefixType;
 	}
 
-	public void setPrefixTypeClass(Class<? extends PrefixType> prefixTypeClass) {
-		this.prefixTypeClass = prefixTypeClass;
+	public void setPrefixType(String prefixType) {
+		this.prefixType = prefixType;
 	}
 }

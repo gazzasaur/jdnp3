@@ -18,7 +18,9 @@ package net.sf.jdnp3.ui.web.outstation.main;
 import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.ByteDataOutstationApplicationRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
@@ -27,6 +29,16 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.Cust
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ByteDataObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ByteDataObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.CustomSingleObjectFragmentPacker;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.LengthPrefixType;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.VariableFormatQualifierRange;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.VirtualAddressRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ByteDataObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManager;
 import net.sf.jdnp3.ui.web.outstation.database.AnalogInputEventListener;
@@ -47,6 +59,22 @@ public class DeviceFactory {
 	private List<String> binaryInputDataPoints = new ArrayList<>();
 	private List<String> binaryOutputDataPoints = new ArrayList<>();
 	private List<String> analogInputDataPoints = new ArrayList<>();
+	
+	@SuppressWarnings("serial")
+	private Map<String, Class<? extends Range>> rangeClassMapping = new HashMap<String, Class<? extends Range>>() {{
+		this.put("NoRange", NoRange.class);
+		this.put("CountRange", CountRange.class);
+		this.put("IndexRange", IndexRange.class);
+		this.put("VirtualAddressRange", VirtualAddressRange.class);
+		this.put("VariableFormatQualifierRange", VariableFormatQualifierRange.class);
+	}};
+
+	@SuppressWarnings("serial")
+	private Map<String, Class<? extends PrefixType>> prefixTypeClassMapping = new HashMap<String, Class<? extends PrefixType>>() {{
+		this.put("NoPrefixType", NoPrefixType.class);
+		this.put("IndexPrefixType", IndexPrefixType.class);
+		this.put("LengthPrefixType", LengthPrefixType.class);
+	}};
 
 	public Outstation create(String siteName, String deviceName, DataLinkManager dataLink, int address) {
 		return this.create(siteName, deviceName, dataLink, address, new ExtendedConfiguration());
@@ -64,9 +92,19 @@ public class DeviceFactory {
 		
 		OutstationFactory outstationFactory = new OutstationFactory();
 		for (CustomType customType : extendedConfiguration.getCustomTypes()) {
+			Class<? extends Range> rangeClass = rangeClassMapping.get(customType.getRange());
+			if (rangeClass == null) {
+				throw new IllegalArgumentException("No range found for requested type " + customType.getRange());
+			}
+			
+			Class<? extends PrefixType> prefixTypeClass = prefixTypeClassMapping.get(customType.getPrefixType());
+			if (prefixTypeClass == null) {
+				throw new IllegalArgumentException("No prefix type found for requested type " + customType.getPrefixType());
+			}
+			
 			outstationFactory.addObjectTypeEncoder(new ByteDataObjectTypeEncoder(customType.getObjectType()));
 			outstationFactory.addObjectTypeDecoder(new ByteDataObjectTypeDecoder(customType.getObjectType(), customType.getExpectedData(), customType.getResponseData()));
-			outstationFactory.addItemEnumeratorFactory(new CustomSingleEnumeratorFactory(customType.getObjectType(), customType.getFunctionCode(), customType.getRangeClass(), customType.getPrefixTypeClass()));
+			outstationFactory.addItemEnumeratorFactory(new CustomSingleEnumeratorFactory(customType.getObjectType(), customType.getFunctionCode(), rangeClass, prefixTypeClass));
 			outstationFactory.addObjectFragmentPacker(new CustomSingleObjectFragmentPacker(ByteDataObjectInstance.class, customType.getResponseData().length()));
 		}
 		

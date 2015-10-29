@@ -17,6 +17,7 @@ def CREATE_DATA():
             'binaryInputPoints': [],
             'binaryOutputPoints': [],
             'analogInputPoints': [],
+            'customTypes': [],
         },
     }
 
@@ -24,7 +25,7 @@ class Control:
     def __init__(self, url):
         self.url = url
     
-    def createOutstation(self, deviceFactory, site, device, address, datalink, binaryInputPoints=[], binaryOutputPoints=[], analogInputPoints=[]):
+    def createOutstation(self, deviceFactory, site, device, address, datalink, binaryInputPoints=[], binaryOutputPoints=[], analogInputPoints=[], customTypes=[]):
         data = CREATE_DATA()
         data['dataLink'] = datalink
         data['siteCode'] = site
@@ -34,6 +35,7 @@ class Control:
         data['extendedConfiguration']['binaryInputPoints'] = binaryInputPoints
         data['extendedConfiguration']['binaryOutputPoints'] = binaryOutputPoints
         data['extendedConfiguration']['analogInputPoints'] = analogInputPoints
+        data['extendedConfiguration']['customTypes'] = customTypes
         return self.postMessage(data)
         
     def getOutstation(self, site, device):

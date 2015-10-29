@@ -53,7 +53,7 @@ public class DatabaseManagerProvider {
 			databaseManagers.put(stationCode, new HashMap<>());
 		}
 		if (databaseManagers.get(stationCode).containsKey(deviceCode)) {
-			LoggerFactory.getLogger(DatabaseManagerProvider.class).warn(format("Replacing device %s:%s."));
+			LoggerFactory.getLogger(DatabaseManagerProvider.class).warn(format("Replacing device %s:%s.", stationCode, deviceCode));
 		}
 		databaseManagers.get(stationCode).put(deviceCode, new DatabaseManager());
 		return databaseManagers.get(stationCode).get(deviceCode);

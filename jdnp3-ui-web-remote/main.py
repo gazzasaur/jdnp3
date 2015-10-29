@@ -6,9 +6,18 @@ HOST_URL = 'http://127.0.0.1:8080/servlet/jsonapi'
 
 control = jdnp3.control.Control(HOST_URL)
 
-#for stationIndex in range(0, 100):
-#    for deviceIndex in range(0, 100):
-#        control.createOutstation('pumpStationFactory', 'Pump Station ' + str(stationIndex).zfill(5), 'Pump ' + str(deviceIndex).zfill(5), stationIndex, "20000", binaryOutputPoints=['asdf', '1234'])
+customType = {
+    'expectedData': '01',
+    'responseData': '01',
+    'objectType': {'group': 199, 'variation': 46},
+    'functionCode': 'WRITE',
+    'rangeClass': 'NoRange',
+    'rangeClass': 'NoIndex',
+}
+
+for stationIndex in range(0, 100):
+    for deviceIndex in range(0, 100):
+        control.createOutstation('pumpStationFactory', 'Pump Station ' + str(stationIndex).zfill(5), 'Pump ' + str(deviceIndex).zfill(5), stationIndex, "20000", binaryOutputPoints=['asdf', '1234'], customTypes=[])
 
 data = {
     'type': 'getDevice'
