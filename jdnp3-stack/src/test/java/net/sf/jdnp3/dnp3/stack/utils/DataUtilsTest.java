@@ -73,6 +73,26 @@ public class DataUtilsTest {
 		performGetIntegerTest_Sad(2, 2, 0x14, 0x83, 0x12);
 		performGetIntegerTest_Sad(4, 1, 0x14, 0x83, 0x12);
 	}
+	
+	@Test
+	public void testAddFloat_Happy() {
+		performAddFloatTest_Happy(0, 0x00, 0x00, 0x00, 0x00);
+		performAddFloatTest_Happy(19.64, 0xB8, 0x1E, 0x9D, 0x41);
+		performAddFloatTest_Happy(-19.64, 0xB8, 0x1E, 0x9D, 0xC1);
+		performAddFloatTest_Happy(Float.NaN, 0x00, 0x00, 0xC0, 0x7F);
+		performAddFloatTest_Happy(Float.POSITIVE_INFINITY, 0x00, 0x00, 0x80, 0x7F);
+		performAddFloatTest_Happy(Float.NEGATIVE_INFINITY, 0x00, 0x00, 0x80, 0xFF);
+	}
+	
+	@Test
+	public void testAddDouble_Happy() {
+		performAddDoubleTest_Happy(0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
+		performAddDoubleTest_Happy(0.1243893, 0xCD, 0xEA, 0x78, 0x27, 0xFA, 0xD7, 0xBF, 0x3F);
+		performAddDoubleTest_Happy(-0.1243893, 0xCD, 0xEA, 0x78, 0x27, 0xFA, 0xD7, 0xBF, 0xBF);
+		performAddDoubleTest_Happy(Double.NaN, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF8, 0x7F);
+		performAddDoubleTest_Happy(Double.POSITIVE_INFINITY, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x7F);
+		performAddDoubleTest_Happy(Double.NEGATIVE_INFINITY, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0xFF);
+	}
 
 	@Test
 	public void testTrim() {
@@ -117,6 +137,18 @@ public class DataUtilsTest {
 			Assert.fail();
 		} catch (Exception e) {
 		}
+	}
+	
+	private void performAddFloatTest_Happy(double value, Integer... expectedBytes) {
+		List<Byte> data = new ArrayList<>();
+		DataUtils.addFloat((float) value, data);
+		assertThat(data, is(integerArrayToByteList(expectedBytes)));
+	}
+	
+	private void performAddDoubleTest_Happy(double value, Integer... expectedBytes) {
+		List<Byte> data = new ArrayList<>();
+		DataUtils.addDouble(value, data);
+		assertThat(data, is(integerArrayToByteList(expectedBytes)));
 	}
 
 	private void performTrimTest(int trimCount, List<Byte> data, List<Byte> expectedData) {

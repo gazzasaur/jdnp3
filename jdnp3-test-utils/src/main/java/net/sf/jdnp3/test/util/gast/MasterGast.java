@@ -19,6 +19,7 @@ import java.util.List;
 
 public class MasterGast {
 	private static GetterAndSetterTester getterAndSetterTester = new GetterAndSetterTester() {{
+		this.addObjectFactory(new LongObjectFactory());
 		this.addObjectFactory(new DoubleObjectFactory());
 		this.addObjectFactory(new BooleanObjectFactory());
 		this.addObjectFactory(new IntegerObjectFactory());
@@ -27,5 +28,19 @@ public class MasterGast {
 	
 	public static <E> boolean testSubject(E subject, List<String> properties, Class<E> clazz) {
 		return getterAndSetterTester.testSubject(subject, properties, clazz);
+	}
+	
+	public static GetterAndSetterTester createGast(ObjectFactory... factories) {
+		GetterAndSetterTester tester = new GetterAndSetterTester();
+		tester.addObjectFactory(new LongObjectFactory());
+		tester.addObjectFactory(new DoubleObjectFactory());
+		tester.addObjectFactory(new BooleanObjectFactory());
+		tester.addObjectFactory(new IntegerObjectFactory());
+		tester.addObjectFactory(new EnumeratorObjectFactory());
+		
+		for (ObjectFactory objectFactory : factories) {
+			tester.addObjectFactory(objectFactory);
+		}
+		return tester;
 	}
 }
