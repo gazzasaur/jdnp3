@@ -16,19 +16,25 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
 
 public enum OperationType {
-	NUL(0),
-	PULSE_ON(1),
-	PULSE_OFF(2),
-	LATCH_ON(3),
-	LATCH_OFF(4);
+	NUL(0, false),
+	PULSE_ON(1, true),
+	PULSE_OFF(2, false),
+	LATCH_ON(3, true),
+	LATCH_OFF(4, false);
 	
 	private int code;
+	private boolean active;
 
-	private OperationType(int code) {
+	private OperationType(int code, boolean active) {
 		this.code = code;
+		this.active = active;
 	}
 
 	public int getCode() {
 		return code;
+	}
+
+	public boolean isActive() {
+		return active;
 	}
 }

@@ -18,7 +18,9 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.model;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.StatusCode.SUCCESS;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.OperationType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StatusCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TripCloseCode;
 
 public class BinaryOutputMessage implements Message {
 	private String type = "binaryOutputPoint";
@@ -35,7 +37,14 @@ public class BinaryOutputMessage implements Message {
 	private boolean remoteForced = false;
 	private boolean communicationsLost = false;
 	
+	private long operatedCount = 0;
 	private StatusCode statusCode = SUCCESS;
+	
+	private long count = 0;
+	private long onTime = 0;
+	private long offTime = 0;
+	private OperationType operationType = OperationType.NUL;
+	private TripCloseCode tripCloseCode = TripCloseCode.NUL;
 	
 	public String getType() {
 		return type;
@@ -135,5 +144,53 @@ public class BinaryOutputMessage implements Message {
 
 	public void setStatusCode(StatusCode statusCode) {
 		this.statusCode = statusCode;
+	}
+
+	public long getCount() {
+		return count;
+	}
+
+	public void setCount(long count) {
+		this.count = count;
+	}
+
+	public long getOnTime() {
+		return onTime;
+	}
+
+	public void setOnTime(long onTime) {
+		this.onTime = onTime;
+	}
+
+	public long getOffTime() {
+		return offTime;
+	}
+
+	public void setOffTime(long offTime) {
+		this.offTime = offTime;
+	}
+
+	public OperationType getOperationType() {
+		return operationType;
+	}
+
+	public void setOperationType(OperationType operationType) {
+		this.operationType = operationType;
+	}
+
+	public TripCloseCode getTripCloseCode() {
+		return tripCloseCode;
+	}
+
+	public void setTripCloseCode(TripCloseCode tripCloseCode) {
+		this.tripCloseCode = tripCloseCode;
+	}
+
+	public long getOperatedCount() {
+		return operatedCount;
+	}
+
+	public void setOperatedCount(long operatedCount) {
+		this.operatedCount = operatedCount;
 	}
 }

@@ -39,8 +39,17 @@ public class BinaryOutputMessageHandler implements MessageHandler {
 		BinaryOutputMessage binaryOutputMessage = (BinaryOutputMessage) message;
 
 		BinaryOutputDataPoint binaryDataPoint = new BinaryOutputDataPoint();
+		BinaryOutputDataPoint currentValue = webSocket.getDatabaseManager().getBinaryOutputDataPoints().get((int) binaryDataPoint.getIndex());
+		
 		try {
 			BeanUtils.copyProperties(binaryDataPoint, binaryOutputMessage);
+			binaryDataPoint.setOperatedCount(currentValue.getOperatedCount());
+			binaryDataPoint.setCount(currentValue.getCount());
+			binaryDataPoint.setOnTime(currentValue.getOnTime());
+			binaryDataPoint.setOffTime(currentValue.getOffTime());
+			binaryDataPoint.setOperationType(currentValue.getOperationType());
+			binaryDataPoint.setTripCloseCode(currentValue.getTripCloseCode());
+			
 			webSocket.getDatabaseManager().setBinaryOutputDataPoint(binaryDataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);

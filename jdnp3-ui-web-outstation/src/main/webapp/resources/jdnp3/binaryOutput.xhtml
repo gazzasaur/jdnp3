@@ -23,8 +23,8 @@
 			<j:dipswitch id="bo-#{cc.attrs.point.index}-cl" title="Communications Lost" abbreviation="CL" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'communicationsLost', !jdnp3.binary.getBinaryOutput('bo-#{cc.attrs.point.index}').communicationsLost)" disabled="true" />
 			<j:dipswitch id="bo-#{cc.attrs.point.index}-rs" title="Restart" abbreviation="RS" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'restart', !jdnp3.binary.getBinaryOutput('bo-#{cc.attrs.point.index}').restart)" disabled="true" />
 			<j:dipswitch id="bo-#{cc.attrs.point.index}-ol" title="Online" abbreviation="OL" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'online', !jdnp3.binary.getBinaryOutput('bo-#{cc.attrs.point.index}').online)" disabled="true" />
-			<div class="text-field" style="width: 100px; cursor: pointer;" title="No Operation" >
-				<h:outputText styleClass="text-field-value" style="width: 100%; text-align: center;" value="-"/>
+			<div id="bo-#{cc.attrs.point.index}-os" class="text-field" style="width: 100px; cursor: pointer;" title="No Operation" >
+				<h:outputText id="bo-#{cc.attrs.point.index}-oc" styleClass="text-field-value" style="width: 100%; text-align: center;" value="-"/>
 			</div>
 			
 			<div class="menu-button" style="font-size: 14px; display: inline-block; width: 34px; height: 42px; overflow: hidden;">

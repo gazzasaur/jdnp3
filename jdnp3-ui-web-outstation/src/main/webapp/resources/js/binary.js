@@ -146,5 +146,9 @@ jdnp3.binary.setBinaryOutput = function(binaryDataPoint) {
 		} else {
 			$('[id$=bo-status-options' + binaryDataPoint.index + '] span').html(binaryDataPoint.statusCode);
 		}
+		
+		operationHint = 'Operation Type: ' + binaryDataPoint.operationType + ', Trip Close Code: ' + binaryDataPoint.tripCloseCode + ', On Time: ' + binaryDataPoint.onTime + 'ms, Off Time: ' + binaryDataPoint.offTime + 'ms, Pulse Count: ' + binaryDataPoint.count;
+		$('[id$=bo-' + binaryDataPoint.index + '-os]').prop('title', operationHint);
+		$('[id$=bo-' + binaryDataPoint.index + '-oc]').html(binaryDataPoint.operatedCount);
 	}
 }

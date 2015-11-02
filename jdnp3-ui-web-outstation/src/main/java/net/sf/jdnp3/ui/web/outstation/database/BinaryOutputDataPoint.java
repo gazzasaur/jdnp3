@@ -35,6 +35,7 @@ public class BinaryOutputDataPoint implements DataPoint {
 	private boolean remoteForced = false;
 	private boolean communicationsLost = false;
 	
+	private long operatedCount = 0;
 	private boolean autoUpdateOnSuccess = true;
 	private long count = 0;
 	private long onTime = 0;
@@ -207,5 +208,13 @@ public class BinaryOutputDataPoint implements DataPoint {
 
 	public void setControlEventClass(int controlEventClass) {
 		this.controlEventClass = controlEventClass;
+	}
+
+	public long getOperatedCount() {
+		return operatedCount;
+	}
+
+	public void setOperatedCount(long operatedCount) {
+		this.operatedCount = operatedCount;
 	}
 }

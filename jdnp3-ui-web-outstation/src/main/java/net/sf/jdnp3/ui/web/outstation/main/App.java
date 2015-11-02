@@ -28,9 +28,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Complete BinaryOutput type:
  * - Add the ability to create events.
  * - Add the ability to create control events.
- * - Counter for the number of control events received.
  * - Ability to choose return attributes including preferred encoding.
- * - The ability to auto-update upon successfuly control request.
  * 
  * All types:
  * - The ability to send automatic events when a user changes the value from the web page/
