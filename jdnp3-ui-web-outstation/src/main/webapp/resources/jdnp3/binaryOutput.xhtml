@@ -31,7 +31,7 @@
 				<p:commandButton style="width: 100%; height: 100%" id="bo-options#{cc.attrs.point.index}" value="" type="button" icon="ui-icon-extlink" />
 				<p:tieredMenu id="bo-menu#{cc.attrs.point.index}" overlay="true" trigger="bo-options#{cc.attrs.point.index}" my="left top" at="left bottom">
 					<p:menuitem value="Create Event" onclick="$('[id$=&quot;bo-menu#{cc.attrs.point.index}&quot;]').toggle(); requestEvent('bo-#{cc.attrs.point.index}');" />
-					<p:menuitem value="Create Control Event" onclick="$('[id$=&quot;bo-menu#{cc.attrs.point.index}&quot;]').toggle(); requestEvent('bc-#{cc.attrs.point.index}');" />
+					<p:menuitem value="Create Command Event" onclick="$('[id$=&quot;bo-menu#{cc.attrs.point.index}&quot;]').toggle(); requestEvent('bc-#{cc.attrs.point.index}');" />
 					<p:separator />
 					<p:menuitem value="Edit" onclick="$('[id$=&quot;bo-menu#{cc.attrs.point.index}&quot;]').toggle(); PF('bo-edit#{cc.attrs.point.index}').show();" />
 				</p:tieredMenu>
@@ -41,24 +41,56 @@
 		<p:dialog header="Binary Output #{cc.attrs.point.index}" widgetVar="bo-edit#{cc.attrs.point.index}" modal="true">
 			<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
 				<h:outputText value="Return Status:" />
-					<p:commandButton style="width: 100%; height: 100%" id="bo-status-options#{cc.attrs.point.index}" value="SUCCESS" type="button" icon="ui-icon-extlink" />
-					<p:tieredMenu id="bo-status-menu#{cc.attrs.point.index}" overlay="true" trigger="bo-status-options#{cc.attrs.point.index}" my="left top" at="left bottom">
-						<p:menuitem value="Success" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'SUCCESS')" />
-						<p:separator />
-						<p:menuitem value="Timeout" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'TIMEOUT')" />
-						<p:menuitem value="No Select" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NO_SELECT')" />
-						<p:menuitem value="Format Error" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'FORMAT_ERROR')" />
-						<p:menuitem value="Not Supported" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NOT_SUPPORTED')" />
-						<p:menuitem value="Already Active" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'ALREADY_ACTIVE')" />
-						<p:menuitem value="Hardware Error" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'HARDWARE_ERROR')" />
-						<p:menuitem value="Local" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'LOCAL')" />
-						<p:menuitem value="Too Many Objects" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'TOO_MANY_OBJS')" />
-						<p:menuitem value="Not Authorised" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NOT_AUTHORIZED')" />
-						<p:menuitem value="Automation Inhibit" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'AUTOMATION_INHIBIT')" />
-						<p:menuitem value="Processing Limited" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'PROCESSING_LIMITED')" />
-						<p:menuitem value="Out of Range" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'OUT_OF_RANGE')" />
-						<p:menuitem value="Non-Participating" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NON_PARTICIPATING')" />
-					</p:tieredMenu>
+				<p:commandButton style="width: 250px; height: 100%" id="bo-status-options#{cc.attrs.point.index}" value="SUCCESS" type="button" icon="ui-icon-extlink">
+				<p:tieredMenu id="bo-status-menu#{cc.attrs.point.index}" overlay="true" trigger="bo-status-options#{cc.attrs.point.index}" my="left top" at="left bottom">
+					<p:menuitem value="Success" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'SUCCESS')" />
+					<p:separator />
+					<p:menuitem value="Timeout" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'TIMEOUT')" />
+					<p:menuitem value="No Select" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NO_SELECT')" />
+					<p:menuitem value="Format Error" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'FORMAT_ERROR')" />
+					<p:menuitem value="Not Supported" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NOT_SUPPORTED')" />
+					<p:menuitem value="Already Active" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'ALREADY_ACTIVE')" />
+					<p:menuitem value="Hardware Error" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'HARDWARE_ERROR')" />
+					<p:menuitem value="Local" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'LOCAL')" />
+					<p:menuitem value="Too Many Objects" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'TOO_MANY_OBJS')" />
+					<p:menuitem value="Not Authorised" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NOT_AUTHORIZED')" />
+					<p:menuitem value="Automation Inhibit" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'AUTOMATION_INHIBIT')" />
+					<p:menuitem value="Processing Limited" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'PROCESSING_LIMITED')" />
+					<p:menuitem value="Out of Range" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'OUT_OF_RANGE')" />
+					<p:menuitem value="Non-Participating" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NON_PARTICIPATING')" />
+				</p:tieredMenu>
+				</p:commandButton>
+				
+				<h:outputText value="Event Class:" />
+				<p:outputPanel>
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-cl-1" title="Class 1" label="1" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'eventClass', 1)" disabled="true" />
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-cl-2" title="Class 2" label="2" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'eventClass', 2)" disabled="true" />
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-cl-3" title="Class 3" label="3" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'eventClass', 3)" disabled="true" />
+				</p:outputPanel>
+				<h:outputText value="Command Event Class:" />
+				<p:outputPanel>
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-cc-1" title="Class 1" label="1" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'commandEventClass', 1)" disabled="true" />
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-cc-2" title="Class 2" label="2" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'commandEventClass', 2)" disabled="true" />
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-cc-3" title="Class 3" label="3" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'commandEventClass', 3)" disabled="true" />
+				</p:outputPanel>
+				<h:outputText value="Preferred Static Type" />
+				<p:outputPanel>
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-st-0" title="Any" label="0" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'staticType', {'group': 10, 'variation': 0})" disabled="true" />
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-st-1" title="Packed" label="1" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'staticType', {'group': 10, 'variation': 1})" disabled="true" />
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-st-2" title="Flags" label="2" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'staticType', {'group': 10, 'variation': 2})" disabled="true" />
+				</p:outputPanel>
+				<h:outputText value="Preferred Event Type:" />
+				<p:outputPanel>
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-ev-0" title="Any" label="0" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'eventType', {'group': 11, 'variation': 0})" disabled="true" />
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-ev-1" title="Without Time" label="1" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'eventType', {'group': 11, 'variation': 1})" disabled="true" />
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-ev-2" title="Absolute Time" label="2" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'eventType', {'group': 11, 'variation': 2})" disabled="true" />
+				</p:outputPanel>
+				<h:outputText value="Preferred Command Event Type:" />
+				<p:outputPanel>
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-ce-0" title="Any" label="0" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'commandEventType', {'group': 13, 'variation': 0})" disabled="true" />
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-ce-1" title="Without Time" label="1" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'commandEventType', {'group': 13, 'variation': 1})" disabled="true" />
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-ce-2" title="Absolute Time" label="2" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'commandEventType', {'group': 13, 'variation': 2})" disabled="true" />
+				</p:outputPanel>
 			</h:panelGrid>
 		</p:dialog>
 	</ui:composition>

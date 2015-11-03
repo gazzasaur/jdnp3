@@ -90,7 +90,6 @@ jdnp3.binary.setBinaryInput = function(binaryDataPoint) {
 		}
 	}
 	
-	$('[id$=bi-' + binaryDataPoint.index + '-sg]').html(binaryDataPoint.staticType.group);
 	for (var i = 0; i < 3; ++i) {
 		var id = 'bi-' + binaryDataPoint.index + '-st-' + i;
 		if (i == binaryDataPoint.staticType.variation) {
@@ -100,7 +99,6 @@ jdnp3.binary.setBinaryInput = function(binaryDataPoint) {
 		}
 	}
 	
-	$('[id$=bi-' + binaryDataPoint.index + '-eg]').html(binaryDataPoint.staticType.group);
 	for (var i = 0; i < 4; ++i) {
 		var id = 'bi-' + binaryDataPoint.index + '-ev-' + i;
 		if (i == binaryDataPoint.eventType.variation) {
@@ -131,6 +129,50 @@ jdnp3.binary.getBinaryOutput = function(id) {
 
 	data.statusCode = $('[id$=bo-status-options' + index + '] span').html();
 
+	data.eventClass = 0;
+	for (var i = 1; i < 4; ++i) {
+		var id = 'bo-' + index + '-cl-' + i;
+		if ($('[id$=' + id + ']').prop('checked')) {
+			var regexArray = /.*-(\d+)/g.exec(id);
+			data.eventClass = parseInt(regexArray[1]);
+		}
+	}
+	
+	data.commandEventClass = 0;
+	for (var i = 1; i < 4; ++i) {
+		var id = 'bo-' + index + '-cc-' + i;
+		if ($('[id$=' + id + ']').prop('checked')) {
+			var regexArray = /.*-(\d+)/g.exec(id);
+			data.commandEventClass = parseInt(regexArray[1]);
+		}
+	}
+
+	data.staticType = {'group': 10, 'variation': 0};
+	for (var i = 0; i < 3; ++i) {
+		var id = 'bo-' + index + '-st-' + i;
+		if ($('[id$=' + id + ']').prop('checked')) {
+			var regexArray = /.*-(\d+)/g.exec(id);
+			data.staticType.variation = parseInt(regexArray[1]);
+		}
+	}
+	
+	data.eventType = {'group': 11, 'variation': 0};
+	for (var i = 0; i < 3; ++i) {
+		var id = 'bo-' + index + '-ev-' + i;
+		if ($('[id$=' + id + ']').prop('checked')) {
+			var regexArray = /.*-(\d+)/g.exec(id);
+			data.eventType.variation = parseInt(regexArray[1]);
+		}
+	}
+	
+	data.commandEventType = {'group': 13, 'variation': 0};
+	for (var i = 0; i < 3; ++i) {
+		var id = 'bo-' + index + '-ce-' + i;
+		if ($('[id$=' + id + ']').prop('checked')) {
+			var regexArray = /.*-(\d+)/g.exec(id);
+			data.commandEventType.variation = parseInt(regexArray[1]);
+		}
+	}
 	return data;
 }
 
@@ -150,5 +192,50 @@ jdnp3.binary.setBinaryOutput = function(binaryDataPoint) {
 		operationHint = 'Operation Type: ' + binaryDataPoint.operationType + ', Trip Close Code: ' + binaryDataPoint.tripCloseCode + ', On Time: ' + binaryDataPoint.onTime + 'ms, Off Time: ' + binaryDataPoint.offTime + 'ms, Pulse Count: ' + binaryDataPoint.count;
 		$('[id$=bo-' + binaryDataPoint.index + '-os]').prop('title', operationHint);
 		$('[id$=bo-' + binaryDataPoint.index + '-oc]').html(binaryDataPoint.operatedCount);
+		
+		for (var i = 1; i < 4; ++i) {
+			var id = 'bo-' + binaryDataPoint.index + '-cl-' + i;
+			if (i == binaryDataPoint.eventClass) {
+				$('[id$=' + id + ']').prop('checked', 'true');
+			} else {
+				$('[id$=' + id + ']').prop('checked', '');
+			}
+		}
+		
+		for (var i = 1; i < 4; ++i) {
+			var id = 'bo-' + binaryDataPoint.index + '-cc-' + i;
+			if (i == binaryDataPoint.commandEventClass) {
+				$('[id$=' + id + ']').prop('checked', 'true');
+			} else {
+				$('[id$=' + id + ']').prop('checked', '');
+			}
+		}
+		
+		for (var i = 0; i < 3; ++i) {
+			var id = 'bo-' + binaryDataPoint.index + '-st-' + i;
+			if (i == binaryDataPoint.staticType.variation) {
+				$('[id$=' + id + ']').prop('checked', 'true');
+			} else {
+				$('[id$=' + id + ']').prop('checked', '');
+			}
+		}
+		
+		for (var i = 0; i < 3; ++i) {
+			var id = 'bo-' + binaryDataPoint.index + '-ev-' + i;
+			if (i == binaryDataPoint.eventType.variation) {
+				$('[id$=' + id + ']').prop('checked', 'true');
+			} else {
+				$('[id$=' + id + ']').prop('checked', '');
+			}
+		}
+		
+		for (var i = 0; i < 3; ++i) {
+			var id = 'bo-' + binaryDataPoint.index + '-ce-' + i;
+			if (i == binaryDataPoint.commandEventType.variation) {
+				$('[id$=' + id + ']').prop('checked', 'true');
+			} else {
+				$('[id$=' + id + ']').prop('checked', '');
+			}
+		}
 	}
 }

@@ -46,9 +46,9 @@ public class BinaryOutputDataPoint implements DataPoint {
 	
 	private ObjectType staticType = BINARY_OUTPUT_STATIC_ANY;
 	private ObjectType eventType = BINARY_OUTPUT_EVENT_ANY;
-	private ObjectType controlEventType = CROB_EVENT_ANY;
+	private ObjectType commandEventType = CROB_EVENT_ANY;
 	private int eventClass = 1;
-	private int controlEventClass = 1;
+	private int commandEventClass = 1;
 
 	public long getIndex() {
 		return index;
@@ -194,27 +194,27 @@ public class BinaryOutputDataPoint implements DataPoint {
 		this.tripCloseCode = tripCloseCode;
 	}
 
-	public ObjectType getControlEventType() {
-		return controlEventType;
-	}
-
-	public void setControlEventType(ObjectType controlEventType) {
-		this.controlEventType = controlEventType;
-	}
-
-	public int getControlEventClass() {
-		return controlEventClass;
-	}
-
-	public void setControlEventClass(int controlEventClass) {
-		this.controlEventClass = controlEventClass;
-	}
-
 	public long getOperatedCount() {
 		return operatedCount;
 	}
 
 	public void setOperatedCount(long operatedCount) {
 		this.operatedCount = operatedCount;
+	}
+
+	public ObjectType getCommandEventType() {
+		return commandEventType;
+	}
+
+	public void setCommandEventType(ObjectType commandEventType) {
+		this.commandEventType = commandEventType;
+	}
+
+	public int getCommandEventClass() {
+		return commandEventClass;
+	}
+
+	public void setCommandEventClass(int commandEventClass) {
+		this.commandEventClass = commandEventClass;
 	}
 }

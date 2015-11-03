@@ -16,6 +16,7 @@
 package net.sf.jdnp3.ui.web.outstation.message.ws.model;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CROB_EVENT_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.StatusCode.SUCCESS;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.OperationType;
@@ -26,8 +27,10 @@ public class BinaryOutputMessage implements Message {
 	private String type = "binaryOutputPoint";
 	private long index = 0;
 	private int eventClass = 1;
+	private int commandEventClass = 1;
 	private ObjectType eventType = ANY;
 	private ObjectType staticType = ANY;
+	private ObjectType commandEventType = CROB_EVENT_ANY;
 	
 	private String name = "";
 	private boolean active = false;
@@ -36,6 +39,8 @@ public class BinaryOutputMessage implements Message {
 	private boolean localForced = false;
 	private boolean remoteForced = false;
 	private boolean communicationsLost = false;
+	
+	private boolean autoUpdateOnSuccess = true;
 	
 	private long operatedCount = 0;
 	private StatusCode statusCode = SUCCESS;
@@ -192,5 +197,29 @@ public class BinaryOutputMessage implements Message {
 
 	public void setOperatedCount(long operatedCount) {
 		this.operatedCount = operatedCount;
+	}
+
+	public ObjectType getCommandEventType() {
+		return commandEventType;
+	}
+
+	public void setCommandEventType(ObjectType commandEventType) {
+		this.commandEventType = commandEventType;
+	}
+
+	public boolean isAutoUpdateOnSuccess() {
+		return autoUpdateOnSuccess;
+	}
+
+	public void setAutoUpdateOnSuccess(boolean autoUpdateOnSuccess) {
+		this.autoUpdateOnSuccess = autoUpdateOnSuccess;
+	}
+
+	public int getCommandEventClass() {
+		return commandEventClass;
+	}
+
+	public void setCommandEventClass(int commandEventClass) {
+		this.commandEventClass = commandEventClass;
 	}
 }
