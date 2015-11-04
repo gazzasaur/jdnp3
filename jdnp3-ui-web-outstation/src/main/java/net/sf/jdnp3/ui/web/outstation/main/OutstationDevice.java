@@ -16,7 +16,7 @@
 package net.sf.jdnp3.ui.web.outstation.main;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
+import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 
 public class OutstationDevice {
 	private String site = "";

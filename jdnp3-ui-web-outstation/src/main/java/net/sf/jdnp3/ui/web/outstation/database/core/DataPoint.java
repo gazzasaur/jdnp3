@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation.message.ws.core;
+package net.sf.jdnp3.ui.web.outstation.database.core;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
-
-public interface MessageHandler {
-	public boolean canHandle(Message message);
-	public void processMessage(DeviceManager webSocket, Message message);
+public interface DataPoint {
+	public long getIndex();
+	public String getName();
 }

@@ -5,8 +5,8 @@ import static java.lang.String.format;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.jdnp3.ui.web.outstation.database.DataPoint;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
+import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
 public class GenericMessageRegistry {
 	private Map<String, Class<? extends Message>> typeMessageMap = new HashMap<>();

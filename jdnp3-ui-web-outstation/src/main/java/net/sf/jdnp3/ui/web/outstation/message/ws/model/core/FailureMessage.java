@@ -13,11 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation.message.ws.core;
+package net.sf.jdnp3.ui.web.outstation.message.ws.model.core;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+public class FailureMessage implements Message {
+	private String type = "failure";
+	private String reason = "unknown";
+	
+	public String getType() {
+		return type;
+	}
 
-public interface MessageHandler {
-	public boolean canHandle(Message message);
-	public void processMessage(DeviceManager webSocket, Message message);
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 }

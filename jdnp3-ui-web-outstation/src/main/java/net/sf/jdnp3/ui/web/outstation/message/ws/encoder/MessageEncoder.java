@@ -4,7 +4,7 @@ import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

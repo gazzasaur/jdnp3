@@ -4,8 +4,8 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.GenericMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.GenericMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

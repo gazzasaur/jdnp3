@@ -3,13 +3,13 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
-	<bean id="messageHandlerRegistry" class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistryProvider" factory-method="getMessageHandlerRegistry" />
+	<bean id="messageHandlerRegistry" class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.MessageHandlerRegistryProvider" factory-method="getMessageHandlerRegistry" />
 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetObject" ref="messageHandlerRegistry" />
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
 			<list>
-				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.HeartbeatMessageHandler" />
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.HeartbeatMessageHandler" />
 			</list>
 		</property>
 	</bean>
@@ -19,7 +19,7 @@
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
 			<list>
-				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.CreateDeviceMessageHandler" />
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.device.CreateDeviceMessageHandler" />
 			</list>
 		</property>
 	</bean>
@@ -29,7 +29,7 @@
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
 			<list>
-				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.GetDeviceMessageHandler" />
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.device.GetDeviceMessageHandler" />
 			</list>
 		</property>
 	</bean>
@@ -39,7 +39,7 @@
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
 			<list>
-				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.InternalIndicatorMessageHandler" />
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.device.InternalIndicatorMessageHandler" />
 			</list>
 		</property>
 	</bean>
@@ -49,7 +49,7 @@
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
 			<list>
-				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputMessageHandler" />
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.binary.BinaryInputMessageHandler" />
 			</list>
 		</property>
 	</bean>
@@ -59,7 +59,7 @@
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
 			<list>
-				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryInputEventMessageHandler" />
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.binary.BinaryInputEventMessageHandler" />
 			</list>
 		</property>
 	</bean>
@@ -69,7 +69,7 @@
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
 			<list>
-				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.BinaryOutputMessageHandler" />
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.binary.BinaryOutputMessageHandler" />
 			</list>
 		</property>
 	</bean>
@@ -79,7 +79,7 @@
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
 			<list>
-				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.AnalogInputMessageHandler" />
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.analog.AnalogInputMessageHandler" />
 			</list>
 		</property>
 	</bean>
@@ -89,7 +89,7 @@
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
 			<list>
-				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.AnalogInputEventMessageHandler" />
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.analog.AnalogInputEventMessageHandler" />
 			</list>
 		</property>
 	</bean>
@@ -101,7 +101,7 @@
 		<property name="arguments">
 			<list>
 				<value>heartbeat</value>
-				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.HeartbeatMessage</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.core.HeartbeatMessage</value>
 			</list>
 		</property>
 	</bean>
@@ -112,7 +112,7 @@
 		<property name="arguments">
 			<list>
 				<value>createDevice</value>
-				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.CreateDeviceMessage</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.device.CreateDeviceMessage</value>
 			</list>
 		</property>
 	</bean>
@@ -124,7 +124,7 @@
 		<property name="arguments">
 			<list>
 				<value>getDevice</value>
-				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.GetDeviceMessage</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.device.GetDeviceMessage</value>
 			</list>
 		</property>
 	</bean>
@@ -135,7 +135,7 @@
 		<property name="arguments">
 			<list>
 				<value>binaryInputEvent</value>
-				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputEventMessage</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputEventMessage</value>
 			</list>
 		</property>
 	</bean>
@@ -146,7 +146,7 @@
 		<property name="arguments">
 			<list>
 				<value>analogInputEvent</value>
-				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.AnalogInputEventMessage</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputEventMessage</value>
 			</list>
 		</property>
 	</bean>
@@ -157,7 +157,7 @@
 		<property name="arguments">
 			<list>
 				<value>internalIndicator</value>
-				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.InternalIndicatorMessage</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.device.InternalIndicatorMessage</value>
 			</list>
 		</property>
 	</bean>
@@ -168,8 +168,8 @@
 		<property name="arguments">
 			<list>
 				<value>internalIndicators</value>
-				<value>net.sf.jdnp3.ui.web.outstation.database.InternalIndicatorsDataPoint</value>
-				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.InternalIndicatorsMessage</value>
+				<value>net.sf.jdnp3.ui.web.outstation.database.device.InternalIndicatorsDataPoint</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.device.InternalIndicatorsMessage</value>
 			</list>
 		</property>
 	</bean>
@@ -180,8 +180,8 @@
 		<property name="arguments">
 			<list>
 				<value>binaryInputPoint</value>
-				<value>net.sf.jdnp3.ui.web.outstation.database.BinaryInputDataPoint</value>
-				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryInputMessage</value>
+				<value>net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputMessage</value>
 			</list>
 		</property>
 	</bean>
@@ -192,8 +192,8 @@
 		<property name="arguments">
 			<list>
 				<value>binaryOutputPoint</value>
-				<value>net.sf.jdnp3.ui.web.outstation.database.BinaryOutputDataPoint</value>
-				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.BinaryOutputMessage</value>
+				<value>net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryOutputMessage</value>
 			</list>
 		</property>
 	</bean>
@@ -204,8 +204,8 @@
 		<property name="arguments">
 			<list>
 				<value>analogInputPoint</value>
-				<value>net.sf.jdnp3.ui.web.outstation.database.AnalogInputDataPoint</value>
-				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.AnalogInputMessage</value>
+				<value>net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage</value>
 			</list>
 		</property>
 	</bean>

@@ -13,11 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation.message.ws.core;
+package net.sf.jdnp3.ui.web.outstation.message.ws.model.binary;
 
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
-public interface MessageHandler {
-	public boolean canHandle(Message message);
-	public void processMessage(DeviceManager webSocket, Message message);
+public class BinaryInputEventMessage implements Message {
+	private String type = "binaryInputEvent";
+	private long index = 0;
+	
+	public String getType() {
+		return type;
+	}
+	
+	public long getIndex() {
+		return index;
+	}
+
+	public void setIndex(long index) {
+		this.index = index;
+	}
 }

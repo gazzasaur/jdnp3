@@ -25,16 +25,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.jdnp3.ui.web.outstation.database.DatabaseManager;
+import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageDecoder;
-import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistry;
-import net.sf.jdnp3.ui.web.outstation.message.ws.handler.MessageHandlerRegistryProvider;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.FailureMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.Message;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.SuccessMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.MessageHandlerRegistry;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.MessageHandlerRegistryProvider;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.FailureMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.SuccessMessage;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;

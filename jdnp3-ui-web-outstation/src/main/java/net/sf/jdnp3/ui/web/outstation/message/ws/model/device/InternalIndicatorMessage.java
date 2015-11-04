@@ -13,11 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation.message.ws.core;
+package net.sf.jdnp3.ui.web.outstation.message.ws.model.device;
 
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
-public interface MessageHandler {
-	public boolean canHandle(Message message);
-	public void processMessage(DeviceManager webSocket, Message message);
+
+public class InternalIndicatorMessage implements Message {
+	private String type = "internalIndicator";
+	private String attribute = "";
+	private boolean value = false;
+	
+	public String getType() {
+		return type;
+	}
+
+	public String getAttribute() {
+		return attribute;
+	}
+
+	public void setAttribute(String attribute) {
+		this.attribute = attribute;
+	}
+
+	public boolean isValue() {
+		return value;
+	}
+
+	public void setValue(boolean value) {
+		this.value = value;
+	}
 }
