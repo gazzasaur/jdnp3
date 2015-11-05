@@ -46,9 +46,6 @@ public class CrobOperator implements CrobRequestHandler {
 			binaryOutputDataPoint.setOperationType(crobObjectInstance.getOperationType());
 			binaryOutputDataPoint.setTripCloseCode(crobObjectInstance.getTripCloseCode());
 			
-			System.out.println(crobObjectInstance.getStatusCode());
-			System.out.println(crobObjectInstance.getOperationType());
-			System.out.println(binaryOutputDataPoint.isAutoUpdateOnSuccess());
 			if (crobObjectInstance.getStatusCode().equals(StatusCode.SUCCESS) && !crobObjectInstance.getOperationType().equals(NUL) && binaryOutputDataPoint.isAutoUpdateOnSuccess()) {
 				binaryOutputDataPoint.setActive(crobObjectInstance.getOperationType().isActive());
 			}

@@ -10,7 +10,7 @@ jdnp3.binary.ATTRIBUTE_MAP.remoteForced = 'rf';
 jdnp3.binary.ATTRIBUTE_MAP.chatterFilter = 'cf';
 jdnp3.binary.ATTRIBUTE_MAP.communicationsLost = 'cl';
 
-jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP = {}
+jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP = {};
 jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.SUCCESS = 'Success';
 jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.TIMEOUT = 'Timeout';
 jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.NO_SELECT = 'No Select';
@@ -25,6 +25,11 @@ jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.AUTOMATION_INHIBIT = 'Automation Inhib
 jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.PROCESSING_LIMITED = 'Processing Limited';
 jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.OUT_OF_RANGE = 'Out of Range';
 jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.NON_PARTICIPATING = 'Non-Participating';
+
+jdnp3.binary.DISPLAY_NAME_STATUS_CODE_MAP = {};
+for (var key in jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP) {
+	jdnp3.binary.DISPLAY_NAME_STATUS_CODE_MAP[jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP[key]] = key;
+}
 
 jdnp3.binary.getBinaryInput = function(id) {
 	if (!/bi-(\d+)/g.exec(id)) {
@@ -128,6 +133,9 @@ jdnp3.binary.getBinaryOutput = function(id) {
 	}
 
 	data.statusCode = $('[id$=bo-status-options' + index + '] span').html();
+	if (data.statusCode in jdnp3.binary.DISPLAY_NAME_STATUS_CODE_MAP) {
+		data.statusCode = jdnp3.binary.DISPLAY_NAME_STATUS_CODE_MAP[data.statusCode];
+	}
 
 	data.eventClass = 0;
 	for (var i = 1; i < 4; ++i) {

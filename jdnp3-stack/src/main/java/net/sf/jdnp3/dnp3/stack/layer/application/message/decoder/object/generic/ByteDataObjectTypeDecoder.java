@@ -45,11 +45,6 @@ public class ByteDataObjectTypeDecoder {
 	}
 	
 	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data) {
-		for (Byte dataByte : data) {
-			System.out.print(String.format("%02X", dataByte));
-		}
-		System.out.println();
-		
 		if (!this.canDecode(decoderContext, data)) {
 			throw new IllegalArgumentException("Cannot decode data.");
 		}
