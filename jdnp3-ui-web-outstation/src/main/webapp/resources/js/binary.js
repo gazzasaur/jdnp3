@@ -9,6 +9,7 @@ jdnp3.binary.ATTRIBUTE_MAP.localForced = 'lf';
 jdnp3.binary.ATTRIBUTE_MAP.remoteForced = 'rf';
 jdnp3.binary.ATTRIBUTE_MAP.chatterFilter = 'cf';
 jdnp3.binary.ATTRIBUTE_MAP.communicationsLost = 'cl';
+jdnp3.binary.ATTRIBUTE_MAP.autoUpdateOnSuccess = 'autoUpdate';
 
 jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP = {};
 jdnp3.binary.STATUS_CODE_DISPLAY_NAME_MAP.SUCCESS = 'Success';

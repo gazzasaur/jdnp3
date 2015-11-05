@@ -42,24 +42,29 @@
 			<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
 				<h:outputText value="Return Status:" />
 				<p:commandButton style="width: 250px; height: 100%" id="bo-status-options#{cc.attrs.point.index}" value="SUCCESS" type="button" icon="ui-icon-extlink">
-				<p:tieredMenu id="bo-status-menu#{cc.attrs.point.index}" overlay="true" trigger="bo-status-options#{cc.attrs.point.index}" my="left top" at="left bottom">
-					<p:menuitem value="Success" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'SUCCESS')" />
-					<p:separator />
-					<p:menuitem value="Timeout" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'TIMEOUT')" />
-					<p:menuitem value="No Select" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NO_SELECT')" />
-					<p:menuitem value="Format Error" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'FORMAT_ERROR')" />
-					<p:menuitem value="Not Supported" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NOT_SUPPORTED')" />
-					<p:menuitem value="Already Active" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'ALREADY_ACTIVE')" />
-					<p:menuitem value="Hardware Error" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'HARDWARE_ERROR')" />
-					<p:menuitem value="Local" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'LOCAL')" />
-					<p:menuitem value="Too Many Objects" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'TOO_MANY_OBJS')" />
-					<p:menuitem value="Not Authorised" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NOT_AUTHORIZED')" />
-					<p:menuitem value="Automation Inhibit" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'AUTOMATION_INHIBIT')" />
-					<p:menuitem value="Processing Limited" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'PROCESSING_LIMITED')" />
-					<p:menuitem value="Out of Range" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'OUT_OF_RANGE')" />
-					<p:menuitem value="Non-Participating" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NON_PARTICIPATING')" />
-				</p:tieredMenu>
+					<p:tieredMenu id="bo-status-menu#{cc.attrs.point.index}" overlay="true" trigger="bo-status-options#{cc.attrs.point.index}" my="left top" at="left bottom">
+						<p:menuitem value="Success" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'SUCCESS')" />
+						<p:separator />
+						<p:menuitem value="Timeout" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'TIMEOUT')" />
+						<p:menuitem value="No Select" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NO_SELECT')" />
+						<p:menuitem value="Format Error" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'FORMAT_ERROR')" />
+						<p:menuitem value="Not Supported" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NOT_SUPPORTED')" />
+						<p:menuitem value="Already Active" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'ALREADY_ACTIVE')" />
+						<p:menuitem value="Hardware Error" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'HARDWARE_ERROR')" />
+						<p:menuitem value="Local" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'LOCAL')" />
+						<p:menuitem value="Too Many Objects" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'TOO_MANY_OBJS')" />
+						<p:menuitem value="Not Authorised" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NOT_AUTHORIZED')" />
+						<p:menuitem value="Automation Inhibit" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'AUTOMATION_INHIBIT')" />
+						<p:menuitem value="Processing Limited" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'PROCESSING_LIMITED')" />
+						<p:menuitem value="Out of Range" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'OUT_OF_RANGE')" />
+						<p:menuitem value="Non-Participating" onclick="$('[id$=&quot;bo-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'statusCode', 'NON_PARTICIPATING')" />
+					</p:tieredMenu>
 				</p:commandButton>
+				
+				<h:outputText value="Auto-Update on Success:" />
+				<p:outputPanel>
+					<j:slideswitch id="bo-#{cc.attrs.point.index}-autoUpdate" title="Auto-Update on Success" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'autoUpdateOnSuccess', !jdnp3.binary.getBinaryOutput('bo-#{cc.attrs.point.index}').autoUpdateOnSuccess)" disabled="true" />
+				</p:outputPanel>
 				
 				<h:outputText value="Event Class:" />
 				<p:outputPanel>
