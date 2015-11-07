@@ -15,12 +15,12 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CLASS_1;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CLASS_1;
 
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class Class1ObjectTypeDecoder implements ObjectTypeDecoder {
 	public boolean canDecode(ObjectFragmentDecoderContext decoderContext) {

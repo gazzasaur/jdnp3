@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public interface ObjectInstanceTypeRationaliserHelper {
 	public void rationalise(ObjectInstance objectInstance);

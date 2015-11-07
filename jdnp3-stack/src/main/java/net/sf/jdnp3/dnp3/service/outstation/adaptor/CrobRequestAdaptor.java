@@ -16,7 +16,7 @@
 package net.sf.jdnp3.dnp3.service.outstation.adaptor;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DIRECT_OPERATE;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CROB;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CROB;
 
 import java.util.List;
 
@@ -25,8 +25,8 @@ import net.sf.jdnp3.dnp3.service.outstation.handler.CrobRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.CrobObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.CrobObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 public class CrobRequestAdaptor implements OutstationRequestHandlerAdaptor {

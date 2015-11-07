@@ -16,16 +16,16 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.TIME_DELAY_COARSE;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.TIME_DELAY_FINE;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.TIME_DELAY_COARSE;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.TIME_DELAY_FINE;
 
 import java.util.Arrays;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeDelayObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeDelayObjectInstance;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

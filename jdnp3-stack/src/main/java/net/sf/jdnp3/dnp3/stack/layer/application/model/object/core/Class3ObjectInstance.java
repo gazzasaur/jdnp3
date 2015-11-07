@@ -13,29 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.model.object.core;
 
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CLASS_3;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
-public class TimeDelayObjectInstance implements ObjectInstance {
-	private long index = 0;
-	private long timestamp = 0;
-	private ObjectType requestedType = ObjectTypeConstants.TIME_DELAY_FINE;
+public class Class3ObjectInstance implements ObjectInstance {
+	private ObjectType requestedType = CLASS_3;
 	
 	public long getIndex() {
-		return index;
-	}
-	
-	public void setIndex(long index) {
-		this.index = index;
-	}
-
-	public long getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
+		return 0;
 	}
 
 	public ObjectType getRequestedType() {

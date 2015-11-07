@@ -13,31 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.model.object.time;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.TIME_AND_DATE_ABSOLUTE_TIME;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.UNSYNCHRONISED_CTO;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
-public class TimeAndDateObjectInstance implements StaticObjectInstance {
-	private long index = 0;
-	private long interval = 0;
+public class UnsynchronisedCtoObjectInstance implements CtoObjectInstance {
 	private long timestamp = 0;
-	private ObjectType requestedType = TIME_AND_DATE_ABSOLUTE_TIME;
-	
+
 	public long getIndex() {
-		return index;
-	}
-	
-	public void setIndex(long index) {
-		this.index = index;
+		return 0;
 	}
 
-	public long getInterval() {
-		return interval;
+	public ObjectType getRequestedType() {
+		return UNSYNCHRONISED_CTO;
 	}
 
-	public void setInterval(long interval) {
-		this.interval = interval;
+	public void setRequestedType(ObjectType requestedType) {
 	}
 
 	public long getTimestamp() {
@@ -46,13 +38,5 @@ public class TimeAndDateObjectInstance implements StaticObjectInstance {
 
 	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
-	}
-
-	public ObjectType getRequestedType() {
-		return requestedType;
-	}
-
-	public void setRequestedType(ObjectType requestedType) {
-		this.requestedType = requestedType;
 	}
 }

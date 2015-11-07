@@ -15,9 +15,9 @@
  */
 package net.sf.jdnp3.ui.web.outstation.database.point.analog;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_STATIC_ANY;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants;
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 
 public class AnalogInputDataPoint implements DataPoint {

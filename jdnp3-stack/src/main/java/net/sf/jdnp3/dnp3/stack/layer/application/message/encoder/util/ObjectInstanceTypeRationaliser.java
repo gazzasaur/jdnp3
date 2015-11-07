@@ -18,11 +18,11 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryOutputStaticObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeDelayObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeDelayObjectInstance;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

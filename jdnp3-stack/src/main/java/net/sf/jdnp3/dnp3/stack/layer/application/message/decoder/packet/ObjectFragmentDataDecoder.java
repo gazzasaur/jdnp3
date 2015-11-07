@@ -27,7 +27,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFrag
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.NullObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.NullObjectInstance;
 
 public class ObjectFragmentDataDecoder {
 	private List<ObjectTypeDecoder> objectTypeDecoders = new ArrayList<>();

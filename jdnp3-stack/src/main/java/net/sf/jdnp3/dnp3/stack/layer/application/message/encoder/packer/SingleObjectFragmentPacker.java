@@ -30,9 +30,9 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.CtoObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeDelayObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.CtoObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeDelayObjectInstance;
 
 public class SingleObjectFragmentPacker implements ObjectFragmentPacker {
 	public boolean canPack(Class<? extends ObjectInstance> clazz) {

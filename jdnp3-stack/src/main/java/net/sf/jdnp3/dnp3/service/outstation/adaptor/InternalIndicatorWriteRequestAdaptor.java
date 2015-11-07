@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.service.outstation.adaptor;
 
 import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.WRITE;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.INTERNAL_INDICATIONS_PACKED;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.INTERNAL_INDICATIONS_PACKED;
 
 import java.util.List;
 
@@ -28,8 +28,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCo
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.InternalIndicatorBitObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.InternalIndicatorBitObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 import org.slf4j.Logger;

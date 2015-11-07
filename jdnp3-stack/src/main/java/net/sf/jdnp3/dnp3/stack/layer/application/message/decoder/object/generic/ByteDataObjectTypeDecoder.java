@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic
 
 import static java.util.Arrays.asList;
 import static javax.xml.bind.DatatypeConverter.parseHexBinary;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CUSTOM;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CUSTOM;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.trim;
 import static org.apache.commons.lang3.ArrayUtils.toObject;
 
@@ -26,8 +26,8 @@ import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ByteDataObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ByteDataObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class ByteDataObjectTypeDecoder {
 	private List<Byte> expectedData;

@@ -15,14 +15,14 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.time;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.TIME_DELAY_FINE;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.TIME_DELAY_FINE;
 
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeDelayObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeDelayObjectInstance;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class TimeDelayCoarseObjectTypeDecoder implements ObjectTypeDecoder {

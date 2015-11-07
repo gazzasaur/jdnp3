@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.service.outstation.handler;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StaticObjectInstance;
 
 public interface StaticReadRequestHandler<E extends StaticObjectInstance> extends OutstationRequestHandler {
 	public List<E> readStatic(long index);

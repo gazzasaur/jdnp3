@@ -17,8 +17,8 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ByteDataObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ByteDataObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class ByteDataObjectTypeEncoder {
 	public void encode(ObjectInstance objectInstance, List<Byte> data) {

@@ -33,7 +33,7 @@ import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationFactory;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ByteDataObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.CustomSingleObjectFragmentPacker;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ByteDataObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ByteDataObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationTransport;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
@@ -44,7 +44,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-@Ignore
 @RunWith(JMockit.class)
 public class CustomTypeIntegrationTest {
 	private Outstation outstation;

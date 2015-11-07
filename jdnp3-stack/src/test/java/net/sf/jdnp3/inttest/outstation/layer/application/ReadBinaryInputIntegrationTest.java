@@ -32,7 +32,7 @@ import mockit.integration.junit4.JMockit;
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationFactory;
 import net.sf.jdnp3.dnp3.service.outstation.handler.BinaryInputStaticReadRequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationTransport;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
@@ -43,7 +43,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-@Ignore
 @RunWith(JMockit.class)
 public class ReadBinaryInputIntegrationTest {
 	private Outstation outstation;

@@ -19,8 +19,8 @@ import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ByteDataObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ByteDataObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 

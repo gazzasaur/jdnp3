@@ -13,28 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.model.object.core;
 
-public enum OperationType {
-	NUL(0, false),
-	PULSE_ON(1, true),
-	PULSE_OFF(2, false),
-	LATCH_ON(3, true),
-	LATCH_OFF(4, false);
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CLASS_1;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+
+public class Class1ObjectInstance implements ObjectInstance {
+	private ObjectType requestedType = CLASS_1;
 	
-	private int code;
-	private boolean active;
-
-	private OperationType(int code, boolean active) {
-		this.code = code;
-		this.active = active;
+	public long getIndex() {
+		return 0;
 	}
 
-	public int getCode() {
-		return code;
+	public ObjectType getRequestedType() {
+		return requestedType;
 	}
 
-	public boolean isActive() {
-		return active;
+	public void setRequestedType(ObjectType requestedType) {
+		this.requestedType = requestedType;
 	}
 }

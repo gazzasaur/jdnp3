@@ -19,7 +19,7 @@ import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class NoDataObjectTypeDecoder implements ObjectTypeDecoder {
 	private ObjectType objectType;

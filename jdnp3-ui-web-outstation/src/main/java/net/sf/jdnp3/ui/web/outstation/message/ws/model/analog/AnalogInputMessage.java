@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.model.analog;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 

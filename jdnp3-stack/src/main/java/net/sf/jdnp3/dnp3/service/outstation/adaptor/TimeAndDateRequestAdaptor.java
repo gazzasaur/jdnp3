@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.service.outstation.adaptor;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.READ;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.WRITE;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.TIME_AND_DATE_ABSOLUTE_TIME;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.TIME_AND_DATE_ABSOLUTE_TIME;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +29,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCo
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeAndDateObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeAndDateObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 import org.slf4j.Logger;

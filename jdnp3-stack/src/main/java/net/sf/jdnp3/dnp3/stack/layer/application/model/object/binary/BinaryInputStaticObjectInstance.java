@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StaticObjectInstance;
 
-public class BinaryOutputStaticObjectInstance implements StaticObjectInstance {
+public class BinaryInputStaticObjectInstance implements StaticObjectInstance {
 	private long index = 0;
 	private boolean active = false;
 	private ObjectType requestedType = ANY;
@@ -27,6 +28,7 @@ public class BinaryOutputStaticObjectInstance implements StaticObjectInstance {
 	private boolean restart = false;
 	private boolean localForced = false;
 	private boolean remoteForced = false;
+	private boolean chatterFilter = false;
 	private boolean communicationsLost = false;
 	
 	public long getIndex() {
@@ -83,6 +85,14 @@ public class BinaryOutputStaticObjectInstance implements StaticObjectInstance {
 
 	public void setRemoteForced(boolean remoteForced) {
 		this.remoteForced = remoteForced;
+	}
+
+	public boolean isChatterFilter() {
+		return chatterFilter;
+	}
+
+	public void setChatterFilter(boolean chatterFilter) {
+		this.chatterFilter = chatterFilter;
 	}
 
 	public boolean isCommunicationsLost() {

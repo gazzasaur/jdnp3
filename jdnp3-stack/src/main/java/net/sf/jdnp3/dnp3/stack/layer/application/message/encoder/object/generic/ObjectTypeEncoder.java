@@ -20,7 +20,7 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public interface ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType);

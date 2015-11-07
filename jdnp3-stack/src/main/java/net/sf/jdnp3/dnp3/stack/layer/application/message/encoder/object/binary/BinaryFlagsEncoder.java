@@ -19,9 +19,9 @@ import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.bitSetToByte;
 
 import java.util.BitSet;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryOutputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputEventObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputStaticObjectInstance;
 
 public class BinaryFlagsEncoder {
 	public static byte encode(BinaryInputStaticObjectInstance objectInstance) {

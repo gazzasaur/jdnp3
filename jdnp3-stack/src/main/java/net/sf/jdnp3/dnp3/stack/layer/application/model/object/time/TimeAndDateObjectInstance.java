@@ -13,16 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.model.object.time;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CLASS_2;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.TIME_AND_DATE_ABSOLUTE_TIME;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StaticObjectInstance;
 
-public class Class2ObjectInstance implements ObjectInstance {
-	private ObjectType requestedType = CLASS_2;
+public class TimeAndDateObjectInstance implements StaticObjectInstance {
+	private long index = 0;
+	private long interval = 0;
+	private long timestamp = 0;
+	private ObjectType requestedType = TIME_AND_DATE_ABSOLUTE_TIME;
 	
 	public long getIndex() {
-		return 0;
+		return index;
+	}
+	
+	public void setIndex(long index) {
+		this.index = index;
+	}
+
+	public long getInterval() {
+		return interval;
+	}
+
+	public void setInterval(long interval) {
+		this.interval = interval;
+	}
+
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public ObjectType getRequestedType() {

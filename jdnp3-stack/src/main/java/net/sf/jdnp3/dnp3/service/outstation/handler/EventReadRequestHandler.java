@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.service.outstation.handler;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.EventObjectInstance;
 
 public interface EventReadRequestHandler<E extends EventObjectInstance> extends OutstationRequestHandler {
 	public List<E> readEvents();

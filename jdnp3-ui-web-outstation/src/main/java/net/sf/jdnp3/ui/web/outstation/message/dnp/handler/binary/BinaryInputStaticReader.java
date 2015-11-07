@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.BinaryInputStaticReadRequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 

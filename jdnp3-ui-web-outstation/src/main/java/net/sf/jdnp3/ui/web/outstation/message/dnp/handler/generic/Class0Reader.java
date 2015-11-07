@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogInputStaticReader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryInputStaticReader;

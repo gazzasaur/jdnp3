@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.handler;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputStaticObjectInstance;
 
 public interface AnalogInputStaticReadRequestHandler extends StaticReadRequestHandler<AnalogInputStaticObjectInstance> {
 }

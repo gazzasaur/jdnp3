@@ -13,20 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.model.object.time;
 
-public enum TripCloseCode {
-	NUL(0),
-	CLOSE(1),
-	TRIP(2);
-	
-	private int code;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
-	private TripCloseCode(int code) {
-		this.code = code;
-	}
-
-	public int getCode() {
-		return code;
-	}
+public interface CtoObjectInstance extends ObjectInstance {
+	public long getTimestamp();
 }

@@ -13,23 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CLASS_0;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-
-public class Class0ObjectInstance implements ObjectInstance {
-	private ObjectType requestedType = CLASS_0;
+public enum StatusCode {
+	SUCCESS(0),
+	TIMEOUT(1),
+	NO_SELECT(2),
+	FORMAT_ERROR(3),
+	NOT_SUPPORTED(4),
+	ALREADY_ACTIVE(5),
+	HARDWARE_ERROR(6),
+	LOCAL(7),
+	TOO_MANY_OBJS(8),
+	NOT_AUTHORIZED(9),
+	AUTOMATION_INHIBIT(10),
+	PROCESSING_LIMITED(11),
+	OUT_OF_RANGE(12),
+	NON_PARTICIPATING(126);
 	
-	public long getIndex() {
-		return 0;
+	private int code;
+
+	private StatusCode(int code) {
+		this.code = code;
 	}
 
-	public ObjectType getRequestedType() {
-		return requestedType;
-	}
-
-	public void setRequestedType(ObjectType requestedType) {
-		this.requestedType = requestedType;
+	public int getCode() {
+		return code;
 	}
 }

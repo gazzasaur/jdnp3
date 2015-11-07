@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.model.object.time;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.SYNCHRONISED_CTO;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.SYNCHRONISED_CTO;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
 public class SynchronisedCtoObjectInstance implements CtoObjectInstance {

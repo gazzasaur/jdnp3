@@ -28,8 +28,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 import org.slf4j.Logger;

@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.handler;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.CrobObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.CrobObjectInstance;
 
 public interface CrobRequestHandler extends OutstationRequestHandler {
 	public CrobObjectInstance doDirectOperate(CrobObjectInstance crobObjectInstance);

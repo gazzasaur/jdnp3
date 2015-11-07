@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StaticObjectInstance;
 
-public class AnalogInputEventObjectInstance implements EventObjectInstance {
+public class AnalogInputStaticObjectInstance implements StaticObjectInstance {
 	private long index = 0;
 	private double value = 0;
-	private long timestamp = 0;
-	private int eventClass = 1;
 	private ObjectType requestedType = ANY;
 	
 	private boolean online = true;
@@ -41,12 +40,12 @@ public class AnalogInputEventObjectInstance implements EventObjectInstance {
 		this.index = index;
 	}
 
-	public long getTimestamp() {
-		return timestamp;
+	public double getValue() {
+		return value;
 	}
 
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
+	public void setValue(double value) {
+		this.value = value;
 	}
 	
 	public ObjectType getRequestedType() {
@@ -56,6 +55,7 @@ public class AnalogInputEventObjectInstance implements EventObjectInstance {
 	public void setRequestedType(ObjectType objectType) {
 		this.requestedType = objectType;
 	}
+
 
 	public boolean isOnline() {
 		return online;
@@ -71,6 +71,14 @@ public class AnalogInputEventObjectInstance implements EventObjectInstance {
 
 	public void setRestart(boolean restart) {
 		this.restart = restart;
+	}
+
+	public boolean isOverRange() {
+		return overRange;
+	}
+
+	public void setOverRange(boolean overRange) {
+		this.overRange = overRange;
 	}
 
 	public boolean isLocalForced() {
@@ -89,30 +97,6 @@ public class AnalogInputEventObjectInstance implements EventObjectInstance {
 		this.remoteForced = remoteForced;
 	}
 
-	public boolean isCommunicationsLost() {
-		return communicationsLost;
-	}
-
-	public void setCommunicationsLost(boolean communicationsLost) {
-		this.communicationsLost = communicationsLost;
-	}
-
-	public int getEventClass() {
-		return eventClass;
-	}
-
-	public void setEventClass(int eventClass) {
-		this.eventClass = eventClass;
-	}
-
-	public boolean isOverRange() {
-		return overRange;
-	}
-
-	public void setOverRange(boolean overRange) {
-		this.overRange = overRange;
-	}
-
 	public boolean isReferenceError() {
 		return referenceError;
 	}
@@ -121,11 +105,11 @@ public class AnalogInputEventObjectInstance implements EventObjectInstance {
 		this.referenceError = referenceError;
 	}
 
-	public double getValue() {
-		return value;
+	public boolean isCommunicationsLost() {
+		return communicationsLost;
 	}
 
-	public void setValue(double value) {
-		this.value = value;
+	public void setCommunicationsLost(boolean communicationsLost) {
+		this.communicationsLost = communicationsLost;
 	}
 }

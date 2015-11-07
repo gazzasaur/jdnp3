@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.EventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationLayer;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationTransport;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationLayer;

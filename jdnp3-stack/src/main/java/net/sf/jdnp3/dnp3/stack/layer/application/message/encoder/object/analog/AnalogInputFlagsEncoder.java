@@ -19,8 +19,8 @@ import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.bitSetToByte;
 
 import java.util.BitSet;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputEventObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputEventObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputStaticObjectInstance;
 
 public class AnalogInputFlagsEncoder {
 	public static byte encode(AnalogInputStaticObjectInstance objectInstance) {

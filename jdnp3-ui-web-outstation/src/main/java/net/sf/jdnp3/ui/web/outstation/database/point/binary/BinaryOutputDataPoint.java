@@ -15,14 +15,14 @@
  */
 package net.sf.jdnp3.ui.web.outstation.database.point.binary;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_OUTPUT_EVENT_ANY;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_OUTPUT_STATIC_ANY;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CROB_EVENT_ANY;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.StatusCode.SUCCESS;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.StatusCode.SUCCESS;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_EVENT_ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_STATIC_ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CROB_EVENT_ANY;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.OperationType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StatusCode;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TripCloseCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.OperationType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.StatusCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.TripCloseCode;
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 
 public class BinaryOutputDataPoint implements DataPoint {

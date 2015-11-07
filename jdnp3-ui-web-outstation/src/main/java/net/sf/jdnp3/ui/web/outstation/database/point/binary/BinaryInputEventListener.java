@@ -18,7 +18,7 @@ package net.sf.jdnp3.ui.web.outstation.database.point.binary;
 import java.util.Date;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputEventObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.core.EventListener;
 

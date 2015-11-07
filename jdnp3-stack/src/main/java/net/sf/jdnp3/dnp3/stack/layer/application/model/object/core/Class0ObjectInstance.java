@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.model.object.core;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.CLASS_3;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CLASS_0;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
-public class Class3ObjectInstance implements ObjectInstance {
-	private ObjectType requestedType = CLASS_3;
+public class Class0ObjectInstance implements ObjectInstance {
+	private ObjectType requestedType = CLASS_0;
 	
 	public long getIndex() {
 		return 0;

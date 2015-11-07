@@ -22,8 +22,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFrag
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NullRange;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ByteDataObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ByteDataObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class CustomSingleObjectFragmentPacker implements ObjectFragmentPacker {
 	private Class<? extends ObjectInstance> targetClass;

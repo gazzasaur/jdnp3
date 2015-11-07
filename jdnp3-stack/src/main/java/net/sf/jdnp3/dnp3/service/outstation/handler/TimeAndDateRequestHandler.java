@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.service.outstation.handler;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeAndDateObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeAndDateObjectInstance;
 
 public interface TimeAndDateRequestHandler extends OutstationRequestHandler {
 	public List<TimeAndDateObjectInstance> doReadTime(long count);

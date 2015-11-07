@@ -30,8 +30,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.EventObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class CountRangeObjectFragmentPacker implements ObjectFragmentPacker {
 	public boolean canPack(Class<? extends ObjectInstance> clazz) {

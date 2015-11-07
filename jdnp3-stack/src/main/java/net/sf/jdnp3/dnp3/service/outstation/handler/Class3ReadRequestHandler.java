@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.service.outstation.handler;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 public interface Class3ReadRequestHandler extends OutstationRequestHandler {

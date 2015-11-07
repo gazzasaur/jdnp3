@@ -13,30 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.model.object.core;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.UNSYNCHRONISED_CTO;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CLASS_2;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
-public class UnsynchronisedCtoObjectInstance implements CtoObjectInstance {
-	private long timestamp = 0;
-
+public class Class2ObjectInstance implements ObjectInstance {
+	private ObjectType requestedType = CLASS_2;
+	
 	public long getIndex() {
 		return 0;
 	}
 
 	public ObjectType getRequestedType() {
-		return UNSYNCHRONISED_CTO;
+		return requestedType;
 	}
 
 	public void setRequestedType(ObjectType requestedType) {
-	}
-
-	public long getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
+		this.requestedType = requestedType;
 	}
 }

@@ -13,27 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.model.object.core;
+
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
-public class NullObjectInstance implements ObjectInstance {
+public class ByteDataObjectInstance implements ObjectInstance {
 	private long index = 0;
-	private ObjectType objectType = ObjectTypeConstants.ANY;
+	private ObjectType requestedType = ANY;
+	private List<Byte> data = new ArrayList<>();
 	
 	public long getIndex() {
 		return index;
 	}
 	
-	public void setIndex(long index) {
-		this.index = index;
-	}
-	
 	public ObjectType getRequestedType() {
-		return objectType;
+		return requestedType;
 	}
 
 	public void setRequestedType(ObjectType objectType) {
-		this.objectType = objectType;
+		this.requestedType = objectType;
 	}
+
+	public List<Byte> getData() {
+		return Collections.unmodifiableList(data);
+	}
+
+	public void setData(List<Byte> data) {
+		this.data = new ArrayList<>(data);
+	}
+
 }

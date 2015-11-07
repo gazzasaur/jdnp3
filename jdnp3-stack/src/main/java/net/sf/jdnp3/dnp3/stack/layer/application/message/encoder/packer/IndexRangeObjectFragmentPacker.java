@@ -30,8 +30,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.StaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StaticObjectInstance;
 
 public class IndexRangeObjectFragmentPacker implements ObjectFragmentPacker {
 	public boolean canPack(Class<? extends ObjectInstance> clazz) {

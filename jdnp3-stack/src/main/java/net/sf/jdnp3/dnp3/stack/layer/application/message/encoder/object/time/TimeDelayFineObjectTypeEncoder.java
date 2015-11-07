@@ -16,7 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.time;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.TIME_DELAY_FINE;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.TIME_DELAY_FINE;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
 
 import java.util.List;
@@ -25,8 +25,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.TimeDelayObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeDelayObjectInstance;
 
 public class TimeDelayFineObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {

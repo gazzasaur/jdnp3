@@ -25,8 +25,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants;
 
 public class ObjectFragmentEncoder {
 	private List<ObjectTypeEncoder> objectTypeEncoders = new ArrayList<>();

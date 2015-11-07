@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.adaptor;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
 
 import java.util.List;
 
@@ -27,8 +27,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFrag
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 import org.slf4j.Logger;

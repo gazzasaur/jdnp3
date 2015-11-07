@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.handler;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryOutputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputStaticObjectInstance;
 
 public interface BinaryOutputStaticReadRequestHandler extends StaticReadRequestHandler<BinaryOutputStaticObjectInstance> {
 }

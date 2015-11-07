@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.service;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.EventObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.EventObjectInstance;
 
 public interface ConfirmationListener {
 	public void confirm(EventObjectInstance eventObjectInstance);

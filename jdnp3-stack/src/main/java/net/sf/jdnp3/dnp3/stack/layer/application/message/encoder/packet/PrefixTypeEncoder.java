@@ -22,7 +22,7 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class PrefixTypeEncoder {
 	public static void encode(PrefixType prefixType, ObjectInstance objectInstance, List<Byte> data) {

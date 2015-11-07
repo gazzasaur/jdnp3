@@ -18,8 +18,8 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants;
 
 public class Class0ObjectTypeDecoder implements ObjectTypeDecoder {
 	public boolean canDecode(ObjectFragmentDecoderContext decoderContext) {

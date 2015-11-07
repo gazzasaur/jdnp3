@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public interface ObjectFragmentPacker {
 	public boolean canPack(Class<? extends ObjectInstance> clazz);

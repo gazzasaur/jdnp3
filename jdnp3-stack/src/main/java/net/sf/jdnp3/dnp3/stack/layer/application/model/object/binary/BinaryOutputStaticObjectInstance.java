@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StaticObjectInstance;
 
-public class AnalogInputStaticObjectInstance implements StaticObjectInstance {
+public class BinaryOutputStaticObjectInstance implements StaticObjectInstance {
 	private long index = 0;
-	private double value = 0;
+	private boolean active = false;
 	private ObjectType requestedType = ANY;
 	
 	private boolean online = true;
 	private boolean restart = false;
-	private boolean overRange = false;
 	private boolean localForced = false;
 	private boolean remoteForced = false;
-	private boolean referenceError = false;
 	private boolean communicationsLost = false;
 	
 	public long getIndex() {
@@ -39,22 +38,21 @@ public class AnalogInputStaticObjectInstance implements StaticObjectInstance {
 		this.index = index;
 	}
 
-	public double getValue() {
-		return value;
+	public boolean isActive() {
+		return active;
 	}
 
-	public void setValue(double value) {
-		this.value = value;
+	public void setActive(boolean active) {
+		this.active = active;
 	}
-	
+
 	public ObjectType getRequestedType() {
 		return requestedType;
 	}
 
-	public void setRequestedType(ObjectType objectType) {
-		this.requestedType = objectType;
+	public void setRequestedType(ObjectType requestedType) {
+		this.requestedType = requestedType;
 	}
-
 
 	public boolean isOnline() {
 		return online;
@@ -72,14 +70,6 @@ public class AnalogInputStaticObjectInstance implements StaticObjectInstance {
 		this.restart = restart;
 	}
 
-	public boolean isOverRange() {
-		return overRange;
-	}
-
-	public void setOverRange(boolean overRange) {
-		this.overRange = overRange;
-	}
-
 	public boolean isLocalForced() {
 		return localForced;
 	}
@@ -94,14 +84,6 @@ public class AnalogInputStaticObjectInstance implements StaticObjectInstance {
 
 	public void setRemoteForced(boolean remoteForced) {
 		this.remoteForced = remoteForced;
-	}
-
-	public boolean isReferenceError() {
-		return referenceError;
-	}
-
-	public void setReferenceError(boolean referenceError) {
-		this.referenceError = referenceError;
 	}
 
 	public boolean isCommunicationsLost() {

@@ -15,13 +15,13 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.INTERNAL_INDICATIONS_PACKED;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.INTERNAL_INDICATIONS_PACKED;
 
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.InternalIndicatorBitObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.InternalIndicatorBitObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class InternalIndicatorBitObjectTypeDecoder implements ObjectTypeDecoder {

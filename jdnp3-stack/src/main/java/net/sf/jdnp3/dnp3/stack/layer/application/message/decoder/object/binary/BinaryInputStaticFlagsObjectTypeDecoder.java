@@ -16,7 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.binary;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.BINARY_INPUT_STATIC_FLAGS;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_STATIC_FLAGS;
 
 import java.util.BitSet;
 import java.util.List;
@@ -27,8 +27,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.B
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.BinaryInputStaticObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class BinaryInputStaticFlagsObjectTypeDecoder implements ObjectTypeDecoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {

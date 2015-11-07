@@ -16,7 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANALOG_INPUT_STATIC_INT16;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_STATIC_INT16;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
 
 import java.util.List;
@@ -25,8 +25,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.AnalogInputStaticObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class AnalogInputStaticInteger16ObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {

@@ -13,21 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object;
+package net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.ObjectTypeConstants.ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.EventObjectInstance;
 
-public class BinaryInputStaticObjectInstance implements StaticObjectInstance {
+public class AnalogInputEventObjectInstance implements EventObjectInstance {
 	private long index = 0;
-	private boolean active = false;
+	private double value = 0;
+	private long timestamp = 0;
+	private int eventClass = 1;
 	private ObjectType requestedType = ANY;
 	
 	private boolean online = true;
 	private boolean restart = false;
+	private boolean overRange = false;
 	private boolean localForced = false;
 	private boolean remoteForced = false;
-	private boolean chatterFilter = false;
+	private boolean referenceError = false;
 	private boolean communicationsLost = false;
 	
 	public long getIndex() {
@@ -38,20 +42,20 @@ public class BinaryInputStaticObjectInstance implements StaticObjectInstance {
 		this.index = index;
 	}
 
-	public boolean isActive() {
-		return active;
+	public long getTimestamp() {
+		return timestamp;
 	}
 
-	public void setActive(boolean active) {
-		this.active = active;
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
-
+	
 	public ObjectType getRequestedType() {
 		return requestedType;
 	}
 
-	public void setRequestedType(ObjectType requestedType) {
-		this.requestedType = requestedType;
+	public void setRequestedType(ObjectType objectType) {
+		this.requestedType = objectType;
 	}
 
 	public boolean isOnline() {
@@ -86,19 +90,43 @@ public class BinaryInputStaticObjectInstance implements StaticObjectInstance {
 		this.remoteForced = remoteForced;
 	}
 
-	public boolean isChatterFilter() {
-		return chatterFilter;
-	}
-
-	public void setChatterFilter(boolean chatterFilter) {
-		this.chatterFilter = chatterFilter;
-	}
-
 	public boolean isCommunicationsLost() {
 		return communicationsLost;
 	}
 
 	public void setCommunicationsLost(boolean communicationsLost) {
 		this.communicationsLost = communicationsLost;
+	}
+
+	public int getEventClass() {
+		return eventClass;
+	}
+
+	public void setEventClass(int eventClass) {
+		this.eventClass = eventClass;
+	}
+
+	public boolean isOverRange() {
+		return overRange;
+	}
+
+	public void setOverRange(boolean overRange) {
+		this.overRange = overRange;
+	}
+
+	public boolean isReferenceError() {
+		return referenceError;
+	}
+
+	public void setReferenceError(boolean referenceError) {
+		this.referenceError = referenceError;
+	}
+
+	public double getValue() {
+		return value;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
 	}
 }
