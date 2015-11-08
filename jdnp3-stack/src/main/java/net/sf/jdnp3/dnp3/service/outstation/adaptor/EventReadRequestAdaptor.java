@@ -18,8 +18,8 @@ package net.sf.jdnp3.dnp3.service.outstation.adaptor;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationRequestHandlerAdaptor;
-import net.sf.jdnp3.dnp3.service.outstation.handler.EventReadRequestHandler;
-import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.generic.EventReadRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.generic.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType;

@@ -21,8 +21,8 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationRequestHandlerAdaptor;
-import net.sf.jdnp3.dnp3.service.outstation.handler.CrobRequestHandler;
-import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.binary.CrobRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.generic.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.CrobObjectInstance;

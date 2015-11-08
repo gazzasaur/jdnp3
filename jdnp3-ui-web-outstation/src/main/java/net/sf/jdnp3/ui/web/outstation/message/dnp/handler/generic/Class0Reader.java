@@ -18,22 +18,22 @@ package net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.Class0ReadRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.generic.Class0ReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogInputStaticReader;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryInputStaticReader;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryOutputStaticReader;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryInputStaticHandler;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryOutputStaticHandler;
 
 public class Class0Reader implements Class0ReadRequestHandler {
 	private AnalogInputStaticReader analogInputStaticReader;
-	private BinaryInputStaticReader binaryInputStaticReader;
-	private BinaryOutputStaticReader binaryOutputStaticReader;
+	private BinaryInputStaticHandler binaryInputStaticReader;
+	private BinaryOutputStaticHandler binaryOutputStaticReader;
 	
 	public Class0Reader(DatabaseManager databaseManager) {
 		analogInputStaticReader = new AnalogInputStaticReader(databaseManager);
-		binaryInputStaticReader = new BinaryInputStaticReader(databaseManager);
-		binaryOutputStaticReader = new BinaryOutputStaticReader(databaseManager);
+		binaryInputStaticReader = new BinaryInputStaticHandler(databaseManager);
+		binaryOutputStaticReader = new BinaryOutputStaticHandler(databaseManager);
 	}
 	
 	public List<ObjectInstance> doReadClass() {

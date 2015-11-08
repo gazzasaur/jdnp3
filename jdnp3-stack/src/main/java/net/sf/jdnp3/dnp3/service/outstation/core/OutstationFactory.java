@@ -16,8 +16,10 @@
 package net.sf.jdnp3.dnp3.service.outstation.core;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectTypeEncoderConstants.OBJECT_TYPE_ENCODERS;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_EVENT_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_STATIC_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_STATIC_GROUP;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_STATIC_GROUP;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.sf.jdnp3.dnp3.service.outstation.adaptor.AssignClassRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class0ReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class1ReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class2ReadRequestAdaptor;
@@ -34,7 +37,7 @@ import net.sf.jdnp3.dnp3.service.outstation.adaptor.EventReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.InternalIndicatorWriteRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.StaticReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.TimeAndDateRequestAdaptor;
-import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.generic.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.ItemEnumeratorFactory;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.StandardItemEnumeratorFactory;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.binary.BinaryInputStaticFlagsObjectTypeDecoder;
@@ -64,9 +67,9 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFr
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ByteDataObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationLayer;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationRequestHandler;
@@ -128,7 +131,12 @@ public class OutstationFactory {
 	
 	public void addStandardOutstationRequestHandlerAdaptors() {
 		adaptors.add(new StaticReadRequestAdaptor<>(BINARY_INPUT_STATIC_GROUP, BinaryInputStaticObjectInstance.class));
-		adaptors.add(new EventReadRequestAdaptor<>(ObjectTypeConstants.BINARY_INPUT_EVENT_GROUP, BinaryInputEventObjectInstance.class));
+		adaptors.add(new AssignClassRequestAdaptor<>(BINARY_INPUT_STATIC_GROUP, BinaryInputStaticObjectInstance.class));
+		
+		adaptors.add(new EventReadRequestAdaptor<>(BINARY_INPUT_EVENT_GROUP, BinaryInputEventObjectInstance.class));
+		
+		adaptors.add(new StaticReadRequestAdaptor<>(BINARY_OUTPUT_STATIC_GROUP, BinaryOutputStaticObjectInstance.class));
+		
 		adaptors.add(new Class0ReadRequestAdaptor());
 		adaptors.add(new Class1ReadRequestAdaptor());
 		adaptors.add(new Class2ReadRequestAdaptor());

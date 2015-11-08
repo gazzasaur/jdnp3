@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.service.outstation.handler;
+package net.sf.jdnp3.dnp3.service.outstation.handler.analog;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.service.outstation.handler.generic.StaticReadRequestHandler;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputStaticObjectInstance;
 
-public interface BinaryOutputStaticReadRequestHandler extends StaticReadRequestHandler<BinaryOutputStaticObjectInstance> {
+public interface AnalogInputStaticReadRequestHandler extends StaticReadRequestHandler<AnalogInputStaticObjectInstance> {
 }

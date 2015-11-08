@@ -41,7 +41,7 @@ import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputEventListener;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputEventListener;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogInputStaticReader;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryInputStaticReader;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryInputStaticHandler;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.CrobOperator;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic.Class0Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic.Class1Reader;
@@ -113,7 +113,7 @@ public class DeviceFactory {
 		outstationFactory.setInternalStatusProvider(databaseManager.getInternalStatusProvider());
 		
 		Outstation outstation = outstationFactory.createOutstation();
-		outstation.addRequestHandler(new BinaryInputStaticReader(databaseManager));
+		outstation.addRequestHandler(new BinaryInputStaticHandler(databaseManager));
 		outstation.addRequestHandler(new AnalogInputStaticReader(databaseManager));
 		outstation.addRequestHandler(new Class0Reader(databaseManager));
 		outstation.addRequestHandler(new Class1Reader());

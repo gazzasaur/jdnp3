@@ -13,8 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.service.outstation.handler;
+package net.sf.jdnp3.dnp3.service.outstation.handler.time;
 
-public interface InternalIndicatorWriteRequestHandler extends OutstationRequestHandler {
-	public void doWriteIndicatorBit(long index, boolean value);
+import java.util.List;
+
+import net.sf.jdnp3.dnp3.service.outstation.handler.generic.OutstationRequestHandler;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeAndDateObjectInstance;
+
+public interface TimeAndDateRequestHandler extends OutstationRequestHandler {
+	public List<TimeAndDateObjectInstance> doReadTime(long count);
+	public void doWriteTime(TimeAndDateObjectInstance timeAndDateObjectInstance);
 }

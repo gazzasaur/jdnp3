@@ -15,23 +15,34 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.service;
 
+import static java.lang.String.format;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.EventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class OutstationEventQueue implements ConfirmationListener {
+	private Logger logger = LoggerFactory.getLogger(OutstationEventQueue.class);
+	
 	private InternalStatusProvider internalStatusProvider = null;
 	private List<EventObjectInstance> events = new ArrayList<>();
 	private List<EventObjectInstance> pendingConfirmation = new ArrayList<>();
 	
 	public synchronized void setInternalStatusProvider(InternalStatusProvider internalStatusProvider) {
 		this.internalStatusProvider = internalStatusProvider;
-		
 	}
 	
 	public synchronized void addEvent(EventObjectInstance eventObjectInstance) {
+		if (eventObjectInstance.getEventClass() < 1 || eventObjectInstance.getEventClass() > 3) {
+			logger.info(format("Ignoring event of type %s and event class of %d.", eventObjectInstance.getClass(), eventObjectInstance.getClass()));
+			return;
+		}
+		
 		for (int i = 0; i < events.size(); ++i) {
 			EventObjectInstance current = events.get(i);
 			if (eventObjectInstance.getTimestamp() < current.getTimestamp()) {

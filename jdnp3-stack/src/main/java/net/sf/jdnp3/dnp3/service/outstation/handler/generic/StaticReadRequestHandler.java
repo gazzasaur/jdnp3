@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.service.outstation.handler;
+package net.sf.jdnp3.dnp3.service.outstation.handler.generic;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.EventObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StaticObjectInstance;
 
-public interface EventReadRequestHandler<E extends EventObjectInstance> extends OutstationRequestHandler {
-	public List<E> readEvents();
-	public List<E> readEvents(long returnLimit);
+public interface StaticReadRequestHandler<E extends StaticObjectInstance> extends OutstationRequestHandler {
+	public List<E> readStatic(long index);
 	
+	public List<E> readStatics();
+	public List<E> readStatics(long startIndex, long stopIndex);
+
 	public Class<E> getObjectInstanceClass();
 }

@@ -13,9 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.service.outstation.handler;
+package net.sf.jdnp3.dnp3.service.outstation.handler.generic;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputStaticObjectInstance;
+import java.util.List;
 
-public interface AnalogInputStaticReadRequestHandler extends StaticReadRequestHandler<AnalogInputStaticObjectInstance> {
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
+
+public interface Class2ReadRequestHandler extends OutstationRequestHandler {
+	public List<ObjectInstance> doReadClass(OutstationEventQueue outstationEventQueue);
+	public List<ObjectInstance> doReadClass(OutstationEventQueue outstationEventQueue, long returnLimit);
 }

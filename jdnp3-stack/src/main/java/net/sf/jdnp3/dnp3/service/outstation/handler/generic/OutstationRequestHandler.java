@@ -13,12 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.service.outstation.handler;
+package net.sf.jdnp3.dnp3.service.outstation.handler.generic;
 
-import java.util.List;
-
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
-
-public interface Class0ReadRequestHandler extends OutstationRequestHandler {
-	public List<ObjectInstance> doReadClass();
+public interface OutstationRequestHandler {
 }

@@ -18,17 +18,18 @@ package net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.BinaryOutputStaticReadRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryOutputStaticAssignClassRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryOutputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputStaticObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 
 import org.apache.commons.beanutils.BeanUtils;
 
-public class BinaryOutputStaticReader implements BinaryOutputStaticReadRequestHandler {
+public class BinaryOutputStaticHandler implements BinaryOutputStaticReadRequestHandler, BinaryOutputStaticAssignClassRequestHandler {
 	private DatabaseManager databaseManager;
 
-	public BinaryOutputStaticReader(DatabaseManager databaseManager) {
+	public BinaryOutputStaticHandler(DatabaseManager databaseManager) {
 		this.databaseManager = databaseManager;
 	}
 	
@@ -78,6 +79,35 @@ public class BinaryOutputStaticReader implements BinaryOutputStaticReadRequestHa
 			}
 		}
 		return points;
+	}
+	
+	public void assignClass(long index, long eventClass) {
+		List<BinaryOutputDataPoint> dataPoints = databaseManager.getBinaryOutputDataPoints();
+
+		if (index < dataPoints.size()) {
+			BinaryOutputDataPoint dataPoint = dataPoints.get((int) index);
+			dataPoint.setEventClass((int) eventClass);
+			databaseManager.setBinaryOutputDataPoint(dataPoint);
+		}
+	}
+	
+	public void assignClasses(long eventClass) {
+		List<BinaryOutputDataPoint> dataPoints = databaseManager.getBinaryOutputDataPoints();
+
+		for (BinaryOutputDataPoint dataPoint : dataPoints) {
+			dataPoint.setEventClass((int) eventClass);
+			databaseManager.setBinaryOutputDataPoint(dataPoint);
+		}
+	}
+	
+	public void assignClasses(long startIndex, long stopIndex, long eventClass) {
+		List<BinaryOutputDataPoint> dataPoints = databaseManager.getBinaryOutputDataPoints();
+
+		for (long i = startIndex; i <= stopIndex; ++i) {
+			BinaryOutputDataPoint dataPoint = dataPoints.get((int) i);
+			dataPoint.setEventClass((int) eventClass);
+			databaseManager.setBinaryOutputDataPoint(dataPoint);
+		}
 	}
 
 	public Class<BinaryOutputStaticObjectInstance> getObjectInstanceClass() {

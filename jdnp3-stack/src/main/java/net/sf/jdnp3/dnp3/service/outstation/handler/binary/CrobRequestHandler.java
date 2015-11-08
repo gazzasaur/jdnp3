@@ -13,7 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.service.outstation.handler;
+package net.sf.jdnp3.dnp3.service.outstation.handler.binary;
 
-public interface OutstationRequestHandler {
+import net.sf.jdnp3.dnp3.service.outstation.handler.generic.OutstationRequestHandler;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.CrobObjectInstance;
+
+public interface CrobRequestHandler extends OutstationRequestHandler {
+	public CrobObjectInstance doDirectOperate(CrobObjectInstance crobObjectInstance);
 }

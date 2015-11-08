@@ -17,7 +17,7 @@ package net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic;
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.Class2ReadRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.generic.Class2ReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.EventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.EventObjectInstanceSelector;

@@ -18,17 +18,18 @@ package net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.BinaryInputStaticReadRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryInputStaticAssignClassRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryInputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 
 import org.apache.commons.beanutils.BeanUtils;
 
-public class BinaryInputStaticReader implements BinaryInputStaticReadRequestHandler {
+public class BinaryInputStaticHandler implements BinaryInputStaticReadRequestHandler, BinaryInputStaticAssignClassRequestHandler {
 	private DatabaseManager databaseManager;
 
-	public BinaryInputStaticReader(DatabaseManager databaseManager) {
+	public BinaryInputStaticHandler(DatabaseManager databaseManager) {
 		this.databaseManager = databaseManager;
 	}
 	
@@ -68,7 +69,7 @@ public class BinaryInputStaticReader implements BinaryInputStaticReadRequestHand
 		List<BinaryInputStaticObjectInstance> points = new ArrayList<>();
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 
-		if (index < points.size()) {
+		if (index < binaryDataPoints.size()) {
 			BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
 			try {
 				BeanUtils.copyProperties(binaryInputStaticObjectInstance, binaryDataPoints.get((int) index));
@@ -78,6 +79,35 @@ public class BinaryInputStaticReader implements BinaryInputStaticReadRequestHand
 			}
 		}
 		return points;
+	}
+
+	public void assignClass(long index, long eventClass) {
+		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
+
+		if (index < binaryDataPoints.size()) {
+			BinaryInputDataPoint point = binaryDataPoints.get((int) index);
+			point.setEventClass((int) eventClass);
+			databaseManager.setBinaryInputDataPoint(point);
+		}
+	}
+
+	public void assignClasses(long eventClass) {
+		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
+
+		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
+			binaryDataPoint.setEventClass((int) eventClass);
+			databaseManager.setBinaryInputDataPoint(binaryDataPoint);
+		}
+	}
+
+	public void assignClasses(long startIndex, long stopIndex, long eventClass) {
+		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
+
+		for (long i = startIndex; i <= stopIndex; ++i) {
+			BinaryInputDataPoint binaryDataPoint = binaryDataPoints.get((int) i);
+			binaryDataPoint.setEventClass((int) eventClass);
+			databaseManager.setBinaryInputDataPoint(binaryDataPoint);
+		}
 	}
 
 	public Class<BinaryInputStaticObjectInstance> getObjectInstanceClass() {

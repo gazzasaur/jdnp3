@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.core;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.OutstationRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.generic.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationRequestHandler;
 
 public interface OutstationRequestHandlerAdaptor extends OutstationApplicationRequestHandler {

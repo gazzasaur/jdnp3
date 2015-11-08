@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.InternalIndicatorWriteRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.generic.InternalIndicatorWriteRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
 
 public class InternalIndicatorWriter implements InternalIndicatorWriteRequestHandler {

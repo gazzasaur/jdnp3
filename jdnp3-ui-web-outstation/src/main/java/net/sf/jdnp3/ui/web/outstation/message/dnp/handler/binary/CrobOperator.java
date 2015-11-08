@@ -19,7 +19,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.Oper
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.CrobRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.binary.CrobRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.CrobObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.StatusCode;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
