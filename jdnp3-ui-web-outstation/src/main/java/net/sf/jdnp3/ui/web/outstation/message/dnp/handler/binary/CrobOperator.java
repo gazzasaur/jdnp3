@@ -19,20 +19,20 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.Oper
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.binary.CrobRequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.CrobObjectInstance;
+import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryOutputOperateRequestHandler;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputCrobObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.StatusCode;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 
-public class CrobOperator implements CrobRequestHandler {
+public class CrobOperator implements BinaryOutputOperateRequestHandler {
 	private DatabaseManager databaseManager;
 
 	public CrobOperator(DatabaseManager databaseManager) {
 		this.databaseManager = databaseManager;
 	}
 	
-	public CrobObjectInstance doDirectOperate(CrobObjectInstance crobObjectInstance) {
+	public BinaryOutputCrobObjectInstance doDirectOperate(BinaryOutputCrobObjectInstance crobObjectInstance) {
 		List<BinaryOutputDataPoint> binaryOutputDataPoints = databaseManager.getBinaryOutputDataPoints();
 		if (binaryOutputDataPoints.size() > crobObjectInstance.getIndex()) {
 			BinaryOutputDataPoint binaryOutputDataPoint = binaryOutputDataPoints.get((int) crobObjectInstance.getIndex());

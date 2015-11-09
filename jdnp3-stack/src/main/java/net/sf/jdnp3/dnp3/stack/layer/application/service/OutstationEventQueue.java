@@ -39,7 +39,7 @@ public class OutstationEventQueue implements ConfirmationListener {
 	
 	public synchronized void addEvent(EventObjectInstance eventObjectInstance) {
 		if (eventObjectInstance.getEventClass() < 1 || eventObjectInstance.getEventClass() > 3) {
-			logger.info(format("Ignoring event of type %s and event class of %d.", eventObjectInstance.getClass(), eventObjectInstance.getClass()));
+			logger.info(format("Ignoring event of type %s and event class of %d.", eventObjectInstance.getClass(), eventObjectInstance.getEventClass()));
 			return;
 		}
 		

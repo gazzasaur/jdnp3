@@ -59,11 +59,11 @@ public class ObjectTypeConstants {
 	public static ObjectType BINARY_OUTPUT_EVENT_WITHOUT_TIME = new ObjectType(11, 1);
 	public static ObjectType BINARY_OUTPUT_EVENT_ABSOLUTE_TIME = new ObjectType(11, 2);
 
-	public static ObjectType CROB = new ObjectType(12, 1);
+	public static ObjectType BINARY_OUTPUT_COMMAND_CROB = new ObjectType(12, 1);
 
-	public static ObjectType CROB_EVENT_ANY = new ObjectType(13, 0);
-	public static ObjectType CROB_EVENT_WITHOUT_TIME = new ObjectType(13, 1);
-	public static ObjectType CROB_EVENT_ABSOLUTE_TIME = new ObjectType(13, 2);
+	public static ObjectType BINARY_OUTPUT_COMMAND_EVENT_ANY = new ObjectType(13, 0);
+	public static ObjectType BINARY_OUTPUT_COMMAND_EVENT_WITHOUT_TIME = new ObjectType(13, 1);
+	public static ObjectType BINARY_OUTPUT_COMMAND_EVENT_ABSOLUTE_TIME = new ObjectType(13, 2);
 	
 	public static ObjectType TIME_AND_DATE_ABSOLUTE_TIME = new ObjectType(50, 1);
 

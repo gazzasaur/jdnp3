@@ -68,12 +68,14 @@
 				
 				<h:outputText value="Event Class:" />
 				<p:outputPanel>
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-cl-0" title="Off" label="0" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'eventClass', 0)" disabled="true" />
 					<j:eventbutton id="bo-#{cc.attrs.point.index}-cl-1" title="Class 1" label="1" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'eventClass', 1)" disabled="true" />
 					<j:eventbutton id="bo-#{cc.attrs.point.index}-cl-2" title="Class 2" label="2" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'eventClass', 2)" disabled="true" />
 					<j:eventbutton id="bo-#{cc.attrs.point.index}-cl-3" title="Class 3" label="3" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'eventClass', 3)" disabled="true" />
 				</p:outputPanel>
 				<h:outputText value="Command Event Class:" />
 				<p:outputPanel>
+					<j:eventbutton id="bo-#{cc.attrs.point.index}-cc-0" title="Off" label="0" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'commandEventClass', 0)" disabled="true" />
 					<j:eventbutton id="bo-#{cc.attrs.point.index}-cc-1" title="Class 1" label="1" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'commandEventClass', 1)" disabled="true" />
 					<j:eventbutton id="bo-#{cc.attrs.point.index}-cc-2" title="Class 2" label="2" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'commandEventClass', 2)" disabled="true" />
 					<j:eventbutton id="bo-#{cc.attrs.point.index}-cc-3" title="Class 3" label="3" onclick="requestChangeAttributeValue('bo-#{cc.attrs.point.index}', 'commandEventClass', 3)" disabled="true" />

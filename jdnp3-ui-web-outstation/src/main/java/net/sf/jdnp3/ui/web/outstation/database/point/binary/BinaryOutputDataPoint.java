@@ -18,7 +18,7 @@ package net.sf.jdnp3.ui.web.outstation.database.point.binary;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.StatusCode.SUCCESS;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_EVENT_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_STATIC_ANY;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CROB_EVENT_ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_COMMAND_EVENT_ANY;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.OperationType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.StatusCode;
@@ -47,7 +47,7 @@ public class BinaryOutputDataPoint implements DataPoint {
 	
 	private ObjectType staticType = BINARY_OUTPUT_STATIC_ANY;
 	private ObjectType eventType = BINARY_OUTPUT_EVENT_ANY;
-	private ObjectType commandEventType = CROB_EVENT_ANY;
+	private ObjectType commandEventType = BINARY_OUTPUT_COMMAND_EVENT_ANY;
 	private int eventClass = 1;
 	private int commandEventClass = 1;
 

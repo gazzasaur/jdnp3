@@ -15,14 +15,14 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.binary;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CROB;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_COMMAND_CROB;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getInteger;
 
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.CrobObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputCrobObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.OperationType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.StatusCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.TripCloseCode;
@@ -31,7 +31,7 @@ import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class CrobObjectTypeDecoder implements ObjectTypeDecoder {
 	public boolean canDecode(ObjectFragmentDecoderContext decoderContext) {
-		return decoderContext.getObjectType().equals(CROB);
+		return decoderContext.getObjectType().equals(BINARY_OUTPUT_COMMAND_CROB);
 	}
 	
 	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data) {
@@ -39,7 +39,7 @@ public class CrobObjectTypeDecoder implements ObjectTypeDecoder {
 			throw new IllegalArgumentException("Unable to decode data.");
 		}
 		
-		CrobObjectInstance crob = new CrobObjectInstance();
+		BinaryOutputCrobObjectInstance crob = new BinaryOutputCrobObjectInstance();
 		crob.setIndex(decoderContext.getCurrentIndex());
 		
 		long firstByte = DataUtils.getInteger(0, 1, data);

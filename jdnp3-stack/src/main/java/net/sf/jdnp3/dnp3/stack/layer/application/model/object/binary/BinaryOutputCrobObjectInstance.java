@@ -19,7 +19,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
-public class CrobObjectInstance implements ObjectInstance {
+public class BinaryOutputCrobObjectInstance implements ObjectInstance {
 	private long index;
 	private long count;
 	private long onTime;

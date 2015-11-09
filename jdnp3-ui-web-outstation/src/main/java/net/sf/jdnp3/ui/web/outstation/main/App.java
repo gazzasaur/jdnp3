@@ -23,8 +23,6 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * For the first build, multiple outstations must be implemented.
- * 
  * Complete BinaryOutput type:
  * - Add the ability to create events.
  * - Add the ability to create control events.

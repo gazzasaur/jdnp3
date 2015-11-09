@@ -17,7 +17,7 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.model.binary;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.StatusCode.SUCCESS;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CROB_EVENT_ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_COMMAND_EVENT_ANY;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.OperationType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.StatusCode;
@@ -31,7 +31,7 @@ public class BinaryOutputMessage implements Message {
 	private int commandEventClass = 1;
 	private ObjectType eventType = ANY;
 	private ObjectType staticType = ANY;
-	private ObjectType commandEventType = CROB_EVENT_ANY;
+	private ObjectType commandEventType = BINARY_OUTPUT_COMMAND_EVENT_ANY;
 	
 	private String name = "";
 	private boolean active = false;

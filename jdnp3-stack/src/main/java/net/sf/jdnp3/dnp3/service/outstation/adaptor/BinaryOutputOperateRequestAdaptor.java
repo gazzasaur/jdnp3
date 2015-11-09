@@ -16,24 +16,24 @@
 package net.sf.jdnp3.dnp3.service.outstation.adaptor;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DIRECT_OPERATE;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CROB;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_COMMAND_CROB;
 
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationRequestHandlerAdaptor;
-import net.sf.jdnp3.dnp3.service.outstation.handler.binary.CrobRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryOutputOperateRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.handler.generic.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.CrobObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputCrobObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
-public class CrobRequestAdaptor implements OutstationRequestHandlerAdaptor {
-	private CrobRequestHandler serviceRequestHandler = null;
+public class BinaryOutputOperateRequestAdaptor implements OutstationRequestHandlerAdaptor {
+	private BinaryOutputOperateRequestHandler serviceRequestHandler = null;
 
 	public boolean canHandle(FunctionCode functionCode, ObjectFragment request) {
-		if (functionCode == DIRECT_OPERATE && request.getObjectFragmentHeader().getObjectType().getGroup() == CROB.getGroup()) {
+		if (functionCode == DIRECT_OPERATE && request.getObjectFragmentHeader().getObjectType().getGroup() == BINARY_OUTPUT_COMMAND_CROB.getGroup()) {
 			return true;
 		}
 		return false;
@@ -42,14 +42,14 @@ public class CrobRequestAdaptor implements OutstationRequestHandlerAdaptor {
 	public void doRequest(FunctionCode functionCode, OutstationEventQueue outstationEventQueue, ObjectFragment request, List<ObjectInstance> response) {
 		if (serviceRequestHandler != null) {
 			for (ObjectInstance objectInstance : request.getObjectInstances()) {
-				response.add(serviceRequestHandler.doDirectOperate((CrobObjectInstance) objectInstance));
+				response.add(serviceRequestHandler.doDirectOperate((BinaryOutputCrobObjectInstance) objectInstance));
 			}
 		}
 	}
 	
 	public void setRequestHandler(OutstationRequestHandler requestHandler) {
-		if (requestHandler instanceof CrobRequestHandler) {
-			this.serviceRequestHandler = (CrobRequestHandler) requestHandler;
+		if (requestHandler instanceof BinaryOutputOperateRequestHandler) {
+			this.serviceRequestHandler = (BinaryOutputOperateRequestHandler) requestHandler;
 		}
 	}
 }

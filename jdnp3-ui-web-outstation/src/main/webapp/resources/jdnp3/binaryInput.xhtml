@@ -39,6 +39,7 @@
 			<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
 				<h:outputText value="Event Class:" />
 				<p:outputPanel>
+					<j:eventbutton id="bi-#{cc.attrs.point.index}-cl-0" title="Off" label="0" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'eventClass', 0)" disabled="true" />
 					<j:eventbutton id="bi-#{cc.attrs.point.index}-cl-1" title="Class 1" label="1" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'eventClass', 1)" disabled="true" />
 					<j:eventbutton id="bi-#{cc.attrs.point.index}-cl-2" title="Class 2" label="2" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'eventClass', 2)" disabled="true" />
 					<j:eventbutton id="bi-#{cc.attrs.point.index}-cl-3" title="Class 3" label="3" onclick="requestChangeAttributeValue('bi-#{cc.attrs.point.index}', 'eventClass', 3)" disabled="true" />

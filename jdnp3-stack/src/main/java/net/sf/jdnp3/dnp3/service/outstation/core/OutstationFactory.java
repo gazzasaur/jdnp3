@@ -28,11 +28,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.AssignClassRequestAdaptor;
+import net.sf.jdnp3.dnp3.service.outstation.adaptor.BinaryOutputOperateRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class0ReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class1ReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class2ReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class3ReadRequestAdaptor;
-import net.sf.jdnp3.dnp3.service.outstation.adaptor.CrobRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.EventReadRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.InternalIndicatorWriteRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.StaticReadRequestAdaptor;
@@ -141,7 +141,7 @@ public class OutstationFactory {
 		adaptors.add(new Class1ReadRequestAdaptor());
 		adaptors.add(new Class2ReadRequestAdaptor());
 		adaptors.add(new Class3ReadRequestAdaptor());
-		adaptors.add(new CrobRequestAdaptor());
+		adaptors.add(new BinaryOutputOperateRequestAdaptor());
 		adaptors.add(new TimeAndDateRequestAdaptor());
 		adaptors.add(new InternalIndicatorWriteRequestAdaptor());
 	}

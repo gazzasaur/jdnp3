@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary;
 
 import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.RESPONSE;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CROB;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_COMMAND_CROB;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
 
 import java.util.List;
@@ -26,12 +26,12 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.CrobObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputCrobObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class CrobObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(RESPONSE) && objectType.equals(CROB);
+		return functionCode.equals(RESPONSE) && objectType.equals(BINARY_OUTPUT_COMMAND_CROB);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
@@ -39,7 +39,7 @@ public class CrobObjectTypeEncoder implements ObjectTypeEncoder {
 			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
 
-		CrobObjectInstance specificInstance = (CrobObjectInstance) objectInstance;
+		BinaryOutputCrobObjectInstance specificInstance = (BinaryOutputCrobObjectInstance) objectInstance;
 		byte firstByte = (byte) ((specificInstance.getTripCloseCode().getCode() << 6) & 0xC0);
 		firstByte |= (byte) (specificInstance.getOperationType().getCode() & 0x0F);
 			

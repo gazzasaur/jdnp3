@@ -51,7 +51,7 @@ jdnp3.binary.getBinaryInput = function(id) {
 	}
 
 	data.eventClass = 0;
-	for (var i = 1; i < 4; ++i) {
+	for (var i = 0; i < 4; ++i) {
 		var id = 'bi-' + index + '-cl-' + i;
 		if ($('[id$=' + id + ']').prop('checked')) {
 			var regexArray = /.*-(\d+)/g.exec(id);
@@ -87,7 +87,7 @@ jdnp3.binary.setBinaryInput = function(binaryDataPoint) {
 		}
 	}
 	
-	for (var i = 1; i < 4; ++i) {
+	for (var i = 0; i < 4; ++i) {
 		var id = 'bi-' + binaryDataPoint.index + '-cl-' + i;
 		if (i == binaryDataPoint.eventClass) {
 			$('[id$=' + id + ']').prop('checked', 'true');
@@ -139,7 +139,7 @@ jdnp3.binary.getBinaryOutput = function(id) {
 	}
 
 	data.eventClass = 0;
-	for (var i = 1; i < 4; ++i) {
+	for (var i = 0; i < 4; ++i) {
 		var id = 'bo-' + index + '-cl-' + i;
 		if ($('[id$=' + id + ']').prop('checked')) {
 			var regexArray = /.*-(\d+)/g.exec(id);
@@ -148,7 +148,7 @@ jdnp3.binary.getBinaryOutput = function(id) {
 	}
 	
 	data.commandEventClass = 0;
-	for (var i = 1; i < 4; ++i) {
+	for (var i = 0; i < 4; ++i) {
 		var id = 'bo-' + index + '-cc-' + i;
 		if ($('[id$=' + id + ']').prop('checked')) {
 			var regexArray = /.*-(\d+)/g.exec(id);
@@ -202,7 +202,7 @@ jdnp3.binary.setBinaryOutput = function(binaryDataPoint) {
 		$('[id$=bo-' + binaryDataPoint.index + '-os]').prop('title', operationHint);
 		$('[id$=bo-' + binaryDataPoint.index + '-oc]').html(binaryDataPoint.operatedCount);
 		
-		for (var i = 1; i < 4; ++i) {
+		for (var i = 0; i < 4; ++i) {
 			var id = 'bo-' + binaryDataPoint.index + '-cl-' + i;
 			if (i == binaryDataPoint.eventClass) {
 				$('[id$=' + id + ']').prop('checked', 'true');
@@ -211,7 +211,7 @@ jdnp3.binary.setBinaryOutput = function(binaryDataPoint) {
 			}
 		}
 		
-		for (var i = 1; i < 4; ++i) {
+		for (var i = 0; i < 4; ++i) {
 			var id = 'bo-' + binaryDataPoint.index + '-cc-' + i;
 			if (i == binaryDataPoint.commandEventClass) {
 				$('[id$=' + id + ']').prop('checked', 'true');

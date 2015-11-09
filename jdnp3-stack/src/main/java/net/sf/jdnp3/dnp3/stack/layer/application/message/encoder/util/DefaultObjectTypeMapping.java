@@ -19,8 +19,8 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT64;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_EVENT_ABSOLUTE_TIME;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_STATIC_PACKED;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_COMMAND_CROB;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_STATIC_PACKED;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CROB;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,8 +30,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInput
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputCrobObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputStaticObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.CrobObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class DefaultObjectTypeMapping {
@@ -40,7 +40,7 @@ public class DefaultObjectTypeMapping {
 		this.put(BinaryInputStaticObjectInstance.class, BINARY_INPUT_STATIC_PACKED);
 		this.put(BinaryInputEventObjectInstance.class, BINARY_INPUT_EVENT_ABSOLUTE_TIME);
 		this.put(BinaryOutputStaticObjectInstance.class, BINARY_OUTPUT_STATIC_PACKED);
-		this.put(CrobObjectInstance.class, CROB);
+		this.put(BinaryOutputCrobObjectInstance.class, BINARY_OUTPUT_COMMAND_CROB);
 		this.put(AnalogInputStaticObjectInstance.class, ANALOG_INPUT_STATIC_FLOAT64);
 		this.put(AnalogInputEventObjectInstance.class, ANALOG_INPUT_EVENT_FLOAT64_ABSOLUTE_TIME);
 	}};
