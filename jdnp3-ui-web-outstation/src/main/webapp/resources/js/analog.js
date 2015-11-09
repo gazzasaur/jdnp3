@@ -30,7 +30,7 @@ jdnp3.analog.getAnalog = function(id) {
 	}
 
 	data.eventClass = 0;
-	for (var i = 1; i < 4; ++i) {
+	for (var i = 0; i < 4; ++i) {
 		var fieldId = id + '-cl-' + i;
 		if ($('[id$=' + fieldId + ']').prop('checked')) {
 			var regexArray = /.*-(\d+)/g.exec(fieldId);
@@ -73,7 +73,7 @@ jdnp3.analog.setAnalog = function(analogDataPoint) {
 		}
 	}
 	
-	for (var i = 1; i < 4; ++i) {
+	for (var i = 0; i < 4; ++i) {
 		var fieldId = id + '-cl-' + i;
 		if (i == analogDataPoint.eventClass) {
 			$('[id$=' + fieldId + ']').prop('checked', 'true');
