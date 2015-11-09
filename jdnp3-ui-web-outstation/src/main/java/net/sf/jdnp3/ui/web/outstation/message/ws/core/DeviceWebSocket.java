@@ -54,7 +54,7 @@ public class DeviceWebSocket implements DeviceManager, DatabaseListener {
 		try {
 			databaseManager = DeviceProvider.getDevice(stationCode, deviceCode).getDatabaseManager();
 		} catch (Exception e) {
-			String reason = format("Cannot from station %s and device %s.", stationCode, deviceCode);
+			String reason = format("Cannot find station %s and device %s.", stationCode, deviceCode);
 			tryCloseSession(session, reason);
 			logger.warn(reason);
 			return;

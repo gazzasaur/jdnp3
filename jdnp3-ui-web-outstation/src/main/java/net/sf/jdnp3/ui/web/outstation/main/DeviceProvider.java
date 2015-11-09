@@ -27,7 +27,11 @@ import org.slf4j.LoggerFactory;
 
 public class DeviceProvider {
 	private static Map<String, Map<String, OutstationDevice>> devices = new HashMap<>();
-	
+
+	public synchronized static boolean exists(String stationCode, String deviceCode) {
+		return devices.containsKey(stationCode) && devices.get(stationCode).containsKey(deviceCode);
+	}
+
 	public synchronized static int getStationCount() {
 		return devices.size();
 	}

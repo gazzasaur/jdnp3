@@ -38,6 +38,10 @@ import org.slf4j.LoggerFactory;
 public class UiPointDatabase {
 	private Logger logger = LoggerFactory.getLogger(UiPointDatabase.class);
 	
+	public boolean extsts(String stationCode, String deviceCode) {
+		return DeviceProvider.exists(stationCode, deviceCode);
+	}
+	
 	public List<UiPoint> getBinaryInputDataPoints(String stationCode, String deviceCode) {
 		if (FacesContext.getCurrentInstance().isPostback()) {
 			return new ArrayList<>();

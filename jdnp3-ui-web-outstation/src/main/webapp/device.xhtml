@@ -40,51 +40,60 @@
 				<f:selectItems value="#{uiStations.devices}" />
 			</p:selectOneMenu>
 		</h:form>
-            	
-		<h:form>
+
+		<c:if test="#{uiPointDatabase.extsts(param['stationCode'], param['deviceCode'])}">
+			<h:form>
+				<p:outputPanel id="page">
+					<div style="text-align: center; display: block;">
+						<p:panel header="Internal Indicators">
+							<p:panelGrid style="margin: auto; text-align: right;" columns="2">
+								<jdnp3:internalIndicators id="iin" index="0" />
+							</p:panelGrid>
+						</p:panel>
+					</div>
+					<c:if test="#{uiPointDatabase.getBinaryInputDataPoints(param['stationCode'], param['deviceCode']).size() > 0}">
+						<div style="text-align: center; display: inline-block;">
+							<p:panel header="Binary Input">
+								<p:panelGrid style="margin: auto; text-align: right;" columns="2">
+									<c:forEach var="point" items="#{uiPointDatabase.getBinaryInputDataPoints(param['stationCode'], param['deviceCode'])}">
+										<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:binaryInput point="#{point}" />
+									</c:forEach>
+								</p:panelGrid>
+							</p:panel>
+						</div>
+					</c:if>
+					<c:if test="#{uiPointDatabase.getBinaryOutputDataPoints(param['stationCode'], param['deviceCode']).size() > 0}">
+						<div style="text-align: center; display: inline-block;">
+							<p:panel header="Binary Output">
+								<p:panelGrid style="margin: auto; text-align: right;" columns="2">
+									<c:forEach var="point" items="#{uiPointDatabase.getBinaryOutputDataPoints(param['stationCode'], param['deviceCode'])}">
+										<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:binaryOutput point="#{point}" />
+									</c:forEach>
+								</p:panelGrid>
+							</p:panel>
+						</div>
+					</c:if>
+					<c:if test="#{uiPointDatabase.getAnalogInputDataPoints(param['stationCode'], param['deviceCode']).size() > 0}">
+						<div style="text-align: center; display: inline-block;">
+							<p:panel header="Analog Input">
+								<p:panelGrid style="margin: auto; text-align: right;" columns="2">
+									<c:forEach var="point" items="#{uiPointDatabase.getAnalogInputDataPoints(param['stationCode'], param['deviceCode'])}">
+										<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:analogInput point="#{point}" />
+									</c:forEach>
+								</p:panelGrid>
+							</p:panel>
+						</div>
+					</c:if>
+				</p:outputPanel>
+			</h:form>
+		</c:if>
+		<c:if test="#{not uiPointDatabase.extsts(param['stationCode'], param['deviceCode'])}">
 			<p:outputPanel id="page">
 				<div style="text-align: center; display: block;">
-					<p:panel header="Internal Indicators">
-						<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-							<jdnp3:internalIndicators id="iin" index="0" />
-						</p:panelGrid>
-					</p:panel>
+					<h:outputText style="font-size: 24px" value="Device '${param['stationCode']}:${param['deviceCode']}' does not exist." />
 				</div>
-				<c:if test="#{uiPointDatabase.getBinaryInputDataPoints(param['stationCode'], param['deviceCode']).size() > 0}">
-					<div style="text-align: center; display: inline-block;">
-						<p:panel header="Binary Input">
-							<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-								<c:forEach var="point" items="#{uiPointDatabase.getBinaryInputDataPoints(param['stationCode'], param['deviceCode'])}">
-									<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:binaryInput point="#{point}" />
-								</c:forEach>
-							</p:panelGrid>
-						</p:panel>
-					</div>
-				</c:if>
-				<c:if test="#{uiPointDatabase.getBinaryOutputDataPoints(param['stationCode'], param['deviceCode']).size() > 0}">
-					<div style="text-align: center; display: inline-block;">
-						<p:panel header="Binary Output">
-							<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-								<c:forEach var="point" items="#{uiPointDatabase.getBinaryOutputDataPoints(param['stationCode'], param['deviceCode'])}">
-									<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:binaryOutput point="#{point}" />
-								</c:forEach>
-							</p:panelGrid>
-						</p:panel>
-					</div>
-				</c:if>
-				<c:if test="#{uiPointDatabase.getAnalogInputDataPoints(param['stationCode'], param['deviceCode']).size() > 0}">
-					<div style="text-align: center; display: inline-block;">
-						<p:panel header="Analog Input">
-							<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-								<c:forEach var="point" items="#{uiPointDatabase.getAnalogInputDataPoints(param['stationCode'], param['deviceCode'])}">
-									<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:analogInput point="#{point}" />
-								</c:forEach>
-							</p:panelGrid>
-						</p:panel>
-					</div>
-				</c:if>
 			</p:outputPanel>
-		</h:form>
+		</c:if>
 	</f:view>
 </h:body>
 </html>
