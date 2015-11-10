@@ -38,13 +38,8 @@ public class BinaryOutputStaticHandler implements BinaryOutputStaticReadRequestH
 		List<BinaryOutputDataPoint> dataPoints = databaseManager.getBinaryOutputDataPoints();
 
 		for (long i = startIndex; i <= stopIndex; ++i) {
-			BinaryOutputStaticObjectInstance staticObjectInstance = new BinaryOutputStaticObjectInstance();
-			try {
-				BeanUtils.copyProperties(staticObjectInstance, dataPoints.get((int) i));
-				points.add(staticObjectInstance);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			BinaryOutputDataPoint dataPoint = dataPoints.get((int) i);
+			copyDataPoint(points, dataPoint);
 		}
 		return points;
 	}
@@ -54,13 +49,7 @@ public class BinaryOutputStaticHandler implements BinaryOutputStaticReadRequestH
 		List<BinaryOutputDataPoint> dataPoints = databaseManager.getBinaryOutputDataPoints();
 
 		for (BinaryOutputDataPoint dataPoint : dataPoints) {
-			BinaryOutputStaticObjectInstance staticObjectInstance = new BinaryOutputStaticObjectInstance();
-			try {
-				BeanUtils.copyProperties(staticObjectInstance, dataPoint);
-				points.add(staticObjectInstance);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			copyDataPoint(points, dataPoint);
 		}
 		return points;
 	}
@@ -70,13 +59,8 @@ public class BinaryOutputStaticHandler implements BinaryOutputStaticReadRequestH
 		List<BinaryOutputDataPoint> dataPoints = databaseManager.getBinaryOutputDataPoints();
 
 		if (index < dataPoints.size()) {
-			BinaryOutputStaticObjectInstance staticObjectInstance = new BinaryOutputStaticObjectInstance();
-			try {
-				BeanUtils.copyProperties(staticObjectInstance, dataPoints.get((int) index));
-				points.add(staticObjectInstance);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			BinaryOutputDataPoint dataPoint = dataPoints.get((int) index);
+			copyDataPoint(points, dataPoint);
 		}
 		return points;
 	}
@@ -112,5 +96,16 @@ public class BinaryOutputStaticHandler implements BinaryOutputStaticReadRequestH
 
 	public Class<BinaryOutputStaticObjectInstance> getObjectInstanceClass() {
 		return BinaryOutputStaticObjectInstance.class;
+	}
+
+	private void copyDataPoint(List<BinaryOutputStaticObjectInstance> points, BinaryOutputDataPoint dataPoint) {
+		BinaryOutputStaticObjectInstance staticObjectInstance = new BinaryOutputStaticObjectInstance();
+		try {
+			BeanUtils.copyProperties(staticObjectInstance, dataPoint);
+			staticObjectInstance.setRequestedType(dataPoint.getStaticType());
+			points.add(staticObjectInstance);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

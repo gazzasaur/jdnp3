@@ -37,6 +37,11 @@ public class ObjectTypeConstants {
 	public static ObjectType BINARY_OUTPUT_STATIC_PACKED = new ObjectType(10, 1);
 	public static ObjectType BINARY_OUTPUT_STATIC_FLAGS = new ObjectType(10, 2);
 
+	public static int BINARY_OUTPUT_EVENT_GROUP = 11;
+	public static ObjectType BINARY_OUTPUT_EVENT_ANY = new ObjectType(11, 0);
+	public static ObjectType BINARY_OUTPUT_EVENT_WITHOUT_TIME = new ObjectType(11, 1);
+	public static ObjectType BINARY_OUTPUT_EVENT_ABSOLUTE_TIME = new ObjectType(11, 2);
+
 	public static ObjectType ANALOG_INPUT_STATIC_ANY = new ObjectType(30, 0);
 	public static ObjectType ANALOG_INPUT_STATIC_INT32 = new ObjectType(30, 1);
 	public static ObjectType ANALOG_INPUT_STATIC_INT16 = new ObjectType(30, 2);
@@ -55,10 +60,6 @@ public class ObjectTypeConstants {
 	public static ObjectType ANALOG_INPUT_EVENT_FLOAT32_ABSOLUTE_TIME = new ObjectType(32, 7);
 	public static ObjectType ANALOG_INPUT_EVENT_FLOAT64_ABSOLUTE_TIME = new ObjectType(32, 8);
 	
-	public static ObjectType BINARY_OUTPUT_EVENT_ANY = new ObjectType(11, 0);
-	public static ObjectType BINARY_OUTPUT_EVENT_WITHOUT_TIME = new ObjectType(11, 1);
-	public static ObjectType BINARY_OUTPUT_EVENT_ABSOLUTE_TIME = new ObjectType(11, 2);
-
 	public static ObjectType BINARY_OUTPUT_COMMAND_CROB = new ObjectType(12, 1);
 
 	public static ObjectType BINARY_OUTPUT_COMMAND_EVENT_ANY = new ObjectType(13, 0);

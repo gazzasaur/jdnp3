@@ -24,11 +24,15 @@ import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class AnalogInputStaticReader implements AnalogInputStaticReadRequestHandler {
+public class AnalogInputStaticHandler implements AnalogInputStaticReadRequestHandler {
+	private Logger logger = LoggerFactory.getLogger(AnalogInputStaticHandler.class);
+	
 	private DatabaseManager databaseManager;
 
-	public AnalogInputStaticReader(DatabaseManager databaseManager) {
+	public AnalogInputStaticHandler(DatabaseManager databaseManager) {
 		this.databaseManager = databaseManager;
 	}
 	
@@ -37,13 +41,8 @@ public class AnalogInputStaticReader implements AnalogInputStaticReadRequestHand
 		List<AnalogInputDataPoint> dataPoints = databaseManager.getAnalogInputDataPoints();
 
 		for (long i = startIndex; i <= stopIndex; ++i) {
-			AnalogInputStaticObjectInstance analogInputStaticObjectInstance = new AnalogInputStaticObjectInstance();
-			try {
-				BeanUtils.copyProperties(analogInputStaticObjectInstance, dataPoints.get((int) i));
-				points.add(analogInputStaticObjectInstance);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			AnalogInputDataPoint dataPoint = dataPoints.get((int) i);
+			copyDataPoint(points, dataPoint);
 		}
 		return points;
 	}
@@ -53,13 +52,7 @@ public class AnalogInputStaticReader implements AnalogInputStaticReadRequestHand
 		List<AnalogInputDataPoint> dataPoints = databaseManager.getAnalogInputDataPoints();
 
 		for (AnalogInputDataPoint analogDataPoint : dataPoints) {
-			AnalogInputStaticObjectInstance analogInputStaticObjectInstance = new AnalogInputStaticObjectInstance();
-			try {
-				BeanUtils.copyProperties(analogInputStaticObjectInstance, analogDataPoint);
-				points.add(analogInputStaticObjectInstance);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			copyDataPoint(points, analogDataPoint);
 		}
 		return points;
 	}
@@ -69,18 +62,24 @@ public class AnalogInputStaticReader implements AnalogInputStaticReadRequestHand
 		List<AnalogInputDataPoint> dataPoints = databaseManager.getAnalogInputDataPoints();
 
 		if (index < dataPoints.size()) {
-			AnalogInputStaticObjectInstance analogInputStaticObjectInstance = new AnalogInputStaticObjectInstance();
-			try {
-				BeanUtils.copyProperties(analogInputStaticObjectInstance, dataPoints.get((int) index));
-				points.add(analogInputStaticObjectInstance);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			AnalogInputDataPoint dataPoint = dataPoints.get((int) index);
+			copyDataPoint(points, dataPoint);
 		}
 		return points;
 	}
 
 	public Class<AnalogInputStaticObjectInstance> getObjectInstanceClass() {
 		return AnalogInputStaticObjectInstance.class;
+	}
+
+	private void copyDataPoint(List<AnalogInputStaticObjectInstance> points, AnalogInputDataPoint dataPoint) {
+		AnalogInputStaticObjectInstance objectInstance = new AnalogInputStaticObjectInstance();
+		try {
+			BeanUtils.copyProperties(objectInstance, dataPoint);
+			objectInstance.setRequestedType(dataPoint.getStaticType());
+			points.add(objectInstance);
+		} catch (Exception e) {
+			logger.error("Cannot copy data point.", e);
+		}
 	}
 }

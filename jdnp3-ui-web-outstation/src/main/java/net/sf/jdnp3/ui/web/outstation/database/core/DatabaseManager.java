@@ -206,6 +206,13 @@ public class DatabaseManager {
 			eventListener.eventReceived(binaryDataPoint);
 		}
 	}
+	
+	public void triggerBinaryOutputEvent(long index) {
+		BinaryOutputDataPoint binaryDataPoint = database.getBinaryOutputDataPoints().get((int) index);
+		for (EventListener eventListener : eventListeners) {
+			eventListener.eventReceived(binaryDataPoint);
+		}
+	}
 
 	public void clear() {
 		synchronized (database) {

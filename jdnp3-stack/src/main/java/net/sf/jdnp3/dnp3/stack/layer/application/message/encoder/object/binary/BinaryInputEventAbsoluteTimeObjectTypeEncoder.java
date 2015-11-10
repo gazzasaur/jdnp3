@@ -18,9 +18,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary;
 import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_EVENT_ABSOLUTE_TIME;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
-import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.bitSetToByte;
 
-import java.util.BitSet;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
@@ -41,16 +39,7 @@ public class BinaryInputEventAbsoluteTimeObjectTypeEncoder implements ObjectType
 		}
 		
 		BinaryInputEventObjectInstance specificInstance = (BinaryInputEventObjectInstance) objectInstance;
-		BitSet bitSet = new BitSet(8);
-		bitSet.set(7, specificInstance.isActive());
-		bitSet.set(5, specificInstance.isChatterFilter());
-		bitSet.set(4, specificInstance.isLocalForced());
-		bitSet.set(3, specificInstance.isRemoteForced());
-		bitSet.set(2, specificInstance.isCommunicationsLost());
-		bitSet.set(1, specificInstance.isRestart());
-		bitSet.set(0, specificInstance.isOnline());
-		
-		data.add(bitSetToByte(bitSet));
+		data.add(BinaryFlagsEncoder.encode(specificInstance));
 		addInteger(specificInstance.getTimestamp(), 6, data);
 	}
 }

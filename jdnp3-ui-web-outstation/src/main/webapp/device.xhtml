@@ -24,7 +24,6 @@
 	</f:facet>
 
 	<f:view>
-        
 		<h:form>
 			<p:poll listener="#{jsfKeepAlive.keepUserSessionAlive()}" interval="#{(session.maxInactiveInterval - 10)/3}" />
 			
@@ -87,6 +86,7 @@
 				</p:outputPanel>
 			</h:form>
 		</c:if>
+
 		<c:if test="#{not uiPointDatabase.extsts(param['stationCode'], param['deviceCode'])}">
 			<p:outputPanel id="page">
 				<div style="text-align: center; display: block;">

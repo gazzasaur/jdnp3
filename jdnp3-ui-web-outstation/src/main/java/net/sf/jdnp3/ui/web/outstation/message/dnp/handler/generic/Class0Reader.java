@@ -21,17 +21,17 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.service.outstation.handler.generic.Class0ReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogInputStaticReader;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogInputStaticHandler;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryInputStaticHandler;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryOutputStaticHandler;
 
 public class Class0Reader implements Class0ReadRequestHandler {
-	private AnalogInputStaticReader analogInputStaticReader;
+	private AnalogInputStaticHandler analogInputStaticReader;
 	private BinaryInputStaticHandler binaryInputStaticReader;
 	private BinaryOutputStaticHandler binaryOutputStaticReader;
 	
 	public Class0Reader(DatabaseManager databaseManager) {
-		analogInputStaticReader = new AnalogInputStaticReader(databaseManager);
+		analogInputStaticReader = new AnalogInputStaticHandler(databaseManager);
 		binaryInputStaticReader = new BinaryInputStaticHandler(databaseManager);
 		binaryOutputStaticReader = new BinaryOutputStaticHandler(databaseManager);
 	}

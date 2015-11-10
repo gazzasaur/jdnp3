@@ -34,9 +34,11 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.A
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputStaticInteger32ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputEventAbsoluteTimeObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputEventRelativeTimeObjectTypeEncoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputEventWithoutTimeTimeObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputEventWithoutTimeObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputStaticFlagsObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputStaticPackedObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryOutputEventAbsoluteTimeObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryOutputEventWithoutTimeObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryOutputStaticFlagsObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryOutputStaticPackedObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.CrobObjectTypeEncoder;
@@ -51,12 +53,15 @@ public class ObjectTypeEncoderConstants {
 		this.add(new BinaryInputStaticPackedObjectTypeEncoder());
 		this.add(new BinaryInputStaticFlagsObjectTypeEncoder());
 		
-		this.add(new BinaryInputEventWithoutTimeTimeObjectTypeEncoder());
+		this.add(new BinaryInputEventWithoutTimeObjectTypeEncoder());
 		this.add(new BinaryInputEventAbsoluteTimeObjectTypeEncoder());
 		this.add(new BinaryInputEventRelativeTimeObjectTypeEncoder());
 		
 		this.add(new BinaryOutputStaticPackedObjectTypeEncoder());
 		this.add(new BinaryOutputStaticFlagsObjectTypeEncoder());
+		
+		this.add(new BinaryOutputEventWithoutTimeObjectTypeEncoder());
+		this.add(new BinaryOutputEventAbsoluteTimeObjectTypeEncoder());
 		
 		this.add(new CrobObjectTypeEncoder());
 		

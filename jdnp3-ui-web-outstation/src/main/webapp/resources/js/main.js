@@ -18,6 +18,7 @@ ATTRIBUTE_CHANGE_HANDLER_REGISTRY.ai = jdnp3.analog.getAnalog;
 
 var EVENT_MESSAGE_REGISTRY = {};
 EVENT_MESSAGE_REGISTRY.bi = 'binaryInputEvent';
+EVENT_MESSAGE_REGISTRY.bo = 'binaryOutputEvent';
 EVENT_MESSAGE_REGISTRY.ai = 'analogInputEvent';
 
 $(document).ready(function() {

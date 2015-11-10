@@ -21,6 +21,7 @@ import java.util.BitSet;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputStaticObjectInstance;
 
 public class BinaryFlagsEncoder {
@@ -51,6 +52,18 @@ public class BinaryFlagsEncoder {
 	}
 	
 	public static byte encode(BinaryOutputStaticObjectInstance objectInstance) {
+		BitSet bitSet = new BitSet(8);
+		bitSet.set(7, objectInstance.isActive());
+		bitSet.set(4, objectInstance.isLocalForced());
+		bitSet.set(3, objectInstance.isRemoteForced());
+		bitSet.set(2, objectInstance.isCommunicationsLost());
+		bitSet.set(1, objectInstance.isRestart());
+		bitSet.set(0, objectInstance.isOnline());
+		
+		return bitSetToByte(bitSet);
+	}
+
+	public static byte encode(BinaryOutputEventObjectInstance objectInstance) {
 		BitSet bitSet = new BitSet(8);
 		bitSet.set(7, objectInstance.isActive());
 		bitSet.set(4, objectInstance.isLocalForced());

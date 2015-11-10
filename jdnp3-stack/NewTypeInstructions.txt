@@ -1,5 +1,5 @@
 1. Add Object Type to ObjectTypeConstants
-2. Create the Object Model
+2. Create the Object Model (net.sf.jdnp3.stack.layer.application.model.object)
 3. Set the Default ObjectType in DefaultObjectTypeMapping (Usually required, use if an object may use variation 0 or ANY)
 4. Create an ObjectInstanceTypeRationaliserHelper (Optional, only required if there are special rules about what ObjectType to use.  i.e. PACKED format requested but flags are different to ONLINE)
 5. Create the ObjectTypeEncoder (if required)
@@ -7,6 +7,7 @@
 7. Register the encoder in the ObjectTypeEncoderConstants (This needs to change to a more dynamic method.)
 8. Create a RequestHandler and RequestAdaptor (if required)
 9. Register the event as using relative time (if required).  This currently sits in the OutstationApplicationLayer but must move.
+10. Add the adaptor to the OutstationFactory.
 
 The way it is encoded as a list is determined by the type (currently hard coded in the OutstationApplicationLayer using the Interfaces, no need to alter when a new type is added).
 - CTO is encoded as a single item.

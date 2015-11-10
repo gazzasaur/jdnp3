@@ -79,6 +79,16 @@
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
 			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.binary.BinaryOutputEventMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
 				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.analog.AnalogInputMessageHandler" />
 			</list>
 		</property>
@@ -136,6 +146,17 @@
 			<list>
 				<value>binaryInputEvent</value>
 				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputEventMessage</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>binaryOutputEvent</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryOutputEventMessage</value>
 			</list>
 		</property>
 	</bean>

@@ -19,6 +19,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.O
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_EVENT_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_STATIC_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_STATIC_GROUP;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_EVENT_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_STATIC_GROUP;
 
 import java.util.ArrayList;
@@ -67,6 +68,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFr
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ByteDataObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
@@ -136,6 +138,8 @@ public class OutstationFactory {
 		adaptors.add(new EventReadRequestAdaptor<>(BINARY_INPUT_EVENT_GROUP, BinaryInputEventObjectInstance.class));
 		
 		adaptors.add(new StaticReadRequestAdaptor<>(BINARY_OUTPUT_STATIC_GROUP, BinaryOutputStaticObjectInstance.class));
+		
+		adaptors.add(new EventReadRequestAdaptor<>(BINARY_OUTPUT_EVENT_GROUP, BinaryOutputEventObjectInstance.class));
 		
 		adaptors.add(new Class0ReadRequestAdaptor());
 		adaptors.add(new Class1ReadRequestAdaptor());

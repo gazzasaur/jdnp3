@@ -16,8 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_EVENT_RELATIVE_TIME;
-import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_EVENT_WITHOUT_TIME;
 
 import java.util.List;
 
@@ -25,21 +24,20 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputEventObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
-public class BinaryInputEventRelativeTimeObjectTypeEncoder implements ObjectTypeEncoder {
+public class BinaryOutputEventWithoutTimeObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_INPUT_EVENT_RELATIVE_TIME);
+		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(BINARY_OUTPUT_EVENT_WITHOUT_TIME);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
 		if (!this.canEncode(context.getFunctionCode(), context.getObjectType())) {
-			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
+			throw new IllegalArgumentException(format("Cannot encode the given value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
-		
-		BinaryInputEventObjectInstance specificInstance = (BinaryInputEventObjectInstance) objectInstance;
+
+		BinaryOutputEventObjectInstance specificInstance = (BinaryOutputEventObjectInstance) objectInstance;
 		data.add(BinaryFlagsEncoder.encode(specificInstance));
-		addInteger(specificInstance.getTimestamp() - context.getCommonTimeOfOccurrance(), 2, data);
 	}
 }

@@ -25,8 +25,12 @@ import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BinaryInputStaticHandler implements BinaryInputStaticReadRequestHandler, BinaryInputStaticAssignClassRequestHandler {
+	private Logger logger = LoggerFactory.getLogger(BinaryInputStaticHandler.class);
+	
 	private DatabaseManager databaseManager;
 
 	public BinaryInputStaticHandler(DatabaseManager databaseManager) {
@@ -38,13 +42,8 @@ public class BinaryInputStaticHandler implements BinaryInputStaticReadRequestHan
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 
 		for (long i = startIndex; i <= stopIndex; ++i) {
-			BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
-			try {
-				BeanUtils.copyProperties(binaryInputStaticObjectInstance, binaryDataPoints.get((int) i));
-				points.add(binaryInputStaticObjectInstance);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			BinaryInputDataPoint dataPoint = binaryDataPoints.get((int) i);
+			copyDataPoint(points, dataPoint);
 		}
 		return points;
 	}
@@ -54,13 +53,7 @@ public class BinaryInputStaticHandler implements BinaryInputStaticReadRequestHan
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 
 		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
-			BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
-			try {
-				BeanUtils.copyProperties(binaryInputStaticObjectInstance, binaryDataPoint);
-				points.add(binaryInputStaticObjectInstance);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			copyDataPoint(points, binaryDataPoint);
 		}
 		return points;
 	}
@@ -70,13 +63,8 @@ public class BinaryInputStaticHandler implements BinaryInputStaticReadRequestHan
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 
 		if (index < binaryDataPoints.size()) {
-			BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
-			try {
-				BeanUtils.copyProperties(binaryInputStaticObjectInstance, binaryDataPoints.get((int) index));
-				points.add(binaryInputStaticObjectInstance);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			BinaryInputDataPoint dataPoint = binaryDataPoints.get((int) index);
+			copyDataPoint(points, dataPoint);
 		}
 		return points;
 	}
@@ -112,5 +100,17 @@ public class BinaryInputStaticHandler implements BinaryInputStaticReadRequestHan
 
 	public Class<BinaryInputStaticObjectInstance> getObjectInstanceClass() {
 		return BinaryInputStaticObjectInstance.class;
+	}
+	
+	private void copyDataPoint(List<BinaryInputStaticObjectInstance> points,
+			BinaryInputDataPoint dataPoint) {
+		BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
+		try {
+			BeanUtils.copyProperties(binaryInputStaticObjectInstance, dataPoint);
+			binaryInputStaticObjectInstance.setRequestedType(dataPoint.getStaticType());
+			points.add(binaryInputStaticObjectInstance);
+		} catch (Exception e) {
+			logger.error("Cannot copy data point.", e);
+		}
 	}
 }
