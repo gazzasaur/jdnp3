@@ -110,31 +110,14 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	}
 	
 	public void dataReceived(MessageProperties messageProperties, List<Byte> data) {
-		if (applicationTransport == null) {
-			throw new IllegalStateException("No ApplicationTransport has been defined.");
-		}
-		if (encoder == null) {
-			throw new IllegalStateException("An encoder must be specified.");
-		}
-		if (decoder == null) {
-			throw new IllegalStateException("A decoder must be specified.");
-		}
+		validateState();
 		data = new ArrayList<>(data);
 		
 		if (!messageProperties.isMaster()) {
 			return;
 		}
-		boolean broadcast = false;
 		MessageProperties returnMessageProperties = new MessageProperties();
-		returnMessageProperties.setSourceAddress(messageProperties.getDestinationAddress());
-		returnMessageProperties.setDestinationAddress(messageProperties.getSourceAddress());
-		returnMessageProperties.setTimeReceived(messageProperties.getTimeReceived());
-		returnMessageProperties.setChannelId(messageProperties.getChannelId());
-		
-		if (messageProperties.getSourceAddress() >= 65533) {
-			messageProperties.setSourceAddress(address);
-			broadcast = true;
-		}
+		boolean broadcast = calculateReturnAddress(messageProperties, returnMessageProperties);
 		
 		List<ObjectInstance> responseObjects = new ArrayList<>();
 		
@@ -272,6 +255,33 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		}
 		
 		applicationTransport.sendData(returnMessageProperties, encoder.encode(response));
+	}
+
+	private boolean calculateReturnAddress(MessageProperties messageProperties,
+			MessageProperties returnMessageProperties) {
+		boolean broadcast = false;
+		returnMessageProperties.setSourceAddress(messageProperties.getDestinationAddress());
+		returnMessageProperties.setDestinationAddress(messageProperties.getSourceAddress());
+		returnMessageProperties.setTimeReceived(messageProperties.getTimeReceived());
+		returnMessageProperties.setChannelId(messageProperties.getChannelId());
+		
+		if (messageProperties.getSourceAddress() >= 65533) {
+			messageProperties.setSourceAddress(address);
+			broadcast = true;
+		}
+		return broadcast;
+	}
+
+	private void validateState() {
+		if (applicationTransport == null) {
+			throw new IllegalStateException("No ApplicationTransport has been defined.");
+		}
+		if (encoder == null) {
+			throw new IllegalStateException("An encoder must be specified.");
+		}
+		if (decoder == null) {
+			throw new IllegalStateException("A decoder must be specified.");
+		}
 	}
 
 	private void sendData(MessageProperties messageProperties, List<Byte> data, MessageProperties returnMessageProperties, ApplicationFragmentResponse response) {
