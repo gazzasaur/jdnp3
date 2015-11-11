@@ -8,7 +8,7 @@
 		<version>0.0.2</version>
 		<relativePath>../jdnp3/pom.xml</relativePath>
 	</parent>
-	
+
 	<name>jdnp3-stack</name>
 	<artifactId>jdnp3-stack</artifactId>
 	<packaging>jar</packaging>
@@ -17,6 +17,7 @@
 	<properties>
 		<org.apache.commons.beanutils.version>1.9.2</org.apache.commons.beanutils.version>
 		<org.apache.commons.lang3.version>3.4</org.apache.commons.lang3.version>
+		<uk.com.robust-it.cloning.version>1.9.2</uk.com.robust-it.cloning.version>
 		<ch.qos.logback.version>1.1.2</ch.qos.logback.version>
 	</properties>
 
@@ -37,7 +38,13 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>uk.com.robust-it</groupId>
+			<artifactId>cloning</artifactId>
+			<version>${uk.com.robust-it.cloning.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
@@ -50,7 +57,7 @@
 			<version>${ch.qos.logback.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.sf.jdnp3</groupId>
 			<artifactId>jdnp3-test-utils</artifactId>

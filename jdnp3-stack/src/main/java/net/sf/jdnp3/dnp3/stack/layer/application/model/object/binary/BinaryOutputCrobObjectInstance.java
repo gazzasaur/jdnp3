@@ -17,9 +17,9 @@ package net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.CommandObjectInstance;
 
-public class BinaryOutputCrobObjectInstance implements ObjectInstance {
+public class BinaryOutputCrobObjectInstance implements CommandObjectInstance {
 	private long index;
 	private long count;
 	private long onTime;

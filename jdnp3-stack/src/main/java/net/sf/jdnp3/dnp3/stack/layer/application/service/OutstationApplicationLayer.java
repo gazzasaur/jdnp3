@@ -15,6 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.service;
 
+import static java.util.Collections.unmodifiableList;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.CONFIRM;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DELAY_MEASURE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DIRECT_OPERATE;
@@ -157,7 +158,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			}
 			return;
 		}
-
+		
 		if (request.getHeader().getFunctionCode() == CONFIRM) {
 			for (EventObjectInstance eventObjectInstance : pendingEvents) {
 				eventQueue.confirm(eventObjectInstance);
@@ -212,7 +213,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			for (ObjectFragment objectFragment : request.getObjectFragments()) {
 				response.addObjectFragment(objectFragment);
 			}
-			applicationTransport.sendData(returnMessageProperties, encoder.encode(response));
+			sendData(messageProperties, data, returnMessageProperties, response);
 			return;
 		}
 		
@@ -271,6 +272,10 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		}
 		
 		applicationTransport.sendData(returnMessageProperties, encoder.encode(response));
+	}
+
+	private void sendData(MessageProperties messageProperties, List<Byte> data, MessageProperties returnMessageProperties, ApplicationFragmentResponse response) {
+		applicationTransport.sendData(returnMessageProperties, unmodifiableList(encoder.encode(response)));
 	}
 
 	public void setPrimaryAddress(int address) {

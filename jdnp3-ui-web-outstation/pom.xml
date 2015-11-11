@@ -14,7 +14,6 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<uk.com.robust-it.cloning.version>1.9.2</uk.com.robust-it.cloning.version>
 		<org.apache.commons.lang3.version>3.4</org.apache.commons.lang3.version>
 		<org.apache.myfaces.core.version>2.2.8</org.apache.myfaces.core.version>
 		<org.springframework.version>4.1.7.RELEASE</org.springframework.version>
@@ -148,12 +147,6 @@
 					<groupId>commons-codec</groupId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>uk.com.robust-it</groupId>
-			<artifactId>cloning</artifactId>
-			<version>${uk.com.robust-it.cloning.version}</version>
 		</dependency>
 
 		<dependency>
