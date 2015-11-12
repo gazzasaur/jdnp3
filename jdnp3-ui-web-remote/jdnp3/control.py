@@ -38,16 +38,16 @@ class Control:
         data['extendedConfiguration']['customTypes'] = customTypes
         return self.postMessage(data)
         
-    def getOutstation(self, site, device):
+    def getOutstation(self, site, device, output=False):
         data = {'type': 'getDevice'}
-        return self.sendMessage(site, device, data)
+        return self.sendMessage(site, device, data, output=output)
 
         
-    def sendMessage(self, site, device, data):
+    def sendMessage(self, site, device, data, output=False):
         query = [('siteCode', site), ('deviceCode', device)]
-        return self.postMessage(data, query)
+        return self.postMessage(data, query, output=output)
     
-    def postMessage(self, data, query=None):
+    def postMessage(self, data, query=None, output=False):
         url = self.url
         if query:
             url += '?' + urllib.urlencode(query)
@@ -58,7 +58,10 @@ class Control:
         if (code < 200 or code >= 300):
             raise exceptions.RuntimeError('HTTP request failed.  HTTP Status Code: ' + str(code))
     
-        data = json.loads(response.read())
+        string_data = response.read()
+        if output:
+            print string_data
+        data = json.loads(string_data)
         if (not 'type' in data or data['type'] == 'failure'):
             if ('reason' in data):
                 raise exceptions.RuntimeError(data['reason'])

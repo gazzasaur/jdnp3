@@ -18,6 +18,7 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler.device;
 import java.util.ArrayList;
 
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
+import net.sf.jdnp3.ui.web.outstation.database.device.InternalIndicatorsDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
@@ -49,6 +50,9 @@ public class GetDeviceMessageHandler implements MessageHandler {
 
 		DatabaseManager databaseManager = webSocket.getDatabaseManager();
 		try {
+			InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+			specificMessage.setInternalIndicators(internalIndicatorsDataPoint);
+			
 			for (BinaryInputDataPoint point : databaseManager.getBinaryInputDataPoints()) {
 				BinaryInputMessage part = new BinaryInputMessage();
 				BeanUtils.copyProperties(part, point);
