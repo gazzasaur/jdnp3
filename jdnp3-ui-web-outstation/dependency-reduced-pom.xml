@@ -3,7 +3,7 @@
   <parent>
     <artifactId>jdnp3-project</artifactId>
     <groupId>net.sf.jdnp3</groupId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <relativePath>../jdnp3/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -50,7 +50,7 @@
         </executions>
         <configuration>
           <descriptor>src/assembly/bin.xml</descriptor>
-          <finalName>jdnp3-ui-web-outstation-archive-${project.version}</finalName>
+          <finalName>jdnp3-ui-web-outstation-${project.version}</finalName>
         </configuration>
       </plugin>
     </plugins>
@@ -84,7 +84,6 @@
   <properties>
     <org.eclipse.jetty.version>9.3.1.v20150714</org.eclipse.jetty.version>
     <commons-io.version>2.4</commons-io.version>
-    <uk.com.robust-it.cloning.version>1.9.2</uk.com.robust-it.cloning.version>
     <org.primefaces.version>5.2</org.primefaces.version>
     <commons-codec.version>1.10</commons-codec.version>
     <org.apache.commons.lang3.version>3.4</org.apache.commons.lang3.version>
