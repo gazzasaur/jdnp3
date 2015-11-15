@@ -23,12 +23,12 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
+ * Forced Variation:
+ *  - Add the ability to force a variation.
+ *  
  * Complete BinaryOutput type:
  * - Add the ability to create events.
  * - Add the ability to create control events.
- * 
- * All types:
- * - The ability to send automatic events when a user changes the value from the web page/
  * 
  * Output types:
  * - The ability to send automatic events when a master changes the value.
@@ -40,8 +40,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * - Keep a history of the 10 most recent visits (requires a dynamic list and session state).
  * - Add per outstation message log.
  * 
+ * Other Thoughts:
+ * - The ability to send automatic events when a user changes the value from the web page/
+ * 
  * Sandpit (Only by popular demand/A long way off):
  * - Ability to change scheme in Runtime.
+ * - The ability to send automatic events when a user changes the value from the web page/
  */
 public class App {
 	public static void main(String[] args) {

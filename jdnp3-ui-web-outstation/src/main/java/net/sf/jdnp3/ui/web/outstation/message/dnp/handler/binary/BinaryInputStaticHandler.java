@@ -102,8 +102,7 @@ public class BinaryInputStaticHandler implements BinaryInputStaticReadRequestHan
 		return BinaryInputStaticObjectInstance.class;
 	}
 	
-	private void copyDataPoint(List<BinaryInputStaticObjectInstance> points,
-			BinaryInputDataPoint dataPoint) {
+	private void copyDataPoint(List<BinaryInputStaticObjectInstance> points, BinaryInputDataPoint dataPoint) {
 		BinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new BinaryInputStaticObjectInstance();
 		try {
 			BeanUtils.copyProperties(binaryInputStaticObjectInstance, dataPoint);
