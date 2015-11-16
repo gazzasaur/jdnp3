@@ -15,6 +15,8 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic;
 
+import static java.lang.String.format;
+
 import net.sf.jdnp3.dnp3.service.outstation.handler.generic.InternalIndicatorWriteRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
 
@@ -27,8 +29,7 @@ public class InternalIndicatorWriter implements InternalIndicatorWriteRequestHan
 	
 	public void doWriteIndicatorBit(long index, boolean value) {
 		if (index != 7) {
-			// FIXME IMPL Move this to the adaptor and use a defined exception (parameter error).
-			throw new IllegalArgumentException("Only IIN index 7 may be written to.");
+			throw new IllegalArgumentException(format("Cannot write to IIN bit %d.  Only IIN index 7 may be written to.", index));
 		}
 		internalStatusProvider.setDeviceRestart(value);
 	}
