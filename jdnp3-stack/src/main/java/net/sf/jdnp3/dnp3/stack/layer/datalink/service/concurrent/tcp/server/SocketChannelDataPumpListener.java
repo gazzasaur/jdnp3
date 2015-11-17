@@ -26,6 +26,7 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
 import net.sf.jdnp3.dnp3.stack.message.ChannelId;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.nio.DataPumpListener;
+import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +55,8 @@ public class SocketChannelDataPumpListener implements DataPumpListener {
 	public void dataReceived(List<Byte> data) {
 		try {
 			if (dataLinkDigester.digest(data)) {
+				logger.debug(String.format("Data received on channel %s: %s", channelId, DataUtils.toString(data)));
+				
 				MessageProperties messageProperties =new MessageProperties();
 				DataLinkFrame dataLinkFrame = dataLinkDigester.getDataLinkFrame();
 				messageProperties.setChannelId(channelId);

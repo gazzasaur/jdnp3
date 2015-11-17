@@ -72,4 +72,12 @@ public class DataUtils {
 		}
 		return 0;
 	}
+	
+	public static String toString(List<Byte> data) {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (Byte dataByte : data) {
+			stringBuilder.append(String.format("%02X", dataByte));
+		}
+		return stringBuilder.toString();
+	}
 }

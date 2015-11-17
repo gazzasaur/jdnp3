@@ -23,6 +23,9 @@ import java.nio.channels.SocketChannel;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.jdnp3.dnp3.stack.layer.datalink.encoder.DataLinkFrameEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.encoder.DataLinkFrameEncoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
@@ -33,9 +36,12 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkServiceBinding;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.nio.DataPump;
+import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 // FIXME IMPL Implement start/stop/running.
 public class TcpServerDataLinkService implements DataLinkLayer {
+	private Logger logger = LoggerFactory.getLogger(TcpServerDataLinkService.class);
+	
 	private static final int MTU = 249;
 	
 	private int mtu = MTU;
@@ -96,6 +102,8 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 		dataLinkFrame.getDataLinkFrameHeader().setDirection((messageProperties.isMaster()) ? MASTER_TO_OUTSTATION : OUTSTATION_TO_MASTER);
 		dataLinkFrame.setData(data);
 		List<Byte> frameData = dataLinkFrameEncoder.encode(dataLinkFrame);
+		
+		logger.debug(String.format("Send data to %s from %s using channel %s: %s", messageProperties.getDestinationAddress(), messageProperties.getSourceAddress(), messageProperties.getChannelId(), DataUtils.toString(frameData)));
 
 		SocketChannel socketChannel = channelManager.getChannel(messageProperties.getChannelId());
 		dataPump.sendData(socketChannel, frameData);
