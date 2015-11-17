@@ -1,43 +1,59 @@
-import time
 import jdnp3.device
+import jdnp3.control
 
 HOST_URL = 'http://127.0.0.1:8080/servlet/jsonapi'
 
+control = jdnp3.control.Control(HOST_URL)
+
+customType = {
+    'expectedData': '46011B012907',
+    'responseData': '1b0129070000',
+    'functionCode': 'READ',
+}
+
+binaryInputDataPoints = [
+    'Running',
+    'Low Fuel',
+    'Non-Urgent Fail',
+    'Urgent Fail',
+]
+
+binaryOutputDataPoints = [
+    'Running',
+]
+
+analogInputDataPoints = [
+    'Speed',
+    'Volume',
+]
+
+# control.createOutstation('pumpStationFactory', 'Pump Station 1', 'Pump 1', 3, "20000")
+
 outstation = jdnp3.device.Outstation(HOST_URL, "Pump Station 1", "Pump 1")
+config = outstation.get()
 outstation.output()
+print config
 
 outstation.set_internal_indicator('device restart', True)
-outstation.set_binary_input_attribute(0, 'event type', 'variation', 0)
-time.sleep(2)
-outstation.set_binary_input_attribute(0, 'event type', 'variation', 1)
-time.sleep(2)
-outstation.set_binary_input_attribute(0, 'event type', 'variation', 2)
-time.sleep(2)
-outstation.set_binary_input_attribute(0, 'event type', 'variation', 3)
-time.sleep(2)
-outstation.set_binary_input_attribute(0, 'event type', 'variation', 0)
-outstation.set_binary_output_attribute(0, 'remote forced', True)
-time.sleep(2)
-outstation.set_analog_input_attribute(1, 'value', 'Infinity')
+outstation.set_binary_input(1, 'local forced', True)
+outstation.set_binary_input(0, 'event type', 'variation', 0)
+
+outstation.set_analog_input(0, 'value', 'Infinity');
+outstation.wait_for_analog_input(0, 'value', 'Infinity');
+outstation.set_analog_input(0, 'value', '1000.0');
+outstation.wait_for_analog_input(0, 'value', '1000.0');
+
+outstation.set_binary_input(0, 'event type', 'variation', 1)
+outstation.set_binary_input(0, 'event type', 'variation', 2)
+outstation.set_binary_input(0, 'event type', 'variation', 3)
+outstation.set_binary_input(0, 'event type', 'variation', 0)
+outstation.set_binary_output(0, 'active', True)
+outstation.wait_for_binary_input(0, 'event type', 'variation', 0);
+outstation.set_binary_output(0, 'remote forced', True)
+outstation.set_analog_input(1, 'value', 'Infinity')
 outstation.set_internal_indicator('device restart', False)
 
-# control = jdnp3.control.Control(HOST_URL)
-#
-# customType = {
-#     'expectedData': '46011B012907',
-#     'responseData': '1b0129070000',
-#     'functionCode': 'READ',
-# }
-# 
-# for stationIndex in range(10, 11):
-#     for deviceIndex in range(0, 1):
-#         control.createOutstation('pumpStationFactory', 'Pump Station ' + str(stationIndex).zfill(5), 'Pump ' + str(deviceIndex).zfill(5), stationIndex, "20000", binaryOutputPoints=['asdf', '1234'], customTypes=[customType])
-# 
-# data = {
-#     'type': 'getDevice'
-# }
-# device = control.sendMessage('Pump Station 1', 'Pump 1', data)
-# 
+
 # aic = jdnp3.control.AnalogInputController(10000, 100, 15000, 50000, 2)
 # 
 # while True:

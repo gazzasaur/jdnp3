@@ -1,6 +1,7 @@
 import json
 import time
 import random
+import decimal
 import urllib
 import urllib2
 import exceptions
@@ -61,13 +62,23 @@ class Control:
         string_data = response.read()
         if output:
             print string_data
-        data = json.loads(string_data)
+        data = json.loads(string_data, parse_float=decimal.Decimal)
         if (not 'type' in data or data['type'] == 'failure'):
             if ('reason' in data):
                 raise exceptions.RuntimeError(data['reason'])
             else:
                 raise exceptions.RuntimeError('Cannot decode data.')
         return data
+
+def wait_for(func, sleep=0.100, timeout=1.0, *args):
+    timeout = time.time() + timeout;
+    
+    while (time.time() < timeout):
+        if (func(*args)):
+            return True
+        time.sleep(sleep)
+        
+    return False
 
 class AutoControl:
     def __init__(self, control, site, device):
