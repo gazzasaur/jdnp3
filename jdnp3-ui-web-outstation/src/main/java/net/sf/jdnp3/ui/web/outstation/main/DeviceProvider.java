@@ -53,12 +53,12 @@ public class DeviceProvider {
 	}
 	
 	public synchronized static OutstationDevice registerDevice(OutstationDevice device) {
-		if (!devices.containsKey(device.getSite())) {
-			devices.put(device.getSite(), new HashMap<>());
-		}
-		if (devices.get(device.getSite()).containsKey(device.getDevice())) {
+		if (devices.containsKey(device.getSite()) && devices.get(device.getSite()).containsKey(device.getDevice())) {
 			LoggerFactory.getLogger(DeviceProvider.class).warn(format("Replacing device %s:%s.", device.getSite(), device.getDevice()));
 			unregisterDevice(device.getSite(), device.getDevice());
+		}
+		if (!devices.containsKey(device.getSite())) {
+			devices.put(device.getSite(), new HashMap<>());
 		}
 		devices.get(device.getSite()).put(device.getDevice(), device);
 		return devices.get(device.getSite()).get(device.getDevice());

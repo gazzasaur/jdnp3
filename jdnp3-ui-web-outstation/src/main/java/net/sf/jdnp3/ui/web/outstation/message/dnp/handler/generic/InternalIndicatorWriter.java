@@ -15,8 +15,6 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic;
 
-import static java.lang.String.format;
-
 import net.sf.jdnp3.dnp3.service.outstation.handler.generic.InternalIndicatorWriteRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
 
@@ -28,9 +26,52 @@ public class InternalIndicatorWriter implements InternalIndicatorWriteRequestHan
 	}
 	
 	public void doWriteIndicatorBit(long index, boolean value) {
-		if (index != 7) {
-			throw new IllegalArgumentException(format("Cannot write to IIN bit %d.  Only IIN index 7 may be written to.", index));
+		switch ((int) index) {
+		case 0:
+			internalStatusProvider.setBroadcast(value);
+			break;
+		case 1:
+			internalStatusProvider.setClass1Events(value);
+			break;
+		case 2:
+			internalStatusProvider.setClass2Events(value);
+			break;
+		case 3:
+			internalStatusProvider.setClass3Events(value);
+			break;
+		case 4:
+			internalStatusProvider.setNeedTime(value);
+			break;
+		case 5:
+			internalStatusProvider.setLocalControl(value);
+			break;
+		case 6:
+			internalStatusProvider.setDeviceTrouble(value);
+			break;
+		case 7:
+			internalStatusProvider.setDeviceRestart(value);
+			break;
+		case 8:
+			internalStatusProvider.setNoFunctionCodeSupport(value);
+			break;
+		case 9:
+			internalStatusProvider.setObjectUnknown(value);
+			break;
+		case 10:
+			internalStatusProvider.setParameterError(value);
+			break;
+		case 11:
+			internalStatusProvider.setEventBufferOverflow(value);
+			break;
+		case 12:
+			internalStatusProvider.setAlreadyExecuting(value);
+			break;
+		case 13:
+			internalStatusProvider.setConfigurationCorrupt(value);
+			break;
+
+		default:
+			break;
 		}
-		internalStatusProvider.setDeviceRestart(value);
 	}
 }
