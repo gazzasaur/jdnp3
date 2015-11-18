@@ -25,6 +25,12 @@
 			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n%ex{15}</pattern>
 		</encoder>
 	</appender>
+	
+	<!-- Debug Transport messages. -->
+	<logger name="net.sf.jdnp3.dnp3.stack.layer.transport" level="DEBUG" additivity="false">
+<!-- 		<appender-ref ref="STDOUT" /> -->
+<!-- 		<appender-ref ref="FILE" /> -->
+	</logger>
 
 	<!-- Debug DataLink messages. -->
 	<logger name="net.sf.jdnp3.dnp3.stack.layer.datalink" level="DEBUG" additivity="false">

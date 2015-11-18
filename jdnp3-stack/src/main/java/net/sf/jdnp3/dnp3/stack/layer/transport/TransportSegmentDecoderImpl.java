@@ -19,8 +19,17 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
+
 public class TransportSegmentDecoderImpl implements TransportSegmentDecoder {
+	private Logger logger = LoggerFactory.getLogger(TransportSegmentDecoderImpl.class);
+	
 	public TransportSegment decode(List<Byte> linkData) {
+		logger.debug("Transport Data Received: " + DataUtils.toString(linkData));
+		
 		List<Byte> data = new ArrayList<Byte>(linkData);
 		TransportSegment transportSegment = new TransportSegment();
 		byte headerByte = data.remove(0);
@@ -32,6 +41,7 @@ public class TransportSegmentDecoderImpl implements TransportSegmentDecoder {
 		
 		transportSegment.getData().addAll(data.subList(0, data.size()));
 		
+		logger.debug(TransportSegmentUtils.toString(transportSegment));
 		return transportSegment;
 	}
 }

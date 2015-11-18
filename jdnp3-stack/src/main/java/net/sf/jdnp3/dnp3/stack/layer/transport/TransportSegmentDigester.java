@@ -21,6 +21,7 @@ import java.util.Deque;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
+import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +55,7 @@ public class TransportSegmentDigester {
 			} else if (transportSegment.getTransportHeader().isFinalSegment()) {
 				applicationData = new ArrayList<Byte>(receiveBuffer);
 				receiveBuffer = new ArrayDeque<Byte>();
+				logger.debug("Application Data Assembled: " + DataUtils.toString(applicationData));
 				return true;
 			}
 		} else if (receiveBuffer != null) {
