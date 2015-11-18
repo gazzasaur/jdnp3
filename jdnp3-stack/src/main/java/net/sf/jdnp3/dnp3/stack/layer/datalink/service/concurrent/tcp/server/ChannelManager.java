@@ -15,21 +15,30 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server;
 
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.SocketChannelUtils.getLocalSocketAddress;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.SocketChannelUtils.getRemoteSocketAddress;
+
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.jdnp3.dnp3.stack.message.BasicChannelId;
 import net.sf.jdnp3.dnp3.stack.message.ChannelId;
 
 public class ChannelManager {
+	private Logger logger = LoggerFactory.getLogger(ChannelManager.class);
+	
 	private Map<ChannelId, SocketChannel> connectedSocketChanels = new ConcurrentHashMap<>();
 	
 	public ChannelId addChannel(SocketChannel socketChannel) {
 		ChannelId channelId = new BasicChannelId();
 		connectedSocketChanels.put(channelId, socketChannel);
+		logger.info(String.format("Assigned channel %s to socket locally bound to %s to remote destination %s.", channelId, getLocalSocketAddress(socketChannel), getRemoteSocketAddress(socketChannel)));
 		return channelId;
 	}
 
@@ -47,6 +56,11 @@ public class ChannelManager {
 
 	public void closeChannel(ChannelId channelId) {
 		SocketChannel socketChannel = connectedSocketChanels.get(channelId);
+		if (socketChannel == null) {
+			logger.warn("Channel does not exist: " + channelId);
+			return;
+		}
+		logger.info(String.format("Cleaning up socket with a channel id %s.", channelId));
 		TcpServerDataLinkServiceConnector.closeChannel(socketChannel);
 		connectedSocketChanels.remove(channelId);
 	}

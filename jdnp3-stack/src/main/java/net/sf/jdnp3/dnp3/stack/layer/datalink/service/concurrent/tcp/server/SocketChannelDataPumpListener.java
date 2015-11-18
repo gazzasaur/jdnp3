@@ -66,7 +66,7 @@ public class SocketChannelDataPumpListener implements DataPumpListener {
 				messageProperties.setDestinationAddress(dataLinkFrame.getDataLinkFrameHeader().getDestination());
 				messageProperties.setMaster(dataLinkFrame.getDataLinkFrameHeader().getDirection().equals(MASTER_TO_OUTSTATION));
 				dataLinkListener.receiveData(messageProperties, dataLinkFrame.getData());
-				logger.debug("Frame Received\n" + DataLinkFrameUtils.toString(dataLinkFrame));
+				logger.debug("Frame Received\n" + DataLinkFrameUtils.toString(channelId, dataLinkFrame));
 			}
 		} catch (Exception e) {
 			logger.error("Failed to process message.", e);

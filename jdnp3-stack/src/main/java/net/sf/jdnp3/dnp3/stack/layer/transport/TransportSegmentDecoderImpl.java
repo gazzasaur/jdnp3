@@ -40,8 +40,6 @@ public class TransportSegmentDecoderImpl implements TransportSegmentDecoder {
 		transportSegment.getTransportHeader().setSequenceNumber(headerByte & 0x3F);
 		
 		transportSegment.getData().addAll(data.subList(0, data.size()));
-		
-		logger.debug(TransportSegmentUtils.toString(transportSegment));
 		return transportSegment;
 	}
 }

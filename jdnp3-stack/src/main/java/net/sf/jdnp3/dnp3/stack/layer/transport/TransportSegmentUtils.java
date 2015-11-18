@@ -17,12 +17,14 @@ package net.sf.jdnp3.dnp3.stack.layer.transport;
 
 import static java.lang.String.format;
 
+import net.sf.jdnp3.dnp3.stack.message.ChannelId;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class TransportSegmentUtils {
-	public static String toString(TransportSegment transportSegment) {
+	public static String toString(ChannelId channelId, TransportSegment transportSegment) {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("Transport Segment\n");
+		stringBuilder.append(format("Channel Id      : %s\n", channelId));
 		stringBuilder.append(format("Sequence Number : %s\n", transportSegment.getTransportHeader().getSequenceNumber()));
 		stringBuilder.append(format("First Segment   : %s\n", transportSegment.getTransportHeader().isFirstSegment()));
 		stringBuilder.append(format("Final Segment   : %s\n", transportSegment.getTransportHeader().isFinalSegment()));

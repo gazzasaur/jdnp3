@@ -27,16 +27,16 @@
 	</appender>
 	
 	<!-- Debug Transport messages. -->
-	<logger name="net.sf.jdnp3.dnp3.stack.layer.transport" level="DEBUG" additivity="false">
+<!-- 	<logger name="net.sf.jdnp3.dnp3.stack.layer.transport" level="DEBUG" additivity="false"> -->
 <!-- 		<appender-ref ref="STDOUT" /> -->
 <!-- 		<appender-ref ref="FILE" /> -->
-	</logger>
+<!-- 	</logger> -->
 
 	<!-- Debug DataLink messages. -->
-	<logger name="net.sf.jdnp3.dnp3.stack.layer.datalink" level="DEBUG" additivity="false">
+<!-- 	<logger name="net.sf.jdnp3.dnp3.stack.layer.datalink" level="DEBUG" additivity="false"> -->
 <!-- 		<appender-ref ref="STDOUT" /> -->
 <!-- 		<appender-ref ref="FILE" /> -->
-	</logger>
+<!-- 	</logger> -->
 	
 	<logger name="net.sf" level="INFO" additivity="false">
 		<appender-ref ref="STDOUT" />

@@ -15,17 +15,20 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server;
 
+import static java.lang.String.format;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.SocketChannelUtils.getRemoteSocketAddress;
+
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
 import net.sf.jdnp3.dnp3.stack.message.ChannelId;
 import net.sf.jdnp3.dnp3.stack.nio.DataPump;
 import net.sf.jdnp3.dnp3.stack.nio.DataPumpListener;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ServerSocketChannelDataPumpListener implements DataPumpListener {
 	private Logger logger = LoggerFactory.getLogger(ServerSocketChannelDataPumpListener.class);
@@ -49,6 +52,7 @@ public class ServerSocketChannelDataPumpListener implements DataPumpListener {
 			socketChannel.configureBlocking(false);
 			
 			ChannelId channelId = channelManager.addChannel(socketChannel);
+			logger.info(format("Connection received from %s and has been assigned a channel id of %s.", getRemoteSocketAddress(socketChannel), channelId));
 			dataPump.registerChannel(socketChannel, new SocketChannelDataPumpListener(channelId, channelManager, dataLinkListener));
 		} catch (Exception e) {
 			logger.error("Failed to accept client socket.", e);

@@ -17,11 +17,16 @@ package net.sf.jdnp3.dnp3.stack.layer.transport;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationLayer;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public class SimpleSynchronisedTransportBinding implements TransportBinding {
+	private Logger logger = LoggerFactory.getLogger(SimpleSynchronisedTransportBinding.class);
+	
 	private int address;
 	private DataLinkLayer dataLinkLayer;
 	private ApplicationLayer applicationLayer;
@@ -36,6 +41,7 @@ public class SimpleSynchronisedTransportBinding implements TransportBinding {
 			return;
 		}
 		TransportSegment transportSegment = transportSegmentDecoder.decode(data);
+		logger.debug(TransportSegmentUtils.toString(messageProperties.getChannelId(), transportSegment));
 		if (transportSegmentDigester.digestData(messageProperties, transportSegment, data)) {
 			applicationLayer.dataReceived(messageProperties, transportSegmentDigester.pollData());
 		}

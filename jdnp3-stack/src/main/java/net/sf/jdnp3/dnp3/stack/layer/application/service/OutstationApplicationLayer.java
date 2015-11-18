@@ -137,7 +137,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 				applicationResponseHeader.getApplicationControl().setFinalFragmentOfMessage(true);
 				applicationResponseHeader.getApplicationControl().setUnsolicitedResponse(false);
 				applicationResponseHeader.getApplicationControl().setSequenceNumber(request.getHeader().getApplicationControl().getSequenceNumber());
-				applicationTransport.sendData(returnMessageProperties, encoder.encode(response));
+				trySendData(returnMessageProperties, response);
 			}
 			return;
 		}
@@ -254,11 +254,18 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			response.addObjectFragment(result.getObjectFragment());
 		}
 		
-		applicationTransport.sendData(returnMessageProperties, encoder.encode(response));
+		trySendData(returnMessageProperties, response);
 	}
 
-	private boolean calculateReturnAddress(MessageProperties messageProperties,
-			MessageProperties returnMessageProperties) {
+	private void trySendData(MessageProperties returnMessageProperties, ApplicationFragmentResponse response) {
+		try {
+			applicationTransport.sendData(returnMessageProperties, encoder.encode(response));
+		} catch (Exception e) {
+			logger.error(String.format("Failed to send message to DNP3 address %s on channel %s.", returnMessageProperties.getDestinationAddress(), returnMessageProperties.getChannelId()), e);
+		}
+	}
+
+	private boolean calculateReturnAddress(MessageProperties messageProperties, MessageProperties returnMessageProperties) {
 		boolean broadcast = false;
 		returnMessageProperties.setSourceAddress(messageProperties.getDestinationAddress());
 		returnMessageProperties.setDestinationAddress(messageProperties.getSourceAddress());

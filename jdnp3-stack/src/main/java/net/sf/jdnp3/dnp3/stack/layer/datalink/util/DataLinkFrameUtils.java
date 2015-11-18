@@ -29,6 +29,7 @@ import java.util.BitSet;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
+import net.sf.jdnp3.dnp3.stack.message.ChannelId;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class DataLinkFrameUtils {
@@ -45,8 +46,9 @@ public class DataLinkFrameUtils {
 		return controlFieldValue;
 	}
 	
-	public static String toString(DataLinkFrame dataLinkFrame) {
+	public static String toString(ChannelId channelId, DataLinkFrame dataLinkFrame) {
 		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(format("Channel Id    : %s\n", channelId));
 		stringBuilder.append(format("Function Code : %s\n", dataLinkFrame.getDataLinkFrameHeader().getFunctionCode()));
 		stringBuilder.append(format("Length        : %s\n", dataLinkFrame.getDataLinkFrameHeader().getLength()));
 		stringBuilder.append(format("Source        : %s\n", dataLinkFrame.getDataLinkFrameHeader().getSource()));
