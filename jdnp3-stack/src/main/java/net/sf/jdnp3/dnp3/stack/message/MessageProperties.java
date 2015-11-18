@@ -62,6 +62,4 @@ public class MessageProperties {
 	public void setMaster(boolean master) {
 		this.master = master;
 	}
-	
-	
 }

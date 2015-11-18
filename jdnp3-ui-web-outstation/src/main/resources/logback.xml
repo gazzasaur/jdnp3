@@ -26,6 +26,12 @@
 		</encoder>
 	</appender>
 
+	<!-- Debug DataLink messages. -->
+	<logger name="net.sf.jdnp3.dnp3.stack.layer.datalink" level="DEBUG" additivity="false">
+<!-- 		<appender-ref ref="STDOUT" /> -->
+<!-- 		<appender-ref ref="FILE" /> -->
+	</logger>
+	
 	<logger name="net.sf" level="INFO" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
