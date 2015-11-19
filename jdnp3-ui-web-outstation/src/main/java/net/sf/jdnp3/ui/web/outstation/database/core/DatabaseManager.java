@@ -18,17 +18,18 @@ package net.sf.jdnp3.ui.web.outstation.database.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
-import net.sf.jdnp3.ui.web.outstation.database.device.InternalIndicatorsDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.rits.cloning.Cloner;
+
+import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
+import net.sf.jdnp3.ui.web.outstation.database.device.InternalIndicatorsDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 
 public class DatabaseManager {
 	private Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
@@ -60,6 +61,31 @@ public class DatabaseManager {
 		synchronized (database) {
 			for (String name : names) {
 				database.addAnalogInputDataPoint(name);
+			}
+		}
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.modelChanged();
+		}
+	}
+
+	public void setAnalogOutputDatabaseSize(int size) {
+		synchronized (database) {
+			while (database.getAnalogOutputDataPoints().size() > size) {
+				database.removeAnalogOutputDataPoint();
+			}
+			while (database.getAnalogOutputDataPoints().size() < size) {
+				database.addAnalogOutputDataPoint();
+			}
+		}
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.modelChanged();
+		}
+	}
+
+	public void addAnalogOutputDataPoints(String... names) {
+		synchronized (database) {
+			for (String name : names) {
+				database.addAnalogOutputDataPoint(name);
 			}
 		}
 		for (DatabaseListener databaseListener : databaseListeners) {
@@ -129,6 +155,12 @@ public class DatabaseManager {
 		}
 	}
 	
+	public List<AnalogOutputDataPoint> getAnalogOutputDataPoints() {
+		synchronized (database) {
+			return Cloner.standard().deepClone(database.getAnalogOutputDataPoints());
+		}
+	}
+	
 	public List<BinaryInputDataPoint> getBinaryInputDataPoints() {
 		synchronized (database) {
 			return Cloner.standard().deepClone(database.getBinaryInputDataPoints());
@@ -159,6 +191,19 @@ public class DatabaseManager {
 			database.setAnalogInputDataPoint(Cloner.standard().deepClone(analogDataPoint));
 		}
 		if (analogDataPoint.getIndex() < database.getAnalogInputDataPoints().size()) {
+			for (DatabaseListener databaseListener : databaseListeners) {
+				databaseListener.valueChanged(analogDataPoint);
+			}
+		} else {
+			logger.warn("Cannot write analog data point of index: " + analogDataPoint.getIndex());
+		}
+	}
+	
+	public void setAnalogOutputDataPoint(AnalogOutputDataPoint analogDataPoint) {
+		synchronized (database) {
+			database.setAnalogOutputDataPoint(Cloner.standard().deepClone(analogDataPoint));
+		}
+		if (analogDataPoint.getIndex() < database.getAnalogOutputDataPoints().size()) {
 			for (DatabaseListener databaseListener : databaseListeners) {
 				databaseListener.valueChanged(analogDataPoint);
 			}
@@ -198,6 +243,10 @@ public class DatabaseManager {
 		for (EventListener eventListener : eventListeners) {
 			eventListener.eventReceived(analogDataPoint);
 		}
+	}
+
+	public void triggerAnalogOutputEvent(long index) {
+		logger.warn("Unimplemented");
 	}
 
 	public void triggerBinaryInputEvent(long index) {

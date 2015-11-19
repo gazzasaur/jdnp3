@@ -39,7 +39,7 @@ public class AnalogInputStaticFloat32ObjectTypeEncoder implements ObjectTypeEnco
 		}
 
 		AnalogInputStaticObjectInstance specificInstance = (AnalogInputStaticObjectInstance) objectInstance;
-		data.add(AnalogInputFlagsEncoder.encode(specificInstance));
+		data.add(AnalogFlagsEncoder.encode(specificInstance));
 		addFloat((float) specificInstance.getValue(), data);
 	}
 }

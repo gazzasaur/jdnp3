@@ -17,6 +17,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_EVENT_FLOAT64_ABSOLUTE_TIME;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT64;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_STATIC_FLOAT64;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_EVENT_ABSOLUTE_TIME;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_STATIC_PACKED;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_COMMAND_CROB;
@@ -29,6 +30,7 @@ import java.util.Map;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogOutputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputCrobObjectInstance;
@@ -46,6 +48,7 @@ public class DefaultObjectTypeMapping {
 		this.put(BinaryOutputCrobObjectInstance.class, BINARY_OUTPUT_COMMAND_CROB);
 		this.put(AnalogInputStaticObjectInstance.class, ANALOG_INPUT_STATIC_FLOAT64);
 		this.put(AnalogInputEventObjectInstance.class, ANALOG_INPUT_EVENT_FLOAT64_ABSOLUTE_TIME);
+		this.put(AnalogOutputStaticObjectInstance.class, ANALOG_OUTPUT_STATIC_FLOAT64);
 	}};
 	
 	public void performMapping(ObjectInstance objectInstance) {

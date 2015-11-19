@@ -22,6 +22,7 @@ import java.util.List;
 
 import net.sf.jdnp3.ui.web.outstation.database.device.InternalIndicatorsDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 
@@ -29,6 +30,7 @@ public class Database {
 	private InternalIndicatorsDataPoint indicatorsDataPoint = new InternalIndicatorsDataPoint();
 	private List<AnalogInputDataPoint> analogInputDataPoints = new ArrayList<>();
 	private List<BinaryInputDataPoint> binaryInputDataPoints = new ArrayList<>();
+	private List<AnalogOutputDataPoint> analogOutputDataPoints = new ArrayList<>();
 	private List<BinaryOutputDataPoint> binaryOutputDataPoints = new ArrayList<>();
 
 	public InternalIndicatorsDataPoint getIndicatorsDataPoint() {
@@ -41,6 +43,10 @@ public class Database {
 
 	public List<BinaryInputDataPoint> getBinaryInputDataPoints() {
 		return unmodifiableList(binaryInputDataPoints);
+	}
+
+	public List<AnalogOutputDataPoint> getAnalogOutputDataPoints() {
+		return unmodifiableList(analogOutputDataPoints);
 	}
 
 	public List<BinaryOutputDataPoint> getBinaryOutputDataPoints() {
@@ -75,6 +81,20 @@ public class Database {
 		binaryInputDataPoints.add(binaryDataPoint);
 	}
 	
+	public void addAnalogOutputDataPoint() {
+		AnalogOutputDataPoint analogDataPoint = new AnalogOutputDataPoint();
+		analogDataPoint.setIndex(analogOutputDataPoints.size());
+		analogDataPoint.setName("Point " + analogOutputDataPoints.size());
+		analogOutputDataPoints.add(analogDataPoint);
+	}
+	
+	public void addAnalogOutputDataPoint(String name) {
+		AnalogOutputDataPoint analogDataPoint = new AnalogOutputDataPoint();
+		analogDataPoint.setIndex(analogOutputDataPoints.size());
+		analogDataPoint.setName(name);
+		analogOutputDataPoints.add(analogDataPoint);
+	}
+	
 	public void addBinaryOutputDataPoint() {
 		BinaryOutputDataPoint binaryDataPoint = new BinaryOutputDataPoint();
 		binaryDataPoint.setIndex(binaryOutputDataPoints.size());
@@ -102,7 +122,14 @@ public class Database {
 			binaryInputDataPoints.set((int) binaryInputDataPoint.getIndex(), binaryInputDataPoint);
 		}
 	}
-	
+
+	public void setAnalogOutputDataPoint(AnalogOutputDataPoint analogOutputDataPoint) {
+		if (analogOutputDataPoint.getIndex() < analogOutputDataPoints.size()) {
+			analogOutputDataPoint.setName(analogOutputDataPoints.get((int) analogOutputDataPoint.getIndex()).getName());
+			analogOutputDataPoints.set((int) analogOutputDataPoint.getIndex(), analogOutputDataPoint);
+		}
+	}
+
 	public void setBinaryOutputDataPoint(BinaryOutputDataPoint binaryDataPoint) {
 		if (binaryDataPoint.getIndex() < binaryInputDataPoints.size()) {
 			binaryDataPoint.setName(binaryInputDataPoints.get((int) binaryDataPoint.getIndex()).getName());
@@ -122,6 +149,12 @@ public class Database {
 		}
 	}
 	
+	public void removeAnalogOutputDataPoint() {
+		if (analogOutputDataPoints.size() > 0) {
+			analogOutputDataPoints.remove(analogOutputDataPoints.size() - 1);
+		}
+	}
+	
 	public void removeBinaryOutputDataPoint() {
 		if (binaryOutputDataPoints.size() > 0) {
 			binaryOutputDataPoints.remove(binaryOutputDataPoints.size() - 1);
@@ -132,5 +165,6 @@ public class Database {
 		binaryInputDataPoints.clear();
 		binaryOutputDataPoints.clear();
 		analogInputDataPoints.clear();
+		analogOutputDataPoints.clear();
 	}
 }

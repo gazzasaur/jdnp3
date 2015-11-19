@@ -39,7 +39,7 @@ public class AnalogInputStaticInteger16ObjectTypeEncoder implements ObjectTypeEn
 		}
 
 		AnalogInputStaticObjectInstance specificInstance = (AnalogInputStaticObjectInstance) objectInstance;
-		data.add(AnalogInputFlagsEncoder.encode(specificInstance));
+		data.add(AnalogFlagsEncoder.encode(specificInstance));
 		addInteger((long) specificInstance.getValue(), 2, data);
 	}
 }

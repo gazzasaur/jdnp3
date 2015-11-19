@@ -32,6 +32,10 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.A
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputStaticInteger16ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputStaticInteger32NoFlagsObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogInputStaticInteger32ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogOutputStaticFloat32ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogOutputStaticFloat64ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogOutputStaticInteger16ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog.AnalogOutputStaticInteger32ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputEventAbsoluteTimeObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputEventRelativeTimeObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryInputEventWithoutTimeObjectTypeEncoder;
@@ -80,6 +84,11 @@ public class ObjectTypeEncoderConstants {
 		this.add(new AnalogInputEventFloat64NoTimeObjectTypeEncoder());
 		this.add(new AnalogInputEventFloat32AbsoluteTimeObjectTypeEncoder());
 		this.add(new AnalogInputEventFloat64AbsoluteTimeObjectTypeEncoder());
+
+		this.add(new AnalogOutputStaticInteger32ObjectTypeEncoder());
+		this.add(new AnalogOutputStaticInteger16ObjectTypeEncoder());
+		this.add(new AnalogOutputStaticFloat32ObjectTypeEncoder());
+		this.add(new AnalogOutputStaticFloat64ObjectTypeEncoder());
 
 		this.add(new SynchronisedCtoObjectTypeEncoder());
 		this.add(new TimeDelayFineObjectTypeEncoder());

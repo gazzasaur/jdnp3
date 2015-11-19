@@ -39,7 +39,7 @@ public class AnalogInputEventInteger32AbsoluteTimeObjectTypeEncoder implements O
 		}
 		
 		AnalogInputEventObjectInstance specificInstance = (AnalogInputEventObjectInstance) objectInstance;
-		data.add(AnalogInputFlagsEncoder.encode(specificInstance));
+		data.add(AnalogFlagsEncoder.encode(specificInstance));
 		addInteger((long) specificInstance.getValue(), 4, data);
 		addInteger(specificInstance.getTimestamp(), 6, data);
 	}

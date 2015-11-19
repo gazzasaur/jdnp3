@@ -39,7 +39,7 @@ public class AnalogInputEventFloat64NoTimeObjectTypeEncoder implements ObjectTyp
 		}
 		
 		AnalogInputEventObjectInstance specificInstance = (AnalogInputEventObjectInstance) objectInstance;
-		data.add(AnalogInputFlagsEncoder.encode(specificInstance));
+		data.add(AnalogFlagsEncoder.encode(specificInstance));
 		addDouble(specificInstance.getValue(), data);
 	}
 }

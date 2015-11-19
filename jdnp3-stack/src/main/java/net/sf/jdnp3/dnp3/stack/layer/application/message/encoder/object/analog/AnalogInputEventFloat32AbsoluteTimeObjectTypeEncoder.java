@@ -40,7 +40,7 @@ public class AnalogInputEventFloat32AbsoluteTimeObjectTypeEncoder implements Obj
 		}
 		
 		AnalogInputEventObjectInstance specificInstance = (AnalogInputEventObjectInstance) objectInstance;
-		data.add(AnalogInputFlagsEncoder.encode(specificInstance));
+		data.add(AnalogFlagsEncoder.encode(specificInstance));
 		addFloat((float) specificInstance.getValue(), data);
 		addInteger(specificInstance.getTimestamp(), 6, data);
 	}
