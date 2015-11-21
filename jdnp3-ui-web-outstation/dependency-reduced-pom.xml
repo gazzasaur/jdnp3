@@ -35,6 +35,14 @@
               </excludes>
             </filter>
           </filters>
+          <transformers>
+            <transformer>
+              <resource>META-INF/spring.handlers</resource>
+            </transformer>
+            <transformer>
+              <resource>META-INF/spring.schemas</resource>
+            </transformer>
+          </transformers>
         </configuration>
       </plugin>
       <plugin>
