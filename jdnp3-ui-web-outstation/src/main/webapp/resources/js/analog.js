@@ -10,7 +10,7 @@ jdnp3.analog.ATTRIBUTE_MAP.remoteForced = 'rf';
 jdnp3.analog.ATTRIBUTE_MAP.referenceError = 're';
 jdnp3.analog.ATTRIBUTE_MAP.communicationsLost = 'cl';
 
-jdnp3.analog.getAnalog = function(id) {
+jdnp3.analog.getAnalogInput = function(id) {
 	if (!/ai-(\d+)/g.exec(id)) {
 		throw "Element " + id + " is not a valid analog input.";
 	}
@@ -58,7 +58,7 @@ jdnp3.analog.getAnalog = function(id) {
 	return data;
 }
 
-jdnp3.analog.setAnalog = function(analogDataPoint) {
+jdnp3.analog.setAnalogInput = function(analogDataPoint) {
 	var id = 'ai-' + analogDataPoint.index;
 	
 	var stringValue = '' + analogDataPoint.value;

@@ -19,31 +19,31 @@
 		<h:outputScript library="js" name="analog.js" />
 		
 		<div style="font-size: 0px;">
-			<div style="cursor: pointer;" class="text-field" title="Value" onclick="$('[id$=ai-#{cc.attrs.point.index}-newvalue]').val($('[id$=ai-#{cc.attrs.point.index}-value]').html()); PF('ai-value#{cc.attrs.point.index}').show(); $('[id$=ai-#{cc.attrs.point.index}-newvalue]').select();">
-				<h:outputText id="ai-#{cc.attrs.point.index}-value" styleClass="text-field-value" title="Value" />
+			<div style="cursor: pointer;" class="text-field" title="Value" onclick="$('[id$=ao-#{cc.attrs.point.index}-newvalue]').val($('[id$=ao-#{cc.attrs.point.index}-value]').html()); PF('ao-value#{cc.attrs.point.index}').show(); $('[id$=ao-#{cc.attrs.point.index}-newvalue]').select();">
+				<h:outputText id="ao-#{cc.attrs.point.index}-value" styleClass="text-field-value" title="Value" />
 			</div>
-			<j:dipswitch id="ai-#{cc.attrs.point.index}-re" title="Reference Error" abbreviation="RE" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'referenceError', !jdnp3.analog.getAnalog('ai-#{cc.attrs.point.index}').referenceError)" disabled="true" />
-			<j:dipswitch id="ai-#{cc.attrs.point.index}-or" title="Over Range" abbreviation="OR" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'overRange', !jdnp3.analog.getAnalog('ai-#{cc.attrs.point.index}').overRange)" disabled="true" />
-			<j:dipswitch id="ai-#{cc.attrs.point.index}-lf" title="Local Forced" abbreviation="LF" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'localForced', !jdnp3.analog.getAnalog('ai-#{cc.attrs.point.index}').localForced)" disabled="true" />
-			<j:dipswitch id="ai-#{cc.attrs.point.index}-rf" title="Remote Forced" abbreviation="RF" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'remoteForced', !jdnp3.analog.getAnalog('ai-#{cc.attrs.point.index}').remoteForced)" disabled="true" />
-			<j:dipswitch id="ai-#{cc.attrs.point.index}-cl" title="Communications Lost" abbreviation="CL" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'communicationsLost', !jdnp3.analog.getAnalog('ai-#{cc.attrs.point.index}').communicationsLost)" disabled="true" />
-			<j:dipswitch id="ai-#{cc.attrs.point.index}-rs" title="Restart" abbreviation="RS" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'restart', !jdnp3.analog.getAnalog('ai-#{cc.attrs.point.index}').restart)" disabled="true" />
-			<j:dipswitch id="ai-#{cc.attrs.point.index}-ol" title="Online" abbreviation="OL" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'online', !jdnp3.analog.getAnalog('ai-#{cc.attrs.point.index}').online)" disabled="true" />
+			<j:dipswitch id="ao-#{cc.attrs.point.index}-re" title="Reference Error" abbreviation="RE" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'referenceError', !jdnp3.analog.getAnalog('ao-#{cc.attrs.point.index}').referenceError)" disabled="true" />
+			<j:dipswitch id="ao-#{cc.attrs.point.index}-or" title="Over Range" abbreviation="OR" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'overRange', !jdnp3.analog.getAnalog('ao-#{cc.attrs.point.index}').overRange)" disabled="true" />
+			<j:dipswitch id="ao-#{cc.attrs.point.index}-lf" title="Local Forced" abbreviation="LF" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'localForced', !jdnp3.analog.getAnalog('ao-#{cc.attrs.point.index}').localForced)" disabled="true" />
+			<j:dipswitch id="ao-#{cc.attrs.point.index}-rf" title="Remote Forced" abbreviation="RF" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'remoteForced', !jdnp3.analog.getAnalog('ao-#{cc.attrs.point.index}').remoteForced)" disabled="true" />
+			<j:dipswitch id="ao-#{cc.attrs.point.index}-cl" title="Communications Lost" abbreviation="CL" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'communicationsLost', !jdnp3.analog.getAnalog('ao-#{cc.attrs.point.index}').communicationsLost)" disabled="true" />
+			<j:dipswitch id="ao-#{cc.attrs.point.index}-rs" title="Restart" abbreviation="RS" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'restart', !jdnp3.analog.getAnalog('ao-#{cc.attrs.point.index}').restart)" disabled="true" />
+			<j:dipswitch id="ao-#{cc.attrs.point.index}-ol" title="Online" abbreviation="OL" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'online', !jdnp3.analog.getAnalog('ao-#{cc.attrs.point.index}').online)" disabled="true" />
 
 			<div class="menu-button" style="font-size: 14px; display: inline-block; width: 34px; height: 42px; overflow: hidden;">
-				<p:commandButton style="width: 100%; height: 100%" id="ai-options#{cc.attrs.point.index}" value="" type="button" icon="ui-icon-extlink" />
-				<p:tieredMenu id="ai-menu#{cc.attrs.point.index}" overlay="true" trigger="ai-options#{cc.attrs.point.index}" my="left top" at="left bottom">
-					<p:menuitem value="Create Event" onclick="$('[id$=&quot;ai-menu#{cc.attrs.point.index}&quot;]').toggle(); requestEvent('ai-#{cc.attrs.point.index}');" />
+				<p:commandButton style="width: 100%; height: 100%" id="ao-options#{cc.attrs.point.index}" value="" type="button" icon="ui-icon-extlink" />
+				<p:tieredMenu id="ao-menu#{cc.attrs.point.index}" overlay="true" trigger="ao-options#{cc.attrs.point.index}" my="left top" at="left bottom">
+					<p:menuitem value="Create Event" onclick="$('[id$=&quot;ao-menu#{cc.attrs.point.index}&quot;]').toggle(); requestEvent('ao-#{cc.attrs.point.index}');" />
 					<p:separator />
-					<p:menuitem value="Edit" onclick="$('[id$=&quot;ai-menu#{cc.attrs.point.index}&quot;]').toggle(); PF('ai-edit#{cc.attrs.point.index}').show();" />
+					<p:menuitem value="Edit" onclick="$('[id$=&quot;ao-menu#{cc.attrs.point.index}&quot;]').toggle(); PF('ao-edit#{cc.attrs.point.index}').show();" />
 				</p:tieredMenu>
 			</div>
 		</div>
 
-		<p:dialog header="Analog Input Value #{cc.attrs.point.index}" widgetVar="ai-value#{cc.attrs.point.index}" modal="true">
+		<p:dialog header="Analog Input Value #{cc.attrs.point.index}" widgetVar="ao-value#{cc.attrs.point.index}" modal="true">
 			<p:outputPanel>
 				<div class="text-field">
-					<h:inputText id="ai-#{cc.attrs.point.index}-newvalue" style="border: none;" styleClass="text-field-value" title="Value" onkeypress="if (event.keyCode == 13) {if ($('[id$=ai-#{cc.attrs.point.index}-newvalue]').val() == 'MAX') $('[id$=ai-#{cc.attrs.point.index}-newvalue]').val(Number.MAX_VALUE); if ($('[id$=ai-#{cc.attrs.point.index}-newvalue]').val() == 'MIN') $('[id$=ai-#{cc.attrs.point.index}-newvalue]').val(-1*Number.MAX_VALUE); requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'value', $('[id$=ai-#{cc.attrs.point.index}-newvalue]').val()); PF('ai-value#{cc.attrs.point.index}').hide();} else if (event.keyCode == 27) {PF('ai-value#{cc.attrs.point.index}').hide();}" />
+					<h:inputText id="ao-#{cc.attrs.point.index}-newvalue" style="border: none;" styleClass="text-field-value" title="Value" onkeypress="if (event.keyCode == 13) {if ($('[id$=ao-#{cc.attrs.point.index}-newvalue]').val() == 'MAX') $('[id$=ao-#{cc.attrs.point.index}-newvalue]').val(Number.MAX_VALUE); if ($('[id$=ao-#{cc.attrs.point.index}-newvalue]').val() == 'MIN') $('[id$=ao-#{cc.attrs.point.index}-newvalue]').val(-1*Number.MAX_VALUE); requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'value', $('[id$=ao-#{cc.attrs.point.index}-newvalue]').val()); PF('ao-value#{cc.attrs.point.index}').hide();} else if (event.keyCode == 27) {PF('ao-value#{cc.attrs.point.index}').hide();}" />
 				</div>
 			</p:outputPanel>
 			<p:outputPanel>
@@ -53,36 +53,79 @@
 			</p:outputPanel>
 		</p:dialog>
 
-		<p:dialog header="Analog Input #{cc.attrs.point.index}" widgetVar="ai-edit#{cc.attrs.point.index}" modal="true">
+		<p:dialog header="Analog Output #{cc.attrs.point.index}" widgetVar="ao-edit#{cc.attrs.point.index}" modal="true">
 			<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+				<h:outputText value="Return Status:" />
+				<p:commandButton style="width: 250px; height: 100%" id="ao-status-options#{cc.attrs.point.index}" value="SUCCESS" type="button" icon="ui-icon-extlink">
+					<p:tieredMenu id="ao-status-menu#{cc.attrs.point.index}" overlay="true" trigger="ao-status-options#{cc.attrs.point.index}" my="left top" at="left bottom">
+						<p:menuitem value="Success" onclick="$('[id$=&quot;ao-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'statusCode', 'SUCCESS')" />
+						<p:separator />
+						<p:menuitem value="Timeout" onclick="$('[id$=&quot;ao-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'statusCode', 'TIMEOUT')" />
+						<p:menuitem value="No Select" onclick="$('[id$=&quot;ao-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'statusCode', 'NO_SELECT')" />
+						<p:menuitem value="Format Error" onclick="$('[id$=&quot;ao-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'statusCode', 'FORMAT_ERROR')" />
+						<p:menuitem value="Not Supported" onclick="$('[id$=&quot;ao-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'statusCode', 'NOT_SUPPORTED')" />
+						<p:menuitem value="Already Active" onclick="$('[id$=&quot;ao-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'statusCode', 'ALREADY_ACTIVE')" />
+						<p:menuitem value="Hardware Error" onclick="$('[id$=&quot;ao-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'statusCode', 'HARDWARE_ERROR')" />
+						<p:menuitem value="Local" onclick="$('[id$=&quot;ao-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'statusCode', 'LOCAL')" />
+						<p:menuitem value="Too Many Objects" onclick="$('[id$=&quot;ao-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'statusCode', 'TOO_MANY_OBJS')" />
+						<p:menuitem value="Not Authorised" onclick="$('[id$=&quot;ao-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'statusCode', 'NOT_AUTHORIZED')" />
+						<p:menuitem value="Automation Inhibit" onclick="$('[id$=&quot;ao-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'statusCode', 'AUTOMATION_INHIBIT')" />
+						<p:menuitem value="Processing Limited" onclick="$('[id$=&quot;ao-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'statusCode', 'PROCESSING_LIMITED')" />
+						<p:menuitem value="Out of Range" onclick="$('[id$=&quot;ao-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'statusCode', 'OUT_OF_RANGE')" />
+						<p:menuitem value="Non-Participating" onclick="$('[id$=&quot;ao-status-menu#{cc.attrs.point.index}&quot;]').toggle(); requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'statusCode', 'NON_PARTICIPATING')" />
+					</p:tieredMenu>
+				</p:commandButton>
+				
+				<h:outputText value="Auto-Update on Success:" />
+				<p:outputPanel>
+					<j:slideswitch id="ao-#{cc.attrs.point.index}-autoUpdate" title="Auto-Update on Success" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'autoUpdateOnSuccess', !jdnp3.binary.getBinaryOutput('ao-#{cc.attrs.point.index}').autoUpdateOnSuccess)" disabled="true" />
+				</p:outputPanel>
+				
 				<h:outputText value="Event Class:" />
 				<p:outputPanel>
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-cl-0" title="Off" label="0" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'eventClass', 0)" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-cl-1" title="Class 1" label="1" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'eventClass', 1)" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-cl-2" title="Class 2" label="2" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'eventClass', 2)" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-cl-3" title="Class 3" label="3" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'eventClass', 3)" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-cl-0" title="Off" label="0" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'eventClass', 0)" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-cl-1" title="Class 1" label="1" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'eventClass', 1)" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-cl-2" title="Class 2" label="2" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'eventClass', 2)" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-cl-3" title="Class 3" label="3" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'eventClass', 3)" disabled="true" />
+				</p:outputPanel>
+				<h:outputText value="Command Event Class:" />
+				<p:outputPanel>
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-cc-0" title="Off" label="0" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'commandEventClass', 0)" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-cc-1" title="Class 1" label="1" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'commandEventClass', 1)" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-cc-2" title="Class 2" label="2" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'commandEventClass', 2)" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-cc-3" title="Class 3" label="3" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'commandEventClass', 3)" disabled="true" />
 				</p:outputPanel>
 				<h:outputText value="Preferred Static Type" />
 				<p:outputPanel>
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-st-0" title="Any" label="0" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'staticType', {'group': 30, 'variation': 0})" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-st-1" title="32-bit Integer with Flags" label="1" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'staticType', {'group': 30, 'variation': 1})" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-st-2" title="16-bit Integer with Flags" label="2" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'staticType', {'group': 30, 'variation': 2})" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-st-3" title="32-bit Integer without Flags" label="3" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'staticType', {'group': 30, 'variation': 3})" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-st-4" title="16-bit Integer without Flags" label="4" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'staticType', {'group': 30, 'variation': 4})" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-st-5" title="32-bit Float" label="5" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'staticType', {'group': 30, 'variation': 5})" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-st-6" title="64-bit Float" label="6" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'staticType', {'group': 30, 'variation': 6})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-st-0" title="Any" label="0" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'staticType', {'group': 40, 'variation': 0})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-st-1" title="32-bit Integer" label="1" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'staticType', {'group': 40, 'variation': 1})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-st-2" title="16-bit Integer" label="2" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'staticType', {'group': 40, 'variation': 2})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-st-3" title="32-bit Float" label="3" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'staticType', {'group': 40, 'variation': 3})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-st-4" title="64-bit Float" label="4" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'staticType', {'group': 40, 'variation': 4})" disabled="true" />
 				</p:outputPanel>
 				<h:outputText value="Preferred Event Type:" />
 				<p:outputPanel>
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-ev-0" title="Any" label="0" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'eventType', {'group': 32, 'variation': 0})" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-ev-1" title="32-bit Integer without Time" label="1" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'eventType', {'group': 32, 'variation': 1})" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-ev-2" title="16-bit Integer wihtout Time" label="2" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'eventType', {'group': 32, 'variation': 2})" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-ev-3" title="32-bit Integer Absolute Time" label="3" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'eventType', {'group': 32, 'variation': 3})" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-ev-4" title="16-bit Integer Absolute Time" label="4" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'eventType', {'group': 32, 'variation': 4})" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-ev-5" title="32-bit Float without Time" label="5" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'eventType', {'group': 32, 'variation': 5})" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-ev-6" title="64-bit Float without Time" label="6" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'eventType', {'group': 32, 'variation': 6})" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-ev-7" title="32-bit Float Absolute Time" label="7" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'eventType', {'group': 32, 'variation': 7})" disabled="true" />
-					<j:eventbutton id="ai-#{cc.attrs.point.index}-ev-8" title="64-bit Float Absolute Time" label="8" onclick="requestChangeAttributeValue('ai-#{cc.attrs.point.index}', 'eventType', {'group': 32, 'variation': 8})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ev-0" title="Any" label="0" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'eventType', {'group': 42, 'variation': 0})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ev-1" title="32-bit Integer without Time" label="1" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'eventType', {'group': 42, 'variation': 1})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ev-2" title="16-bit Integer without Time" label="2" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'eventType', {'group': 42, 'variation': 2})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ev-3" title="32-bit Integer Absolute Time" label="3" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'eventType', {'group': 42, 'variation': 3})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ev-4" title="16-bit Integer Absolute Time" label="4" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'eventType', {'group': 42, 'variation': 4})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ev-5" title="32-bit Float without Time" label="5" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'eventType', {'group': 42, 'variation': 5})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ev-6" title="64-bit Float without Time" label="6" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'eventType', {'group': 42, 'variation': 6})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ev-7" title="32-bit Float Absolute Time" label="7" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'eventType', {'group': 42, 'variation': 7})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ev-8" title="32-bit Float Absolute Time" label="8" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'eventType', {'group': 42, 'variation': 8})" disabled="true" />
+				</p:outputPanel>
+				<h:outputText value="Preferred Command Event Type:" />
+				<p:outputPanel>
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ce-0" title="Any" label="0" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'commandEventType', {'group': 43, 'variation': 0})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ce-1" title="32-bit Integer without Time" label="1" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'commandEventType', {'group': 43, 'variation': 1})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ce-2" title="16-bit Integer without Time" label="2" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'commandEventType', {'group': 43, 'variation': 2})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ce-3" title="32-bit Integer Absolute Time" label="3" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'commandEventType', {'group': 43, 'variation': 3})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ce-4" title="16-bit Integer Absolute Time" label="4" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'commandEventType', {'group': 43, 'variation': 4})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ce-5" title="32-bit Float without Time" label="5" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'commandEventType', {'group': 43, 'variation': 5})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ce-6" title="64-bit Float without Time" label="6" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'commandEventType', {'group': 43, 'variation': 6})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ce-7" title="32-bit Float Absolute Time" label="7" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'commandEventType', {'group': 43, 'variation': 7})" disabled="true" />
+					<j:eventbutton id="ao-#{cc.attrs.point.index}-ce-8" title="64-bit Float Absolute Time" label="8" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'commandEventType', {'group': 43, 'variation': 8})" disabled="true" />
 				</p:outputPanel>
 			</h:panelGrid>
 		</p:dialog>

@@ -24,14 +24,15 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @ManagedBean
 @RequestScoped
@@ -84,6 +85,23 @@ public class UiPointDatabase {
 		if (stationCode != null && deviceCode != null && !stationCode.isEmpty() && !deviceCode.isEmpty()) {
 			try {
 				List<AnalogInputDataPoint> dataPoints = DeviceProvider.getDevice(stationCode, deviceCode).getDatabaseManager().getAnalogInputDataPoints();
+				return convert(dataPoints);
+			} catch (Exception e) {
+				logger.error("Failed to fetch data points.", e);
+			}
+		}
+		logger.warn(format("Failed to fetch station details for station %s device %s.", stationCode, deviceCode));
+		return new ArrayList<>();
+	}
+
+	public List<UiPoint> getAnalogOutputDataPoints(String stationCode, String deviceCode) {
+		if (FacesContext.getCurrentInstance().isPostback()) {
+			return new ArrayList<>();
+		}
+
+		if (stationCode != null && deviceCode != null && !stationCode.isEmpty() && !deviceCode.isEmpty()) {
+			try {
+				List<AnalogOutputDataPoint> dataPoints = DeviceProvider.getDevice(stationCode, deviceCode).getDatabaseManager().getAnalogOutputDataPoints();
 				return convert(dataPoints);
 			} catch (Exception e) {
 				logger.error("Failed to fetch data points.", e);

@@ -8,13 +8,14 @@ MESSAGE_HANDLER_REGISTRY.heartbeat = function() {};
 MESSAGE_HANDLER_REGISTRY.internalIndicators = jdnp3.iin.setInternalIndicators;
 MESSAGE_HANDLER_REGISTRY.binaryInputPoint = jdnp3.binary.setBinaryInput;
 MESSAGE_HANDLER_REGISTRY.binaryOutputPoint = jdnp3.binary.setBinaryOutput;
-MESSAGE_HANDLER_REGISTRY.analogInputPoint = jdnp3.analog.setAnalog;
+MESSAGE_HANDLER_REGISTRY.analogInputPoint = jdnp3.analog.setAnalogInput;
 
 var ATTRIBUTE_CHANGE_HANDLER_REGISTRY = {};
 ATTRIBUTE_CHANGE_HANDLER_REGISTRY.ii = jdnp3.iin.getInternalIndicators;
 ATTRIBUTE_CHANGE_HANDLER_REGISTRY.bi = jdnp3.binary.getBinaryInput;
 ATTRIBUTE_CHANGE_HANDLER_REGISTRY.bo = jdnp3.binary.getBinaryOutput;
-ATTRIBUTE_CHANGE_HANDLER_REGISTRY.ai = jdnp3.analog.getAnalog;
+ATTRIBUTE_CHANGE_HANDLER_REGISTRY.ai = jdnp3.analog.getAnalogInput;
+ATTRIBUTE_CHANGE_HANDLER_REGISTRY.ao = jdnp3.analog.getAnalogOutput;
 
 var EVENT_MESSAGE_REGISTRY = {};
 EVENT_MESSAGE_REGISTRY.bi = 'binaryInputEvent';

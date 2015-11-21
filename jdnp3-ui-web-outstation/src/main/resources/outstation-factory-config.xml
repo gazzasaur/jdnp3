@@ -23,5 +23,11 @@
 				<value>Volume</value>
 			</list>
 		</property>
+		<property name="analogOutputDataPoints">
+			<list>
+				<value>Min Speed</value>
+				<value>Max Speed</value>
+			</list>
+		</property>
 	</bean>
 </beans>

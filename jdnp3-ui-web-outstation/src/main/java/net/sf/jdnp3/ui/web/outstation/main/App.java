@@ -25,14 +25,23 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  * Forced Variation:
  *  - Add the ability to force a variation.
+ *  - The ability to disable a point.
  *  
  * Complete BinaryOutput type:
  * - Add the ability to create events.
  * - Add the ability to create control events.
  * 
- * Output types:
- * - The ability to send automatic events when a master changes the value.
- * - The ability to send automatic control events when a master changes the value.
+ * Complete BinaryOutput type:
+ * - Add the ability to create events.
+ * - Add the ability to create control events.
+ * 
+ * Counters.
+ * 
+ * Freeze/Unfreeze
+ * 
+ * Direct Operate NR
+ * 
+ * Slect/Operate
  * 
  * Wish list:
  * - Subsystem interface to control data pump and other subsystems.

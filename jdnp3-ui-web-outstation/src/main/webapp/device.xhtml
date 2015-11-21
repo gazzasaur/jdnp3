@@ -83,6 +83,17 @@
 							</p:panel>
 						</div>
 					</c:if>
+					<c:if test="#{uiPointDatabase.getAnalogOutputDataPoints(param['stationCode'], param['deviceCode']).size() > 0}">
+						<div style="text-align: center; display: inline-block;">
+							<p:panel header="Analog Output">
+								<p:panelGrid style="margin: auto; text-align: right;" columns="2">
+									<c:forEach var="point" items="#{uiPointDatabase.getAnalogOutputDataPoints(param['stationCode'], param['deviceCode'])}">
+										<h:outputText style="margin-right: 10px" value="#{point.name}" /><jdnp3:analogOutput point="#{point}" />
+									</c:forEach>
+								</p:panelGrid>
+							</p:panel>
+						</div>
+					</c:if>
 				</p:outputPanel>
 			</h:form>
 		</c:if>
