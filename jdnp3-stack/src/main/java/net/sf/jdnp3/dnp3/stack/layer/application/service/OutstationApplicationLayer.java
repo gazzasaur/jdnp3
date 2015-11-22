@@ -128,6 +128,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			logger.error(unknownObjectException.getMessage(), unknownObjectException);
 			if (request.getHeader().getApplicationControl().getSequenceNumber() >= 0) {
 				ApplicationFragmentResponse response = new ApplicationFragmentResponse();
+				response.getHeader().getInternalIndicatorField().setObjectUnknown(true);
 				ApplicationFragmentResponseHeader applicationResponseHeader = response.getHeader();
 				applicationResponseHeader.setFunctionCode(RESPONSE);
 				applicationResponseHeader.getInternalIndicatorField().setObjectUnknown(true);

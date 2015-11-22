@@ -17,22 +17,24 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler.device;
 
 import java.util.ArrayList;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.device.InternalIndicatorsDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.GetDeviceMessage;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GetDeviceMessageHandler implements MessageHandler {
 	private Logger logger = LoggerFactory.getLogger(GetDeviceMessageHandler.class);
@@ -67,6 +69,11 @@ public class GetDeviceMessageHandler implements MessageHandler {
 				AnalogInputMessage part = new AnalogInputMessage();
 				BeanUtils.copyProperties(part, point);
 				specificMessage.getAnalogInputPoints().add(part);
+			}
+			for (AnalogOutputDataPoint point : databaseManager.getAnalogOutputDataPoints()) {
+				AnalogOutputMessage part = new AnalogOutputMessage();
+				BeanUtils.copyProperties(part, point);
+				specificMessage.getAnalogOutputPoints().add(part);
 			}
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);

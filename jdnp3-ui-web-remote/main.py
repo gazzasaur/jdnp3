@@ -32,7 +32,6 @@ analogInputDataPoints = [
 outstation = jdnp3.device.Outstation(HOST_URL, "Pump Station 1", "Pump 1")
 config = outstation.get()
 outstation.output()
-print config
 
 outstation.set_internal_indicator('device restart', True)
 outstation.set_binary_input(1, 'local forced', True)
@@ -53,6 +52,10 @@ outstation.set_binary_output(0, 'remote forced', True)
 outstation.set_analog_input(1, 'value', 'Infinity')
 outstation.set_internal_indicator('device restart', False)
 
+outstation.set_analog_output(1, 'value', -20.3)
+outstation.set_analog_output(1, 'value', 'Infinity')
+
+###
 
 # aic = jdnp3.control.AnalogInputController(10000, 100, 15000, 50000, 2)
 # 

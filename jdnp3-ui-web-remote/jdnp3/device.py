@@ -41,6 +41,26 @@ class Outstation:
         self.set_attribute(data, *args)
         self.set(data)
 
+    def get_analog_output(self, index, *args):
+        data = self.get()['analogOutputPoints'][index]
+        return self.get_attribute(data, *args);
+
+    def wait_for_analog_output(self, index, *args):
+        value = args[-1]
+        args_list = list(args)
+        del args_list[-1]
+        args = tuple(args_list)
+        
+        def func():
+            return self.get_analog_output(index, *args) == value
+        if not jdnp3.control.wait_for(func):
+            raise RuntimeError('Timeout while waiting for value %s.' % (value))
+
+    def set_analog_output(self, index, *args):
+        data = self.get()['analogOutputPoints'][index]
+        self.set_attribute(data, *args)
+        self.set(data)
+
     def get_binary_input(self, index, *args):
         data = self.get()['binaryInputPoints'][index]
         return self.get_attribute(data, *args);
