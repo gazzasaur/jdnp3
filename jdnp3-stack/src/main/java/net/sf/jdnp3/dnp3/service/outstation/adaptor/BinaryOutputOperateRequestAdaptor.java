@@ -33,7 +33,7 @@ public class BinaryOutputOperateRequestAdaptor implements OutstationRequestHandl
 	private BinaryOutputOperateRequestHandler serviceRequestHandler = null;
 
 	public boolean canHandle(FunctionCode functionCode, ObjectFragment request) {
-		if (functionCode == DIRECT_OPERATE && request.getObjectFragmentHeader().getObjectType().getGroup() == BINARY_OUTPUT_COMMAND_CROB.getGroup()) {
+		if (functionCode == DIRECT_OPERATE && request.getObjectFragmentHeader().getObjectType().equals(BINARY_OUTPUT_COMMAND_CROB.getGroup())) {
 			return true;
 		}
 		return false;
