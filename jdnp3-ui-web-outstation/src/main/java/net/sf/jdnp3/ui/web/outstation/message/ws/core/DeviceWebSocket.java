@@ -13,10 +13,15 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseListener;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
@@ -28,10 +33,6 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.MessageHandlerRegi
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.MessageHandlerRegistryProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.ModelChangedMessage;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @ServerEndpoint(value="/ws/device", encoders=MessageEncoder.class, decoders=GenericMessageDecoder.class, configurator=DeviceWebSocketConfigurator.class)
 public class DeviceWebSocket implements DeviceManager, DatabaseListener {
@@ -73,8 +74,12 @@ public class DeviceWebSocket implements DeviceManager, DatabaseListener {
 		for (BinaryOutputDataPoint binaryDataPoint : binaryOutputDataPoints) {
 			this.valueChanged(binaryDataPoint);
 		}
-		List<AnalogInputDataPoint> analogDataPoints = databaseManager.getAnalogInputDataPoints();
-		for (AnalogInputDataPoint analogDataPoint : analogDataPoints) {
+		List<AnalogInputDataPoint> analogInputDataPoints = databaseManager.getAnalogInputDataPoints();
+		for (AnalogInputDataPoint analogDataPoint : analogInputDataPoints) {
+			this.valueChanged(analogDataPoint);
+		}
+		List<AnalogOutputDataPoint> analogOutputDataPoints = databaseManager.getAnalogOutputDataPoints();
+		for (AnalogOutputDataPoint analogDataPoint : analogOutputDataPoints) {
 			this.valueChanged(analogDataPoint);
 		}
 	}

@@ -15,13 +15,14 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.model.binary;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.StatusCode.SUCCESS;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_COMMAND_EVENT_ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StatusCode.SUCCESS;
+
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.OperationType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.StatusCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.TripCloseCode;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StatusCode;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
 public class BinaryOutputMessage implements Message {

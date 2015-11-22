@@ -24,9 +24,9 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputCrobObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.OperationType;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.StatusCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.TripCloseCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StatusCode;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class CrobObjectTypeDecoder implements ObjectTypeDecoder {

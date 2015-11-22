@@ -16,7 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_STATIC_INT16;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_STATIC_INT16;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
 
 import java.util.List;
@@ -30,7 +30,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstanc
 
 public class AnalogOutputStaticInteger16ObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return objectType.equals(ANALOG_INPUT_STATIC_INT16);
+		return objectType.equals(ANALOG_OUTPUT_STATIC_INT16);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {

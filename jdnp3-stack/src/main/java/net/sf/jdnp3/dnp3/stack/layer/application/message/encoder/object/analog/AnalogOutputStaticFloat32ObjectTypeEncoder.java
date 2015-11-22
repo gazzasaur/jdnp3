@@ -16,6 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog;
 
 import static java.lang.String.format;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_STATIC_FLOAT32;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addFloat;
 
 import java.util.List;
@@ -26,11 +27,10 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCo
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogOutputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants;
 
 public class AnalogOutputStaticFloat32ObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return objectType.equals(ObjectTypeConstants.ANALOG_OUTPUT_STATIC_FLOAT32);
+		return objectType.equals(ANALOG_OUTPUT_STATIC_FLOAT32);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {

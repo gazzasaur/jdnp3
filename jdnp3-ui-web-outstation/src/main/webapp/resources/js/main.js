@@ -9,6 +9,7 @@ MESSAGE_HANDLER_REGISTRY.internalIndicators = jdnp3.iin.setInternalIndicators;
 MESSAGE_HANDLER_REGISTRY.binaryInputPoint = jdnp3.binary.setBinaryInput;
 MESSAGE_HANDLER_REGISTRY.binaryOutputPoint = jdnp3.binary.setBinaryOutput;
 MESSAGE_HANDLER_REGISTRY.analogInputPoint = jdnp3.analog.setAnalogInput;
+MESSAGE_HANDLER_REGISTRY.analogOutputPoint = jdnp3.analog.setAnalogOutput;
 
 var ATTRIBUTE_CHANGE_HANDLER_REGISTRY = {};
 ATTRIBUTE_CHANGE_HANDLER_REGISTRY.ii = jdnp3.iin.getInternalIndicators;

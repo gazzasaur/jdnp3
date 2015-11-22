@@ -20,6 +20,7 @@ import java.util.List;
 
 import net.sf.jdnp3.ui.web.outstation.database.device.InternalIndicatorsDataPoint;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
@@ -31,6 +32,7 @@ public class GetDeviceMessage implements Message {
 	private List<BinaryInputMessage> binaryInputPoints = new ArrayList<>();
 	private List<BinaryOutputMessage> binaryOutputPoints = new ArrayList<>();
 	private List<AnalogInputMessage> analogInputPoints = new ArrayList<>();
+	private List<AnalogOutputMessage> analogOutputPoints = new ArrayList<>();
 	
 	public String getType() {
 		return type;
@@ -58,6 +60,14 @@ public class GetDeviceMessage implements Message {
 
 	public void setAnalogInputPoints(List<AnalogInputMessage> analogInputPoints) {
 		this.analogInputPoints = analogInputPoints;
+	}
+
+	public List<AnalogOutputMessage> getAnalogOutputPoints() {
+		return analogOutputPoints;
+	}
+
+	public void setAnalogOutputPoints(List<AnalogOutputMessage> analogOutputPoints) {
+		this.analogOutputPoints = analogOutputPoints;
 	}
 
 	public InternalIndicatorsDataPoint getInternalIndicators() {

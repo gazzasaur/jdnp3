@@ -103,6 +103,26 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.analog.AnalogOutputMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+<!-- 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"> -->
+<!-- 		<property name="targetObject" ref="messageHandlerRegistry" /> -->
+<!-- 		<property name="targetMethod" value="registerHandler" /> -->
+<!-- 		<property name="arguments"> -->
+<!-- 			<list> -->
+<!-- 				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.analog.AnalogOutputEventMessageHandler" /> -->
+<!-- 			</list> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
 	
 	<bean id="genericMessageRegistry" class="net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistryProvider" factory-method="getRegistry" />
 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
@@ -171,6 +191,17 @@
 			</list>
 		</property>
 	</bean>
+
+<!-- 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"> -->
+<!-- 		<property name="targetObject" ref="genericMessageRegistry" /> -->
+<!-- 		<property name="targetMethod" value="register" /> -->
+<!-- 		<property name="arguments"> -->
+<!-- 			<list> -->
+<!-- 				<value>analogOutputEvent</value> -->
+<!-- 				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputEventMessage</value> -->
+<!-- 			</list> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
 	
 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetObject" ref="genericMessageRegistry" />
@@ -227,6 +258,18 @@
 				<value>analogInputPoint</value>
 				<value>net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint</value>
 				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>analogOutputPoint</value>
+				<value>net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessage</value>
 			</list>
 		</property>
 	</bean>

@@ -15,10 +15,13 @@
  */
 package net.sf.jdnp3.ui.web.outstation.database.point.analog;
 
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_COMMAND_EVENT_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_EVENT_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_STATIC_ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StatusCode.SUCCESS;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StatusCode;
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 
 public class AnalogOutputDataPoint implements DataPoint {
@@ -34,10 +37,16 @@ public class AnalogOutputDataPoint implements DataPoint {
 	private boolean referenceError = false;
 	private boolean communicationsLost = false;
 	
+	private long operatedCount = 0;
+	private StatusCode statusCode = SUCCESS;
+	private boolean autoUpdateOnSuccess = true;
+	
 	private ObjectType staticType = ANALOG_OUTPUT_STATIC_ANY;
 	private ObjectType eventType = ANALOG_OUTPUT_EVENT_ANY;
+	private ObjectType commandEventType = ANALOG_OUTPUT_COMMAND_EVENT_ANY;
 	private int eventClass = 1;
-
+	private int commandEventClass = 1;
+	
 	public long getIndex() {
 		return index;
 	}
@@ -140,5 +149,45 @@ public class AnalogOutputDataPoint implements DataPoint {
 
 	public void setValue(double value) {
 		this.value = value;
+	}
+
+	public long getOperatedCount() {
+		return operatedCount;
+	}
+
+	public void setOperatedCount(long operatedCount) {
+		this.operatedCount = operatedCount;
+	}
+
+	public StatusCode getStatusCode() {
+		return statusCode;
+	}
+
+	public void setStatusCode(StatusCode statusCode) {
+		this.statusCode = statusCode;
+	}
+
+	public boolean isAutoUpdateOnSuccess() {
+		return autoUpdateOnSuccess;
+	}
+
+	public void setAutoUpdateOnSuccess(boolean autoUpdateOnSuccess) {
+		this.autoUpdateOnSuccess = autoUpdateOnSuccess;
+	}
+
+	public ObjectType getCommandEventType() {
+		return commandEventType;
+	}
+
+	public void setCommandEventType(ObjectType commandEventType) {
+		this.commandEventType = commandEventType;
+	}
+
+	public int getCommandEventClass() {
+		return commandEventClass;
+	}
+
+	public void setCommandEventClass(int commandEventClass) {
+		this.commandEventClass = commandEventClass;
 	}
 }

@@ -22,13 +22,13 @@
 			<div style="cursor: pointer;" class="text-field" title="Value" onclick="$('[id$=ao-#{cc.attrs.point.index}-newvalue]').val($('[id$=ao-#{cc.attrs.point.index}-value]').html()); PF('ao-value#{cc.attrs.point.index}').show(); $('[id$=ao-#{cc.attrs.point.index}-newvalue]').select();">
 				<h:outputText id="ao-#{cc.attrs.point.index}-value" styleClass="text-field-value" title="Value" />
 			</div>
-			<j:dipswitch id="ao-#{cc.attrs.point.index}-re" title="Reference Error" abbreviation="RE" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'referenceError', !jdnp3.analog.getAnalog('ao-#{cc.attrs.point.index}').referenceError)" disabled="true" />
-			<j:dipswitch id="ao-#{cc.attrs.point.index}-or" title="Over Range" abbreviation="OR" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'overRange', !jdnp3.analog.getAnalog('ao-#{cc.attrs.point.index}').overRange)" disabled="true" />
-			<j:dipswitch id="ao-#{cc.attrs.point.index}-lf" title="Local Forced" abbreviation="LF" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'localForced', !jdnp3.analog.getAnalog('ao-#{cc.attrs.point.index}').localForced)" disabled="true" />
-			<j:dipswitch id="ao-#{cc.attrs.point.index}-rf" title="Remote Forced" abbreviation="RF" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'remoteForced', !jdnp3.analog.getAnalog('ao-#{cc.attrs.point.index}').remoteForced)" disabled="true" />
-			<j:dipswitch id="ao-#{cc.attrs.point.index}-cl" title="Communications Lost" abbreviation="CL" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'communicationsLost', !jdnp3.analog.getAnalog('ao-#{cc.attrs.point.index}').communicationsLost)" disabled="true" />
-			<j:dipswitch id="ao-#{cc.attrs.point.index}-rs" title="Restart" abbreviation="RS" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'restart', !jdnp3.analog.getAnalog('ao-#{cc.attrs.point.index}').restart)" disabled="true" />
-			<j:dipswitch id="ao-#{cc.attrs.point.index}-ol" title="Online" abbreviation="OL" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'online', !jdnp3.analog.getAnalog('ao-#{cc.attrs.point.index}').online)" disabled="true" />
+			<j:dipswitch id="ao-#{cc.attrs.point.index}-re" title="Reference Error" abbreviation="RE" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'referenceError', !jdnp3.analog.getAnalogOutput('ao-#{cc.attrs.point.index}').referenceError)" disabled="true" />
+			<j:dipswitch id="ao-#{cc.attrs.point.index}-or" title="Over Range" abbreviation="OR" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'overRange', !jdnp3.analog.getAnalogOutput('ao-#{cc.attrs.point.index}').overRange)" disabled="true" />
+			<j:dipswitch id="ao-#{cc.attrs.point.index}-lf" title="Local Forced" abbreviation="LF" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'localForced', !jdnp3.analog.getAnalogOutput('ao-#{cc.attrs.point.index}').localForced)" disabled="true" />
+			<j:dipswitch id="ao-#{cc.attrs.point.index}-rf" title="Remote Forced" abbreviation="RF" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'remoteForced', !jdnp3.analog.getAnalogOutput('ao-#{cc.attrs.point.index}').remoteForced)" disabled="true" />
+			<j:dipswitch id="ao-#{cc.attrs.point.index}-cl" title="Communications Lost" abbreviation="CL" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'communicationsLost', !jdnp3.analog.getAnalogOutput('ao-#{cc.attrs.point.index}').communicationsLost)" disabled="true" />
+			<j:dipswitch id="ao-#{cc.attrs.point.index}-rs" title="Restart" abbreviation="RS" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'restart', !jdnp3.analog.getAnalogOutput('ao-#{cc.attrs.point.index}').restart)" disabled="true" />
+			<j:dipswitch id="ao-#{cc.attrs.point.index}-ol" title="Online" abbreviation="OL" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'online', !jdnp3.analog.getAnalogOutput('ao-#{cc.attrs.point.index}').online)" disabled="true" />
 
 			<div class="menu-button" style="font-size: 14px; display: inline-block; width: 34px; height: 42px; overflow: hidden;">
 				<p:commandButton style="width: 100%; height: 100%" id="ao-options#{cc.attrs.point.index}" value="" type="button" icon="ui-icon-extlink" />
@@ -78,7 +78,7 @@
 				
 				<h:outputText value="Auto-Update on Success:" />
 				<p:outputPanel>
-					<j:slideswitch id="ao-#{cc.attrs.point.index}-autoUpdate" title="Auto-Update on Success" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'autoUpdateOnSuccess', !jdnp3.binary.getBinaryOutput('ao-#{cc.attrs.point.index}').autoUpdateOnSuccess)" disabled="true" />
+					<j:slideswitch id="ao-#{cc.attrs.point.index}-autoUpdate" title="Auto-Update on Success" onclick="requestChangeAttributeValue('ao-#{cc.attrs.point.index}', 'autoUpdateOnSuccess', !jdnp3.analog.getAnalogOutput('ao-#{cc.attrs.point.index}').autoUpdateOnSuccess)" disabled="true" />
 				</p:outputPanel>
 				
 				<h:outputText value="Event Class:" />
