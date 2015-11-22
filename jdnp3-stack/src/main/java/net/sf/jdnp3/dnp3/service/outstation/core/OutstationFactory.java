@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.sf.jdnp3.dnp3.service.outstation.adaptor.AnalogOutputOperateRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.AssignClassRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.BinaryOutputOperateRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class0ReadRequestAdaptor;
@@ -42,6 +43,10 @@ import net.sf.jdnp3.dnp3.service.outstation.adaptor.TimeAndDateRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.handler.generic.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.ItemEnumeratorFactory;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator.StandardItemEnumeratorFactory;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.analog.AnalogOutputCommandFloat32ObjectTypeDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.analog.AnalogOutputCommandFloat64ObjectTypeDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.analog.AnalogOutputCommandInteger16ObjectTypeDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.analog.AnalogOutputCommandInteger32ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.binary.BinaryInputStaticFlagsObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.binary.CrobObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ByteDataObjectTypeDecoder;
@@ -150,6 +155,7 @@ public class OutstationFactory {
 		adaptors.add(new Class2ReadRequestAdaptor());
 		adaptors.add(new Class3ReadRequestAdaptor());
 		adaptors.add(new BinaryOutputOperateRequestAdaptor());
+		adaptors.add(new AnalogOutputOperateRequestAdaptor());
 		adaptors.add(new TimeAndDateRequestAdaptor());
 		adaptors.add(new InternalIndicatorWriteRequestAdaptor());
 	}
@@ -173,6 +179,10 @@ public class OutstationFactory {
 		decoders.add(new Class1ObjectTypeDecoder());
 		decoders.add(new Class2ObjectTypeDecoder());
 		decoders.add(new Class3ObjectTypeDecoder());
+		decoders.add(new AnalogOutputCommandInteger32ObjectTypeDecoder());
+		decoders.add(new AnalogOutputCommandInteger16ObjectTypeDecoder());
+		decoders.add(new AnalogOutputCommandFloat32ObjectTypeDecoder());
+		decoders.add(new AnalogOutputCommandFloat64ObjectTypeDecoder());
 		decoders.add(new CrobObjectTypeDecoder());
 		decoders.add(new TimeAndDateObjectTypeDecoder());
 		decoders.add(new InternalIndicatorBitObjectTypeDecoder());

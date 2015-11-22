@@ -52,12 +52,30 @@ public class DataUtils {
 		reverse(byteBuffer.array());
 		data.addAll(asList(toObject(byteBuffer.array())));
 	}
-	
+
+	public static double getFloat(int index, List<Byte> data) {
+		byte[] rawBuffer = { 0, 0, 0, 0 };
+		for (int i = 0; i < rawBuffer.length; ++i) {
+			rawBuffer[i] = data.get(index + i);
+		}
+		ArrayUtils.reverse(rawBuffer);
+		return ByteBuffer.wrap(rawBuffer).getFloat();
+	}
+
 	public static void addDouble(double value, List<Byte> data) {
 		ByteBuffer byteBuffer = ByteBuffer.allocate(8);
 		byteBuffer.putDouble(value);
 		reverse(byteBuffer.array());
 		data.addAll(asList(toObject(byteBuffer.array())));
+	}
+	
+	public static double getDouble(int index, List<Byte> data) {
+		byte[] rawBuffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
+		for (int i = 0; i < rawBuffer.length; ++i) {
+			rawBuffer[i] = data.get(index + i);
+		}
+		ArrayUtils.reverse(rawBuffer);
+		return ByteBuffer.wrap(rawBuffer).getDouble();
 	}
 
 	public static void trim(long count, List<Byte> data) {

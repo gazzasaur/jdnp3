@@ -67,6 +67,12 @@ public class ObjectTypeConstants {
 	public static ObjectType ANALOG_OUTPUT_STATIC_FLOAT32 = new ObjectType(40, 3);
 	public static ObjectType ANALOG_OUTPUT_STATIC_FLOAT64 = new ObjectType(40, 4);
 	
+	public static int ANALOG_OUTPUT_COMMAND_GROUP = 41;
+	public static ObjectType ANALOG_OUTPUT_COMMAND_INT32 = new ObjectType(41, 1);
+	public static ObjectType ANALOG_OUTPUT_COMMAND_INT16 = new ObjectType(41, 2);
+	public static ObjectType ANALOG_OUTPUT_COMMAND_FLOAT32 = new ObjectType(41, 3);
+	public static ObjectType ANALOG_OUTPUT_COMMAND_FLOAT64 = new ObjectType(41, 4);
+	
 	public static ObjectType ANALOG_OUTPUT_EVENT_ANY = new ObjectType(42, 0);
 
 	public static final ObjectType ANALOG_OUTPUT_COMMAND_EVENT_ANY = new ObjectType(43, 0);
