@@ -34,6 +34,11 @@ public class DataUtils {
 	
 	public static long getInteger(int index, int octetCount, List<Byte> data) {
 		byte[] rawBuffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
+		if (data.get(octetCount - 1).byteValue() < 0) {
+			for (int i = 0; i < rawBuffer.length; ++i) {
+				rawBuffer[i] = (byte) 0xFF;
+			}
+		}
 		for (int i = 0; i < octetCount; ++i) {
 			rawBuffer[i] = data.get(index + i);
 		}

@@ -60,9 +60,8 @@ public class DataUtilsTest {
 	public void testGetInteger_Happy() {
 		performGetIntegerTest_Happy(0, 1, 0x3B, 0x3B);
 		performGetIntegerTest_Happy(1, 1, 0x47L, 0x19, 0x47, 0x9A);
-		performGetIntegerTest_Happy(0, 2, 0xF76AL, 0x6A, 0xF7, 0x2A);
+		performGetIntegerTest_Happy(0, 2, 0xFFFFFFFFFFFFF76AL, 0x6A, 0xF7, 0x2A);
 		performGetIntegerTest_Happy(2, 8, 0xF36A68A3E79C9B4FL, 0x52, 0x34, 0x4F, 0x9B, 0x9C, 0xE7, 0xA3, 0x68, 0x6A, 0xF3, 0x8D);
-		performGetIntegerTest_Happy(random.nextInt(10000) - 5000, 0, 0, generateRandomList());
 	}
 
 	@Test
@@ -70,6 +69,7 @@ public class DataUtilsTest {
 		performGetIntegerTest_Sad(-1, 1, generateRandomList());
 		performGetIntegerTest_Sad(-2, 2, generateRandomList());
 		performGetIntegerTest_Sad(-1*random.nextInt(10000) - 1, random.nextInt(10) + 1, generateRandomList());
+		performGetIntegerTest_Sad(random.nextInt(10000) - 5000, 0, generateRandomList());
 		performGetIntegerTest_Sad(2, 2, 0x14, 0x83, 0x12);
 		performGetIntegerTest_Sad(4, 1, 0x14, 0x83, 0x12);
 	}
