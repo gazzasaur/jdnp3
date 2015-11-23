@@ -27,6 +27,7 @@ import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage;
@@ -34,6 +35,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessag
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.counter.CounterMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.GetDeviceMessage;
 
 public class GetDeviceMessageHandler implements MessageHandler {
@@ -74,6 +76,11 @@ public class GetDeviceMessageHandler implements MessageHandler {
 				AnalogOutputMessage part = new AnalogOutputMessage();
 				BeanUtils.copyProperties(part, point);
 				specificMessage.getAnalogOutputPoints().add(part);
+			}
+			for (CounterDataPoint point : databaseManager.getCounterDataPoints()) {
+				CounterMessage part = new CounterMessage();
+				BeanUtils.copyProperties(part, point);
+				specificMessage.getCounterPoints().add(part);
 			}
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);

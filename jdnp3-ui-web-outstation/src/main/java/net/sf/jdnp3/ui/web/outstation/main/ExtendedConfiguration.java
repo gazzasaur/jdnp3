@@ -25,6 +25,8 @@ public class ExtendedConfiguration {
 	private List<String> binaryInputPoints = new ArrayList<>();
 	private List<String> binaryOutputPoints = new ArrayList<>();
 	private List<String> analogInputPoints = new ArrayList<>();
+	private List<String> analogOutputPoints = new ArrayList<>();
+	private List<String> counterPoints = new ArrayList<>();
 	
 	public List<CustomType> getCustomTypes() {
 		return unmodifiableList(customTypes);
@@ -56,6 +58,22 @@ public class ExtendedConfiguration {
 
 	public void setAnalogInputPoints(List<String> analogInputPoints) {
 		this.analogInputPoints = new ArrayList<>(analogInputPoints);
+	}
+
+	public List<String> getAnalogOutputPoints() {
+		return unmodifiableList(analogOutputPoints);
+	}
+
+	public void setAnalogOutputPoints(List<String> analogOutputPoints) {
+		this.analogOutputPoints = new ArrayList<>(analogOutputPoints);
+	}
+
+	public List<String> getCounterPoints() {
+		return unmodifiableList(counterPoints);
+	}
+
+	public void setCounterPoints(List<String> counterPoints) {
+		this.counterPoints = new ArrayList<>(counterPoints);
 	}
 	
 }

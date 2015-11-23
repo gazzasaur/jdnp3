@@ -92,6 +92,8 @@ public class DeviceFactory {
 		databaseManager.addBinaryInputDataPoints(extendedConfiguration.getBinaryInputPoints().toArray(new String[0]));
 		databaseManager.addBinaryOutputDataPoints(extendedConfiguration.getBinaryOutputPoints().toArray(new String[0]));
 		databaseManager.addAnalogInputDataPoints(extendedConfiguration.getAnalogInputPoints().toArray(new String[0]));
+		databaseManager.addAnalogOutputDataPoints(extendedConfiguration.getAnalogOutputPoints().toArray(new String[0]));
+		databaseManager.addCounterDataPoints(extendedConfiguration.getCounterPoints().toArray(new String[0]));
 		
 		OutstationFactory outstationFactory = new OutstationFactory();
 		for (CustomType customType : extendedConfiguration.getCustomTypes()) {

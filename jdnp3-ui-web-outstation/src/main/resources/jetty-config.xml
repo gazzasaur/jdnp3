@@ -123,6 +123,16 @@
 <!-- 			</list> -->
 <!-- 		</property> -->
 <!-- 	</bean> -->
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.counter.CounterMessageHandler" />
+			</list>
+		</property>
+	</bean>
 	
 	<bean id="genericMessageRegistry" class="net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistryProvider" factory-method="getRegistry" />
 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
@@ -270,6 +280,18 @@
 				<value>analogOutputPoint</value>
 				<value>net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint</value>
 				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessage</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>counterPoint</value>
+				<value>net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.CounterMessage</value>
 			</list>
 		</property>
 	</bean>

@@ -18,5 +18,5 @@ package net.sf.jdnp3.dnp3.service.outstation.handler.counter;
 import net.sf.jdnp3.dnp3.service.outstation.handler.generic.StaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.counter.CounterStaticObjectInstance;
 
-public interface CounterStaticReadRequestHandler2 extends StaticReadRequestHandler<CounterStaticObjectInstance> {
+public interface CounterStaticReadRequestHandler extends StaticReadRequestHandler<CounterStaticObjectInstance> {
 }

@@ -24,6 +24,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessag
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.counter.CounterMessage;
 
 public class GetDeviceMessage implements Message {
 	private String type = "getDevice";
@@ -33,6 +34,7 @@ public class GetDeviceMessage implements Message {
 	private List<BinaryOutputMessage> binaryOutputPoints = new ArrayList<>();
 	private List<AnalogInputMessage> analogInputPoints = new ArrayList<>();
 	private List<AnalogOutputMessage> analogOutputPoints = new ArrayList<>();
+	private List<CounterMessage> counterPoints = new ArrayList<>();
 	
 	public String getType() {
 		return type;
@@ -78,4 +80,11 @@ public class GetDeviceMessage implements Message {
 		this.internalIndicators = internalIndicators;
 	}
 
+	public List<CounterMessage> getCounterPoints() {
+		return counterPoints;
+	}
+
+	public void setCounterPoints(List<CounterMessage> counterPoints) {
+		this.counterPoints = counterPoints;
+	}
 }
