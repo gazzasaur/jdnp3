@@ -23,7 +23,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_COMMAND_CROB;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_EVENT_ABSOLUTE_TIME;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_STATIC_PACKED;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.COuNTER_STATIC_INT32;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.COUNTER_STATIC_INT32;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +48,7 @@ public class DefaultObjectTypeMapping {
 		this.put(BinaryOutputStaticObjectInstance.class, BINARY_OUTPUT_STATIC_PACKED);
 		this.put(BinaryOutputEventObjectInstance.class, BINARY_OUTPUT_EVENT_ABSOLUTE_TIME);
 		this.put(BinaryOutputCrobObjectInstance.class, BINARY_OUTPUT_COMMAND_CROB);
-		this.put(CounterStaticObjectInstance.class, COuNTER_STATIC_INT32);
+		this.put(CounterStaticObjectInstance.class, COUNTER_STATIC_INT32);
 		this.put(AnalogInputStaticObjectInstance.class, ANALOG_INPUT_STATIC_FLOAT64);
 		this.put(AnalogInputEventObjectInstance.class, ANALOG_INPUT_EVENT_FLOAT64_ABSOLUTE_TIME);
 		this.put(AnalogOutputStaticObjectInstance.class, ANALOG_OUTPUT_STATIC_FLOAT64);

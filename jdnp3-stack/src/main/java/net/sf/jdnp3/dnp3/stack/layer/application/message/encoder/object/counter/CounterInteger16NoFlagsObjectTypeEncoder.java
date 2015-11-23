@@ -16,7 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.counter;
 
 import static java.lang.String.format;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.COuNTER_STATIC_INT16_NO_FLAGS;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.COUNTER_STATIC_INT16_NO_FLAGS;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
 
 import java.util.List;
@@ -30,7 +30,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.counter.CounterSta
 
 public class CounterInteger16NoFlagsObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return objectType.equals(COuNTER_STATIC_INT16_NO_FLAGS);
+		return objectType.equals(COUNTER_STATIC_INT16_NO_FLAGS);
 	}
 
 	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {

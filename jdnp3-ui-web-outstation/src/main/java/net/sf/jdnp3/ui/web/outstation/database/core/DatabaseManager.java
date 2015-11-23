@@ -30,6 +30,7 @@ import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 
 public class DatabaseManager {
 	private Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
@@ -143,6 +144,31 @@ public class DatabaseManager {
 		}
 	}
 	
+	public void setCounterDatabaseSize(int size) {
+		synchronized (database) {
+			while (database.getCounterDataPoints().size() > size) {
+				database.removeCounterDataPoint();
+			}
+			while (database.getCounterDataPoints().size() < size) {
+				database.addCounterDataPoint();
+			}
+		}
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.modelChanged();
+		}
+	}
+	
+	public void addCounterDataPoints(String... names) {
+		synchronized (database) {
+			for (String name : names) {
+				database.addCounterDataPoint(name);
+			}
+		}
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.modelChanged();
+		}
+	}
+	
 	public InternalIndicatorsDataPoint getInternalIndicatorsDataPoint() {
 		synchronized (database) {
 			return Cloner.standard().deepClone(database.getIndicatorsDataPoint());
@@ -170,6 +196,12 @@ public class DatabaseManager {
 	public List<BinaryOutputDataPoint> getBinaryOutputDataPoints() {
 		synchronized (database) {
 			return Cloner.standard().deepClone(database.getBinaryOutputDataPoints());
+		}
+	}
+	
+	public List<CounterDataPoint> getCounterDataPoints() {
+		synchronized (database) {
+			return Cloner.standard().deepClone(database.getCounterDataPoints());
 		}
 	}
 	
@@ -235,6 +267,19 @@ public class DatabaseManager {
 			}
 		} else {
 			logger.warn("Cannot write binary output data point of index: " + binaryDataPoint.getIndex());
+		}
+	}
+	
+	public void setCounterDataPoint(CounterDataPoint dataPoint) {
+		synchronized (database) {
+			database.setCounterDataPoint(Cloner.standard().deepClone(dataPoint));
+		}
+		if (dataPoint.getIndex() < database.getCounterDataPoints().size()) {
+			for (DatabaseListener databaseListener : databaseListeners) {
+				databaseListener.valueChanged(dataPoint);
+			}
+		} else {
+			logger.warn("Cannot write data point of index: " + dataPoint.getIndex());
 		}
 	}
 

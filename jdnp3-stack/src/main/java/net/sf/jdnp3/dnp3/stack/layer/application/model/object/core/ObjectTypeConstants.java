@@ -49,15 +49,18 @@ public class ObjectTypeConstants {
 	public static ObjectType BINARY_OUTPUT_COMMAND_EVENT_ABSOLUTE_TIME = new ObjectType(13, 2);
 	
 	public static int COUNTER_STATIC_GROUP = 20;
-	public static ObjectType COuNTER_STATIC_ANY = new ObjectType(COUNTER_STATIC_GROUP, 0);
-	public static ObjectType COuNTER_STATIC_INT32 = new ObjectType(COUNTER_STATIC_GROUP, 1);
-	public static ObjectType COuNTER_STATIC_INT16 = new ObjectType(COUNTER_STATIC_GROUP, 2);
-	public static ObjectType COuNTER_STATIC_INT32_DELTA = new ObjectType(COUNTER_STATIC_GROUP, 3);
-	public static ObjectType COuNTER_STATIC_INT16_DELTA = new ObjectType(COUNTER_STATIC_GROUP, 4);
-	public static ObjectType COuNTER_STATIC_INT32_NO_FLAGS = new ObjectType(COUNTER_STATIC_GROUP, 5);
-	public static ObjectType COuNTER_STATIC_INT16_NO_FLAGS = new ObjectType(COUNTER_STATIC_GROUP, 6);
-	public static ObjectType COuNTER_STATIC_INT32_DELTA_NO_FLAGS = new ObjectType(COUNTER_STATIC_GROUP, 7);
-	public static ObjectType COuNTER_STATIC_INT16_DELTA_NO_FLAGS = new ObjectType(COUNTER_STATIC_GROUP, 8);
+	public static ObjectType COUNTER_STATIC_ANY = new ObjectType(COUNTER_STATIC_GROUP, 0);
+	public static ObjectType COUNTER_STATIC_INT32 = new ObjectType(COUNTER_STATIC_GROUP, 1);
+	public static ObjectType COUNTER_STATIC_INT16 = new ObjectType(COUNTER_STATIC_GROUP, 2);
+	public static ObjectType COUNTER_STATIC_INT32_DELTA = new ObjectType(COUNTER_STATIC_GROUP, 3);
+	public static ObjectType COUNTER_STATIC_INT16_DELTA = new ObjectType(COUNTER_STATIC_GROUP, 4);
+	public static ObjectType COUNTER_STATIC_INT32_NO_FLAGS = new ObjectType(COUNTER_STATIC_GROUP, 5);
+	public static ObjectType COUNTER_STATIC_INT16_NO_FLAGS = new ObjectType(COUNTER_STATIC_GROUP, 6);
+	public static ObjectType COUNTER_STATIC_INT32_DELTA_NO_FLAGS = new ObjectType(COUNTER_STATIC_GROUP, 7);
+	public static ObjectType COUNTER_STATIC_INT16_DELTA_NO_FLAGS = new ObjectType(COUNTER_STATIC_GROUP, 8);
+
+	public static int COUNTER_EVENT_GROUP = 20;
+	public static ObjectType COUNTER_EVENT_ANY = new ObjectType(COUNTER_STATIC_GROUP, 0);
 
 	public static ObjectType ANALOG_INPUT_STATIC_ANY = new ObjectType(30, 0);
 	public static ObjectType ANALOG_INPUT_STATIC_INT32 = new ObjectType(30, 1);

@@ -50,6 +50,14 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.B
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryOutputStaticFlagsObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryOutputStaticPackedObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.CrobObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.counter.CounterInteger16DeltaNoFlagsObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.counter.CounterInteger16DeltaObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.counter.CounterInteger16NoFlagsObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.counter.CounterInteger16ObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.counter.CounterInteger32DeltaNoFlagsObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.counter.CounterInteger32DeltaObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.counter.CounterInteger32NoFlagsObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.counter.CounterInteger32ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.time.SynchronisedCtoObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.time.TimeAndDateObjectTypeEncoder;
@@ -72,7 +80,16 @@ public class ObjectTypeEncoderConstants {
 		this.add(new BinaryOutputEventAbsoluteTimeObjectTypeEncoder());
 		
 		this.add(new CrobObjectTypeEncoder());
-		
+
+		this.add(new CounterInteger32ObjectTypeEncoder());
+		this.add(new CounterInteger16ObjectTypeEncoder());
+		this.add(new CounterInteger32DeltaObjectTypeEncoder());
+		this.add(new CounterInteger16DeltaObjectTypeEncoder());
+		this.add(new CounterInteger32NoFlagsObjectTypeEncoder());
+		this.add(new CounterInteger16NoFlagsObjectTypeEncoder());
+		this.add(new CounterInteger32DeltaNoFlagsObjectTypeEncoder());
+		this.add(new CounterInteger16DeltaNoFlagsObjectTypeEncoder());
+
 		this.add(new AnalogInputStaticInteger32ObjectTypeEncoder());
 		this.add(new AnalogInputStaticInteger16ObjectTypeEncoder());
 		this.add(new AnalogInputStaticInteger32NoFlagsObjectTypeEncoder());
