@@ -31,11 +31,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * - Add the ability to create events.
  * - Add the ability to create control events.
  * 
+ * Counters
+ * 
  * Complete AnalogOutput type:
  * - Add the ability to create events.
  * - Add the ability to create control events.
- * 
- * Counters.
+ * - Add JSON AnalogOutput to python create module.
  * 
  * Freeze/Unfreeze
  * 
