@@ -25,18 +25,21 @@ import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogInputStat
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogOutputStaticHandler;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryInputStaticHandler;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryOutputStaticHandler;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.counter.CounterStaticHandler;
 
 public class Class0Reader implements Class0ReadRequestHandler {
 	private AnalogInputStaticHandler analogInputStaticReader;
 	private BinaryInputStaticHandler binaryInputStaticReader;
 	private AnalogOutputStaticHandler analogOutputStaticReader;
 	private BinaryOutputStaticHandler binaryOutputStaticReader;
+	private CounterStaticHandler counterStaticReader;
 	
 	public Class0Reader(DatabaseManager databaseManager) {
 		analogInputStaticReader = new AnalogInputStaticHandler(databaseManager);
 		binaryInputStaticReader = new BinaryInputStaticHandler(databaseManager);
 		analogOutputStaticReader = new AnalogOutputStaticHandler(databaseManager);
 		binaryOutputStaticReader = new BinaryOutputStaticHandler(databaseManager);
+		counterStaticReader = new CounterStaticHandler(databaseManager);
 	}
 	
 	public List<ObjectInstance> doReadClass() {
@@ -45,6 +48,7 @@ public class Class0Reader implements Class0ReadRequestHandler {
 		points.addAll(analogInputStaticReader.readStatics());
 		points.addAll(binaryOutputStaticReader.readStatics());
 		points.addAll(analogOutputStaticReader.readStatics());
+		points.addAll(counterStaticReader.readStatics());
 
 		return points;
 	}

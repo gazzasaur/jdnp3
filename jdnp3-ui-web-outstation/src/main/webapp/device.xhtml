@@ -11,6 +11,7 @@
 	xmlns:jdnp3="http://java.sun.com/jsf/composite/jdnp3">
 <h:head>
 	<h:outputScript library="js" name="schedule.js" />
+	<h:outputScript library="js" name="counter.js" />
 	<h:outputScript library="js" name="analog.js" />
 	<h:outputScript library="js" name="binary.js" />
 	<h:outputScript library="js" name="iin.js" />
@@ -89,6 +90,17 @@
 								<p:panelGrid style="margin: auto; text-align: right;" columns="2">
 									<c:forEach var="point" items="#{uiPointDatabase.getAnalogOutputDataPoints(param['stationCode'], param['deviceCode'])}">
 										<h:outputText style="margin-right: 10px" value="#{point.name} (#{point.index})" /><jdnp3:analogOutput point="#{point}" />
+									</c:forEach>
+								</p:panelGrid>
+							</p:panel>
+						</div>
+					</c:if>
+					<c:if test="#{uiPointDatabase.getCounterDataPoints(param['stationCode'], param['deviceCode']).size() > 0}">
+						<div style="text-align: center; display: inline-block;">
+							<p:panel header="Counter">
+								<p:panelGrid style="margin: auto; text-align: right;" columns="2">
+									<c:forEach var="point" items="#{uiPointDatabase.getCounterDataPoints(param['stationCode'], param['deviceCode'])}">
+										<h:outputText style="margin-right: 10px" value="#{point.name} (#{point.index})" /><jdnp3:counter point="#{point}" />
 									</c:forEach>
 								</p:panelGrid>
 							</p:panel>

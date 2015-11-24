@@ -29,5 +29,11 @@
 				<value>Max Speed</value>
 			</list>
 		</property>
+		<property name="counterDataPoints">
+			<list>
+				<value>Control Count</value>
+				<value>Uptime</value>
+			</list>
+		</property>
 	</bean>
 </beans>

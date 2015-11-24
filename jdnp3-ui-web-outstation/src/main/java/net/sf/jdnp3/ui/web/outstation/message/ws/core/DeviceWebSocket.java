@@ -24,6 +24,7 @@ import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageDecoder;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistry;
@@ -81,6 +82,10 @@ public class DeviceWebSocket implements DeviceManager, DatabaseListener {
 		List<AnalogOutputDataPoint> analogOutputDataPoints = databaseManager.getAnalogOutputDataPoints();
 		for (AnalogOutputDataPoint analogDataPoint : analogOutputDataPoints) {
 			this.valueChanged(analogDataPoint);
+		}
+		List<CounterDataPoint> counterDataPoints = databaseManager.getCounterDataPoints();
+		for (CounterDataPoint counterDataPoint : counterDataPoints) {
+			this.valueChanged(counterDataPoint);
 		}
 	}
 	

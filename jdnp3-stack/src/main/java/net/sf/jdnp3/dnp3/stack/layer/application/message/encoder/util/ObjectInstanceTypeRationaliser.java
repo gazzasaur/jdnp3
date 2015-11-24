@@ -18,14 +18,15 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.counter.CounterStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeDelayObjectInstance;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 // FIXME IMPL Update this to avoid hard coding the helpers.
 public class ObjectInstanceTypeRationaliser {
@@ -36,6 +37,7 @@ public class ObjectInstanceTypeRationaliser {
 		this.put(BinaryInputStaticObjectInstance.class, new BinaryInputStaticTypeRationaliserHelper());
 		this.put(BinaryOutputStaticObjectInstance.class, new BinaryOutputStaticTypeRationaliserHelper());
 		this.put(AnalogInputStaticObjectInstance.class, new AnalogInputStaticTypeRationaliserHelper());
+		this.put(CounterStaticObjectInstance.class, new CounterStaticTypeRationaliserHelper());
 		this.put(TimeDelayObjectInstance.class, new TimeDelayTypeRationaliserHelper());
 	}};
 	

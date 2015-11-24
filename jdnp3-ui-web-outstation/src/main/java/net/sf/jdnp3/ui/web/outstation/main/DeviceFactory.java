@@ -57,6 +57,7 @@ public class DeviceFactory {
 	private List<String> binaryOutputDataPoints = new ArrayList<>();
 	private List<String> analogInputDataPoints = new ArrayList<>();
 	private List<String> analogOutputDataPoints = new ArrayList<>();
+	private List<String> counterDataPoints = new ArrayList<>();
 	
 	@SuppressWarnings("serial")
 	private Map<String, Class<? extends Range>> rangeClassMapping = new HashMap<String, Class<? extends Range>>() {{
@@ -88,6 +89,7 @@ public class DeviceFactory {
 		databaseManager.addBinaryOutputDataPoints(binaryOutputDataPoints.toArray(new String[0]));
 		databaseManager.addAnalogInputDataPoints(analogInputDataPoints.toArray(new String[0]));
 		databaseManager.addAnalogOutputDataPoints(analogOutputDataPoints.toArray(new String[0]));
+		databaseManager.addCounterDataPoints(counterDataPoints.toArray(new String[0]));
 		
 		databaseManager.addBinaryInputDataPoints(extendedConfiguration.getBinaryInputPoints().toArray(new String[0]));
 		databaseManager.addBinaryOutputDataPoints(extendedConfiguration.getBinaryOutputPoints().toArray(new String[0]));
@@ -158,5 +160,9 @@ public class DeviceFactory {
 
 	public void setAnalogOutputDataPoints(String... analogOutputDataPoints) {
 		this.analogOutputDataPoints = asList(analogOutputDataPoints);
+	}
+
+	public void setCounterDataPoints(String... counterDataPoints) {
+		this.counterDataPoints = asList(counterDataPoints);
 	}
 }

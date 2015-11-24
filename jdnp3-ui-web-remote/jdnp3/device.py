@@ -100,6 +100,26 @@ class Outstation:
         data = self.get()['binaryOutputPoints'][index]
         self.set_attribute(data, *args)
         self.set(data)
+
+    def get_counter(self, index, *args):
+        data = self.get()['counterPoints'][index]
+        return self.get_attribute(data, *args);
+    
+    def wait_for_counter(self, index, *args):
+        value = args[-1]
+        args_list = list(args)
+        del args_list[-1]
+        args = tuple(args_list)
+        
+        def func():
+            return self.get_counter(index, *args) == value
+        if not jdnp3.control.wait_for(func):
+            raise RuntimeError('Timeout while waiting for value %s.' % (value))
+        
+    def set_counter(self, index, *args):
+        data = self.get()['counterPoints'][index]
+        self.set_attribute(data, *args)
+        self.set(data)
         
     def get(self):
         return self.control.getOutstation(self.site, self.device)

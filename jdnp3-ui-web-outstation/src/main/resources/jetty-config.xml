@@ -291,7 +291,7 @@
 			<list>
 				<value>counterPoint</value>
 				<value>net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint</value>
-				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.CounterMessage</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.counter.CounterMessage</value>
 			</list>
 		</property>
 	</bean>

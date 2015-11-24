@@ -27,7 +27,11 @@ analogInputDataPoints = [
     'Volume',
 ]
 
-# control.createOutstation('pumpStationFactory', 'Pump Station 1', 'Pump 1', 3, "20000")
+counterDataPoints = [
+    'Other',
+]
+
+# control.createOutstation('pumpStationFactory', 'Pump Station 1', 'Pump 1', 3, "20000", counterPoints=counterDataPoints)
 
 outstation = jdnp3.device.Outstation(HOST_URL, "Pump Station 1", "Pump 1")
 config = outstation.get()
@@ -54,6 +58,13 @@ outstation.set_internal_indicator('device restart', False)
 
 outstation.set_analog_output(1, 'value', -20.3)
 outstation.set_analog_output(1, 'value', 'Infinity')
+
+outstation.set_counter(1, 'rollover', False)
+for i in range(1,1000):
+    outstation.set_counter(1, 'value', i)
+    outstation.wait_for_counter(1, 'value', i)
+outstation.set_counter(1, 'rollover', True)
+outstation.set_counter(1, 'value', 0)
 
 ###
 

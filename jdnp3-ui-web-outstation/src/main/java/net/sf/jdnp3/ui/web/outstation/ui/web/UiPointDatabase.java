@@ -32,6 +32,7 @@ import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
 
 @ManagedBean
@@ -102,6 +103,23 @@ public class UiPointDatabase {
 		if (stationCode != null && deviceCode != null && !stationCode.isEmpty() && !deviceCode.isEmpty()) {
 			try {
 				List<AnalogOutputDataPoint> dataPoints = DeviceProvider.getDevice(stationCode, deviceCode).getDatabaseManager().getAnalogOutputDataPoints();
+				return convert(dataPoints);
+			} catch (Exception e) {
+				logger.error("Failed to fetch data points.", e);
+			}
+		}
+		logger.warn(format("Failed to fetch station details for station %s device %s.", stationCode, deviceCode));
+		return new ArrayList<>();
+	}
+
+	public List<UiPoint> getCounterDataPoints(String stationCode, String deviceCode) {
+		if (FacesContext.getCurrentInstance().isPostback()) {
+			return new ArrayList<>();
+		}
+
+		if (stationCode != null && deviceCode != null && !stationCode.isEmpty() && !deviceCode.isEmpty()) {
+			try {
+				List<CounterDataPoint> dataPoints = DeviceProvider.getDevice(stationCode, deviceCode).getDatabaseManager().getCounterDataPoints();
 				return convert(dataPoints);
 			} catch (Exception e) {
 				logger.error("Failed to fetch data points.", e);
