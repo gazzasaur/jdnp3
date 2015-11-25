@@ -41,7 +41,7 @@ public class ObjectFragmentDataDecoder {
 		itemEnumeratorFactories.add(itemEnumeratorFactory);
 	}
 
-	public void decode(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment, List<Byte> data) {
+	public void decode(ApplicationFragmentDecoderContext decoderContext, ObjectFragment objectFragment, List<Byte> data) {
 		Range range = objectFragment.getObjectFragmentHeader().getRange();
 		PrefixType prefixType = objectFragment.getObjectFragmentHeader().getPrefixType();
 		

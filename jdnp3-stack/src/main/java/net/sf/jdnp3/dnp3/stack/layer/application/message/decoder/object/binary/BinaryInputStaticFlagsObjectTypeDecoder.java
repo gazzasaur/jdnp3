@@ -22,7 +22,7 @@ import java.util.BitSet;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ObjectTypeDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryFlagsEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
@@ -44,11 +44,11 @@ public class BinaryInputStaticFlagsObjectTypeDecoder implements ObjectTypeDecode
 		data.add(BinaryFlagsEncoder.encode(specificInstance));
 	}
 
-	public boolean canDecode(ObjectFragmentDecoderContext decoderContext) {
+	public boolean canDecode(ApplicationFragmentDecoderContext decoderContext) {
 		return decoderContext.getObjectType().equals(BINARY_INPUT_STATIC_FLAGS);
 	}
 
-	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data) {
+	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, List<Byte> data) {
 		BinaryInputStaticObjectInstance objectInstance = new BinaryInputStaticObjectInstance();
 		objectInstance.setIndex(decoderContext.getCurrentIndex());
 		objectInstance.setRequestedType(decoderContext.getObjectType());

@@ -17,10 +17,10 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public interface ObjectTypeDecoder {
-	public boolean canDecode(ObjectFragmentDecoderContext decoderContext);
-	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data);
+	public boolean canDecode(ApplicationFragmentDecoderContext decoderContext);
+	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, List<Byte> data);
 }

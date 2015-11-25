@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
@@ -26,7 +26,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 
 public class StandardItemEnumeratorFactory implements ItemEnumeratorFactory {
-	public boolean hasEnumerator(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment) {
+	public boolean hasEnumerator(ApplicationFragmentDecoderContext decoderContext, ObjectFragment objectFragment) {
 		try {
 			this.createEnumerator(decoderContext, objectFragment);
 		} catch (Exception e) {
@@ -35,7 +35,7 @@ public class StandardItemEnumeratorFactory implements ItemEnumeratorFactory {
 		return true;
 	}
 	
-	public ItemEnumerator createEnumerator(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment) {
+	public ItemEnumerator createEnumerator(ApplicationFragmentDecoderContext decoderContext, ObjectFragment objectFragment) {
 		PrefixType prefixType = objectFragment.getObjectFragmentHeader().getPrefixType();
 		Range range = objectFragment.getObjectFragmentHeader().getRange();
 		

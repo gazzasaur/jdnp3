@@ -20,10 +20,11 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
-public class ObjectFragmentDecoderContext {
+public class ApplicationFragmentDecoderContext {
 	private ObjectType objectType = ANY;
 	private long commonTimeOfOccurrance = 0;
 	private FunctionCode functionCode = RESPONSE;
+	private StringBuilder stringBuilder = new StringBuilder("Decoded Data");
 	
 	private long startIndex = 0;
 	private long currentIndex = 0;
@@ -75,5 +76,13 @@ public class ObjectFragmentDecoderContext {
 
 	public void setLastItem(boolean lastItem) {
 		this.lastItem = lastItem;
+	}
+	
+	public void addDecodeLogic(String value) {
+		stringBuilder.append("\n" + value);
+	}
+
+	public String getDecodeLogic() {
+		return stringBuilder.toString();
 	}
 }

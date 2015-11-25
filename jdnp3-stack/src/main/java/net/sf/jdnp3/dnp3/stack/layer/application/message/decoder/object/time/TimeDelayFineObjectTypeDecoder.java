@@ -20,17 +20,17 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ObjectTypeDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeDelayObjectInstance;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class TimeDelayFineObjectTypeDecoder implements ObjectTypeDecoder {
-	public boolean canDecode(ObjectFragmentDecoderContext decoderContext) {
+	public boolean canDecode(ApplicationFragmentDecoderContext decoderContext) {
 		return decoderContext.getObjectType().equals(TIME_DELAY_FINE);
 	}
 	
-	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data) {
+	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, List<Byte> data) {
 		if (!this.canDecode(decoderContext)) {
 			throw new IllegalArgumentException("Unable to decode data.");
 		}

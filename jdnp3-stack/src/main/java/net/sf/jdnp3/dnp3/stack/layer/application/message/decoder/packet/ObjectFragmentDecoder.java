@@ -42,7 +42,7 @@ public class ObjectFragmentDecoder {
 		customDecoders.add(decoder);
 	}
 	
-	public void decode(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment, List<Byte> data) {
+	public void decode(ApplicationFragmentDecoderContext decoderContext, ObjectFragment objectFragment, List<Byte> data) {
 		for (ByteDataObjectTypeDecoder customDecoder : customDecoders) {
 			customDecoder.canDecode(decoderContext, data);
 			

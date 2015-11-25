@@ -20,5 +20,5 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentRequest;
 
 public interface ApplicationFragmentRequestDecoder {
-	public ApplicationFragmentRequest decode(ApplicationFragmentRequest request, List<Byte> data);
+	public ApplicationFragmentRequest decode(ApplicationFragmentDecoderContext decoderContext, ApplicationFragmentRequest request, List<Byte> data);
 }

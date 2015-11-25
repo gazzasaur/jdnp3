@@ -20,18 +20,18 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ObjectTypeDecoder;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogOutputCommandObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StatusCode;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class AnalogOutputCommandInteger16ObjectTypeDecoder implements ObjectTypeDecoder {
-	public boolean canDecode(ObjectFragmentDecoderContext decoderContext) {
+	public boolean canDecode(ApplicationFragmentDecoderContext decoderContext) {
 		return decoderContext.getObjectType().equals(ANALOG_OUTPUT_COMMAND_INT16);
 	}
 	
-	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data) {
+	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, List<Byte> data) {
 		if (!this.canDecode(decoderContext)) {
 			throw new IllegalArgumentException("Unable to decode data.");
 		}

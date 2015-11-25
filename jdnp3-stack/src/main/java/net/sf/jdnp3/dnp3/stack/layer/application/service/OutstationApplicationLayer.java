@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.exception.UnknownObjectException;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFragmentPacker;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFragmentPackerContext;
@@ -49,6 +50,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.SynchronisedC
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeDelayObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
+import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
@@ -111,7 +113,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	
 	public void dataReceived(MessageProperties messageProperties, List<Byte> data) {
 		validateState();
-		data = new ArrayList<>(data);
+		List<Byte> localData = new ArrayList<>(data);
 		
 		if (!messageProperties.isMaster()) {
 			return;
@@ -122,9 +124,12 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		List<ObjectInstance> responseObjects = new ArrayList<>();
 		
 		ApplicationFragmentRequest request = new ApplicationFragmentRequest();
+		ApplicationFragmentDecoderContext decoderContext = new ApplicationFragmentDecoderContext();
 		try {
-			decoder.decode(request, data);
+			decoder.decode(decoderContext, request, localData);
 		} catch (UnknownObjectException unknownObjectException) {
+			logger.error("Failed to decode: " + DataUtils.toString(data));
+			logger.error(decoderContext.getDecodeLogic());
 			logger.error(unknownObjectException.getMessage(), unknownObjectException);
 			if (request.getHeader().getApplicationControl().getSequenceNumber() >= 0) {
 				ApplicationFragmentResponse response = new ApplicationFragmentResponse();
@@ -197,7 +202,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			for (ObjectFragment objectFragment : request.getObjectFragments()) {
 				response.addObjectFragment(objectFragment);
 			}
-			sendData(messageProperties, data, returnMessageProperties, response);
+			sendData(messageProperties, localData, returnMessageProperties, response);
 			return;
 		}
 		

@@ -15,10 +15,10 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 
 public interface ItemEnumeratorFactory {
-	public boolean hasEnumerator(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment);
-	public ItemEnumerator createEnumerator(ObjectFragmentDecoderContext decoderContext, ObjectFragment objectFragment);
+	public boolean hasEnumerator(ApplicationFragmentDecoderContext decoderContext, ObjectFragment objectFragment);
+	public ItemEnumerator createEnumerator(ApplicationFragmentDecoderContext decoderContext, ObjectFragment objectFragment);
 }

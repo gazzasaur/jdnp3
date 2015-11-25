@@ -38,7 +38,7 @@
 <!-- 		<appender-ref ref="FILE" /> -->
 <!-- 	</logger> -->
 	
-	<logger name="net.sf" level="INFO" additivity="false">
+	<logger name="net.sf" level="WARN" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 	

@@ -17,16 +17,16 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic
 
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ObjectFragmentDecoderContext;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants;
 
 public class Class0ObjectTypeDecoder implements ObjectTypeDecoder {
-	public boolean canDecode(ObjectFragmentDecoderContext decoderContext) {
+	public boolean canDecode(ApplicationFragmentDecoderContext decoderContext) {
 		return decoderContext.getObjectType().equals(ObjectTypeConstants.CLASS_0);
 	}
 	
-	public ObjectInstance decode(ObjectFragmentDecoderContext decoderContext, List<Byte> data) {
+	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, List<Byte> data) {
 		throw new UnsupportedOperationException("Object does not contain data.");
 	}
 }
