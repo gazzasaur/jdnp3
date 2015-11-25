@@ -19,6 +19,26 @@
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
 			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.datalink.StartDataLinkMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.datalink.StopDataLinkMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
 				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.device.CreateDeviceMessageHandler" />
 			</list>
 		</property>
@@ -142,6 +162,28 @@
 			<list>
 				<value>heartbeat</value>
 				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.core.HeartbeatMessage</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>startDataLink</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.datalink.StartDataLinkMessage</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>stopDataLink</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.datalink.StopDataLinkMessage</value>
 			</list>
 		</property>
 	</bean>

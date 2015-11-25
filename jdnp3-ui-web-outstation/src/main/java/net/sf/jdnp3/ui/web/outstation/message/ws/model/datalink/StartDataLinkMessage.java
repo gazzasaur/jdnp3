@@ -13,21 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.service.core;
+package net.sf.jdnp3.ui.web.outstation.message.ws.model.datalink;
 
-import java.util.List;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
-import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
-
-public interface DataLinkLayer {
-	public int getMtu();
-	public int getConnectionCount();
-	public void sendData(MessageProperties messageProperties, List<Byte> encode);
+public class StartDataLinkMessage implements Message {
+	private String type = "startDataLink";
+	private String dataLink = "";
 	
-	public void addDataLinkLayerListener(DataLinkListener listener);
-	public void removeDataLinkLayerListener(DataLinkListener listener);
-	
-	public void start();
-	public void stop();
-	public boolean isRunning();
+	public String getType() {
+		return type;
+	}
+
+	public String getDataLink() {
+		return dataLink;
+	}
+
+	public void setDataLink(String dataLink) {
+		this.dataLink = dataLink;
+	}
 }

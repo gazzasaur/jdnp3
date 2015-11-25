@@ -46,7 +46,6 @@ class Control:
     def getOutstation(self, site, device, output=False):
         data = {'type': 'getDevice'}
         return self.sendMessage(site, device, data, output=output)
-
         
     def sendMessage(self, site, device, data, output=False):
         query = [('siteCode', site), ('deviceCode', device)]

@@ -39,6 +39,18 @@ public class DataLinkManager {
 		transportBinding.setDataLinkLayer(dataLinkLayer);
 		transportBindings.add(transportBinding);
 	}
+	
+	public void start() {
+		dataLinkLayer.start();
+	}
+	
+	public void stop() {
+		dataLinkLayer.stop();
+	}
+	
+	public boolean isRunning() {
+		return dataLinkLayer.isRunning();
+	}
 
 	public void setDataLinkLayer(DataLinkLayer dataLinkLayer) {
 		this.dataLinkLayer = dataLinkLayer;

@@ -130,6 +130,14 @@ class Outstation:
     def output(self):
         self.control.getOutstation(self.site, self.device, output=True)
 
+    def start_data_link(self, dataLinkName):
+        data = {'type': 'startDataLink', 'dataLink': dataLinkName}
+        self.control.sendMessage(self.site, self.device, data)
+
+    def stop_data_link(self, dataLinkName):
+        data = {'type': 'stopDataLink', 'dataLink': dataLinkName}
+        self.control.sendMessage(self.site, self.device, data)
+
     def get_attribute(self, data, *args):
         if (len(args) < 1):
             print "Must specify at least one attribute."

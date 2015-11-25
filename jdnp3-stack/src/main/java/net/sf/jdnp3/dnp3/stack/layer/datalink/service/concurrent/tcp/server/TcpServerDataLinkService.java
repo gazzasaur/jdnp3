@@ -38,7 +38,6 @@ import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.nio.DataPump;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
-// FIXME IMPL Implement start/stop/running.
 public class TcpServerDataLinkService implements DataLinkLayer {
 	private Logger logger = LoggerFactory.getLogger(TcpServerDataLinkService.class);
 	
@@ -54,46 +53,56 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 	private int port = 20000;
 	
 	private ChannelManager channelManager = new ChannelManager();
+	private ServerSocketChannel serverSocketChannel = null;
 	
-	public int getMtu() {
+	public synchronized int getMtu() {
 		return mtu;
 	}
 
-	public void setMtu(int mtu) {
+	public synchronized void setMtu(int mtu) {
 		this.mtu = mtu;
 	}
 
-	public void start() {
+	public synchronized void start() {
 		if (dataPump == null) {
 			throw new IllegalStateException("No data pump has been specified.");
 		}
 		if (executorService == null) {
 			throw new IllegalStateException("No executor service has been defined.");
 		}
-		ServerSocketChannel serverSocketChannel = TcpServerDataLinkServiceConnector.create(getHost(), getPort());
-		dataPump.registerServerChannel(serverSocketChannel, new ServerSocketChannelDataPumpListener(dataPump, channelManager, serverSocketChannel, multiDataLinkListener));
+		if (serverSocketChannel != null) {
+			throw new IllegalStateException("Service already started.");
+		}
+		serverSocketChannel  = TcpServerDataLinkServiceConnector.create(getHost(), getPort());
+		dataPump.registerServerChannel(serverSocketChannel , new ServerSocketChannelDataPumpListener(dataPump, channelManager, serverSocketChannel , multiDataLinkListener));
 	}
 
-	public void stop() {
+	public synchronized void stop() {
+		if (serverSocketChannel == null) {
+			return;
+		}
+		TcpServerDataLinkServiceConnector.closeChannel(serverSocketChannel);
+		channelManager.closeAll();
+		serverSocketChannel = null;
 	}
 
-	public boolean isRunning() {
-		return false;
+	public synchronized boolean isRunning() {
+		return serverSocketChannel != null;
 	}
 
-	public DataLinkServiceBinding bind(DataLinkConsumer dataLinkConsumer) {
+	public synchronized DataLinkServiceBinding bind(DataLinkConsumer dataLinkConsumer) {
 		throw new UnsupportedOperationException();
 	}	
 
-	public void addDataLinkLayerListener(DataLinkListener dataLinkListener) {
+	public synchronized void addDataLinkLayerListener(DataLinkListener dataLinkListener) {
 		multiDataLinkListener.addDataLinkListener(dataLinkListener);
 	}
 
-	public void removeDataLinkLayerListener(DataLinkListener dataLinkListener) {
+	public synchronized void removeDataLinkLayerListener(DataLinkListener dataLinkListener) {
 		multiDataLinkListener.removeDataLinkListener(dataLinkListener);
 	}
 
-	public void sendData(MessageProperties messageProperties, List<Byte> data) {
+	public synchronized void sendData(MessageProperties messageProperties, List<Byte> data) {
 		DataLinkFrame dataLinkFrame = new DataLinkFrame();
 		dataLinkFrame.getDataLinkFrameHeader().setPrimary(true);
 		dataLinkFrame.getDataLinkFrameHeader().setSource(messageProperties.getSourceAddress());
@@ -109,32 +118,32 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 		dataPump.sendData(socketChannel, frameData);
 	}
 	
-	public void setDataPump(DataPump dataPump) {
+	public synchronized void setDataPump(DataPump dataPump) {
 		this.dataPump = dataPump;
 	}
 
-	public void setExecutorService(ExecutorService executorService) {
+	public synchronized void setExecutorService(ExecutorService executorService) {
 		multiDataLinkListener.setExecutorService(executorService);
 		this.executorService = executorService;
 	}
 
-	public String getHost() {
+	public synchronized String getHost() {
 		return host;
 	}
 
-	public void setHost(String host) {
+	public synchronized void setHost(String host) {
 		this.host = host;
 	}
 
-	public int getPort() {
+	public synchronized int getPort() {
 		return port;
 	}
 
-	public void setPort(int port) {
+	public synchronized void setPort(int port) {
 		this.port = port;
 	}
 
-	public int getConnectionCount() {
+	public synchronized int getConnectionCount() {
 		return channelManager.getChannels().size();
 	}
 }

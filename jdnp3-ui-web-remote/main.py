@@ -66,6 +66,12 @@ for i in range(1,1000):
 outstation.set_counter(1, 'rollover', True)
 outstation.set_counter(1, 'value', 0)
 
+# Simulate device cold restart.
+outstation.stop_data_link("20000")
+outstation.set_internal_indicator("device restart", True)
+outstation.wait_for_internal_indicator("device restart", True)
+outstation.start_data_link("20000")
+
 ###
 
 # aic = jdnp3.control.AnalogInputController(10000, 100, 15000, 50000, 2)
