@@ -24,7 +24,6 @@ public class GenericMessageDecoder implements Decoder.Text<Message> {
 	}
 
 	public Message decode(String data) throws DecodeException {
-		System.out.println(data);
 		GenericMessageRegistry registry = GenericMessageRegistryProvider.getRegistry();
 		GenericMessage genericMessage = gson.fromJson(data, GenericMessage.class);
 		if (registry.isRegistered(genericMessage.getType())) {

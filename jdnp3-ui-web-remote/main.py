@@ -68,10 +68,10 @@ outstation.set_counter(1, 'rollover', True)
 outstation.set_counter(1, 'value', 0)
 
 # Simulate device cold restart.
-outstation.stop_data_link("20000")
+control.stop_data_link("20000")
 outstation.set_internal_indicator("device restart", True)
 outstation.wait_for_internal_indicator("device restart", True)
-outstation.start_data_link("20000")
+control.start_data_link("20000")
 
 ###
 

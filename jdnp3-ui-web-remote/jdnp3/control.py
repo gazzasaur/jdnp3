@@ -43,8 +43,16 @@ class Control:
         return self.postMessage(data)
         
     def getOutstation(self, site, device, output=False):
-        data = {'type': 'getDevice'}
+        data = {'type': 'getDevice', 'site': site, 'device': device}
         return self.sendMessage(site, device, data, output=output)
+    
+    def start_data_link(self, dataLinkName):
+        data = {'type': 'startDataLink', 'dataLink': dataLinkName}
+        self.postMessage(data)
+
+    def stop_data_link(self, dataLinkName):
+        data = {'type': 'stopDataLink', 'dataLink': dataLinkName}
+        self.postMessage(data)
         
     def sendMessage(self, site, device, data, output=False):
         return self.postMessage(data, output=output)

@@ -125,18 +125,12 @@ class Outstation:
         return self.control.getOutstation(self.site, self.device)
         
     def set(self, data):
+        data['site'] = self.site
+        data['device'] = self.device
         self.control.sendMessage(self.site, self.device, data)
         
     def output(self):
         self.control.getOutstation(self.site, self.device, output=True)
-
-    def start_data_link(self, dataLinkName):
-        data = {'type': 'startDataLink', 'dataLink': dataLinkName}
-        self.control.sendMessage(self.site, self.device, data)
-
-    def stop_data_link(self, dataLinkName):
-        data = {'type': 'stopDataLink', 'dataLink': dataLinkName}
-        self.control.sendMessage(self.site, self.device, data)
 
     def get_attribute(self, data, *args):
         if (len(args) < 1):
