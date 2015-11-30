@@ -15,9 +15,10 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler.analog;
 
+import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
@@ -25,14 +26,14 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AnalogInputMessageHandler implements MessageHandler {
+public class AnalogInputMessageHandler implements DeviceMessageHandler {
 	private Logger logger = LoggerFactory.getLogger(AnalogInputMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof AnalogInputMessage;
 	}
 
-	public void processMessage(DeviceManager webSocket, Message message) {
+	public void processMessage(Messanger webSocket, DatabaseManager databaseManager, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
@@ -41,7 +42,7 @@ public class AnalogInputMessageHandler implements MessageHandler {
 		AnalogInputDataPoint analogDataPoint = new AnalogInputDataPoint();
 		try {
 			BeanUtils.copyProperties(analogDataPoint, analogInputMessage);
-			webSocket.getDatabaseManager().setAnalogInputDataPoint(analogDataPoint);
+			databaseManager.setAnalogInputDataPoint(analogDataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

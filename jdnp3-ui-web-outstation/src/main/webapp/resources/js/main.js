@@ -69,9 +69,11 @@ getDataPointIndex = function(id) {
 requestChangeSingleAttributeValue = function(type, attribute, value) {
 	scheduler.addTask(function() {
 		var data = {
-			type: type,
-			attribute: attribute,
-			value: value
+			'type': type,
+			'site': site,
+			'device': device,
+			'attribute': attribute,
+			'value': value
 		};
 		webSocket.send(JSON.stringify(data));
 	}, 0);
@@ -84,6 +86,8 @@ requestChangeAttributeValue = function(id, attribute, value) {
 			var data = ATTRIBUTE_CHANGE_HANDLER_REGISTRY[objectId[1]](id);
 			if (data.hasOwnProperty(attribute)) {
 				data[attribute] = value;
+				data['site'] = site;
+				data['device'] = device;
 				webSocket.send(JSON.stringify(data));
 			}
 		} else {
@@ -98,6 +102,8 @@ requestEvent = function(id) {
 		if (objectId && objectId[1] in EVENT_MESSAGE_REGISTRY) {
 			var data = {
 				'type': EVENT_MESSAGE_REGISTRY[objectId[1]],
+				'site': site,
+				'device': device,
 				'index': parseInt(objectId[2])
 			};
 			webSocket.send(JSON.stringify(data));

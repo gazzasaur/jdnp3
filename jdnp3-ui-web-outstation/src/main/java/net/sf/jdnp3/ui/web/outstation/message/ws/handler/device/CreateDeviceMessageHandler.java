@@ -15,37 +15,37 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler.device;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManager;
 import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.main.DeviceFactory;
 import net.sf.jdnp3.ui.web.outstation.main.DeviceFactoryRegistry;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.CreateDeviceMessage;
-
-import org.apache.commons.lang3.ObjectUtils;
 
 public class CreateDeviceMessageHandler implements MessageHandler {
 	public boolean canHandle(Message message) {
 		return message instanceof CreateDeviceMessage;
 	}
 
-	public void processMessage(DeviceManager webSocket, Message message) {
+	public void processMessage(Messanger messanger, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 		CreateDeviceMessage specificMessage = (CreateDeviceMessage) message;
 		
-		if (ObjectUtils.defaultIfNull(specificMessage.getSiteCode(), "").isEmpty() || ObjectUtils.defaultIfNull(specificMessage.getSiteCode(), "").isEmpty()) {
+		if (ObjectUtils.defaultIfNull(specificMessage.getSite(), "").isEmpty() || ObjectUtils.defaultIfNull(specificMessage.getSite(), "").isEmpty()) {
 			throw new IllegalArgumentException("A siteCode and deviceCode must be specified.");
 		}
 		
 		DataLinkManager dataLinkManager = DataLinkManagerProvider.getDataLinkManager(specificMessage.getDataLink());
 		DeviceFactory deviceFactory = DeviceFactoryRegistry.getFactory(specificMessage.getDeviceFactory());
 		
-		String siteCode = specificMessage.getSiteCode();
-		String deviceCode = specificMessage.getDeviceCode();
-		deviceFactory.create(siteCode, deviceCode, dataLinkManager, specificMessage.getPrimaryAddress(), specificMessage.getExtendedConfiguration());
+		String site = specificMessage.getSite();
+		String device = specificMessage.getDevice();
+		deviceFactory.create(site, device, dataLinkManager, specificMessage.getPrimaryAddress(), specificMessage.getExtendedConfiguration());
 	}
 }

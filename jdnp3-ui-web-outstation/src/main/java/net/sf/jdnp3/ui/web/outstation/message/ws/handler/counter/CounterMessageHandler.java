@@ -19,20 +19,21 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.counter.CounterMessage;
 
-public class CounterMessageHandler implements MessageHandler {
+public class CounterMessageHandler implements DeviceMessageHandler {
 	private Logger logger = LoggerFactory.getLogger(CounterMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof CounterMessage;
 	}
 
-	public void processMessage(DeviceManager webSocket, Message message) {
+	public void processMessage(Messanger messanger, DatabaseManager databaseManager, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
@@ -41,7 +42,7 @@ public class CounterMessageHandler implements MessageHandler {
 		CounterDataPoint dataPoint = new CounterDataPoint();
 		try {
 			BeanUtils.copyProperties(dataPoint, specificMessage);
-			webSocket.getDatabaseManager().setCounterDataPoint(dataPoint);
+			databaseManager.setCounterDataPoint(dataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

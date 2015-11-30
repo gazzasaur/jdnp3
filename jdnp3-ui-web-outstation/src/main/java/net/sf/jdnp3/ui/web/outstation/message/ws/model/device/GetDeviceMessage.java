@@ -23,11 +23,13 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryOutputMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.counter.CounterMessage;
 
-public class GetDeviceMessage implements Message {
+public class GetDeviceMessage implements DeviceMessage {
 	private String type = "getDevice";
+	private String site = "";
+	private String device = "";
 	
 	private InternalIndicatorsDataPoint internalIndicators = new InternalIndicatorsDataPoint();
 	private List<BinaryInputMessage> binaryInputPoints = new ArrayList<>();
@@ -86,5 +88,21 @@ public class GetDeviceMessage implements Message {
 
 	public void setCounterPoints(List<CounterMessage> counterPoints) {
 		this.counterPoints = counterPoints;
+	}
+
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	public String getDevice() {
+		return device;
+	}
+
+	public void setDevice(String device) {
+		this.device = device;
 	}
 }

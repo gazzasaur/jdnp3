@@ -20,8 +20,8 @@ import org.slf4j.LoggerFactory;
 
 import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManager;
 import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.FailureMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.SuccessMessage;
@@ -34,7 +34,7 @@ public class StopDataLinkMessageHandler implements MessageHandler {
 		return message instanceof StopDataLinkMessage;
 	}
 
-	public void processMessage(DeviceManager webSocket, Message message) {
+	public void processMessage(Messanger webSocket, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}

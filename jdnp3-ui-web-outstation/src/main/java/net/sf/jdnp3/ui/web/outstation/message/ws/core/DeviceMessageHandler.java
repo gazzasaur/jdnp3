@@ -13,22 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation.message.ws.handler.core;
+package net.sf.jdnp3.ui.web.outstation.message.ws.core;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.HeartbeatMessage;
+import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
-public class HeartbeatMessageHandler implements MessageHandler {
-	public boolean canHandle(Message message) {
-		return message instanceof HeartbeatMessage;
-	}
-
-	public void processMessage(Messanger messanger, Message message) {
-		if (!this.canHandle(message)) {
-			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
-		}
-		messanger.sendMessage(message);
-	}
+public interface DeviceMessageHandler {
+	public boolean canHandle(Message message);
+	public void processMessage(Messanger messanger, DatabaseManager databaseManager, Message message);
 }

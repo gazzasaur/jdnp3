@@ -15,21 +15,22 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler.analog;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputEventMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
-public class AnalogInputEventMessageHandler implements MessageHandler {
+public class AnalogInputEventMessageHandler implements DeviceMessageHandler {
 	public boolean canHandle(Message message) {
 		return message instanceof AnalogInputEventMessage;
 	}
 
-	public void processMessage(DeviceManager webSocket, Message message) {
+	public void processMessage(Messanger messanger, DatabaseManager databaseManager, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 		AnalogInputEventMessage analogInputEventMessage = (AnalogInputEventMessage) message;
-		webSocket.getDatabaseManager().triggerAnalogInputEvent(analogInputEventMessage.getIndex());
+		databaseManager.triggerAnalogInputEvent(analogInputEventMessage.getIndex());
 	}
 }

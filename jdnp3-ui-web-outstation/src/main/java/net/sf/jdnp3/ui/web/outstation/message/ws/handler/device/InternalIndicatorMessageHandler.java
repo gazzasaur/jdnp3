@@ -18,8 +18,9 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler.device;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.InternalIndicatorMessage;
 
@@ -27,7 +28,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class InternalIndicatorMessageHandler implements MessageHandler {
+public class InternalIndicatorMessageHandler implements DeviceMessageHandler {
 	private Logger logger = LoggerFactory.getLogger(InternalIndicatorMessageHandler.class);
 	private static final List<String> TRUSTED_ATTRIBUTES = Arrays.asList("broadcast", "class1Events", "class2Events", "class3Events", "needTime", "localControl", "deviceTrouble", "deviceRestart", "noFunctionCodeSupport", "objectUnknown", "parameterError", "eventBufferOverflow", "alreadyExecuting", "configurationCorrupt");
 	
@@ -35,7 +36,7 @@ public class InternalIndicatorMessageHandler implements MessageHandler {
 		return message instanceof InternalIndicatorMessage;
 	}
 
-	public void processMessage(DeviceManager webSocket, Message message) {
+	public void processMessage(Messanger messanger, DatabaseManager databaseManager, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
@@ -47,7 +48,7 @@ public class InternalIndicatorMessageHandler implements MessageHandler {
 		}
 		
 		try {
-			BeanUtils.setProperty(webSocket.getDatabaseManager().getInternalStatusProvider(), specificMessage.getAttribute(), specificMessage.isValue());
+			BeanUtils.setProperty(databaseManager.getInternalStatusProvider(), specificMessage.getAttribute(), specificMessage.isValue());
 		} catch (Exception e) {
 			logger.error("Failed to set IIN flag.", e);
 		}

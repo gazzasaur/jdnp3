@@ -15,11 +15,14 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.model.device;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
 
-public class InternalIndicatorMessage implements Message {
+public class InternalIndicatorMessage implements DeviceMessage {
 	private String type = "internalIndicator";
+	private String site = "";
+	private String device = "";
+	
 	private String attribute = "";
 	private boolean value = false;
 	
@@ -41,5 +44,21 @@ public class InternalIndicatorMessage implements Message {
 
 	public void setValue(boolean value) {
 		this.value = value;
+	}
+
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	public String getDevice() {
+		return device;
+	}
+
+	public void setDevice(String device) {
+		this.device = device;
 	}
 }

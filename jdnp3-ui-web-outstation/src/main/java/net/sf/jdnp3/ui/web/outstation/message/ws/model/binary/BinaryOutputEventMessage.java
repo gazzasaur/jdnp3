@@ -15,10 +15,12 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.model.binary;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
-public class BinaryOutputEventMessage implements Message {
+public class BinaryOutputEventMessage implements DeviceMessage {
 	private String type = "binaryOutputEvent";
+	private String site = "";
+	private String device = "";
 	private long index = 0;
 	
 	public String getType() {
@@ -31,5 +33,21 @@ public class BinaryOutputEventMessage implements Message {
 
 	public void setIndex(long index) {
 		this.index = index;
+	}
+
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	public String getDevice() {
+		return device;
+	}
+
+	public void setDevice(String device) {
+		this.device = device;
 	}
 }

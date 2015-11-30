@@ -15,11 +15,13 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.model.analog;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
-public class AnalogInputEventMessage implements Message {
+public class AnalogInputEventMessage implements DeviceMessage {
 	private String type = "analogInputEvent";
 	private long index = 0;
+	private String site = "";
+	private String device = "";
 	
 	public String getType() {
 		return type;
@@ -31,5 +33,21 @@ public class AnalogInputEventMessage implements Message {
 
 	public void setIndex(long index) {
 		this.index = index;
+	}
+
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	public String getDevice() {
+		return device;
+	}
+
+	public void setDevice(String device) {
+		this.device = device;
 	}
 }

@@ -28,8 +28,8 @@ import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoin
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputMessage;
@@ -38,21 +38,20 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.counter.CounterMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.GetDeviceMessage;
 
-public class GetDeviceMessageHandler implements MessageHandler {
+public class GetDeviceMessageHandler implements DeviceMessageHandler {
 	private Logger logger = LoggerFactory.getLogger(GetDeviceMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof GetDeviceMessage;
 	}
 
-	public void processMessage(DeviceManager webSocket, Message message) {
+	public void processMessage(Messanger messanger, DatabaseManager databaseManager, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 		GetDeviceMessage specificMessage = (GetDeviceMessage) message;
 		specificMessage.setBinaryInputPoints(new ArrayList<>());
 
-		DatabaseManager databaseManager = webSocket.getDatabaseManager();
 		try {
 			InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
 			specificMessage.setInternalIndicators(internalIndicatorsDataPoint);
@@ -86,6 +85,6 @@ public class GetDeviceMessageHandler implements MessageHandler {
 			logger.error("Failed to copy object.", e);
 		}
 		
-		webSocket.sendMessage(specificMessage);
+		messanger.sendMessage(specificMessage);
 	}
 }

@@ -2,7 +2,6 @@ import json
 import time
 import random
 import decimal
-import urllib
 import urllib2
 import exceptions
 
@@ -10,8 +9,8 @@ def CREATE_DATA():
     return {
         'type': 'createDevice',
         'dataLink': '',
-        'siteCode': '',
-        'deviceCode': '',
+        'site': '',
+        'device': '',
         'deviceFactory': '',
         'primaryAddress': '',
         'extendedConfiguration': {
@@ -31,8 +30,8 @@ class Control:
     def createOutstation(self, deviceFactory, site, device, address, datalink, binaryInputPoints=[], binaryOutputPoints=[], analogInputPoints=[], analogOutputPoints=[], counterPoints=[], customTypes=[]):
         data = CREATE_DATA()
         data['dataLink'] = datalink
-        data['siteCode'] = site
-        data['deviceCode'] = device
+        data['site'] = site
+        data['device'] = device
         data['primaryAddress'] = address
         data['deviceFactory'] = deviceFactory
         data['extendedConfiguration']['binaryInputPoints'] = binaryInputPoints
@@ -48,13 +47,10 @@ class Control:
         return self.sendMessage(site, device, data, output=output)
         
     def sendMessage(self, site, device, data, output=False):
-        query = [('siteCode', site), ('deviceCode', device)]
-        return self.postMessage(data, query, output=output)
+        return self.postMessage(data, output=output)
     
-    def postMessage(self, data, query=None, output=False):
+    def postMessage(self, data, output=False):
         url = self.url
-        if query:
-            url += '?' + urllib.urlencode(query)
         request = urllib2.Request(url, json.dumps(data), {'Content-Type': 'application/json'})
         response = urllib2.urlopen(request)
         code = response.getcode()

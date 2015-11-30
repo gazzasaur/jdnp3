@@ -23,11 +23,14 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.OperationType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.TripCloseCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StatusCode;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
-public class BinaryOutputMessage implements Message {
+public class BinaryOutputMessage implements DeviceMessage {
 	private String type = "binaryOutputPoint";
 	private long index = 0;
+	private String site = "";
+	private String device = "";
+	
 	private int eventClass = 1;
 	private int commandEventClass = 1;
 	private ObjectType eventType = ANY;
@@ -223,5 +226,21 @@ public class BinaryOutputMessage implements Message {
 
 	public void setCommandEventClass(int commandEventClass) {
 		this.commandEventClass = commandEventClass;
+	}
+
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	public String getDevice() {
+		return device;
+	}
+
+	public void setDevice(String device) {
+		this.device = device;
 	}
 }

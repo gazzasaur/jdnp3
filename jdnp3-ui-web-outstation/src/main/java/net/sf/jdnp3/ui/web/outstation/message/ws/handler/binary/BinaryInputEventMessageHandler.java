@@ -15,21 +15,22 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler.binary;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputEventMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
-public class BinaryInputEventMessageHandler implements MessageHandler {
+public class BinaryInputEventMessageHandler implements DeviceMessageHandler {
 	public boolean canHandle(Message message) {
 		return message instanceof BinaryInputEventMessage;
 	}
 
-	public void processMessage(DeviceManager webSocket, Message message) {
+	public void processMessage(Messanger messanger, DatabaseManager databaseManager, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 		BinaryInputEventMessage binaryInputEventMessage = (BinaryInputEventMessage) message;
-		webSocket.getDatabaseManager().triggerBinaryInputEvent(binaryInputEventMessage.getIndex());
+		databaseManager.triggerBinaryInputEvent(binaryInputEventMessage.getIndex());
 	}
 }

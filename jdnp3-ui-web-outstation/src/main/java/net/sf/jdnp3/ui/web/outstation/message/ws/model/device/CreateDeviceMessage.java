@@ -21,8 +21,8 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 public class CreateDeviceMessage implements Message {
 	private String type = "createDevice";
 	private String dataLink = "";
-	private String siteCode = "";
-	private String deviceCode = "";
+	private String site = "";
+	private String device = "";
 	private int primaryAddress = 0;
 	private String deviceFactory = "";
 
@@ -30,22 +30,6 @@ public class CreateDeviceMessage implements Message {
 	
 	public String getType() {
 		return type;
-	}
-
-	public String getSiteCode() {
-		return siteCode;
-	}
-
-	public void setSiteCode(String siteCode) {
-		this.siteCode = siteCode;
-	}
-
-	public String getDeviceCode() {
-		return deviceCode;
-	}
-
-	public void setDeviceCode(String deviceCode) {
-		this.deviceCode = deviceCode;
 	}
 
 	public int getPrimaryAddress() {
@@ -78,5 +62,21 @@ public class CreateDeviceMessage implements Message {
 
 	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
 		this.extendedConfiguration = extendedConfiguration;
+	}
+
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	public String getDevice() {
+		return device;
+	}
+
+	public void setDevice(String device) {
+		this.device = device;
 	}
 }

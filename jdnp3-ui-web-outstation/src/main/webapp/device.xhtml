@@ -20,6 +20,11 @@
 </h:head>
 
 <h:body>
+	<script type="text/javascript">
+		var site = '${param['stationCode']}';
+		var device = '${param['deviceCode']}';
+	</script>
+
 	<f:facet name="last">
 		<h:outputStylesheet library="css" name="general.css" />
 	</f:facet>

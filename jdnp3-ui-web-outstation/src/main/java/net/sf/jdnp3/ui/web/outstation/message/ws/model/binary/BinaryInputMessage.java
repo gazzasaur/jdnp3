@@ -16,12 +16,16 @@
 package net.sf.jdnp3.ui.web.outstation.message.ws.model.binary;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
-public class BinaryInputMessage implements Message {
+import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
+
+public class BinaryInputMessage implements DeviceMessage {
 	private String type = "binaryInputPoint";
 	private long index = 0;
+	private String site = "";
+	private String device = "";
+	
 	private int eventClass = 1;
 	private ObjectType eventType = ANY;
 	private ObjectType staticType = ANY;
@@ -133,5 +137,21 @@ public class BinaryInputMessage implements Message {
 
 	public void setStaticType(ObjectType staticType) {
 		this.staticType = staticType;
+	}
+
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	public String getDevice() {
+		return device;
+	}
+
+	public void setDevice(String device) {
+		this.device = device;
 	}
 }

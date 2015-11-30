@@ -15,9 +15,10 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler.binary;
 
+import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceManager;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
@@ -25,21 +26,21 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BinaryOutputMessageHandler implements MessageHandler {
+public class BinaryOutputMessageHandler implements DeviceMessageHandler {
 	private Logger logger = LoggerFactory.getLogger(BinaryOutputMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof BinaryOutputMessage;
 	}
 
-	public void processMessage(DeviceManager webSocket, Message message) {
+	public void processMessage(Messanger messanger, DatabaseManager databaseManager, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 		BinaryOutputMessage binaryOutputMessage = (BinaryOutputMessage) message;
 
 		BinaryOutputDataPoint binaryDataPoint = new BinaryOutputDataPoint();
-		BinaryOutputDataPoint currentValue = webSocket.getDatabaseManager().getBinaryOutputDataPoints().get((int) binaryDataPoint.getIndex());
+		BinaryOutputDataPoint currentValue = databaseManager.getBinaryOutputDataPoints().get((int) binaryDataPoint.getIndex());
 		
 		try {
 			BeanUtils.copyProperties(binaryDataPoint, binaryOutputMessage);
@@ -50,7 +51,7 @@ public class BinaryOutputMessageHandler implements MessageHandler {
 			binaryDataPoint.setOperationType(currentValue.getOperationType());
 			binaryDataPoint.setTripCloseCode(currentValue.getTripCloseCode());
 			
-			webSocket.getDatabaseManager().setBinaryOutputDataPoint(binaryDataPoint);
+			databaseManager.setBinaryOutputDataPoint(binaryDataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

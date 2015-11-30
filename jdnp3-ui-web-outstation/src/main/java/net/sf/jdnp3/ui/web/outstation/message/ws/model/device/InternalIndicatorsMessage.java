@@ -15,11 +15,13 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.model.device;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
 
-public class InternalIndicatorsMessage implements Message {
+public class InternalIndicatorsMessage implements DeviceMessage {
 	private String type = "internalIndicators";
+	private String site = "";
+	private String device = "";
 	
 	private boolean needTime = false;
 	private boolean broadcast = false;
@@ -150,5 +152,21 @@ public class InternalIndicatorsMessage implements Message {
 
 	public void setConfigurationCorrupt(boolean configurationCorrupt) {
 		this.configurationCorrupt = configurationCorrupt;
+	}
+
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	public String getDevice() {
+		return device;
+	}
+
+	public void setDevice(String device) {
+		this.device = device;
 	}
 }
