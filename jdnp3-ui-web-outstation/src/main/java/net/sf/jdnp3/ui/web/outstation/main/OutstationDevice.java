@@ -15,7 +15,11 @@
  */
 package net.sf.jdnp3.ui.web.outstation.main;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
+import net.sf.jdnp3.ui.web.outstation.channel.TransportBindingItem;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 
 public class OutstationDevice {
@@ -23,6 +27,7 @@ public class OutstationDevice {
 	private String device = "";
 	private Outstation outstation;
 	private DatabaseManager databaseManager;
+	private List<TransportBindingItem> transportBindings = new ArrayList<>();
 	
 	public String getSite() {
 		return site;
@@ -60,5 +65,16 @@ public class OutstationDevice {
 
 	public void setDatabaseManager(DatabaseManager databaseManager) {
 		this.databaseManager = databaseManager;
+	}
+
+	public void addTransportBinding(TransportBindingItem dataLinkBinding) {
+		transportBindings.add(dataLinkBinding);
+	}
+	
+	public void unbind() {
+		for (TransportBindingItem transportBindingItem : transportBindings) {
+			transportBindingItem.unbind();
+		}
+		transportBindings.clear();
 	}
 }

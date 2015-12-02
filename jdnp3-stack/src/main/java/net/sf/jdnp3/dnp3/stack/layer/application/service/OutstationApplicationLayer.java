@@ -78,8 +78,12 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		return dataLinkLayer;
 	}
 
-	public void setApplicationTransport(ApplicationTransport applicationTransport) {
+	public void addApplicationTransport(ApplicationTransport applicationTransport) {
 		this.applicationTransport = applicationTransport;
+	}
+	
+	public void removeApplicationTransport(ApplicationTransport applicationTransport) {
+		this.applicationTransport = null;
 	}
 	
 	public void addRequestHandler(OutstationApplicationRequestHandler outstationRequestHandler) {

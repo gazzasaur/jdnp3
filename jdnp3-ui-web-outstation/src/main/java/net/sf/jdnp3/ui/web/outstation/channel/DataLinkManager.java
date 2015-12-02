@@ -15,29 +15,25 @@
  */
 package net.sf.jdnp3.ui.web.outstation.channel;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
-import net.sf.jdnp3.dnp3.stack.layer.transport.ApplicationTransportBindingAdaptor;
-import net.sf.jdnp3.dnp3.stack.layer.transport.DataLinkTransportBindingAdaptor;
 import net.sf.jdnp3.dnp3.stack.layer.transport.SimpleSynchronisedTransportBinding;
-import net.sf.jdnp3.dnp3.stack.layer.transport.TransportBinding;
+import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 
 public class DataLinkManager {
 	private DataLinkLayer dataLinkLayer;
-	private List<TransportBinding> transportBindings = new ArrayList<>();
+	private Map<TransportBindingItem, OutstationDevice> transportBindings = new HashMap<>();
 	
-	public void bind(int address, Outstation outstation) {
+	public void bind(int address, OutstationDevice outstationDevice) {
 		SimpleSynchronisedTransportBinding transportBinding = new SimpleSynchronisedTransportBinding();
-		DataLinkTransportBindingAdaptor dataLinkBinding = new DataLinkTransportBindingAdaptor(transportBinding);
-		ApplicationTransportBindingAdaptor applicationBinding = new ApplicationTransportBindingAdaptor(transportBinding);
-		dataLinkLayer.addDataLinkLayerListener(dataLinkBinding);
-		outstation.setApplicationTransport(applicationBinding);
-		transportBinding.setApplicationLayer(address, outstation.getApplicationLayer());
-		transportBinding.setDataLinkLayer(dataLinkLayer);
-		transportBindings.add(transportBinding);
+		TransportBindingItem dataLinkBinding = new TransportBindingItem(this, transportBinding);
+		outstationDevice.addTransportBinding(dataLinkBinding);
+		dataLinkBinding.bindOutstation(address, outstationDevice);
+		dataLinkBinding.bindDataLink(dataLinkLayer);
+		transportBindings.put(dataLinkBinding, outstationDevice);
 	}
 	
 	public void start() {
@@ -62,5 +58,18 @@ public class DataLinkManager {
 
 	public int getConnectionCount() {
 		return this.dataLinkLayer.getConnectionCount();
+	}
+	
+	public void removeBinding(TransportBindingItem transportBindingItem) {
+		transportBindings.remove(transportBindingItem);
+	}
+	
+	public void unbind(OutstationDevice outstation) {
+		for (Entry<TransportBindingItem, OutstationDevice> binding : transportBindings.entrySet()) {
+			if (binding.getValue() == outstation) {
+				transportBindings.remove(binding.getKey());
+				binding.getKey().unbind();
+			}
+		}
 	}
 }

@@ -136,6 +136,6 @@ public class ReadBinaryInputIntegrationTest {
 		factory.addStandardObjectTypeDecoders();
 		factory.addStandardObjectTypeEncoders();
 		outstation = factory.createOutstation();
-		outstation.setApplicationTransport(mockApplicationTransport);
+		outstation.addApplicationTransport(mockApplicationTransport);
 	}
 }

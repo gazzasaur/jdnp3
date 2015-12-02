@@ -57,6 +57,26 @@
 	</bean>
 
 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.device.DestroyDeviceMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.device.BindDeviceMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetObject" ref="deviceMessageHandlerRegistry" />
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
@@ -210,8 +230,29 @@
 			</list>
 		</property>
 	</bean>
-
 	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>destroyDevice</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.device.DestroyDeviceMessage</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>bindDevice</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.device.BindDeviceMessage</value>
+			</list>
+		</property>
+	</bean>
+
 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetObject" ref="genericMessageRegistry" />
 		<property name="targetMethod" value="register" />

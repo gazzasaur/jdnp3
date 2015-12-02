@@ -50,15 +50,19 @@ public class OutstationImpl implements Outstation {
 		outstationApplicationLayer.getOutstationEventQueue().addEvent(eventObjectInstance);
 	}
 
-	public void setApplicationTransport(ApplicationTransport applicationTransport) {
-		outstationApplicationLayer.setApplicationTransport(applicationTransport);
-	}
-
 	public ApplicationLayer getApplicationLayer() {
 		return outstationApplicationLayer;
 	}
 
 	public void setPrimaryAddress(int address) {
 		outstationApplicationLayer.setPrimaryAddress(address);
+	}
+
+	public void addApplicationTransport(ApplicationTransport applicationTransport) {
+		outstationApplicationLayer.addApplicationTransport(applicationTransport);
+	}
+
+	public void removeApplicationTransport(ApplicationTransport applicationTransport) {
+		outstationApplicationLayer.removeApplicationTransport(applicationTransport);
 	}
 }

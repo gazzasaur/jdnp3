@@ -49,7 +49,7 @@ public class DataLinkManagerProvider {
 		if (dataLinkManagers.containsKey(dataLinkName)) {
 			return dataLinkManagers.get(dataLinkName);
 		}
-		throw new IllegalArgumentException(format("The data link %s could be found.", dataLinkName));
+		throw new IllegalArgumentException(format("The data link %s could not be found.", dataLinkName));
 	}
 	
 	public synchronized static DataLinkManager registerDataLink(String dataLinkName) {

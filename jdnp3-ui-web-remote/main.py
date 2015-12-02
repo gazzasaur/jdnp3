@@ -32,7 +32,9 @@ counterDataPoints = [
     'Other',
 ]
 
-# control.createOutstation('pumpStationFactory', 'Pump Station 1', 'Pump 1', 3, "20000", counterPoints=counterDataPoints)
+control.destroyOutstation('Pump Station 1', 'Pump 1')
+control.createOutstation('pumpStationFactory', 'Pump Station 1', 'Pump 1', 3, counterPoints=counterDataPoints)
+control.bindOutstation('Pump Station 1', 'Pump 1', 3, "20000")
 
 outstation = jdnp3.device.Outstation(HOST_URL, "Pump Station 1", "Pump 1")
 config = outstation.get()

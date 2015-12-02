@@ -15,44 +15,17 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.model.device;
 
-import net.sf.jdnp3.ui.web.outstation.main.ExtendedConfiguration;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
-public class CreateDeviceMessage implements Message {
-	private String type = "createDevice";
+public class BindDeviceMessage implements DeviceMessage {
+	private String type = "bindDevice";
 	private String site = "";
 	private String device = "";
-	private int primaryAddress = 0;
-	private String deviceFactory = "";
-
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	private String dataLinkName = "";
+	private int address = 0;
 	
 	public String getType() {
 		return type;
-	}
-
-	public int getPrimaryAddress() {
-		return primaryAddress;
-	}
-
-	public void setPrimaryAddress(int primaryAddress) {
-		this.primaryAddress = primaryAddress;
-	}
-
-	public String getDeviceFactory() {
-		return deviceFactory;
-	}
-
-	public void setDeviceFactory(String deviceFactory) {
-		this.deviceFactory = deviceFactory;
-	}
-
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
 	}
 
 	public String getSite() {
@@ -69,5 +42,21 @@ public class CreateDeviceMessage implements Message {
 
 	public void setDevice(String device) {
 		this.device = device;
+	}
+
+	public int getAddress() {
+		return address;
+	}
+
+	public void setAddress(int address) {
+		this.address = address;
+	}
+
+	public String getDataLinkName() {
+		return dataLinkName;
+	}
+
+	public void setDataLinkName(String dataLinkName) {
+		this.dataLinkName = dataLinkName;
 	}
 }

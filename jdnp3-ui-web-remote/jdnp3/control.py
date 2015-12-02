@@ -27,9 +27,8 @@ class Control:
     def __init__(self, url):
         self.url = url
     
-    def createOutstation(self, deviceFactory, site, device, address, datalink, binaryInputPoints=[], binaryOutputPoints=[], analogInputPoints=[], analogOutputPoints=[], counterPoints=[], customTypes=[]):
+    def createOutstation(self, deviceFactory, site, device, address, binaryInputPoints=[], binaryOutputPoints=[], analogInputPoints=[], analogOutputPoints=[], counterPoints=[], customTypes=[]):
         data = CREATE_DATA()
-        data['dataLink'] = datalink
         data['site'] = site
         data['device'] = device
         data['primaryAddress'] = address
@@ -40,6 +39,20 @@ class Control:
         data['extendedConfiguration']['analogOutputPoints'] = analogOutputPoints
         data['extendedConfiguration']['counterPoints'] = counterPoints
         data['extendedConfiguration']['customTypes'] = customTypes
+        return self.postMessage(data)
+    
+    def destroyOutstation(self, site, device):
+        data = {'type': 'destroyDevice'};
+        data['site'] = site
+        data['device'] = device
+        return self.postMessage(data)
+    
+    def bindOutstation(self, site, device, address, dataLinkName):
+        data = {'type': 'bindDevice'};
+        data['site'] = site
+        data['device'] = device
+        data['address'] = address
+        data['dataLinkName'] = dataLinkName
         return self.postMessage(data)
         
     def getOutstation(self, site, device, output=False):

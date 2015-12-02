@@ -17,32 +17,29 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler.device;
 
 import org.apache.commons.lang3.ObjectUtils;
 
-import net.sf.jdnp3.ui.web.outstation.main.DeviceFactory;
-import net.sf.jdnp3.ui.web.outstation.main.DeviceFactoryRegistry;
+import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.CreateDeviceMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.DestroyDeviceMessage;
 
-public class CreateDeviceMessageHandler implements MessageHandler {
+public class DestroyDeviceMessageHandler implements MessageHandler {
 	public boolean canHandle(Message message) {
-		return message instanceof CreateDeviceMessage;
+		return message instanceof DestroyDeviceMessage;
 	}
 
 	public void processMessage(Messanger messanger, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
-		CreateDeviceMessage specificMessage = (CreateDeviceMessage) message;
+		DestroyDeviceMessage specificMessage = (DestroyDeviceMessage) message;
 		
 		if (ObjectUtils.defaultIfNull(specificMessage.getSite(), "").isEmpty() || ObjectUtils.defaultIfNull(specificMessage.getSite(), "").isEmpty()) {
 			throw new IllegalArgumentException("A siteCode and deviceCode must be specified.");
 		}
 		
-		DeviceFactory deviceFactory = DeviceFactoryRegistry.getFactory(specificMessage.getDeviceFactory());
-		
 		String site = specificMessage.getSite();
 		String device = specificMessage.getDevice();
-		deviceFactory.create(site, device, specificMessage.getPrimaryAddress(), specificMessage.getExtendedConfiguration());
+		DeviceProvider.unregisterDevice(site, device);
 	}
 }

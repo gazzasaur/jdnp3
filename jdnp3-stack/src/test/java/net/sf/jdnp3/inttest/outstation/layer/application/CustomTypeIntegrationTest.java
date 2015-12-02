@@ -93,6 +93,6 @@ public class CustomTypeIntegrationTest {
 		factory.addStandardObjectTypeEncoders();
 
 		outstation = factory.createOutstation();
-		outstation.setApplicationTransport(mockApplicationTransport);
+		outstation.addApplicationTransport(mockApplicationTransport);
 	}
 }

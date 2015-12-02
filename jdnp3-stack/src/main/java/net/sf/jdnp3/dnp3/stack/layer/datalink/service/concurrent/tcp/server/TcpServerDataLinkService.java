@@ -30,10 +30,8 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.encoder.DataLinkFrameEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.encoder.DataLinkFrameEncoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkConsumer;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkServiceBinding;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.nio.DataPump;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
@@ -90,10 +88,6 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 		return serverSocketChannel != null;
 	}
 
-	public synchronized DataLinkServiceBinding bind(DataLinkConsumer dataLinkConsumer) {
-		throw new UnsupportedOperationException();
-	}	
-
 	public synchronized void addDataLinkLayerListener(DataLinkListener dataLinkListener) {
 		multiDataLinkListener.addDataLinkListener(dataLinkListener);
 	}
@@ -142,7 +136,7 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 	public synchronized void setPort(int port) {
 		this.port = port;
 	}
-
+	
 	public synchronized int getConnectionCount() {
 		return channelManager.getChannels().size();
 	}

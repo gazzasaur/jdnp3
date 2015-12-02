@@ -15,44 +15,15 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.model.device;
 
-import net.sf.jdnp3.ui.web.outstation.main.ExtendedConfiguration;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
-public class CreateDeviceMessage implements Message {
-	private String type = "createDevice";
+public class DestroyDeviceMessage implements DeviceMessage {
+	private String type = "destroyDevice";
 	private String site = "";
 	private String device = "";
-	private int primaryAddress = 0;
-	private String deviceFactory = "";
-
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
 	public String getType() {
 		return type;
-	}
-
-	public int getPrimaryAddress() {
-		return primaryAddress;
-	}
-
-	public void setPrimaryAddress(int primaryAddress) {
-		this.primaryAddress = primaryAddress;
-	}
-
-	public String getDeviceFactory() {
-		return deviceFactory;
-	}
-
-	public void setDeviceFactory(String deviceFactory) {
-		this.deviceFactory = deviceFactory;
-	}
-
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
 	}
 
 	public String getSite() {

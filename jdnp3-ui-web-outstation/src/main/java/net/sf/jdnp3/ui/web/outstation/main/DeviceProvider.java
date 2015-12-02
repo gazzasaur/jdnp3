@@ -23,8 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.LoggerFactory;
-
 public class DeviceProvider {
 	private static Map<String, Map<String, OutstationDevice>> devices = new HashMap<>();
 
@@ -54,8 +52,7 @@ public class DeviceProvider {
 	
 	public synchronized static OutstationDevice registerDevice(OutstationDevice device) {
 		if (devices.containsKey(device.getSite()) && devices.get(device.getSite()).containsKey(device.getDevice())) {
-			LoggerFactory.getLogger(DeviceProvider.class).warn(format("Replacing device %s:%s.", device.getSite(), device.getDevice()));
-			unregisterDevice(device.getSite(), device.getDevice());
+			throw new IllegalStateException(format("Cannot register device %s:%s.  Device already exists.", device.getSite(), device.getDevice()));
 		}
 		if (!devices.containsKey(device.getSite())) {
 			devices.put(device.getSite(), new HashMap<>());
@@ -69,7 +66,8 @@ public class DeviceProvider {
 			return;
 		}
 		if (devices.get(stationCode).containsKey(deviceCode)) {
-			devices.get(stationCode).remove(deviceCode);
+			OutstationDevice outstationDevice = devices.get(stationCode).remove(deviceCode);
+			outstationDevice.unbind();
 		}
 		if (devices.get(stationCode).isEmpty()) {
 			devices.remove(stationCode);

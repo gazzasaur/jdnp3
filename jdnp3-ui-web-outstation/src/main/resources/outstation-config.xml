@@ -19,7 +19,16 @@
 	<bean id="station-1-pump-1" factory-bean="pumpStationFactory" factory-method="create">
 		<constructor-arg name="siteName" value="Pump Station 1" />
 		<constructor-arg name="deviceName" value="Pump 1" />
-		<constructor-arg name="dataLink" ref="20000" />
-		<constructor-arg name="address" value="3" />
+		<constructor-arg name="primaryAddress" value="3" />
+	</bean>
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="20000" />
+		<property name="targetMethod" value="bind" />
+		<property name="arguments">
+			<list>
+				<value>3</value>
+				<ref bean="station-1-pump-1" />
+			</list>
+		</property>
 	</bean>
 </beans>
