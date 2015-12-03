@@ -22,7 +22,7 @@ class Outstation:
         self.set({'type': 'internalIndicator', 'attribute': field, 'value': value})
 
     def get_analog_input(self, index, *args):
-        data = self.get()['analogInputPoints'][index]
+        data = self.get()['analogInputPoints'][int(index)]
         return self.get_attribute(data, *args);
 
     def wait_for_analog_input(self, index, *args):
@@ -32,17 +32,17 @@ class Outstation:
         args = tuple(args_list)
         
         def func():
-            return self.get_analog_input(index, *args) == value
+            return self.get_analog_input(int(index), *args) == value
         if not jdnp3.control.wait_for(func):
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
 
     def set_analog_input(self, index, *args):
-        data = self.get()['analogInputPoints'][index]
+        data = self.get()['analogInputPoints'][int(index)]
         self.set_attribute(data, *args)
         self.set(data)
 
     def get_analog_output(self, index, *args):
-        data = self.get()['analogOutputPoints'][index]
+        data = self.get()['analogOutputPoints'][int(index)]
         return self.get_attribute(data, *args);
 
     def wait_for_analog_output(self, index, *args):
@@ -52,17 +52,17 @@ class Outstation:
         args = tuple(args_list)
         
         def func():
-            return self.get_analog_output(index, *args) == value
+            return self.get_analog_output(int(index), *args) == value
         if not jdnp3.control.wait_for(func):
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
 
     def set_analog_output(self, index, *args):
-        data = self.get()['analogOutputPoints'][index]
+        data = self.get()['analogOutputPoints'][int(index)]
         self.set_attribute(data, *args)
         self.set(data)
 
     def get_binary_input(self, index, *args):
-        data = self.get()['binaryInputPoints'][index]
+        data = self.get()['binaryInputPoints'][int(index)]
         return self.get_attribute(data, *args);
     
     def wait_for_binary_input(self, index, *args):
@@ -72,17 +72,17 @@ class Outstation:
         args = tuple(args_list)
         
         def func():
-            return self.get_binary_input(index, *args) == value
+            return self.get_binary_input(int(index), *args) == value
         if not jdnp3.control.wait_for(func):
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
         
     def set_binary_input(self, index, *args):
-        data = self.get()['binaryInputPoints'][index]
+        data = self.get()['binaryInputPoints'][int(index)]
         self.set_attribute(data, *args)
         self.set(data)
 
     def get_binary_output(self, index, *args):
-        data = self.get()['binaryOutputPoints'][index]
+        data = self.get()['binaryOutputPoints'][int(index)]
         return self.get_attribute(data, *args);
     
     def wait_for_binary_output(self, index, *args):
@@ -92,17 +92,17 @@ class Outstation:
         args = tuple(args_list)
         
         def func():
-            return self.get_binary_output(index, *args) == value
+            return self.get_binary_output(int(index), *args) == value
         if not jdnp3.control.wait_for(func):
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
         
     def set_binary_output(self, index, *args):
-        data = self.get()['binaryOutputPoints'][index]
+        data = self.get()['binaryOutputPoints'][int(index)]
         self.set_attribute(data, *args)
         self.set(data)
 
     def get_counter(self, index, *args):
-        data = self.get()['counterPoints'][index]
+        data = self.get()['counterPoints'][int(index)]
         return self.get_attribute(data, *args);
     
     def wait_for_counter(self, index, *args):
@@ -112,12 +112,12 @@ class Outstation:
         args = tuple(args_list)
         
         def func():
-            return self.get_counter(index, *args) == value
+            return self.get_counter(int(index), *args) == value
         if not jdnp3.control.wait_for(func):
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
         
     def set_counter(self, index, *args):
-        data = self.get()['counterPoints'][index]
+        data = self.get()['counterPoints'][int(index)]
         self.set_attribute(data, *args)
         self.set(data)
         
