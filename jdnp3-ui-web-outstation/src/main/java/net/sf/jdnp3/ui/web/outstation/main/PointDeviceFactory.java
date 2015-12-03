@@ -83,36 +83,66 @@ public class PointDeviceFactory implements DeviceFactory {
 		return this.create(siteName, deviceName, primaryAddress, new ExtendedConfiguration());
 	}
 
-	// FIXME Bug will not allow correct naming and indexing of points.
 	public OutstationDevice create(String siteName, String deviceName, int primaryAddress, ExtendedConfiguration extendedConfiguration) {
 		OutstationDevice outstationDevice = new OutstationDevice();
 		outstationDevice.setSite(siteName);
 		outstationDevice.setDevice(deviceName);
 		
 		DatabaseManager databaseManager = new DatabaseManager();
-		databaseManager.setBinaryInputDatabaseSize(binaryInputDataPoints.size());
-		for (BinaryInputDataPoint binaryInputDataPoint : binaryInputDataPoints) {
-			databaseManager.setBinaryInputDataPoint(binaryInputDataPoint);
+		
+		List<String> names = new ArrayList<>();
+		for (BinaryInputDataPoint dataPoint : binaryInputDataPoints) {
+			names.add(dataPoint.getName());
+		}
+		databaseManager.addBinaryInputDataPoints(names.toArray(new String[0]));
+		for (int i = 0; i < databaseManager.getBinaryInputDataPoints().size(); i++) {
+			BinaryInputDataPoint dataPoint = binaryInputDataPoints.get(i);
+			dataPoint.setIndex(i);
+			databaseManager.setBinaryInputDataPoint(dataPoint);
 		}
 		
-		databaseManager.setBinaryOutputDatabaseSize(binaryOutputDataPoints.size());
-		for (BinaryOutputDataPoint binaryOutputDataPoint : binaryOutputDataPoints) {
-			databaseManager.setBinaryOutputDataPoint(binaryOutputDataPoint);
+		names.clear();
+		for (BinaryOutputDataPoint dataPoint : binaryOutputDataPoints) {
+			names.add(dataPoint.getName());
 		}
-
-		databaseManager.setAnalogInputDatabaseSize(analogInputDataPoints.size());
-		for (AnalogInputDataPoint analogInputDataPoint : analogInputDataPoints) {
-			databaseManager.setAnalogInputDataPoint(analogInputDataPoint);
+		databaseManager.addBinaryOutputDataPoints(names.toArray(new String[0]));
+		for (int i = 0; i < databaseManager.getBinaryOutputDataPoints().size(); i++) {
+			BinaryOutputDataPoint dataPoint = binaryOutputDataPoints.get(i);
+			dataPoint.setIndex(i);
+			databaseManager.setBinaryOutputDataPoint(dataPoint);
 		}
-
-		databaseManager.setAnalogOutputDatabaseSize(analogOutputDataPoints.size());
-		for (AnalogOutputDataPoint analogOutputDataPoint : analogOutputDataPoints) {
-			databaseManager.setAnalogOutputDataPoint(analogOutputDataPoint);
+		
+		names.clear();
+		for (AnalogInputDataPoint dataPoint : analogInputDataPoints) {
+			names.add(dataPoint.getName());
 		}
-
-		databaseManager.setCounterDatabaseSize(counterDataPoints.size());
-		for (CounterDataPoint counterDataPoint : counterDataPoints) {
-			databaseManager.setCounterDataPoint(counterDataPoint);
+		databaseManager.addAnalogInputDataPoints(names.toArray(new String[0]));
+		for (int i = 0; i < databaseManager.getAnalogInputDataPoints().size(); i++) {
+			AnalogInputDataPoint dataPoint = analogInputDataPoints.get(i);
+			dataPoint.setIndex(i);
+			databaseManager.setAnalogInputDataPoint(dataPoint);
+		}
+		
+		names.clear();
+		for (AnalogOutputDataPoint dataPoint : analogOutputDataPoints) {
+			names.add(dataPoint.getName());
+		}
+		databaseManager.addAnalogOutputDataPoints(names.toArray(new String[0]));
+		for (int i = 0; i < databaseManager.getAnalogOutputDataPoints().size(); i++) {
+			AnalogOutputDataPoint dataPoint = analogOutputDataPoints.get(i);
+			dataPoint.setIndex(i);
+			databaseManager.setAnalogOutputDataPoint(dataPoint);
+		}
+		
+		names.clear();
+		for (CounterDataPoint dataPoint : counterDataPoints) {
+			names.add(dataPoint.getName());
+		}
+		databaseManager.addCounterDataPoints(names.toArray(new String[0]));
+		for (int i = 0; i < databaseManager.getCounterDataPoints().size(); i++) {
+			CounterDataPoint dataPoint = counterDataPoints.get(i);
+			dataPoint.setIndex(i);
+			databaseManager.setCounterDataPoint(dataPoint);
 		}
 		
 		databaseManager.addBinaryInputDataPoints(extendedConfiguration.getBinaryInputPoints().toArray(new String[0]));

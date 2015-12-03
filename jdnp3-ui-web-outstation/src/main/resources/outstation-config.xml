@@ -31,4 +31,20 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="station-2-factory-1" factory-bean="muffinFactory" factory-method="create">
+		<constructor-arg name="siteName" value="Muffin Factory" />
+		<constructor-arg name="deviceName" value="Factory Floor" />
+		<constructor-arg name="primaryAddress" value="4" />
+	</bean>
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="20000" />
+		<property name="targetMethod" value="bind" />
+		<property name="arguments">
+			<list>
+				<value>4</value>
+				<ref bean="station-2-factory-1" />
+			</list>
+		</property>
+	</bean>
 </beans>

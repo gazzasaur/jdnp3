@@ -36,4 +36,37 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="binaryInputStaticWithFlags" class="net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType">
+		<constructor-arg name="group" value="1" />
+		<constructor-arg name="variation" value="2" />
+	</bean>
+	
+	<bean id="muffinFactory" class="net.sf.jdnp3.ui.web.outstation.main.PointDeviceFactory">
+		<property name="binaryInputDataPoints">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint">
+					<property name="name" value="Conveyer Running" />
+					<property name="active" value="true" />
+					<property name="staticType" ref="binaryInputStaticWithFlags" />
+				</bean>
+			</list>
+		</property>
+		<property name="binaryOutputDataPoints">
+			<list>
+			</list>
+		</property>
+		<property name="analogInputDataPoints">
+			<list>
+			</list>
+		</property>
+		<property name="analogOutputDataPoints">
+			<list>
+			</list>
+		</property>
+		<property name="counterDataPoints">
+			<list>
+			</list>
+		</property>
+	</bean>
 </beans>
