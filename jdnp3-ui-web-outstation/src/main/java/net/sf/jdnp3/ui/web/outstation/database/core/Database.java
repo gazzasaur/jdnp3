@@ -151,8 +151,8 @@ public class Database {
 	}
 
 	public void setBinaryOutputDataPoint(BinaryOutputDataPoint binaryDataPoint) {
-		if (binaryDataPoint.getIndex() < binaryInputDataPoints.size()) {
-			binaryDataPoint.setName(binaryInputDataPoints.get((int) binaryDataPoint.getIndex()).getName());
+		if (binaryDataPoint.getIndex() < binaryOutputDataPoints.size()) {
+			binaryDataPoint.setName(binaryOutputDataPoints.get((int) binaryDataPoint.getIndex()).getName());
 			binaryOutputDataPoints.set((int) binaryDataPoint.getIndex(), binaryDataPoint);
 		}
 	}
