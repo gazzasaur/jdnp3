@@ -41,6 +41,14 @@
 		<constructor-arg name="group" value="1" />
 		<constructor-arg name="variation" value="2" />
 	</bean>
+	<bean id="analogInputStaticInt32" class="net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType">
+		<constructor-arg name="group" value="30" />
+		<constructor-arg name="variation" value="1" />
+	</bean>
+	<bean id="analogInputEventInt32" class="net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType">
+		<constructor-arg name="group" value="32" />
+		<constructor-arg name="variation" value="3" />
+	</bean>
 	
 	<bean id="muffinFactory" class="net.sf.jdnp3.ui.web.outstation.main.PointDeviceFactory">
 		<property name="binaryInputDataPoints">
@@ -50,22 +58,47 @@
 					<property name="active" value="true" />
 					<property name="staticType" ref="binaryInputStaticWithFlags" />
 				</bean>
+				<bean class="net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint">
+					<property name="name" value="Emergency Stopped" />
+					<property name="staticType" ref="binaryInputStaticWithFlags" />
+				</bean>
 			</list>
 		</property>
 		<property name="binaryOutputDataPoints">
 			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint">
+					<property name="name" value="Emergency Stop" />
+				</bean>
 			</list>
 		</property>
 		<property name="analogInputDataPoints">
 			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint">
+					<property name="name" value="Oven Temperature" />
+					<property name="value" value="180" />
+					<property name="eventClass" value="3" />
+					<property name="staticType" ref="analogInputStaticInt32" />
+					<property name="eventType" ref="analogInputEventInt32" />
+					<property name="localForced" value="True" />
+				</bean>
 			</list>
 		</property>
 		<property name="analogOutputDataPoints">
 			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint">
+					<property name="name" value="Dough Pressure" />
+					<property name="value" value="720" />
+					<property name="eventClass" value="3" />
+				</bean>
 			</list>
 		</property>
 		<property name="counterDataPoints">
 			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint">
+					<property name="name" value="Muffins" />
+					<property name="value" value="123591043" />
+					<property name="eventClass" value="3" />
+				</bean>
 			</list>
 		</property>
 	</bean>
