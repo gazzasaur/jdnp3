@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:j="http://sf.net/jdnp3/facelets"
+	xmlns:jdnp3="http://java.sun.com/jsf/composite/jdnp3">
+<h:head>
+	<h:outputScript library="js" name="device/schedule.js" />
+	<h:outputScript library="js" name="device/analog.js" />
+	<h:outputScript library="js" name="device/device.js" />
+	<h:outputScript library="js" name="device/message.js" />
+</h:head>
+
+<h:body>
+<script>
+document.addEventListener("DOMContentLoaded", function(event) {
+	var location = document.location.toString().replace(/\bhttp/,'ws').replace(/\/\/.*/,'//') + window.location.host + '/ws/device' + window.location.search;
+	var device = new jdnp3.device.Device(location);
+});
+</script>
+
+	<f:facet name="last">
+		<h:outputStylesheet library="css" name="general.css" />
+	</f:facet>
+
+	<f:view>
+		<h:form>
+			<p:poll listener="#{jsfKeepAlive.keepUserSessionAlive()}" interval="#{(session.maxInactiveInterval - 10)/3}" />
+		</h:form>
+
+		<h:form>
+			<div id="analogInputs">
+			</div>
+		</h:form>
+	</f:view>
+</h:body>
+</html>
