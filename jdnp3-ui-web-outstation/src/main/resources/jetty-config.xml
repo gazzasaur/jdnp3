@@ -25,6 +25,16 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.DestroyAllMessageHandler" />
+			</list>
+		</property>
+	</bean>
 
 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetObject" ref="messageHandlerRegistry" />
@@ -42,6 +52,26 @@
 		<property name="arguments">
 			<list>
 				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.datalink.StopDataLinkMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.datalink.CreateDataLinkMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.datalink.DestroyDataLinkMessageHandler" />
 			</list>
 		</property>
 	</bean>
@@ -72,6 +102,16 @@
 		<property name="arguments">
 			<list>
 				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.device.BindDeviceMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.device.UnbindDeviceMessageHandler" />
 			</list>
 		</property>
 	</bean>
@@ -203,6 +243,17 @@
 		<property name="targetMethod" value="register" />
 		<property name="arguments">
 			<list>
+				<value>destroyAll</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DestroyAllMessage</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
 				<value>startDataLink</value>
 				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.datalink.StartDataLinkMessage</value>
 			</list>
@@ -216,6 +267,28 @@
 			<list>
 				<value>stopDataLink</value>
 				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.datalink.StopDataLinkMessage</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>createDataLink</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.datalink.CreateDataLinkMessage</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>destroyDataLink</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.datalink.DestroyDataLinkMessage</value>
 			</list>
 		</property>
 	</bean>
@@ -249,6 +322,17 @@
 			<list>
 				<value>bindDevice</value>
 				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.device.BindDeviceMessage</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>unbindDevice</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.device.UnbindDeviceMessage</value>
 			</list>
 		</property>
 	</bean>

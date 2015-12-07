@@ -10,6 +10,7 @@
 	xmlns:j="http://sf.net/jdnp3/facelets"
 	xmlns:jdnp3="http://java.sun.com/jsf/composite/jdnp3">
 <h:head>
+	<h:outputScript library="js" name="device/ui.js" />
 	<h:outputScript library="js" name="device/schedule.js" />
 	<h:outputScript library="js" name="device/analog.js" />
 	<h:outputScript library="js" name="device/device.js" />
@@ -26,6 +27,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	<f:facet name="last">
 		<h:outputStylesheet library="css" name="general.css" />
+		<h:outputStylesheet library="css" name="buttons.css" />
+		<h:outputStylesheet library="css" name="switches.css" />
 	</f:facet>
 
 	<f:view>
@@ -35,8 +38,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 		<h:form>
 			<div id="analogInputs">
+				<table id="analogInputTable" class="value-table">
+				</table>
 			</div>
 		</h:form>
 	</f:view>
+	
+	<p:dialog header="Dialog" widgetVar="main-dialog" modal="true">
+		<div id="main-dialog">
+			<p>This is a dialog</p>
+		</div>
+	</p:dialog>
 </h:body>
 </html>

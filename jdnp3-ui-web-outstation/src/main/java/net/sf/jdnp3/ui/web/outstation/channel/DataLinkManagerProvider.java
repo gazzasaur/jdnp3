@@ -55,8 +55,18 @@ public class DataLinkManagerProvider {
 	public synchronized static DataLinkManager registerDataLink(String dataLinkName) {
 		if (!dataLinkManagers.containsKey(dataLinkName)) {
 			dataLinkManagers.put(dataLinkName, new DataLinkManager());
+		} else {
+			throw new IllegalArgumentException("DataLink already exists: " + dataLinkName);
 		}
 		return dataLinkManagers.get(dataLinkName);
+	}
+	
+	public synchronized static void unregisterDataLink(String dataLinkName) {
+		if (!dataLinkManagers.containsKey(dataLinkName)) {
+			throw new IllegalArgumentException("DataLink does not exist: " + dataLinkName);
+		}
+		DataLinkManager dataLinkManager = dataLinkManagers.remove(dataLinkName);
+		dataLinkManager.close();
 	}
 
 	public synchronized static List<String> getDataLinkNames() {

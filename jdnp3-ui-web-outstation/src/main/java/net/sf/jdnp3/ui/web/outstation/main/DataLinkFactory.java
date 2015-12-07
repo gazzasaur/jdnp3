@@ -26,7 +26,7 @@ public class DataLinkFactory {
 	private DataPump dataPump;
 	private ExecutorService executorService;
 	
-	public DataLinkManager create(String name, int port) {
+	public DataLinkManager create(String name, String host, int port) {
 		if (dataPump == null || executorService == null) {
 			throw new RuntimeException("Must specify a data pump and executor service.");
 		}
@@ -34,11 +34,11 @@ public class DataLinkFactory {
 		TcpServerDataLinkService dataLinkLayer = new TcpServerDataLinkService();
 		dataLinkLayer.setExecutorService(executorService);
 		dataLinkLayer.setDataPump(dataPump);
+		dataLinkLayer.setHost(host);
 		dataLinkLayer.setPort(port);
 		
 		DataLinkManager dataLinkManager = DataLinkManagerProvider.registerDataLink(name);
 		dataLinkManager.setDataLinkLayer(dataLinkLayer);
-		dataLinkLayer.start();
 		return dataLinkManager;
 	}
 	

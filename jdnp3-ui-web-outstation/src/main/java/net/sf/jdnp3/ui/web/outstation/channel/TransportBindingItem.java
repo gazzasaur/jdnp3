@@ -22,6 +22,7 @@ import net.sf.jdnp3.dnp3.stack.layer.transport.TransportBinding;
 import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 
 public class TransportBindingItem {
+	private int address = 0;
 	private DataLinkLayer dataLinkLayer = null;
 	private OutstationDevice outstationDevice = null;
 	
@@ -39,6 +40,7 @@ public class TransportBindingItem {
 		if (outstationDevice != null) {
 			throw new IllegalStateException("An outstation is already bound.");
 		}
+		this.address = address;
 		outstationDevice = outstation;
 		applicationTransportBindingAdaptor = new ApplicationTransportBindingAdaptor(transportBinding);
 		outstationDevice.getOutstation().addApplicationTransport(applicationTransportBindingAdaptor);
@@ -65,5 +67,9 @@ public class TransportBindingItem {
 			dataLinkLayer.removeDataLinkLayerListener(dataLinkTransportBindingAdaptor);
 			dataLinkLayer = null;
 		}
+	}
+
+	public int getAddress() {
+		return address;
 	}
 }

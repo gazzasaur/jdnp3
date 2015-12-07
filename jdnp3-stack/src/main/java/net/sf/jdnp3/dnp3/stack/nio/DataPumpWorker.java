@@ -146,7 +146,7 @@ public class DataPumpWorker implements Runnable {
 					iterator.remove();
 				}
 			} catch (Exception e) {
-				logger.error("Failed during read loop.", e);
+				logger.error("Catastrophic failure.  Failed during read loop.", e);
 				running = false;
 			}
 		}

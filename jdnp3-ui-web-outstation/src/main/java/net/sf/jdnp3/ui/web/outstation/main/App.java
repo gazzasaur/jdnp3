@@ -67,6 +67,11 @@ public class App {
 		for (Entry<String, DeviceFactory> entry : deviceFactories.entrySet()) {
 			DeviceFactoryRegistry.registerFactory(entry.getKey(), entry.getValue());
 		}
+		
+		Map<String, DataLinkFactory> dataLinkFactories = loadContext.getBeansOfType(DataLinkFactory.class);
+		for (Entry<String, DataLinkFactory> entry : dataLinkFactories.entrySet()) {
+			DataLinkFactoryRegistry.registerFactory(entry.getKey(), entry.getValue());
+		}
 		loadContext.close();
 		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("jetty-config.xml");

@@ -42,6 +42,7 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 	private static final int MTU = 249;
 	
 	private int mtu = MTU;
+	private boolean closed = false;
 	private MultiDataLinkListener multiDataLinkListener = new MultiDataLinkListener();
 	private DataLinkFrameEncoder dataLinkFrameEncoder = new DataLinkFrameEncoderImpl();
 	
@@ -62,6 +63,9 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 	}
 
 	public synchronized void start() {
+		if (closed) {
+			throw new IllegalStateException("DataLink has been closed and may not be restarted.");
+		}
 		if (dataPump == null) {
 			throw new IllegalStateException("No data pump has been specified.");
 		}
@@ -87,8 +91,16 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 	public synchronized boolean isRunning() {
 		return serverSocketChannel != null;
 	}
+	
+	public synchronized void close() {
+		closed = true;
+		this.stop();
+	}
 
 	public synchronized void addDataLinkLayerListener(DataLinkListener dataLinkListener) {
+		if (closed) {
+			throw new IllegalStateException("DataLink has been closed and may not be restarted.");
+		}
 		multiDataLinkListener.addDataLinkListener(dataLinkListener);
 	}
 
@@ -97,6 +109,9 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 	}
 
 	public synchronized void sendData(MessageProperties messageProperties, List<Byte> data) {
+		if (closed) {
+			throw new IllegalStateException("DataLink has been closed and may not be restarted.");
+		}
 		DataLinkFrame dataLinkFrame = new DataLinkFrame();
 		dataLinkFrame.getDataLinkFrameHeader().setPrimary(true);
 		dataLinkFrame.getDataLinkFrameHeader().setSource(messageProperties.getSourceAddress());

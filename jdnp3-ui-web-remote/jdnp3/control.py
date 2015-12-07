@@ -26,6 +26,10 @@ def CREATE_DATA():
 class Control:
     def __init__(self, url):
         self.url = url
+        
+    def destroy_all(self):
+        data = {'type': 'destroyAll'};
+        return self.postMessage(data)
     
     def createOutstation(self, deviceFactory, site, device, address, binaryInputPoints=[], binaryOutputPoints=[], analogInputPoints=[], analogOutputPoints=[], counterPoints=[], customTypes=[]):
         data = CREATE_DATA()
@@ -65,6 +69,14 @@ class Control:
 
     def stop_data_link(self, dataLinkName):
         data = {'type': 'stopDataLink', 'dataLink': dataLinkName}
+        self.postMessage(data)
+
+    def create_data_link(self, dataLinkFactory, dataLinkName, host, port):
+        data = {'type': 'createDataLink', 'dataLinkFactory': dataLinkFactory, 'dataLink': dataLinkName, 'host': host, 'port': port}
+        self.postMessage(data)
+
+    def destroy_data_link(self, dataLinkName):
+        data = {'type': 'destroyDataLink', 'dataLink': dataLinkName}
         self.postMessage(data)
         
     def sendMessage(self, site, device, data, output=False):

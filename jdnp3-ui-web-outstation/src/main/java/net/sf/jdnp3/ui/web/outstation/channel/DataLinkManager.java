@@ -15,7 +15,9 @@
  */
 package net.sf.jdnp3.ui.web.outstation.channel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -64,9 +66,27 @@ public class DataLinkManager {
 		transportBindings.remove(transportBindingItem);
 	}
 	
+	public void close() {
+		dataLinkLayer.close();
+		List<Entry<TransportBindingItem, OutstationDevice>> bindings = new ArrayList<>(transportBindings.entrySet());
+		for (Entry<TransportBindingItem, OutstationDevice> binding : bindings) {
+			transportBindings.remove(binding.getKey());
+			binding.getKey().unbind();
+		}
+	}
+	
 	public void unbind(OutstationDevice outstation) {
 		for (Entry<TransportBindingItem, OutstationDevice> binding : transportBindings.entrySet()) {
 			if (binding.getValue() == outstation) {
+				transportBindings.remove(binding.getKey());
+				binding.getKey().unbind();
+			}
+		}
+	}
+	
+	public void unbind(int address, OutstationDevice outstation) {
+		for (Entry<TransportBindingItem, OutstationDevice> binding : transportBindings.entrySet()) {
+			if (binding.getValue() == outstation && binding.getKey().getAddress() == address) {
 				transportBindings.remove(binding.getKey());
 				binding.getKey().unbind();
 			}

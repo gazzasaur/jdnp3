@@ -1,3 +1,18 @@
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+td {
+    border-collapse: separate;
+}
+
+table, tr, td {
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
 .ui-widget-content {
 	border-style: none;
 }
@@ -26,7 +41,7 @@
 	display: inline-block;
 }
 
-.text-field .text-field-value {
+.text-field-value {
 	position: absolute;
 	display: inline-block;
 	bottom: 7px;
@@ -36,4 +51,48 @@
 	font-family: Aerial;
 	text-align: right;
 	font-size: 18px;
+}
+
+.full-text-field-label {
+	overflow: hidden;
+	border-style: none;
+	font-size: 18px;
+	padding-right: 10px;
+	text-align: right;
+}
+
+.zero-padding {
+	font-size: 0px;
+}
+
+.full-text-field-value-view {
+	display: inline-block;
+}
+
+.full-text-field-value {
+	width: 200px;
+	height: 40px;
+	overflow: hidden;
+	
+	border: 1px solid #7777FF;
+	border-radius: 3px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	
+	cursor: pointer;
+	display: table-cell;
+	vertical-align: middle;
+	
+	color: #7777FF;
+	font-weight: bold;
+	font-family: Aerial;
+	background-color: #FFFFFF;
+	text-align: right;
+	font-size: 18px;
+}
+
+.drop-down-menu {
+	width: 40px;
+	height: 40px;
 }

@@ -10,6 +10,12 @@
 	
 	<bean id="20000" factory-bean="dataLinkFactory" factory-method="create">
 		<constructor-arg name="name" value="20000" />
+		<constructor-arg name="host" value="0.0.0.0" />
 		<constructor-arg name="port" value="20000" />
 	</bean>
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="20000" />
+		<property name="targetMethod" value="start" />
+	</bean>
+
 </beans>
