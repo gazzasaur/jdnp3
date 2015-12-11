@@ -65,6 +65,20 @@ table, tr, td {
 	font-size: 0px;
 }
 
+.section-header {
+    padding: 0.5em 1em 0.3em;
+    display: block;
+    border-radius: 3px;
+    border: 1px solid #A8A8A8;
+    background: #C4C4C4 -moz-linear-gradient(center top , rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)) repeat scroll 0% 0%;
+    color: #333;
+    font-weight: bold;
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.7);
+    font-size: 1em;
+    font-family: Arial,sans-serif;
+    text-align: center;
+}
+
 .full-text-field-value-view {
 	display: inline-block;
 }
@@ -92,7 +106,10 @@ table, tr, td {
 	font-size: 18px;
 }
 
-.drop-down-menu {
-	width: 40px;
-	height: 40px;
+.drop-down-menu-button {
+	cursor: pointer;
+}
+
+.drop-down-menu-button:hover {
+	background-color: lightcyan;
 }

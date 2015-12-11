@@ -46,3 +46,10 @@ jdnp3.message.Messanger.prototype.messageReceived = function(message) {
 		}, 0);
 	}
 }
+
+jdnp3.message.Messanger.prototype.sendMessage = function(message) {
+	var messanger = this;
+	jdnp3.schedule.getDefaultScheduler().addTask(function() {
+		messanger.webSocket.send(JSON.stringify(message));
+	}, 0);
+}

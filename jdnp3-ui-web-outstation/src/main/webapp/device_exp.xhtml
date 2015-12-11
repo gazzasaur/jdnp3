@@ -21,7 +21,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", function(event) {
 	var location = document.location.toString().replace(/\bhttp/,'ws').replace(/\/\/.*/,'//') + window.location.host + '/ws/device' + window.location.search;
-	var device = new jdnp3.device.Device(location);
+	window['device'] = new jdnp3.device.Device(location);
 });
 </script>
 
@@ -37,17 +37,31 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		</h:form>
 
 		<h:form>
-			<div id="analogInputs">
+			<div id="binaryInputs" style="display: inline-block; text-align: center;">
+				<div style="margin-bottom: 2px;" class="section-header">
+					<span>Binary Inputs</span>
+				</div>
+				<table id="binaryInputTable" class="value-table">
+				</table>
+			</div>
+		
+			<div id="analogInputs" style="display: inline-block; text-align: center;">
+				<div style="margin-bottom: 2px;" class="section-header">
+					<span>Analog Inputs</span>
+				</div>
 				<table id="analogInputTable" class="value-table">
 				</table>
 			</div>
 		</h:form>
 	</f:view>
 	
-	<p:dialog header="Dialog" widgetVar="main-dialog" modal="true">
+	<p:dialog widgetVar="main-dialog" modal="true">
+		<f:facet name="header"><span id="main-dialog-title"></span></f:facet>
 		<div id="main-dialog">
-			<p>This is a dialog</p>
 		</div>
 	</p:dialog>
+	
+	<div id="main-menu" onmouseleave="document.getElementById('main-menu').setAttribute('style', 'display: none;');">
+	</div>
 </h:body>
 </html>

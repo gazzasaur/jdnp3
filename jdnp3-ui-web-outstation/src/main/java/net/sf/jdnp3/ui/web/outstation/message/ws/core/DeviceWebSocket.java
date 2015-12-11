@@ -32,6 +32,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistryP
 import net.sf.jdnp3.ui.web.outstation.message.ws.encoder.MessageEncoder;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.MessageHandlerRegistry;
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.MessageHandlerRegistryProvider;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.ModelChangedMessage;
 
@@ -41,6 +42,9 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 	
 	private Session session;
 	private DatabaseManager databaseManager;
+
+	private String deviceCode;
+	private String stationCode;
 	
 	@OnOpen
 	public void onConnect(Session session, EndpointConfig endpointConfig) {
@@ -51,8 +55,8 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 			return;
 		}
 		
-		String stationCode = session.getRequestParameterMap().get("stationCode").get(0);
-		String deviceCode = session.getRequestParameterMap().get("deviceCode").get(0);
+		stationCode = session.getRequestParameterMap().get("stationCode").get(0);
+		deviceCode = session.getRequestParameterMap().get("deviceCode").get(0);
 		try {
 			databaseManager = DeviceProvider.getDevice(stationCode, deviceCode).getDatabaseManager();
 		} catch (Exception e) {
@@ -125,6 +129,12 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 			try {
 				Class<? extends Message> messageClass = registry.get(dataPoint.getClass());
 				Message message = messageClass.newInstance();
+				if (message instanceof DeviceMessage) {
+					DeviceMessage deviceMessage = (DeviceMessage) message;
+					deviceMessage.setSite(stationCode);
+					deviceMessage.setDevice(deviceCode);
+				}
+				
 				BeanUtils.copyProperties(message, dataPoint);
 				session.getAsyncRemote().sendObject(message);
 			} catch (Exception e) {

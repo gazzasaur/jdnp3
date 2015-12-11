@@ -20,3 +20,14 @@ jdnp3.device.Device.prototype.messageReceived = function(message) {
 		}
 	}
 }
+
+jdnp3.device.Device.prototype.requestChangeAttributeValue = function(dataPoint, attribute, value) {
+	jdnp3.schedule.getDefaultScheduler().addTask(function() {
+		if (dataPoint.hasOwnProperty(attribute)) {
+			dataPoint[attribute] = value;
+			device.messanger.sendMessage(dataPoint);
+		} else {
+			console.log('WARN: Cannot change attribute ' + attribute + ' in ' + dataPoint);
+		}
+	}, 0);
+}

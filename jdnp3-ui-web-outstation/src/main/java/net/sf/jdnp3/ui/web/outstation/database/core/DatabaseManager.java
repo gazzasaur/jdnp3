@@ -224,7 +224,7 @@ public class DatabaseManager {
 		}
 		if (analogDataPoint.getIndex() < database.getAnalogInputDataPoints().size()) {
 			for (DatabaseListener databaseListener : databaseListeners) {
-				databaseListener.valueChanged(analogDataPoint);
+				databaseListener.valueChanged(database.getAnalogInputDataPoints().get((int) analogDataPoint.getIndex()));
 			}
 		} else {
 			logger.warn("Cannot write analog data point of index: " + analogDataPoint.getIndex());

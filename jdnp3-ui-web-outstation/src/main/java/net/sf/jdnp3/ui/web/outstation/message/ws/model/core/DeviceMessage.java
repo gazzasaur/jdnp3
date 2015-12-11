@@ -17,5 +17,8 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.model.core;
 
 public interface DeviceMessage extends Message {
 	public String getSite();
+	public void setSite(String site);
+	
 	public String getDevice();
+	public void setDevice(String device);
 }
