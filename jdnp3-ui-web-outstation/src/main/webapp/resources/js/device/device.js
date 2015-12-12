@@ -3,7 +3,8 @@ jdnp3.device = jdnp3.device || {};
 
 jdnp3.device.Device = function(location) {
 	this.messageHandlers = {};
-	this.messageHandlers['analogInputPoint'] = new jdnp3.analog.SetAnalogInputMessageHandler();
+	this.messageHandlers['binaryInputPoint'] = new jdnp3.binaryinput.SetBinaryInputMessageHandler();
+	this.messageHandlers['analogInputPoint'] = new jdnp3.analoginput.SetAnalogInputMessageHandler();
 	
 	this.messanger = new jdnp3.message.Messanger(location);
 	this.messanger.setMessageReceiver(this);

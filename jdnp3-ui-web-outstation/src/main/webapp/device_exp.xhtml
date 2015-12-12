@@ -10,9 +10,11 @@
 	xmlns:j="http://sf.net/jdnp3/facelets"
 	xmlns:jdnp3="http://java.sun.com/jsf/composite/jdnp3">
 <h:head>
-	<h:outputScript library="js" name="device/ui.js" />
 	<h:outputScript library="js" name="device/schedule.js" />
-	<h:outputScript library="js" name="device/analog.js" />
+	<h:outputScript library="js" name="device/pointlist.js" />
+	<h:outputScript library="js" name="device/ui.js" />
+	<h:outputScript library="js" name="device/binaryinput.js" />
+	<h:outputScript library="js" name="device/analoginput.js" />
 	<h:outputScript library="js" name="device/device.js" />
 	<h:outputScript library="js" name="device/message.js" />
 </h:head>
@@ -37,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		</h:form>
 
 		<h:form>
-			<div id="binaryInputs" style="display: inline-block; text-align: center;">
+			<div id="binaryInputs" style="display: none;">
 				<div style="margin-bottom: 2px;" class="section-header">
 					<span>Binary Inputs</span>
 				</div>
@@ -45,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				</table>
 			</div>
 		
-			<div id="analogInputs" style="display: inline-block; text-align: center;">
+			<div id="analogInputs" style="display: none;">
 				<div style="margin-bottom: 2px;" class="section-header">
 					<span>Analog Inputs</span>
 				</div>
