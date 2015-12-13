@@ -4,6 +4,7 @@ jdnp3.device = jdnp3.device || {};
 jdnp3.device.Device = function(location) {
 	this.messageHandlers = {};
 	this.messageHandlers['binaryInputPoint'] = new jdnp3.binaryinput.SetBinaryInputMessageHandler();
+	this.messageHandlers['binaryOutputPoint'] = new jdnp3.binaryoutput.SetBinaryOutputMessageHandler();
 	this.messageHandlers['analogInputPoint'] = new jdnp3.analoginput.SetAnalogInputMessageHandler();
 	
 	this.messanger = new jdnp3.message.Messanger(location);
@@ -30,5 +31,17 @@ jdnp3.device.Device.prototype.requestChangeAttributeValue = function(dataPoint, 
 		} else {
 			console.log('WARN: Cannot change attribute ' + attribute + ' in ' + dataPoint);
 		}
+	}, 0);
+}
+
+jdnp3.device.Device.prototype.requestEvent = function(type, dataPoint) {
+	jdnp3.schedule.getDefaultScheduler().addTask(function() {
+		var data = {
+			'type': type,
+			'site': dataPoint.site,
+			'device': dataPoint.device,
+			'index': dataPoint.index
+		};
+		device.messanger.sendMessage(data);
 	}, 0);
 }

@@ -13,8 +13,9 @@
 	<h:outputScript library="js" name="device/schedule.js" />
 	<h:outputScript library="js" name="device/pointlist.js" />
 	<h:outputScript library="js" name="device/ui.js" />
-	<h:outputScript library="js" name="device/binaryinput.js" />
 	<h:outputScript library="js" name="device/analoginput.js" />
+	<h:outputScript library="js" name="device/binaryoutput.js" />
+	<h:outputScript library="js" name="device/binaryinput.js" />
 	<h:outputScript library="js" name="device/device.js" />
 	<h:outputScript library="js" name="device/message.js" />
 </h:head>
@@ -44,6 +45,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					<span>Binary Inputs</span>
 				</div>
 				<table id="binaryInputTable" class="value-table">
+				</table>
+			</div>
+		
+			<div id="binaryOutputs" style="display: none;">
+				<div style="margin-bottom: 2px;" class="section-header">
+					<span>Binary Outputs</span>
+				</div>
+				<table id="binaryOutputTable" class="value-table">
 				</table>
 			</div>
 		

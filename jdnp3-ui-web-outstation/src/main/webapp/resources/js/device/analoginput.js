@@ -59,147 +59,34 @@ jdnp3.analoginput.updateAnalogInput = function(index, dataPoint) {
 jdnp3.analoginput.createAnalogInputView = function(dataPoint) {
 	var name = dataPoint.name;
 	var index = dataPoint.index;
-	var analogInputRow = document.createElement('tr');
 	
-	var analogInputNameCell = document.createElement('td');
-	analogInputNameCell.className = 'full-text-field-label';
-	analogInputNameCell.appendChild(document.createTextNode(name + ' (' + index + ')'));
-	analogInputRow.appendChild(analogInputNameCell);
-	
-	var analogInputViewCell = document.createElement('td');
-	var analogInputView = document.createElement('div');
-	analogInputView.className = "zero-padding";
-	
-	var analogInputValueView = document.createElement('div');
-	analogInputValueView.className = 'full-text-field-value-view';
-	var analogInputValue = document.createElement('span');
-	analogInputValue.id = 'ai-' + index + '-value';
-	analogInputValue.className = 'full-text-field-value';
-	analogInputValue.onclick = function() {
-		var dataPoint = jdnp3.analoginput.analogInputPoints.get(index);
-
-		var container = document.createElement('div');
-		
-		var infoDiv = document.createElement('div');
-		infoDiv.setAttribute('style', 'width: 300px;');
-		container.appendChild(infoDiv);
-		
-		var infoSpan = document.createElement('span');
-		infoSpan.innerHTML = 'Enter a new value:';
-		infoSpan.setAttribute('style', 'font-size: 18px;');
-		infoDiv.appendChild(infoSpan);
-		
-		var textField = document.createElement('div');
-		textField.className = 'text-field';
-		textField.setAttribute('style', 'width: 100%; min-width: 250px');
-		container.appendChild(textField);
-		textField.title = 'Supports Infinity, -Infinity, MAX, MIN and NaN';
-		
-		var textFieldValue = document.createElement('input');
-		textFieldValue.id = 'ai-' + index + '-newvalue';
-		textFieldValue.value = dataPoint.value;
-		textFieldValue.className = 'text-field-value';
-		textFieldValue.setAttribute('style', 'border: none');
-		textFieldValue.type = 'text';
-		textFieldValue.select();
-		textField.appendChild(textFieldValue);
-		textFieldValue.onkeypress = function(event) {
-			var dataPoint = jdnp3.analoginput.analogInputPoints.get(index);
-			
-			if (event.keyCode == 13) {
-				var value = document.getElementById('ai-' + index + '-newvalue').value;
-				if (value == 'MAX') {
-					value = Number.MAX_VALUE;
-				} else if (value == 'MIN') {
-					value = -1*Number.MAX_VALUE;
-				}
-				device.requestChangeAttributeValue(dataPoint, 'value', value);
-				jdnp3.ui.destroyDialog();
-			} else if (event.keyCode == 27) {
-				jdnp3.ui.destroyDialog();
-			};
-		};
-	
-		jdnp3.ui.createDialog('Analog Input ' + index + ' - ' + dataPoint.name, container, function() {});
-		jdnp3.schedule.getDefaultScheduler().addTask(function() {
-			textFieldValue.select();
-		}, 0);
-	};
-	analogInputValue.appendChild(document.createTextNode('0.0'));
-	analogInputValueView.appendChild(analogInputValue);
-	analogInputView.appendChild(analogInputValueView);
-	
-	analogInputView.appendChild(jdnp3.ui.createDipSwitch('Reference Error', 'RE', 'ai-' + index + '-re', function() {var attribute = 'referenceError'; var dataPoint = jdnp3.analoginput.analogInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
-	analogInputView.appendChild(jdnp3.ui.createDipSwitch('Over Range', 'OR', 'ai-' + index + '-or', function() {var attribute = 'overRange'; var dataPoint = jdnp3.analoginput.analogInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
-	analogInputView.appendChild(jdnp3.ui.createDipSwitch('Local Forced', 'LF', 'ai-' + index + '-lf', function() {var attribute = 'localForced'; var dataPoint = jdnp3.analoginput.analogInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
-	analogInputView.appendChild(jdnp3.ui.createDipSwitch('Remote Forced', 'RF', 'ai-' + index + '-rf', function() {var attribute = 'remoteForced'; var dataPoint = jdnp3.analoginput.analogInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
-	analogInputView.appendChild(jdnp3.ui.createDipSwitch('Communications Lost', 'CL', 'ai-' + index + '-cl', function() {var attribute = 'communicationsLost'; var dataPoint = jdnp3.analoginput.analogInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
-	analogInputView.appendChild(jdnp3.ui.createDipSwitch('Restart', 'RS', 'ai-' + index + '-rs', function() {var attribute = 'restart'; var dataPoint = jdnp3.analoginput.analogInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
-	analogInputView.appendChild(jdnp3.ui.createDipSwitch('Online', 'OL', 'ai-' + index + '-ol', function() {var attribute = 'online'; var dataPoint = jdnp3.analoginput.analogInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
-	
-	dropDownButtonView = document.createElement('div');
-	dropDownButtonView.setAttribute('style', 'display: inline-block;');
-	
-	dropDownButton = document.createElement('input');
-	dropDownButton.id = 'ai-' + index + '-showmenu';
-	dropDownButton.name = 'ai-' + index + '-showmenu';
-	dropDownButton.className = 'eventbutton-checkbox';
-	dropDownButton.setAttribute('type', 'button');
-	dropDownButton.onclick = function(event) {
-		jdnp3.schedule.getDefaultScheduler().addTask(function() {
-			var menu = document.createElement('div');
-			menu.className = 'drop-down-menu';
-			
-			var createEvent = document.createElement('div');
-			menu.appendChild(createEvent);
-			var createEventSpan = document.createElement('span');
-			createEvent.setAttribute('style', 'padding: 10px;')
-			createEvent.className = 'drop-down-menu-button';
-			createEvent.appendChild(createEventSpan);
-			createEventSpan.innerHTML = 'Create Event';
-			
-			var separator = document.createElement('hr');
-			separator.setAttribute('style', 'color: #FFFFFF; margin-top: 0px; margin-bottom: 0px; margin-left: auto; margin-right: auto; width: 95%');
-			menu.appendChild(separator);
-			
-			var edit = document.createElement('div');
-			menu.appendChild(edit);
-			var createEventSpan = document.createElement('span');
-			edit.setAttribute('style', 'padding: 10px;')
-			edit.className = 'drop-down-menu-button';
-			edit.appendChild(createEventSpan);
-			createEventSpan.innerHTML = 'Edit';
-			edit.onclick = function() {
-				jdnp3.schedule.getDefaultScheduler().addTask(function() {
-					jdnp3.ui.destroyMenu();
-					var callback = jdnp3.analoginput.createRefreshCallback(index);
-					var analogInput = jdnp3.analoginput.analogInputPoints.get(index);
-					jdnp3.ui.createDialog('Analog Input ' + index + ' - ' + analogInput.name, jdnp3.analoginput.createDialog(index), callback);
-					callback(index);
-				}, 0);
-			};
-			
-			var parent = event.target.parentElement;
-			jdnp3.ui.createMenu(parent, menu);
-		}, 0);
-	};
-	dropDownButtonView.appendChild(dropDownButton);
-	
-	dropDownButtonLabel = document.createElement('label');
-	dropDownButtonLabel.className = 'glossy-button';
-	dropDownButtonLabel.setAttribute('for', 'ai-' + index + '-showmenu');
-	dropDownButtonLabelText = document.createElement('span');
-	dropDownButtonLabelText.innerHTML = '';
-	dropDownButtonLabelText.setAttribute('style', 'width: 16px; height: 8px; background-position: -32px -80px; overflow: hidden; display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px; background-repeat: no-repeat; background-image: url("/javax.faces.resource/images/ui-icons_38667f_256x240.png.jsf?ln=primefaces-aristo");');
-	dropDownButtonLabel.appendChild(dropDownButtonLabelText);
-	dropDownButtonView.appendChild(dropDownButtonLabel);
-	
-	analogInputView.appendChild(dropDownButtonView);
-	
-	analogInputViewCell.appendChild(analogInputView);
-	analogInputRow.appendChild(analogInputViewCell);
-	
-	return analogInputRow;
+	var view = new jdnp3.ui.DataPointItem('ai', dataPoint.index, jdnp3.analoginput.analogInputPoints);
+	view.appendInputText('value', 'Value', function() {});
+	view.appendDipSwitch('re', 'Reference Error', 'RE', function() {var attribute = 'referenceError'; var dataPoint = jdnp3.analoginput.analogInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
+	view.appendDipSwitch('or', 'Over Range', 'OR', function() {var attribute = 'overRange'; var dataPoint = jdnp3.analoginput.analogInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
+	view.appendDipSwitch('lf', 'Local Forced', 'LF', function() {var attribute = 'localForced'; var dataPoint = jdnp3.analoginput.analogInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
+	view.appendDipSwitch('rf', 'Remote Forced', 'RF', function() {var attribute = 'remoteForced'; var dataPoint = jdnp3.analoginput.analogInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
+	view.appendDipSwitch('cl', 'Communications Lost', 'CL', function() {var attribute = 'communicationsLost'; var dataPoint = jdnp3.analoginput.analogInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
+	view.appendDipSwitch('rs', 'Restart', 'RS', function() {var attribute = 'restart'; var dataPoint = jdnp3.analoginput.analogInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
+	view.appendDipSwitch('ol', 'Online', 'OL', function() {var attribute = 'online'; var dataPoint = jdnp3.analoginput.analogInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
+	view.appendDialogButton([
+		{text: 'Create Event', callback: function() {
+			jdnp3.schedule.getDefaultScheduler().addTask(function() {
+				jdnp3.ui.destroyMenu();
+				device.requestEvent('analogInputEvent', jdnp3.analoginput.analogInputPoints.get(index));
+			}, 0);
+		}},
+	    {text: 'Edit', separate: true, callback: function() {
+	    	jdnp3.schedule.getDefaultScheduler().addTask(function() {
+	    		jdnp3.ui.destroyMenu();
+	    		var refreshCallback = jdnp3.analoginput.createRefreshCallback(index);
+	    		var analogInput = jdnp3.analoginput.analogInputPoints.get(index);
+	    		jdnp3.ui.createDialog('Analog Input ' + index + ' - ' + analogInput.name, jdnp3.analoginput.createDialog(index), refreshCallback);
+	    		refreshCallback(index);
+	    	}, 0);
+	    }}
+	]);
+	return view.getComponent();
 }
 
 jdnp3.analoginput.createDialog = function(index) {

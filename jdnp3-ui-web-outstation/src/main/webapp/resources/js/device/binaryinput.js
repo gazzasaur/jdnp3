@@ -53,88 +53,33 @@ jdnp3.binaryinput.updateBinaryInput = function(index, dataPoint) {
 jdnp3.binaryinput.createBinaryInputView = function(dataPoint) {
 	var name = dataPoint.name;
 	var index = dataPoint.index;
-	var binaryInputRow = document.createElement('tr');
 	
-	var binaryInputNameCell = document.createElement('td');
-	binaryInputNameCell.className = 'full-text-field-label';
-	binaryInputNameCell.appendChild(document.createTextNode(name + ' (' + index + ')'));
-	binaryInputRow.appendChild(binaryInputNameCell);
-	
-	var binaryInputViewCell = document.createElement('td');
-	var binaryInputView = document.createElement('div');
-	binaryInputView.className = "zero-padding";
-	
-	binaryInputView.appendChild(jdnp3.ui.createSlideSwitch('bi-' + index + '-state', 'State', 'bi-' + index + '-state', function() {var attribute = 'active'; var dataPoint = jdnp3.binaryinput.binaryInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
-	binaryInputView.appendChild(jdnp3.ui.createDipSwitch('Chatter Filter', 'CF', 'bi-' + index + '-cf', function() {var attribute = 'chatterFilter'; var dataPoint = jdnp3.binaryinput.binaryInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
-	binaryInputView.appendChild(jdnp3.ui.createDipSwitch('Local Forced', 'LF', 'bi-' + index + '-lf', function() {var attribute = 'localForced'; var dataPoint = jdnp3.binaryinput.binaryInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
-	binaryInputView.appendChild(jdnp3.ui.createDipSwitch('Remote Forced', 'Remote Forced', 'bi-' + index + '-rf', function() {var attribute = 'remoteForced'; var dataPoint = jdnp3.binaryinput.binaryInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
-	binaryInputView.appendChild(jdnp3.ui.createDipSwitch('Communications Lost', 'CL', 'bi-' + index + '-cl', function() {var attribute = 'communicationsLost'; var dataPoint = jdnp3.binaryinput.binaryInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
-	binaryInputView.appendChild(jdnp3.ui.createDipSwitch('Restart', 'RS', 'bi-' + index + '-rs', function() {var attribute = 'restart'; var dataPoint = jdnp3.binaryinput.binaryInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
-	binaryInputView.appendChild(jdnp3.ui.createDipSwitch('Online', 'OL', 'bi-' + index + '-ol', function() {var attribute = 'online'; var dataPoint = jdnp3.binaryinput.binaryInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
-	
-	dropDownButtonView = document.createElement('div');
-	dropDownButtonView.setAttribute('style', 'display: inline-block;');
-	
-	dropDownButton = document.createElement('input');
-	dropDownButton.id = 'bi-' + index + '-showmenu';
-	dropDownButton.name = 'bi-' + index + '-showmenu';
-	dropDownButton.className = 'eventbutton-checkbox';
-	dropDownButton.setAttribute('type', 'button');
-	dropDownButton.onclick = function(event) {
-		jdnp3.schedule.getDefaultScheduler().addTask(function() {
-			var menu = document.createElement('div');
-			menu.className = 'drop-down-menu';
-			
-			var createEvent = document.createElement('div');
-			menu.appendChild(createEvent);
-			var createEventSpan = document.createElement('span');
-			createEvent.setAttribute('style', 'padding: 10px;')
-			createEvent.className = 'drop-down-menu-button';
-			createEvent.appendChild(createEventSpan);
-			createEventSpan.innerHTML = 'Create Event';
-			
-			var separator = document.createElement('hr');
-			separator.setAttribute('style', 'color: #FFFFFF; margin-top: 0px; margin-bottom: 0px; margin-left: auto; margin-right: auto; width: 95%');
-			menu.appendChild(separator);
-			
-			var edit = document.createElement('div');
-			menu.appendChild(edit);
-			var createEventSpan = document.createElement('span');
-			edit.setAttribute('style', 'padding: 10px;')
-			edit.className = 'drop-down-menu-button';
-			edit.appendChild(createEventSpan);
-			createEventSpan.innerHTML = 'Edit';
-			edit.onclick = function() {
-				jdnp3.schedule.getDefaultScheduler().addTask(function() {
-					jdnp3.ui.destroyMenu();
-					var callback = jdnp3.binaryinput.createRefreshCallback(index);
-					var binaryInput = jdnp3.binaryinput.binaryInputPoints.get(index);
-					jdnp3.ui.createDialog('Binary Input ' + index + ' - ' + binaryInput.name, jdnp3.binaryinput.createDialog(index), callback);
-					callback(index);
-				}, 0);
-			};
-			
-			var parent = event.target.parentElement;
-			jdnp3.ui.createMenu(parent, menu);
-		}, 0);
-	};
-	dropDownButtonView.appendChild(dropDownButton);
-	
-	dropDownButtonLabel = document.createElement('label');
-	dropDownButtonLabel.className = 'glossy-button';
-	dropDownButtonLabel.setAttribute('for', 'bi-' + index + '-showmenu');
-	dropDownButtonLabelText = document.createElement('span');
-	dropDownButtonLabelText.innerHTML = '';
-	dropDownButtonLabelText.setAttribute('style', 'width: 16px; height: 8px; background-position: -32px -80px; overflow: hidden; display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px; background-repeat: no-repeat; background-image: url("/javax.faces.resource/images/ui-icons_38667f_256x240.png.jsf?ln=primefaces-aristo");');
-	dropDownButtonLabel.appendChild(dropDownButtonLabelText);
-	dropDownButtonView.appendChild(dropDownButtonLabel);
-	
-	binaryInputView.appendChild(dropDownButtonView);
-	
-	binaryInputViewCell.appendChild(binaryInputView);
-	binaryInputRow.appendChild(binaryInputViewCell);
-	
-	return binaryInputRow;
+	var view = new jdnp3.ui.DataPointItem('bi', dataPoint.index, jdnp3.binaryinput.binaryInputPoints);
+	view.appendSlideSwitch('state', 'State', function() {var attribute = 'active'; var dataPoint = jdnp3.binaryinput.binaryInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
+	view.appendDipSwitch('cf', 'Chatter Filter', 'CF', function() {var attribute = 'chatterFilter'; var dataPoint = jdnp3.binaryinput.binaryInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
+	view.appendDipSwitch('lf', 'Local Forced', 'LF', function() {var attribute = 'localForced'; var dataPoint = jdnp3.binaryinput.binaryInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
+	view.appendDipSwitch('rf', 'Remote Forced', 'RF', function() {var attribute = 'remoteForced'; var dataPoint = jdnp3.binaryinput.binaryInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
+	view.appendDipSwitch('cl', 'Communications Lost', 'CL', function() {var attribute = 'communicationsLost'; var dataPoint = jdnp3.binaryinput.binaryInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
+	view.appendDipSwitch('rs', 'Restart', 'RS', function() {var attribute = 'restart'; var dataPoint = jdnp3.binaryinput.binaryInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
+	view.appendDipSwitch('ol', 'Online', 'OL', function() {var attribute = 'online'; var dataPoint = jdnp3.binaryinput.binaryInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
+	view.appendDialogButton([
+	    {text: 'Create Event', callback: function() {
+	    	jdnp3.schedule.getDefaultScheduler().addTask(function() {
+	    		jdnp3.ui.destroyMenu();
+	    		device.requestEvent('binaryInputEvent', jdnp3.binaryinput.binaryInputPoints.get(index));
+	    	}, 0);
+	    }},
+	    {text: 'Edit', separate: true, callback: function() {
+	    	jdnp3.schedule.getDefaultScheduler().addTask(function() {
+	    		jdnp3.ui.destroyMenu();
+	    		var refreshCallback = jdnp3.binaryinput.createRefreshCallback(index);
+	    		var binaryInput = jdnp3.binaryinput.binaryInputPoints.get(index);
+	    		jdnp3.ui.createDialog('Binary Input ' + index + ' - ' + binaryInput.name, jdnp3.binaryinput.createDialog(index), refreshCallback);
+	    		refreshCallback(index);
+	    	}, 0);
+	    }}
+	]);
+	return view.getComponent();
 }
 
 jdnp3.binaryinput.createDialog = function(index) {

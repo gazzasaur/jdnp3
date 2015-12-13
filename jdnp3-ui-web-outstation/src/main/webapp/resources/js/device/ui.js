@@ -44,6 +44,172 @@ jdnp3.ui.destroyMenu = function() {
 	mainMenu.setAttribute('style', 'display: none;');
 }
 
+
+jdnp3.ui.DataPointItem = function(idPrefix, dataPointIndex, dataPointList) {
+	var dataPoint = dataPointList.get(dataPointIndex);
+	this.dataPointIndex = dataPointIndex;
+	this.dataPointList = dataPointList;
+	this.idPrefix = idPrefix;
+	
+	this.container = document.createElement('tr');
+	var nameCell = document.createElement('td');
+	nameCell.id = idPrefix + '-' + this.dataPointIndex + '-name';
+	nameCell.className = 'full-text-field-label';
+	nameCell.appendChild(document.createTextNode(dataPoint.name + ' (' + dataPointIndex + ')'));
+	this.container.appendChild(nameCell);
+	
+	var viewCell = document.createElement('td');
+	var view = document.createElement('div');
+	this.container.appendChild(viewCell);
+	view.className = "zero-padding";
+	viewCell.appendChild(view);
+	this.view = view;
+}
+
+jdnp3.ui.DataPointItem.prototype.getComponent = function() {
+	return this.container;
+}
+
+jdnp3.ui.DataPointItem.prototype.appendInputText = function(attribute, title, onclick) {
+	var id = this.idPrefix + '-' + this.dataPointIndex + '-' + attribute;
+	var dataPointList = this.dataPointList;
+	var index = this.dataPointIndex;
+	var idPrefix = this.idPrefix;
+	
+	var valueView = document.createElement('div');
+	valueView.className = 'full-text-field-value-view';
+	valueView.title = title;
+	
+	var value = document.createElement('span');
+	value.className = 'full-text-field-value';
+	value.id = id;
+
+	value.onclick = function() {
+		jdnp3.schedule.getDefaultScheduler().addTask(function() {
+			var container = document.createElement('div');
+			var infoDiv = document.createElement('div');
+			infoDiv.setAttribute('style', 'width: 300px;');
+			var infoSpan = document.createElement('span');
+			infoSpan.innerHTML = 'Enter a new value:';
+			infoSpan.setAttribute('style', 'font-size: 18px;');
+			infoDiv.appendChild(infoSpan);
+			container.appendChild(infoDiv);
+			
+			var textField = document.createElement('div');
+			textField.className = 'text-field';
+			textField.setAttribute('style', 'width: 100%; min-width: 250px');
+			container.appendChild(textField);
+			textField.title = 'Supports Infinity, -Infinity, MAX, MIN and NaN';
+			
+			var textFieldValue = document.createElement('input');
+			textFieldValue.id = 'ai-' + index + '-newvalue';
+			textFieldValue.value = dataPointList.get(index).value;
+			textFieldValue.className = 'text-field-value';
+			textFieldValue.setAttribute('style', 'border: none');
+			textFieldValue.type = 'text';
+			textFieldValue.select();
+			textField.appendChild(textFieldValue);
+			
+			textFieldValue.onkeypress = function(event) {
+				jdnp3.schedule.getDefaultScheduler().addTask(function() {
+					if (event.keyCode == 13) {
+						var value = document.getElementById(idPrefix + '-' + index + '-newvalue').value;
+						if (value == 'MAX') {
+							value = Number.MAX_VALUE;
+						} else if (value == 'MIN') {
+							value = -1*Number.MAX_VALUE;
+						}
+						device.requestChangeAttributeValue(dataPointList.get(index), 'value', value);
+						jdnp3.ui.destroyDialog();
+					} else if (event.keyCode == 27) {
+						jdnp3.ui.destroyDialog();
+					};
+				}, 0);
+			}
+			
+			jdnp3.ui.createDialog('Analog Input ' + index + ' - ' + dataPointList.get(index).name, container, function() {});
+			jdnp3.schedule.getDefaultScheduler().addTask(function() {
+				textFieldValue.select();
+			}, 0);
+		}, 0);
+	}
+	value.appendChild(document.createTextNode('0.0'));
+	valueView.appendChild(value);
+	this.view.appendChild(valueView);
+}
+
+jdnp3.ui.DataPointItem.prototype.appendSlideSwitch = function(attribute, title, onclick) {
+	var id = this.idPrefix + '-' + this.dataPointIndex + '-' + attribute;
+	this.view.appendChild(jdnp3.ui.createSlideSwitch(id, title, id, onclick));
+}
+
+jdnp3.ui.DataPointItem.prototype.appendDipSwitch = function(attribute, title, abbreviation, onclick) {
+	var id = this.idPrefix + '-' + this.dataPointIndex + '-' + attribute;
+	this.view.appendChild(jdnp3.ui.createDipSwitch(title, abbreviation, id, onclick));
+}
+
+jdnp3.ui.DataPointItem.prototype.appendDialogButton = function(menuItems) {
+	var id = this.idPrefix + '-' + this.dataPointIndex + '-showmenu';
+	var dropDownButtonView = document.createElement('div');
+	dropDownButtonView.setAttribute('style', 'display: inline-block; font-size: 16px;');
+	this.view.appendChild(dropDownButtonView);
+	
+	var dropDownButton = document.createElement('input');
+	dropDownButton.id = id;
+	dropDownButton.name = name;
+	dropDownButton.setAttribute('type', 'button');
+	dropDownButton.className = 'eventbutton-checkbox';
+	dropDownButtonView.appendChild(dropDownButton);
+	
+	dropDownButtonLabel = document.createElement('label');
+	dropDownButtonLabel.className = 'glossy-button';
+	dropDownButtonLabel.style = 'min-width:32px; width: 100%';
+	dropDownButtonLabel.setAttribute('for', id);
+	dropDownButtonLabelText = document.createElement('span');
+	dropDownButtonLabelText.innerHTML = '';
+	dropDownButtonLabelText.setAttribute('style', 'display: inline-block; width: 16px; height: 8px; background-position: -32px -80px; overflow: hidden; display: block; position: relative; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px; background-repeat: no-repeat; background-image: url("/javax.faces.resource/images/ui-icons_38667f_256x240.png.jsf?ln=primefaces-aristo");');
+	dropDownButtonLabel.appendChild(dropDownButtonLabelText);
+	dropDownButtonView.appendChild(dropDownButtonLabel);
+	
+	dropDownButton.onclick = function(event) {
+		jdnp3.schedule.getDefaultScheduler().addTask(function() {
+			var menu = document.createElement('div');
+			menu.className = 'drop-down-menu';
+			
+			for (var i = 0; i < menuItems.length; ++i) {
+				var menuItem = menuItems[i];
+				if (menuItem.separate) {
+					var separator = document.createElement('hr');
+					separator.setAttribute('style', 'color: #FFFFFF; margin-top: 0px; margin-bottom: 0px; margin-left: auto; margin-right: auto; width: 95%');
+					menu.appendChild(separator);
+				}
+				if (menuItem.text) {
+					var item = document.createElement('div');
+					menu.appendChild(item);
+					var itemSpan = document.createElement('span');
+					item.setAttribute('style', 'padding: 10px;')
+					item.className = 'drop-down-menu-button';
+					item.appendChild(itemSpan);
+					itemSpan.innerHTML = menuItem.text;
+					
+					item.onclick = (function(menuItem) {
+						return function(event) {
+							jdnp3.schedule.getDefaultScheduler().addTask(function() {
+								jdnp3.ui.destroyMenu();
+								var callback = menuItem.callback || function() {};
+								callback();
+							}, 0);
+						}
+					}(menuItem));
+				}
+			}
+		
+			var parent = event.target.parentElement;
+			jdnp3.ui.createMenu(parent, menu);
+		}, 0);
+	};
+}
+
 jdnp3.ui.createDipSwitch = function(title, abbreviation, valueId, onclick) {
 	var container = document.createElement('div');
 	container.title = title;
@@ -121,6 +287,7 @@ jdnp3.ui.createCheckbox = function(id, title, label, onclick, data) {
 	buttonView.appendChild(button);
 	
 	var buttonLabel = document.createElement('label');
+	buttonLabel.style = 'width: 100%;';
 	buttonLabel.className = 'glossy-button';
 	buttonLabel.setAttribute('for', id);
 	buttonLabel.onclick = onclick;
