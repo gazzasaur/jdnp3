@@ -28,14 +28,20 @@ jdnp3.ui.refreshDialog = function() {
 	}
 }
 
-jdnp3.ui.createMenu = function(target, component) {
+jdnp3.ui.createMenu = function(target, component, data) {
+	var data = data || {};
 	var mainMenu = document.getElementById('main-menu');
 	mainMenu.innerHTML = '';
 	mainMenu.appendChild(component);
 	
+	console.log(data);
 	var top = target.getBoundingClientRect().top;
 	var left = target.getBoundingClientRect().right;
-	mainMenu.setAttribute('style', 'border: none; outline 0; background: #C4C4C4 -moz-linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)); background: #C4C4C4 -webkit-linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)); box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.8); overflow: hidden; border-radius: 5px; display: block; position: fixed; top: ' + top + 'px; left: ' + left + 'px;');
+	if (data.orientation == 'bottom') {
+		top = target.getBoundingClientRect().bottom;
+		left = target.getBoundingClientRect().left;
+	}
+	mainMenu.setAttribute('style', 'border: none; outline 0; background: #C4C4C4 -moz-linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)); background: #C4C4C4 -webkit-linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)); box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.8); overflow: hidden; border-radius: 5px; display: block; position: fixed; top: ' + top + 'px; left: ' + left + 'px; ' + (data['style'] || ''));
 }
 
 jdnp3.ui.destroyMenu = function() {
@@ -52,11 +58,13 @@ jdnp3.ui.DataPointItem = function(idPrefix, dataPointIndex, dataPointList) {
 	this.idPrefix = idPrefix;
 	
 	this.container = document.createElement('tr');
-	var nameCell = document.createElement('td');
-	nameCell.id = idPrefix + '-' + this.dataPointIndex + '-name';
-	nameCell.className = 'full-text-field-label';
-	nameCell.appendChild(document.createTextNode(dataPoint.name + ' (' + dataPointIndex + ')'));
-	this.container.appendChild(nameCell);
+	if (dataPoint.name) {
+		var nameCell = document.createElement('td');
+		nameCell.id = idPrefix + '-' + this.dataPointIndex + '-name';
+		nameCell.className = 'full-text-field-label';
+		nameCell.appendChild(document.createTextNode(dataPoint.name + ' (' + dataPointIndex + ')'));
+		this.container.appendChild(nameCell);
+	}
 	
 	var viewCell = document.createElement('td');
 	var view = document.createElement('div');
@@ -148,10 +156,11 @@ jdnp3.ui.DataPointItem.prototype.appendDipSwitch = function(attribute, title, ab
 	this.view.appendChild(jdnp3.ui.createDipSwitch(title, abbreviation, id, onclick));
 }
 
-jdnp3.ui.DataPointItem.prototype.appendDialogButton = function(menuItems) {
+jdnp3.ui.DataPointItem.prototype.appendDialogButton = function(menuItems, data) {
+	var data = data || {};
 	var id = this.idPrefix + '-' + this.dataPointIndex + '-showmenu';
 	var dropDownButtonView = document.createElement('div');
-	dropDownButtonView.setAttribute('style', 'display: inline-block; font-size: 16px;');
+	dropDownButtonView.setAttribute('style', 'display: inline-block;');
 	this.view.appendChild(dropDownButtonView);
 	
 	var dropDownButton = document.createElement('input');
@@ -163,11 +172,10 @@ jdnp3.ui.DataPointItem.prototype.appendDialogButton = function(menuItems) {
 	
 	dropDownButtonLabel = document.createElement('label');
 	dropDownButtonLabel.className = 'glossy-button';
-	dropDownButtonLabel.style = 'min-width:32px; width: 100%';
+	dropDownButtonLabel.setAttribute('style', 'min-width: 32px; width: 100%;');
 	dropDownButtonLabel.setAttribute('for', id);
 	dropDownButtonLabelText = document.createElement('span');
-	dropDownButtonLabelText.innerHTML = '';
-	dropDownButtonLabelText.setAttribute('style', 'display: inline-block; width: 16px; height: 8px; background-position: -32px -80px; overflow: hidden; display: block; position: relative; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px; background-repeat: no-repeat; background-image: url("/javax.faces.resource/images/ui-icons_38667f_256x240.png.jsf?ln=primefaces-aristo");');
+	dropDownButtonLabelText.setAttribute('style', 'width: 16px; height: 8px; background-position: -32px -80px; overflow: hidden; display: block; position: relative; left: 16px; margin-left: -8px; top: 50%; margin-top: -8px; background-repeat: no-repeat; background-image: url("/javax.faces.resource/images/ui-icons_38667f_256x240.png.jsf?ln=primefaces-aristo");');
 	dropDownButtonLabel.appendChild(dropDownButtonLabelText);
 	dropDownButtonView.appendChild(dropDownButtonLabel);
 	
@@ -287,7 +295,6 @@ jdnp3.ui.createCheckbox = function(id, title, label, onclick, data) {
 	buttonView.appendChild(button);
 	
 	var buttonLabel = document.createElement('label');
-	buttonLabel.style = 'width: 100%;';
 	buttonLabel.className = 'glossy-button';
 	buttonLabel.setAttribute('for', id);
 	buttonLabel.onclick = onclick;
@@ -297,4 +304,72 @@ jdnp3.ui.createCheckbox = function(id, title, label, onclick, data) {
 	buttonView.appendChild(buttonLabel);
 	
 	return buttonView;
+}
+
+jdnp3.ui.createContextMenuButton = function(id, menuItems, data) {
+	var data = data || {};
+	
+	var menuId = id + '-showmenu';
+	var dropDownButtonView = document.createElement('div');
+	dropDownButtonView.setAttribute('style', 'display: inline-block; font-size: 16px;');
+	
+	var dropDownButton = document.createElement('input');
+	dropDownButton.id = menuId;
+	dropDownButton.name = name;
+	dropDownButton.setAttribute('type', 'button');
+	dropDownButton.className = 'eventbutton-checkbox';
+	dropDownButtonView.appendChild(dropDownButton);
+	
+	dropDownButtonLabel = document.createElement('label');
+	dropDownButtonLabel.className = 'glossy-button';
+	dropDownButtonLabel.setAttribute('style', 'min-width: 32px; ' + (data.style || ''));
+	dropDownButtonLabel.setAttribute('for', menuId);
+	dropDownButtonLabelText = document.createElement('span');
+	dropDownButtonLabelText.setAttribute('style', 'width: 16px; height: 8px; background-position: -32px -80px; overflow: hidden; display: block; position: relative; left: 16px; margin-left: -8px; top: 50%; margin-top: -8px; background-repeat: no-repeat; background-image: url("/javax.faces.resource/images/ui-icons_38667f_256x240.png.jsf?ln=primefaces-aristo");');
+	dropDownButtonLabel.appendChild(dropDownButtonLabelText);
+	dropDownButtonLabelText = document.createElement('span');
+	dropDownButtonLabelText.id = id;
+	dropDownButtonLabelText.setAttribute('style', 'display: block; position: relative; top: -25%;');
+	dropDownButtonLabelText.appendChild(document.createTextNode(''));
+	dropDownButtonLabel.appendChild(dropDownButtonLabelText);
+	dropDownButtonView.appendChild(dropDownButtonLabel);
+	
+	dropDownButton.onclick = function(event) {
+		jdnp3.schedule.getDefaultScheduler().addTask(function() {
+			var menu = document.createElement('div');
+			menu.className = 'drop-down-menu';
+			
+			for (var i = 0; i < menuItems.length; ++i) {
+				var menuItem = menuItems[i];
+				if (menuItem.separate) {
+					var separator = document.createElement('hr');
+					separator.setAttribute('style', 'color: #FFFFFF; margin-top: 0px; margin-bottom: 0px; margin-left: auto; margin-right: auto; width: 95%');
+					menu.appendChild(separator);
+				}
+				if (menuItem.text) {
+					var item = document.createElement('div');
+					menu.appendChild(item);
+					var itemSpan = document.createElement('span');
+					item.setAttribute('style', 'padding: 5px;')
+					item.className = 'drop-down-menu-button';
+					item.appendChild(itemSpan);
+					itemSpan.innerHTML = menuItem.text;
+					
+					item.onclick = (function(menuItem) {
+						return function(event) {
+							jdnp3.schedule.getDefaultScheduler().addTask(function() {
+								jdnp3.ui.destroyMenu();
+								var callback = menuItem.callback || function() {};
+								callback();
+							}, 0);
+						}
+					}(menuItem));
+				}
+			}
+		
+			var parent = event.target.parentElement;
+			jdnp3.ui.createMenu(parent, menu, {style: 'z-index: 4000; ' + (data.menuStyle || ''), orientation: (data.orientation || 'right')});
+		}, 0);
+	};
+	return dropDownButtonView;
 }

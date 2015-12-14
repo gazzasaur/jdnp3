@@ -13,6 +13,7 @@
 	<h:outputScript library="js" name="device/schedule.js" />
 	<h:outputScript library="js" name="device/pointlist.js" />
 	<h:outputScript library="js" name="device/ui.js" />
+	<h:outputScript library="js" name="device/iin.js" />
 	<h:outputScript library="js" name="device/analoginput.js" />
 	<h:outputScript library="js" name="device/binaryoutput.js" />
 	<h:outputScript library="js" name="device/binaryinput.js" />
@@ -40,6 +41,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		</h:form>
 
 		<h:form>
+			<div id="internalIndicators" style="display: none;">
+				<div style="margin-bottom: 2px;" class="section-header">
+					<span>Internal Indicators</span>
+				</div>
+				<table id="internalIndicatorsTable" class="value-table" style="margin-left: auto; margin-right: auto;">
+				</table>
+			</div>
+		
 			<div id="binaryInputs" style="display: none;">
 				<div style="margin-bottom: 2px;" class="section-header">
 					<span>Binary Inputs</span>

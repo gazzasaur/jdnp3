@@ -103,6 +103,40 @@ jdnp3.binaryoutput.createDialog = function(index) {
 	
 	var staticElementRow = document.createElement('tr');
 	var staticElementCell = document.createElement('td');
+	staticElementCell.appendChild(document.createTextNode('Return Status:'));
+	staticElementRow.appendChild(staticElementCell);
+	var staticElementItems = document.createElement('td');
+	staticElementItems.setAttribute('style', 'text-align: right;');
+	
+	var updateFunction = function(displayName) {
+		jdnp3.schedule.getDefaultScheduler().addTask(function() {
+			var statusCode = jdnp3.binaryoutput.DISPLAY_NAME_STATUS_CODE_MAP[displayName];
+			var dataPoint = jdnp3.binaryoutput.binaryOutputPoints.get(index);
+			device.requestChangeAttributeValue(dataPoint, 'statusCode', statusCode);
+		}, 0);
+	};
+	
+	staticElementItems.appendChild(jdnp3.ui.createContextMenuButton('bo-' + index + 'returnstatus', [
+	   {text: 'Success', callback: function() {updateFunction('Success');}},
+	   {text: 'Timeout', separate: true, callback: function() {updateFunction('Timeout');}},
+	   {text: 'No Select', callback: function() {updateFunction('No Select');}},
+	   {text: 'Format Error', callback: function() {updateFunction('Format Error');}},
+	   {text: 'Not Supported', callback: function() {updateFunction('Not Supported');}},
+	   {text: 'Already Active', callback: function() {updateFunction('Already Active');}},
+	   {text: 'Hardware Error', callback: function() {updateFunction('Hardware Error');}},
+	   {text: 'Local', callback: function() {updateFunction('Local');}},
+	   {text: 'Too Many Objects', callback: function() {updateFunction('Too Many Objects');}},
+	   {text: 'Not Authorised', callback: function() {updateFunction('Not Authorised');}},
+	   {text: 'Automation Inhibit', callback: function() {updateFunction('Automation Inhibit');}},
+	   {text: 'Processing Limited', callback: function() {updateFunction('Processing Limited');}},
+	   {text: 'Out of Range', callback: function() {updateFunction('Out of Range');}},
+	   {text: 'Non-Participating', callback: function() {updateFunction('Non-Participating');}}
+	], {orientation: 'bottom', style: 'width: 300px', menuStyle: 'width: 300px; padding: 0px;'}));
+	staticElementRow.appendChild(staticElementItems);
+	table.appendChild(staticElementRow);
+	
+	var staticElementRow = document.createElement('tr');
+	var staticElementCell = document.createElement('td');
 	staticElementCell.appendChild(document.createTextNode('Auto-Update on Success:'));
 	staticElementRow.appendChild(staticElementCell);
 	var staticElementItems = document.createElement('td');
@@ -192,6 +226,11 @@ jdnp3.binaryoutput.createDialog = function(index) {
 jdnp3.binaryoutput.createRefreshCallback = function(index) {
 	return function() {
 		var dataPoint = jdnp3.binaryoutput.binaryOutputPoints.get(index);
+		
+		var textElement = document.getElementById('bo-' + index + 'returnstatus');
+		var text = jdnp3.binaryoutput.STATUS_CODE_DISPLAY_NAME_MAP[jdnp3.binaryoutput.binaryOutputPoints.get(index).statusCode];
+		textElement.innerHTML = '';
+		textElement.appendChild(document.createTextNode(text));
 		
 		var fieldId = 'bo-' + index + '-autoUpdate';
 		document.getElementById(fieldId).checked = dataPoint.autoUpdateOnSuccess;
