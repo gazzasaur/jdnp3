@@ -7,6 +7,7 @@ jdnp3.device.Device = function(location) {
 	this.messageHandlers['binaryInputPoint'] = new jdnp3.binaryinput.SetBinaryInputMessageHandler();
 	this.messageHandlers['binaryOutputPoint'] = new jdnp3.binaryoutput.SetBinaryOutputMessageHandler();
 	this.messageHandlers['analogInputPoint'] = new jdnp3.analoginput.SetAnalogInputMessageHandler();
+	this.messageHandlers['analogOutputPoint'] = new jdnp3.analogoutput.SetAnalogOutputMessageHandler();
 	
 	this.messanger = new jdnp3.message.Messanger(location);
 	this.messanger.setMessageReceiver(this);

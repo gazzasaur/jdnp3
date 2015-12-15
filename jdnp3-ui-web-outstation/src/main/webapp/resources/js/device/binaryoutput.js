@@ -67,6 +67,13 @@ jdnp3.binaryoutput.updateBinaryOutput = function(index, dataPoint) {
 			document.getElementById(id + "-" + jdnp3.binaryoutput.ATTRIBUTE_MAP[property]).checked = dataPoint[property];
 		}
 	}
+	
+	var operationHint = 'Operation Type: ' + dataPoint.operationType + ', Trip Close Code: ' + dataPoint.tripCloseCode + ', On Time: ' + dataPoint.onTime + 'ms, Off Time: ' + dataPoint.offTime + 'ms, Pulse Count: ' + dataPoint.count;
+	document.getElementById('bo-' + index + '-os').setAttribute('title', operationHint);
+	var operationCountElement = document.getElementById('bo-' + index + '-oc')
+	operationCountElement.innerHTML = '';
+	operationCountElement.appendChild(document.createTextNode(dataPoint.operatedCount));
+	
 	jdnp3.ui.refreshDialog();
 }
 
@@ -81,6 +88,20 @@ jdnp3.binaryoutput.createBinaryOutputView = function(dataPoint) {
 	view.appendDipSwitch('cl', 'Communications Lost', 'CL', function() {var attribute = 'communicationsLost'; var dataPoint = jdnp3.binaryoutput.binaryOutputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
 	view.appendDipSwitch('rs', 'Restart', 'RS', function() {var attribute = 'restart'; var dataPoint = jdnp3.binaryoutput.binaryOutputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
 	view.appendDipSwitch('ol', 'Online', 'OL', function() {var attribute = 'online'; var dataPoint = jdnp3.binaryoutput.binaryOutputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);});
+	
+	var operationElement = document.createElement('div');
+	operationElement.id = 'bo-' + index + '-os';
+	operationElement.title = 'No Operation';
+	operationElement.className = 'text-field';
+	operationElement.setAttribute('style', 'width: 100px; cursor: pointer;');
+	view.appendItem(operationElement);
+	
+	var operationElementText = document.createElement('span');
+	operationElementText.id = 'bo-' + index + '-oc';
+	operationElementText.className = 'text-field-value';
+	operationElementText.setAttribute('style', 'width: 100%; text-align: center;');
+	operationElement.appendChild(operationElementText);
+	
 	view.appendDialogButton([
 	    {text: 'Create Event'},
 	    {text: 'Edit', separate: true, callback: function() {

@@ -34,7 +34,6 @@ jdnp3.ui.createMenu = function(target, component, data) {
 	mainMenu.innerHTML = '';
 	mainMenu.appendChild(component);
 	
-	console.log(data);
 	var top = target.getBoundingClientRect().top;
 	var left = target.getBoundingClientRect().right;
 	if (data.orientation == 'bottom') {
@@ -78,6 +77,10 @@ jdnp3.ui.DataPointItem.prototype.getComponent = function() {
 	return this.container;
 }
 
+jdnp3.ui.DataPointItem.prototype.appendItem = function(component) {
+	this.view.appendChild(component);
+}
+
 jdnp3.ui.DataPointItem.prototype.appendInputText = function(attribute, title, onclick) {
 	var id = this.idPrefix + '-' + this.dataPointIndex + '-' + attribute;
 	var dataPointList = this.dataPointList;
@@ -110,7 +113,7 @@ jdnp3.ui.DataPointItem.prototype.appendInputText = function(attribute, title, on
 			textField.title = 'Supports Infinity, -Infinity, MAX, MIN and NaN';
 			
 			var textFieldValue = document.createElement('input');
-			textFieldValue.id = 'ai-' + index + '-newvalue';
+			textFieldValue.id = idPrefix + '-' + index + '-newvalue';
 			textFieldValue.value = dataPointList.get(index).value;
 			textFieldValue.className = 'text-field-value';
 			textFieldValue.setAttribute('style', 'border: none');

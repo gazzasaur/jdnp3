@@ -48,7 +48,6 @@ public class BinaryOutputOperateRequestAdaptor implements OutstationRequestHandl
 	}
 	
 	public void setRequestHandler(OutstationRequestHandler requestHandler) {
-		System.out.println(requestHandler);
 		if (requestHandler instanceof BinaryOutputOperateRequestHandler) {
 			this.serviceRequestHandler = (BinaryOutputOperateRequestHandler) requestHandler;
 		}

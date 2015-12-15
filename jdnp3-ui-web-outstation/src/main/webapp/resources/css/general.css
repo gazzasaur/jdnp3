@@ -22,6 +22,10 @@ table, tr, td {
 	border-style: none;
 }
 
+.value-table {
+	margin: 5px;
+}
+
 .menu-button span button {
 	width: 100%;
 	height: 100%;
