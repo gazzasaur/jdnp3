@@ -109,7 +109,7 @@ jdnp3.binaryoutput.createBinaryOutputView = function(dataPoint) {
 	    		jdnp3.ui.destroyMenu();
 	    		var refreshCallback = jdnp3.binaryoutput.createRefreshCallback(index);
 	    		var binaryOutput = jdnp3.binaryoutput.binaryOutputPoints.get(index);
-	    		jdnp3.ui.createDialog('Binary Input ' + index + ' - ' + binaryOutput.name, jdnp3.binaryoutput.createDialog(index), refreshCallback);
+	    		jdnp3.ui.createDialog('Binary Output ' + index + ' - ' + binaryOutput.name, jdnp3.binaryoutput.createDialog(index), refreshCallback);
 	    		refreshCallback(index);
 	    	}, 0);
 	    }}

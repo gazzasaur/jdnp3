@@ -13,6 +13,7 @@
 	<h:outputScript library="js" name="device/schedule.js" />
 	<h:outputScript library="js" name="device/pointlist.js" />
 	<h:outputScript library="js" name="device/ui.js" />
+	<h:outputScript library="js" name="device/counter.js" />
 	<h:outputScript library="js" name="device/analogoutput.js" />
 	<h:outputScript library="js" name="device/iin.js" />
 	<h:outputScript library="js" name="device/analoginput.js" />
@@ -79,6 +80,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					<span>Analog Outputs</span>
 				</div>
 				<table id="analogOutputTable" class="value-table">
+				</table>
+			</div>
+		
+			<div id="counters" style="display: none;">
+				<div style="margin-bottom: 2px;" class="section-header">
+					<span>Counters</span>
+				</div>
+				<table id="counterTable" class="value-table">
 				</table>
 			</div>
 		</h:form>

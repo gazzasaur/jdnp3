@@ -118,7 +118,7 @@ jdnp3.analogoutput.createAnalogOutputView = function(dataPoint) {
 	    		jdnp3.ui.destroyMenu();
 	    		var refreshCallback = jdnp3.analogoutput.createRefreshCallback(index);
 	    		var analogOutput = jdnp3.analogoutput.analogOutputPoints.get(index);
-	    		jdnp3.ui.createDialog('Binary Input ' + index + ' - ' + analogOutput.name, jdnp3.analogoutput.createDialog(index), refreshCallback);
+	    		jdnp3.ui.createDialog('Analog Output ' + index + ' - ' + analogOutput.name, jdnp3.analogoutput.createDialog(index), refreshCallback);
 	    		refreshCallback(index);
 	    	}, 0);
 	    }}
