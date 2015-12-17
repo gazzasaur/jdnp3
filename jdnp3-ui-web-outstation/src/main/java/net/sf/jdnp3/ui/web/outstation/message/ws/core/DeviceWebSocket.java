@@ -1,10 +1,8 @@
 package net.sf.jdnp3.ui.web.outstation.message.ws.core;
 
 import static java.lang.String.format;
+import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
-import java.util.List;
-
-import javax.websocket.CloseReason;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -19,12 +17,6 @@ import org.slf4j.LoggerFactory;
 
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseListener;
-import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageDecoder;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistry;
@@ -41,55 +33,23 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 	private Logger logger = LoggerFactory.getLogger(DeviceWebSocket.class);
 	
 	private Session session;
-	private DatabaseManager databaseManager;
 
-	private String deviceCode;
-	private String stationCode;
+	private String device = "";
+	private String station = "";
 	
 	@OnOpen
 	public void onConnect(Session session, EndpointConfig endpointConfig) {
-		if (!session.getRequestParameterMap().containsKey("stationCode") || !session.getRequestParameterMap().containsKey("deviceCode")) {
-			String reason = "A stationCode and deviceCode must be defined.";
-			tryCloseSession(session, reason);
-			logger.warn(reason);
-			return;
-		}
-		
-		stationCode = session.getRequestParameterMap().get("stationCode").get(0);
-		deviceCode = session.getRequestParameterMap().get("deviceCode").get(0);
-		try {
-			databaseManager = DeviceProvider.getDevice(stationCode, deviceCode).getDatabaseManager();
-		} catch (Exception e) {
-			String reason = format("Cannot find station %s and device %s.", stationCode, deviceCode);
-			tryCloseSession(session, reason);
-			logger.warn(reason);
-			return;
-		}
-		databaseManager.addDatabaseListener(this);
-		
 		this.session = session;
-    	session.setMaxIdleTimeout(0);
+		session.setMaxIdleTimeout(0);
+		
+		try {
+			station = (String) defaultIfNull(session.getRequestParameterMap().get("stationCode").get(0), "");
+			device = (String) defaultIfNull(session.getRequestParameterMap().get("deviceCode").get(0), "");
+		} catch (Exception e) {
+		}
     	
-		this.valueChanged(databaseManager.getInternalIndicatorsDataPoint());
-		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
-		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
-			this.valueChanged(binaryDataPoint);
-		}
-		List<BinaryOutputDataPoint> binaryOutputDataPoints = databaseManager.getBinaryOutputDataPoints();
-		for (BinaryOutputDataPoint binaryDataPoint : binaryOutputDataPoints) {
-			this.valueChanged(binaryDataPoint);
-		}
-		List<AnalogInputDataPoint> analogInputDataPoints = databaseManager.getAnalogInputDataPoints();
-		for (AnalogInputDataPoint analogDataPoint : analogInputDataPoints) {
-			this.valueChanged(analogDataPoint);
-		}
-		List<AnalogOutputDataPoint> analogOutputDataPoints = databaseManager.getAnalogOutputDataPoints();
-		for (AnalogOutputDataPoint analogDataPoint : analogOutputDataPoints) {
-			this.valueChanged(analogDataPoint);
-		}
-		List<CounterDataPoint> counterDataPoints = databaseManager.getCounterDataPoints();
-		for (CounterDataPoint counterDataPoint : counterDataPoints) {
-			this.valueChanged(counterDataPoint);
+		if (!station.isEmpty() && !device.isEmpty()) {
+			DeviceProvider.addDatabaseListener(station, device, this);
 		}
 	}
 	
@@ -102,17 +62,13 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 	
     @OnClose
     public void onClose(Session session) {
-    	if (databaseManager != null) {
-    		databaseManager.removeDatabaseListener(this);
-    	}
+    	DeviceProvider.removeDatabaseListener(station, device, this);
     }
     
     @OnError
     public void onError(Session session, Throwable throwable) {
-    	if (databaseManager != null) {
-    		databaseManager.removeDatabaseListener(this);
-    	}
     	logger.error("Websocket Error", throwable);
+    	DeviceProvider.removeDatabaseListener(station, device, this);
     }
     
     public void sendMessage(Message message) {
@@ -131,8 +87,8 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 				Message message = messageClass.newInstance();
 				if (message instanceof DeviceMessage) {
 					DeviceMessage deviceMessage = (DeviceMessage) message;
-					deviceMessage.setSite(stationCode);
-					deviceMessage.setDevice(deviceCode);
+					deviceMessage.setSite(station);
+					deviceMessage.setDevice(device);
 				}
 				
 				BeanUtils.copyProperties(message, dataPoint);
@@ -142,22 +98,6 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 			}
 		} else {
 			logger.warn(format("Data point type %s has not been mapped to a message.", dataPoint.getClass()));
-		}
-	}
-	
-	public DatabaseManager getDatabaseManager() {
-		if (databaseManager == null) {
-			throw new IllegalStateException("No database manager has been subscribed to.");
-		}
-		return databaseManager;
-	}
-
-	private void tryCloseSession(Session session, String reason) {
-		try {
-			CloseReason closeReason = new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, reason);
-			session.close(closeReason);
-		} catch (Exception e) {
-			logger.error("Failed to close session.", e);
 		}
 	}
 }

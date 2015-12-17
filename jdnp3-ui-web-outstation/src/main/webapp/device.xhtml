@@ -11,117 +11,95 @@
 	xmlns:jdnp3="http://java.sun.com/jsf/composite/jdnp3">
 <h:head>
 	<h:outputScript library="js" name="schedule.js" />
+	<h:outputScript library="js" name="pointlist.js" />
+	<h:outputScript library="js" name="ui.js" />
 	<h:outputScript library="js" name="counter.js" />
-	<h:outputScript library="js" name="analog.js" />
-	<h:outputScript library="js" name="binary.js" />
+	<h:outputScript library="js" name="analogoutput.js" />
 	<h:outputScript library="js" name="iin.js" />
-	<h:outputScript library="js" name="main.js" />
-	<title>${param['stationCode']} - ${param['deviceCode']}</title>
+	<h:outputScript library="js" name="analoginput.js" />
+	<h:outputScript library="js" name="binaryoutput.js" />
+	<h:outputScript library="js" name="binaryinput.js" />
+	<h:outputScript library="js" name="device.js" />
+	<h:outputScript library="js" name="message.js" />
 </h:head>
 
 <h:body>
-	<script type="text/javascript">
-		var site = '${param['stationCode']}';
-		var device = '${param['deviceCode']}';
-	</script>
+<script>
+document.addEventListener("DOMContentLoaded", function(event) {
+	var location = document.location.toString().replace(/\bhttp/,'ws').replace(/\/\/.*/,'//') + window.location.host + '/ws/device' + window.location.search;
+	window['device'] = new jdnp3.device.Device(location);
+});
+</script>
 
 	<f:facet name="last">
 		<h:outputStylesheet library="css" name="general.css" />
+		<h:outputStylesheet library="css" name="buttons.css" />
+		<h:outputStylesheet library="css" name="switches.css" />
 	</f:facet>
 
 	<f:view>
 		<h:form>
 			<p:poll listener="#{jsfKeepAlive.keepUserSessionAlive()}" interval="#{(session.maxInactiveInterval - 10)/3}" />
-			
-			<p:selectOneMenu id="station" value="#{uiStations.station}" style="width:150px">
-				<p:ajax update="device" />
-				<f:selectItem itemLabel="Select Station" itemValue="" noSelectionOption="true" />
-				<f:selectItems value="#{uiStations.stations}" />
-			</p:selectOneMenu>
- 
-			<p:selectOneMenu  id="device" value="#{uiStations.device}" style="width:150px">
-				<p:ajax listener="#{uiStations.submit}" />
-				<f:selectItem itemLabel="Select Device" itemValue="" noSelectionOption="true" />
-				<f:selectItems value="#{uiStations.devices}" />
-			</p:selectOneMenu>
 		</h:form>
 
-		<c:if test="#{uiPointDatabase.extsts(param['stationCode'], param['deviceCode'])}">
-			<h:form>
-				<p:outputPanel id="page">
-					<div style="text-align: center; display: block;">
-						<p:panel header="Internal Indicators">
-							<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-								<jdnp3:internalIndicators id="iin" index="0" />
-							</p:panelGrid>
-						</p:panel>
-					</div>
-					<c:if test="#{uiPointDatabase.getBinaryInputDataPoints(param['stationCode'], param['deviceCode']).size() > 0}">
-						<div style="text-align: center; display: inline-block;">
-							<p:panel header="Binary Input">
-								<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-									<c:forEach var="point" items="#{uiPointDatabase.getBinaryInputDataPoints(param['stationCode'], param['deviceCode'])}">
-										<h:outputText style="margin-right: 10px" value="#{point.name} (#{point.index})" /><jdnp3:binaryInput point="#{point}" />
-									</c:forEach>
-								</p:panelGrid>
-							</p:panel>
-						</div>
-					</c:if>
-					<c:if test="#{uiPointDatabase.getBinaryOutputDataPoints(param['stationCode'], param['deviceCode']).size() > 0}">
-						<div style="text-align: center; display: inline-block;">
-							<p:panel header="Binary Output">
-								<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-									<c:forEach var="point" items="#{uiPointDatabase.getBinaryOutputDataPoints(param['stationCode'], param['deviceCode'])}">
-										<h:outputText style="margin-right: 10px" value="#{point.name} (#{point.index})" /><jdnp3:binaryOutput point="#{point}" />
-									</c:forEach>
-								</p:panelGrid>
-							</p:panel>
-						</div>
-					</c:if>
-					<c:if test="#{uiPointDatabase.getAnalogInputDataPoints(param['stationCode'], param['deviceCode']).size() > 0}">
-						<div style="text-align: center; display: inline-block;">
-							<p:panel header="Analog Input">
-								<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-									<c:forEach var="point" items="#{uiPointDatabase.getAnalogInputDataPoints(param['stationCode'], param['deviceCode'])}">
-										<h:outputText style="margin-right: 10px" value="#{point.name} (#{point.index})" /><jdnp3:analogInput point="#{point}" />
-									</c:forEach>
-								</p:panelGrid>
-							</p:panel>
-						</div>
-					</c:if>
-					<c:if test="#{uiPointDatabase.getAnalogOutputDataPoints(param['stationCode'], param['deviceCode']).size() > 0}">
-						<div style="text-align: center; display: inline-block;">
-							<p:panel header="Analog Output">
-								<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-									<c:forEach var="point" items="#{uiPointDatabase.getAnalogOutputDataPoints(param['stationCode'], param['deviceCode'])}">
-										<h:outputText style="margin-right: 10px" value="#{point.name} (#{point.index})" /><jdnp3:analogOutput point="#{point}" />
-									</c:forEach>
-								</p:panelGrid>
-							</p:panel>
-						</div>
-					</c:if>
-					<c:if test="#{uiPointDatabase.getCounterDataPoints(param['stationCode'], param['deviceCode']).size() > 0}">
-						<div style="text-align: center; display: inline-block;">
-							<p:panel header="Counter">
-								<p:panelGrid style="margin: auto; text-align: right;" columns="2">
-									<c:forEach var="point" items="#{uiPointDatabase.getCounterDataPoints(param['stationCode'], param['deviceCode'])}">
-										<h:outputText style="margin-right: 10px" value="#{point.name} (#{point.index})" /><jdnp3:counter point="#{point}" />
-									</c:forEach>
-								</p:panelGrid>
-							</p:panel>
-						</div>
-					</c:if>
-				</p:outputPanel>
-			</h:form>
-		</c:if>
-
-		<c:if test="#{not uiPointDatabase.extsts(param['stationCode'], param['deviceCode'])}">
-			<p:outputPanel id="page">
-				<div style="text-align: center; display: block;">
-					<h:outputText style="font-size: 24px" value="Device '${param['stationCode']}:${param['deviceCode']}' does not exist." />
+		<h:form>
+			<div id="internalIndicators" style="display: none;">
+				<div style="margin-bottom: 2px;" class="section-header">
+					<span>Internal Indicators</span>
 				</div>
-			</p:outputPanel>
-		</c:if>
+				<table id="internalIndicatorsTable" class="value-table" style="margin-left: auto; margin-right: auto;">
+				</table>
+			</div>
+		
+			<div id="binaryInputs" style="display: none;">
+				<div style="margin-bottom: 2px;" class="section-header">
+					<span>Binary Inputs</span>
+				</div>
+				<table id="binaryInputTable" class="value-table">
+				</table>
+			</div>
+		
+			<div id="binaryOutputs" style="display: none;">
+				<div style="margin-bottom: 2px;" class="section-header">
+					<span>Binary Outputs</span>
+				</div>
+				<table id="binaryOutputTable" class="value-table">
+				</table>
+			</div>
+		
+			<div id="analogInputs" style="display: none;">
+				<div style="margin-bottom: 2px;" class="section-header">
+					<span>Analog Inputs</span>
+				</div>
+				<table id="analogInputTable" class="value-table">
+				</table>
+			</div>
+		
+			<div id="analogOutputs" style="display: none;">
+				<div style="margin-bottom: 2px;" class="section-header">
+					<span>Analog Outputs</span>
+				</div>
+				<table id="analogOutputTable" class="value-table">
+				</table>
+			</div>
+		
+			<div id="counters" style="display: none;">
+				<div style="margin-bottom: 2px;" class="section-header">
+					<span>Counters</span>
+				</div>
+				<table id="counterTable" class="value-table">
+				</table>
+			</div>
+		</h:form>
 	</f:view>
+	
+	<p:dialog widgetVar="main-dialog" modal="true">
+		<f:facet name="header"><span id="main-dialog-title"></span></f:facet>
+		<div id="main-dialog">
+		</div>
+	</p:dialog>
+	
+	<div id="main-menu" onmouseleave="document.getElementById('main-menu').setAttribute('style', 'display: none;');">
+	</div>
 </h:body>
 </html>

@@ -23,8 +23,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseListener;
+import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
+import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
+
 public class DeviceProvider {
 	private static Map<String, Map<String, OutstationDevice>> devices = new HashMap<>();
+	private static Map<String, Map<String, List<DatabaseListener>>> databaseListeners = new HashMap<>();
 
 	public synchronized static boolean exists(String stationCode, String deviceCode) {
 		return devices.containsKey(stationCode) && devices.get(stationCode).containsKey(deviceCode);
@@ -58,6 +70,16 @@ public class DeviceProvider {
 			devices.put(device.getSite(), new HashMap<>());
 		}
 		devices.get(device.getSite()).put(device.getDevice(), device);
+		
+		List<DatabaseListener> listeners = new ArrayList<>();
+		if (databaseListeners.containsKey(device.getSite()) && databaseListeners.get(device.getSite()).containsKey(device.getDevice())) {
+			listeners.addAll(databaseListeners.get(device.getSite()).get(device.getDevice()));
+		}
+		for (DatabaseListener listener : listeners) {
+			device.getDatabaseManager().addDatabaseListener(listener);
+			triggerDatabaseListener(listener, device.getDatabaseManager());
+		}
+		
 		return devices.get(device.getSite()).get(device.getDevice());
 	}
 	
@@ -84,5 +106,74 @@ public class DeviceProvider {
 			return new ArrayList<>(siteDevices.keySet());
 		}
 		return new ArrayList<>();
+	}
+
+	public synchronized static void addDatabaseListener(String station, String device, DatabaseListener databaseListener) {
+		if (!databaseListeners.containsKey(station)) {
+			databaseListeners.put(station, new HashMap<>());
+		}
+		if (!databaseListeners.get(station).containsKey(device)) {
+			databaseListeners.get(station).put(device, new ArrayList<>());
+		}
+		databaseListeners.get(station).get(device).add(databaseListener);
+		
+		DatabaseManager databaseManager = null;
+		try {
+			databaseManager = DeviceProvider.getDevice(station, device).getDatabaseManager();
+			databaseManager.addDatabaseListener(databaseListener);
+		} catch (Exception e) {
+			Logger logger = LoggerFactory.getLogger(DeviceProvider.class);
+			logger.debug(format("Cannot retreive device %s:%s.", station, device), e);
+			logger.info(format("No device found for %s:%s.  Registered interest.", station, device));
+		}
+		
+		if (databaseManager != null) {
+			triggerDatabaseListener(databaseListener, databaseManager);
+		}
+	}
+	
+	public synchronized static void removeDatabaseListener(String station, String device, DatabaseListener databaseListener) {
+		if (!databaseListeners.containsKey(station)) {
+			return;
+		}
+		if (!databaseListeners.get(station).containsKey(device)) {
+			return;
+		}
+		databaseListeners.get(station).get(device).remove(databaseListener);
+		
+		if (databaseListeners.containsKey(station)) {
+			if (databaseListeners.get(station).containsKey(device)) {
+				if (databaseListeners.get(station).get(device).size() == 0) {
+					databaseListeners.get(station).remove(device);
+				}
+			}
+			if (databaseListeners.get(station).size() == 0) {
+				databaseListeners.remove(station);
+			}
+		}
+	}
+
+	private static void triggerDatabaseListener(DatabaseListener databaseListener, DatabaseManager databaseManager) {
+		databaseListener.valueChanged(databaseManager.getInternalIndicatorsDataPoint());
+		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
+		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
+			databaseListener.valueChanged(binaryDataPoint);
+		}
+		List<BinaryOutputDataPoint> binaryOutputDataPoints = databaseManager.getBinaryOutputDataPoints();
+		for (BinaryOutputDataPoint binaryDataPoint : binaryOutputDataPoints) {
+			databaseListener.valueChanged(binaryDataPoint);
+		}
+		List<AnalogInputDataPoint> analogInputDataPoints = databaseManager.getAnalogInputDataPoints();
+		for (AnalogInputDataPoint analogDataPoint : analogInputDataPoints) {
+			databaseListener.valueChanged(analogDataPoint);
+		}
+		List<AnalogOutputDataPoint> analogOutputDataPoints = databaseManager.getAnalogOutputDataPoints();
+		for (AnalogOutputDataPoint analogDataPoint : analogOutputDataPoints) {
+			databaseListener.valueChanged(analogDataPoint);
+		}
+		List<CounterDataPoint> counterDataPoints = databaseManager.getCounterDataPoints();
+		for (CounterDataPoint counterDataPoint : counterDataPoints) {
+			databaseListener.valueChanged(counterDataPoint);
+		}
 	}
 }

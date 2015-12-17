@@ -46,7 +46,7 @@ public class UiDeviceNode {
 	
 	public void submit() {
 		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect(String.format("/device_exp.jsf?stationCode=%s&deviceCode=%s", URLEncoder.encode(station, "UTF-8"), URLEncoder.encode(device, "UTF-8")));
+			FacesContext.getCurrentInstance().getExternalContext().redirect(String.format("/device.jsf?stationCode=%s&deviceCode=%s", URLEncoder.encode(station, "UTF-8"), URLEncoder.encode(device, "UTF-8")));
 		} catch (Exception e) {
 			logger.error("Cannot redirect to device.", e);
 		}
