@@ -32,9 +32,13 @@ counterDataPoints = [
     'Other',
 ]
 
-# For those who like to really clean up.
+# Ane object to rule them all.
+outstation_manager = jdnp3.device.OutstationManager(HOST_URL)
+
+# Or you could address a single object at a time.
 outstation = jdnp3.device.Outstation(HOST_URL, "Pump Station 1", "Pump 1")
 
+# For those who like to really clean up.
 control.destroy_all()
 control.create_data_link("dataLinkFactory", "20000", "0.0.0.0", 20000)
 control.createOutstation('pumpStationFactory', 'Pump Station 1', 'Pump 1', 3, counterPoints=counterDataPoints)
@@ -42,7 +46,6 @@ outstation.set_internal_indicator('device restart', True)
 control.bindOutstation('Pump Station 1', 'Pump 1', 3, "20000")
 control.start_data_link("20000")
  
-outstation = jdnp3.device.Outstation(HOST_URL, "Pump Station 1", "Pump 1")
 config = outstation.get()
 outstation.output()
  
@@ -70,11 +73,11 @@ outstation.set_analog_output(1, 'value', 'Infinity')
  
 outstation.set_counter(1, 'rollover', False)
 for i in range(1,1000):
-    outstation.set_counter(1, 'value', i)
+    outstation_manager.set_counter('Pump Station 1', 'Pump 1', 1, 'value', i)
     outstation.wait_for_counter(1, 'value', i)
 outstation.set_counter(1, 'rollover', True)
 outstation.set_counter(1, 'value', 0)
- 
+
 # Simulate device cold restart.
 control.stop_data_link("20000")
 outstation.set_internal_indicator("device restart", True)

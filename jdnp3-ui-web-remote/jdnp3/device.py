@@ -1,3 +1,4 @@
+import inspect
 import jdnp3.control
 
 class Outstation:
@@ -157,3 +158,23 @@ class Outstation:
         
     def camel_case(self, value):
         return ''.join(x for x in value.title() if x.isalpha())[0].lower() + ''.join(x for x in value.title() if x.isalpha())[1:]
+
+class OutstationManager:
+    def __init__(self, url):
+        self.url = url
+
+def create_method(method_name):
+    def new_method(self, site, device, *args):
+        outstation = Outstation(self.url, site, device)
+        getattr(outstation, method_name)(*args)
+    return new_method
+
+outstation_methods = inspect.getmembers(Outstation, predicate=inspect.ismethod)
+for outstation_method in outstation_methods:
+    if (outstation_method[0] in [i[0] for i in inspect.getmembers(OutstationManager, predicate=inspect.ismethod)]):
+        print outstation_method[0]
+        continue
+    
+    new_method = create_method(outstation_method[0])
+    new_method.__name__ = outstation_method[0]
+    setattr(OutstationManager, new_method.__name__, new_method)
