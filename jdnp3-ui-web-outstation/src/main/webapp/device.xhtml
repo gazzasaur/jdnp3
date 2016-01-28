@@ -37,60 +37,54 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		<h:outputStylesheet library="css" name="switches.css" />
 	</f:facet>
 
-	<f:view>
-		<h:form>
-			<p:poll listener="#{jsfKeepAlive.keepUserSessionAlive()}" interval="#{(session.maxInactiveInterval - 10)/3}" />
-		</h:form>
-
-		<h:form>
-			<div id="internalIndicators" style="display: none;">
-				<div style="margin-bottom: 2px;" class="section-header">
-					<span>Internal Indicators</span>
-				</div>
-				<table id="internalIndicatorsTable" class="value-table" style="margin-left: auto; margin-right: auto;">
-				</table>
+	<f:view transient="true">
+		<div id="internalIndicators" style="display: none;">
+			<div style="margin-bottom: 2px;" class="section-header">
+				<span>Internal Indicators</span>
 			</div>
-		
-			<div id="binaryInputs" style="display: none;">
-				<div style="margin-bottom: 2px;" class="section-header">
-					<span>Binary Inputs</span>
-				</div>
-				<table id="binaryInputTable" class="value-table">
-				</table>
+			<table id="internalIndicatorsTable" class="value-table" style="margin-left: auto; margin-right: auto;">
+			</table>
+		</div>
+	
+		<div id="binaryInputs" style="display: none;">
+			<div style="margin-bottom: 2px;" class="section-header">
+				<span>Binary Inputs</span>
 			</div>
-		
-			<div id="binaryOutputs" style="display: none;">
-				<div style="margin-bottom: 2px;" class="section-header">
-					<span>Binary Outputs</span>
-				</div>
-				<table id="binaryOutputTable" class="value-table">
-				</table>
+			<table id="binaryInputTable" class="value-table">
+			</table>
+		</div>
+	
+		<div id="binaryOutputs" style="display: none;">
+			<div style="margin-bottom: 2px;" class="section-header">
+				<span>Binary Outputs</span>
 			</div>
-		
-			<div id="analogInputs" style="display: none;">
-				<div style="margin-bottom: 2px;" class="section-header">
-					<span>Analog Inputs</span>
-				</div>
-				<table id="analogInputTable" class="value-table">
-				</table>
+			<table id="binaryOutputTable" class="value-table">
+			</table>
+		</div>
+	
+		<div id="analogInputs" style="display: none;">
+			<div style="margin-bottom: 2px;" class="section-header">
+				<span>Analog Inputs</span>
 			</div>
-		
-			<div id="analogOutputs" style="display: none;">
-				<div style="margin-bottom: 2px;" class="section-header">
-					<span>Analog Outputs</span>
-				</div>
-				<table id="analogOutputTable" class="value-table">
-				</table>
+			<table id="analogInputTable" class="value-table">
+			</table>
+		</div>
+	
+		<div id="analogOutputs" style="display: none;">
+			<div style="margin-bottom: 2px;" class="section-header">
+				<span>Analog Outputs</span>
 			</div>
-		
-			<div id="counters" style="display: none;">
-				<div style="margin-bottom: 2px;" class="section-header">
-					<span>Counters</span>
-				</div>
-				<table id="counterTable" class="value-table">
-				</table>
+			<table id="analogOutputTable" class="value-table">
+			</table>
+		</div>
+	
+		<div id="counters" style="display: none;">
+			<div style="margin-bottom: 2px;" class="section-header">
+				<span>Counters</span>
 			</div>
-		</h:form>
+			<table id="counterTable" class="value-table">
+			</table>
+		</div>
 	</f:view>
 	
 	<p:dialog widgetVar="main-dialog" modal="true">
