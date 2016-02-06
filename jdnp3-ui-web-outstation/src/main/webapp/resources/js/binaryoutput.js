@@ -103,7 +103,12 @@ jdnp3.binaryoutput.createBinaryOutputView = function(dataPoint) {
 	operationElement.appendChild(operationElementText);
 	
 	view.appendDialogButton([
-	    {text: 'Create Event'},
+	    {text: 'Create Event', callback: function() {
+	        jdnp3.schedule.getDefaultScheduler().addTask(function() {
+	            jdnp3.ui.destroyMenu();
+	            	device.requestEvent('binaryOutputEvent', jdnp3.binaryoutput.binaryOutputPoints.get(index));
+	            }, 0);
+	    }},
 	    {text: 'Edit', separate: true, callback: function() {
 	    	jdnp3.schedule.getDefaultScheduler().addTask(function() {
 	    		jdnp3.ui.destroyMenu();
