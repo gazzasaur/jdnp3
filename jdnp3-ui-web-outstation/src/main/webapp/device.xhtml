@@ -38,11 +38,32 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	</f:facet>
 
 	<f:view transient="true">
-		<div id="internalIndicators" style="display: none;">
+		<div>
 			<div style="margin-bottom: 2px;" class="section-header">
-				<span>Internal Indicators</span>
+				<span>Device</span>
 			</div>
-			<table id="internalIndicatorsTable" class="value-table" style="margin-left: auto; margin-right: auto;">
+			<table style="margin-left:auto; margin-right: auto;">
+				<tr>
+					<td class="full-text-field-label">Connection Status</td>
+					<td>
+						<div class="zero-padding" style="top: 0px; bottom: 0px; left: 0px; right: 0px;">
+							<div class="full-text-field-value-view" style="width: 100%" title="Status">
+								<div style="display: table; width: 100%">
+									<span class="full-text-field-value" style="text-align: center; vertical-align: middle; display: table-cell;"><span id="statusText" style="color: red;">Disconnected</span></span>
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="full-text-field-label">Internal Indicators</td>
+					<td>
+						<div id="internalIndicators" style="display: none;">
+							<table id="internalIndicatorsTable" class="value-table" style="margin-left: auto; margin-right: auto;">
+							</table>
+						</div>
+					</td>
+				</tr>
 			</table>
 		</div>
 	
@@ -85,13 +106,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			<table id="counterTable" class="value-table">
 			</table>
 		</div>
-	</f:view>
 	
-	<p:dialog widgetVar="main-dialog" modal="true">
-		<f:facet name="header"><span id="main-dialog-title"></span></f:facet>
-		<div id="main-dialog">
-		</div>
-	</p:dialog>
+		<p:dialog widgetVar="main-dialog" modal="true">
+			<f:facet name="header"><span id="main-dialog-title"></span></f:facet>
+			<div id="main-dialog">
+			</div>
+		</p:dialog>
+	</f:view>
 	
 	<div id="main-menu" onmouseleave="document.getElementById('main-menu').setAttribute('style', 'display: none;');">
 	</div>

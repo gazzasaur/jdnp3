@@ -11,10 +11,15 @@ jdnp3.message.Messanger = function(url) {
 	this.url = url;
 	this.webSocket = null;
 	this.messageReceiver = null;
+	this.connectionListener = null;
 }
 
 jdnp3.message.Messanger.prototype.setMessageReceiver = function(messageReceiver) {
 	this.messageReceiver = messageReceiver;
+}
+
+jdnp3.message.Messanger.prototype.setConnectionListener = function(connectionListener) {
+	this.connectionListener = connectionListener;
 }
 
 jdnp3.message.Messanger.prototype.connect = function() {
@@ -26,6 +31,11 @@ jdnp3.message.Messanger.prototype.connect = function() {
 	var messanger = this;
 	this.webSocket.onopen = function() {
 		console.log('Connection to ' + this.url + ' is open.')
+		jdnp3.schedule.getDefaultScheduler().addTask(function() {
+			if (messanger.connectionListener != null) {
+				messanger.connectionListener.connected();
+			}
+		}, 0);
 	}
 	
 	this.webSocket.onmessage = function(message) {
@@ -38,6 +48,11 @@ jdnp3.message.Messanger.prototype.connect = function() {
 		jdnp3.schedule.getDefaultScheduler().addTask(function() {
 			messanger.connect();
 		}, 1000);
+		jdnp3.schedule.getDefaultScheduler().addTask(function() {
+			if (messanger.connectionListener != null) {
+				messanger.connectionListener.disconnected();
+			}
+		}, 0);
 	}
 	
 	this.webSocket.onerror = function() {

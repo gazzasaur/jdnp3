@@ -10,7 +10,20 @@ jdnp3.device.Device = function(location) {
 	this.messageHandlers['analogOutputPoint'] = new jdnp3.analogoutput.SetAnalogOutputMessageHandler();
 	this.messageHandlers['counterPoint'] = new jdnp3.counter.SetCounterMessageHandler();
 	
+	var connectionListener = {};
+	connectionListener.connected = function() {
+		var element = document.getElementById('statusText');
+		element.innerHTML = "Connected";
+		element.setAttribute('style', 'color: green;');
+	};
+	connectionListener.disconnected = function() {
+		var element = document.getElementById('statusText');
+		element.innerHTML = "Disconnected";
+		element.setAttribute('style', 'color: red;');
+	};
+	
 	this.messanger = new jdnp3.message.Messanger(location);
+	this.messanger.setConnectionListener(connectionListener);
 	this.messanger.setMessageReceiver(this);
 	this.messanger.connect();
 }
