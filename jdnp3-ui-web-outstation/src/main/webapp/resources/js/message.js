@@ -18,6 +18,9 @@ jdnp3.message.Messanger.prototype.setMessageReceiver = function(messageReceiver)
 }
 
 jdnp3.message.Messanger.prototype.connect = function() {
+	if (this.webSocket != null) {
+		return;
+	}
 	this.webSocket = new WebSocket(this.url);
 	
 	var messanger = this;
@@ -30,7 +33,11 @@ jdnp3.message.Messanger.prototype.connect = function() {
 	}
 	
 	this.webSocket.onclose = function() {
+		messanger.webSocket = null;
 		console.log('Connection to ' + this.url + ' is closed.')
+		jdnp3.schedule.getDefaultScheduler().addTask(function() {
+			messanger.connect();
+		}, 1000);
 	}
 	
 	this.webSocket.onerror = function() {
