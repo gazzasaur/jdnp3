@@ -59,8 +59,16 @@ public class ObjectTypeConstants {
 	public static ObjectType COUNTER_STATIC_INT32_DELTA_NO_FLAGS = new ObjectType(COUNTER_STATIC_GROUP, 7);
 	public static ObjectType COUNTER_STATIC_INT16_DELTA_NO_FLAGS = new ObjectType(COUNTER_STATIC_GROUP, 8);
 
-	public static int COUNTER_EVENT_GROUP = 20;
-	public static ObjectType COUNTER_EVENT_ANY = new ObjectType(COUNTER_STATIC_GROUP, 0);
+	public static int COUNTER_EVENT_GROUP = 22;
+	public static ObjectType COUNTER_EVENT_ANY = new ObjectType(COUNTER_EVENT_GROUP, 0);
+	public static ObjectType COUNTER_EVENT_INT32_FLAGS = new ObjectType(COUNTER_EVENT_GROUP, 1);
+	public static ObjectType COUNTER_EVENT_INT16_FLAGS = new ObjectType(COUNTER_EVENT_GROUP, 2);
+	public static ObjectType COUNTER_EVENT_INT32_FLAGS_DELTA = new ObjectType(COUNTER_EVENT_GROUP, 3);
+	public static ObjectType COUNTER_EVENT_INT16_FLAGS_DELTA = new ObjectType(COUNTER_EVENT_GROUP, 4);
+	public static ObjectType COUNTER_EVENT_INT32_FLAGS_TIME = new ObjectType(COUNTER_EVENT_GROUP, 5);
+	public static ObjectType COUNTER_EVENT_INT16_FLAGS_TIME = new ObjectType(COUNTER_EVENT_GROUP, 6);
+	public static ObjectType COUNTER_EVENT_INT32_FLAGS_DELTA_TIME = new ObjectType(COUNTER_EVENT_GROUP, 7);
+	public static ObjectType COUNTER_EVENT_INT16_FLAGS_DELTA_TIME = new ObjectType(COUNTER_EVENT_GROUP, 8);
 
 	public static ObjectType ANALOG_INPUT_STATIC_ANY = new ObjectType(30, 0);
 	public static ObjectType ANALOG_INPUT_STATIC_INT32 = new ObjectType(30, 1);
@@ -93,8 +101,17 @@ public class ObjectTypeConstants {
 	public static ObjectType ANALOG_OUTPUT_COMMAND_FLOAT32 = new ObjectType(41, 3);
 	public static ObjectType ANALOG_OUTPUT_COMMAND_FLOAT64 = new ObjectType(41, 4);
 	
-	public static ObjectType ANALOG_OUTPUT_EVENT_ANY = new ObjectType(42, 0);
-
+	public static int ANALOG_OUTPUT_EVENT_GROUP = 42;
+	public static ObjectType ANALOG_OUTPUT_EVENT_ANY = new ObjectType(ANALOG_OUTPUT_EVENT_GROUP, 0);
+	public static ObjectType ANALOG_OUTPUT_EVENT_INT32_WITHOUT_TIME = new ObjectType(ANALOG_OUTPUT_EVENT_GROUP, 2);
+	public static ObjectType ANALOG_OUTPUT_EVENT_INT16_WITHOUT_TIME = new ObjectType(ANALOG_OUTPUT_EVENT_GROUP, 2);
+	public static ObjectType ANALOG_OUTPUT_EVENT_INT32_WITH_TIME = new ObjectType(ANALOG_OUTPUT_EVENT_GROUP, 3);
+	public static ObjectType ANALOG_OUTPUT_EVENT_INT16_WITH_TIME = new ObjectType(ANALOG_OUTPUT_EVENT_GROUP, 4);
+	public static ObjectType ANALOG_OUTPUT_EVENT_FLOAT32_WITHOUT_TIME = new ObjectType(ANALOG_OUTPUT_EVENT_GROUP, 5);
+	public static ObjectType ANALOG_OUTPUT_EVENT_FLOAT64_WITHOUT_TIME = new ObjectType(ANALOG_OUTPUT_EVENT_GROUP, 6);
+	public static ObjectType ANALOG_OUTPUT_EVENT_FLOAT32_WITH_TIME = new ObjectType(ANALOG_OUTPUT_EVENT_GROUP, 7);
+	public static ObjectType ANALOG_OUTPUT_EVENT_FLOAT64_WITH_TIME = new ObjectType(ANALOG_OUTPUT_EVENT_GROUP, 8);
+	
 	public static final ObjectType ANALOG_OUTPUT_COMMAND_EVENT_ANY = new ObjectType(43, 0);
 	
 	public static ObjectType TIME_AND_DATE_ABSOLUTE_TIME = new ObjectType(50, 1);

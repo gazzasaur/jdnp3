@@ -22,6 +22,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_STATIC_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_EVENT_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_STATIC_GROUP;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.COUNTER_EVENT_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.COUNTER_STATIC_GROUP;
 
 import java.util.ArrayList;
@@ -80,6 +81,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutpu
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ByteDataObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.counter.CounterEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.counter.CounterStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationLayer;
@@ -151,6 +153,8 @@ public class OutstationFactory {
 		adaptors.add(new EventReadRequestAdaptor<>(BINARY_OUTPUT_EVENT_GROUP, BinaryOutputEventObjectInstance.class));
 
 		adaptors.add(new StaticReadRequestAdaptor<>(COUNTER_STATIC_GROUP, CounterStaticObjectInstance.class));
+
+		adaptors.add(new EventReadRequestAdaptor<>(COUNTER_EVENT_GROUP, CounterEventObjectInstance.class));
 
 		adaptors.add(new StaticReadRequestAdaptor<>(ANALOG_OUTPUT_STATIC_GROUP, AnalogOutputStaticObjectInstance.class));
 
