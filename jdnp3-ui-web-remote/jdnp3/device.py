@@ -121,6 +121,10 @@ class Outstation:
         data = self.get()['counterPoints'][int(index)]
         self.set_attribute(data, *args)
         self.set(data)
+
+    def trigger_event(self, index, event_type):
+        event = self.camel_case(event_type);
+        self.control.sendMessage(self.site, self.device, {'site': self.site, 'device': self.device, 'type': event, 'index': index})
         
     def get(self):
         return self.control.getOutstation(self.site, self.device)

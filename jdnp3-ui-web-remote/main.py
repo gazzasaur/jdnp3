@@ -67,6 +67,7 @@ outstation.wait_for_binary_input(0, 'event type', 'variation', 0);
 outstation.set_binary_output(0, 'remote forced', True)
 outstation.set_analog_input(1, 'value', 'Infinity')
 outstation.set_internal_indicator('device restart', False)
+outstation.trigger_event(0, 'binary output event')
  
 outstation.set_analog_output(1, 'value', -20.3)
 outstation.set_analog_output(1, 'value', 'Infinity')
