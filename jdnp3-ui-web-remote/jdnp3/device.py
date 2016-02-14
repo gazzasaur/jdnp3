@@ -1,6 +1,9 @@
 import inspect
 import jdnp3.control
 
+WAIT_TIMEOUT = 1.0
+FLOATING_POINT_TOLERANCE = 1e-09
+
 class Outstation:
     def __init__(self, url, site, device):
         self.site = site
@@ -15,7 +18,7 @@ class Outstation:
     def wait_for_internal_indicator(self, field, value):
         def func():
             return is_equal(self.get_internal_indicator(field), value)
-        if not jdnp3.control.wait_for(func):
+        if not jdnp3.control.wait_for(func, timeout=WAIT_TIMEOUT):
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
 
     def set_internal_indicator(self, field, value):
@@ -34,7 +37,7 @@ class Outstation:
         
         def func():
             return is_equal(self.get_analog_input(int(index), *args), value)
-        if not jdnp3.control.wait_for(func):
+        if not jdnp3.control.wait_for(func, timeout=WAIT_TIMEOUT):
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
 
     def set_analog_input(self, index, *args):
@@ -54,7 +57,7 @@ class Outstation:
         
         def func():
             return is_equal(self.get_analog_output(int(index), *args), value)
-        if not jdnp3.control.wait_for(func):
+        if not jdnp3.control.wait_for(func, timeout=WAIT_TIMEOUT):
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
 
     def set_analog_output(self, index, *args):
@@ -74,7 +77,7 @@ class Outstation:
         
         def func():
             return is_equal(self.get_binary_input(int(index), *args), value)
-        if not jdnp3.control.wait_for(func):
+        if not jdnp3.control.wait_for(func, timeout=WAIT_TIMEOUT):
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
         
     def set_binary_input(self, index, *args):
@@ -94,7 +97,7 @@ class Outstation:
         
         def func():
             return is_equal(self.get_binary_output(int(index), *args), value)
-        if not jdnp3.control.wait_for(func):
+        if not jdnp3.control.wait_for(func, timeout=WAIT_TIMEOUT):
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
         
     def set_binary_output(self, index, *args):
@@ -114,7 +117,7 @@ class Outstation:
         
         def func():
             return is_equal(self.get_counter(int(index), *args), value)
-        if not jdnp3.control.wait_for(func):
+        if not jdnp3.control.wait_for(func, timeout=WAIT_TIMEOUT):
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
         
     def set_counter(self, index, *args):
@@ -183,7 +186,6 @@ for outstation_method in outstation_methods:
     new_method.__name__ = outstation_method[0]
     setattr(OutstationManager, new_method.__name__, new_method)
 
-FLOATING_POINT_TOLERANCE = 1e-09
 def is_equal(primary, other):
     if (type(primary).__name__ == 'bool' and type(other).__name__ == 'str'):
         other = other == 'True'
