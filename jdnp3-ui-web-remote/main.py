@@ -1,4 +1,3 @@
-
 import jdnp3.device
 import jdnp3.control
 
@@ -48,7 +47,7 @@ control.start_data_link("20000")
  
 config = outstation.get()
 outstation.output()
- 
+
 outstation.set_internal_indicator('device restart', True)
 outstation.set_binary_input(1, 'local forced', True)
 outstation.set_binary_input(0, 'event type', 'variation', 0)
