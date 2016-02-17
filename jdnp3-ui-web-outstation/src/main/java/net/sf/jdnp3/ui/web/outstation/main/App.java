@@ -42,20 +42,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * 
  * Direct Operate NR
  * 
- * Slect/Operate
- * 
- * Wish list:
- * - Subsystem interface to control data pump and other subsystems.
- * - Data pump should stop after 3 successive failures.
- * - Keep a history of the 10 most recent visits (requires a dynamic list and session state).
- * - Add per outstation message log.
- * 
- * Other Thoughts:
- * - The ability to send automatic events when a user changes the value from the web page/
- * 
- * Sandpit (Only by popular demand/A long way off):
- * - Ability to change scheme in Runtime.
- * - The ability to send automatic events when a user changes the value from the web page/
+ * Select/Operate
  */
 public class App {
 	public static void main(String[] args) {

@@ -67,6 +67,7 @@ jdnp3.schedule.Scheduler.prototype.tick = function() {
 			}
 		} catch (e) {
 			console.log('WARN: Failed task, removed ' + task.getTask() + ': ' + e);
+			console.log(e.stack);
 		}
 	}
 	this.taskQueue = newTaskList;

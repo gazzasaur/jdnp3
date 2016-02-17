@@ -187,10 +187,14 @@ for outstation_method in outstation_methods:
     setattr(OutstationManager, new_method.__name__, new_method)
 
 def is_equal(primary, other):
-    if (type(primary).__name__ == 'bool' and type(other).__name__ == 'str'):
-        other = other == 'True'
+    if (type(primary).__name__ == 'bool' and (type(other).__name__ == 'str' or type(other).__name__ == 'unicode')):
+        other = str(other) == 'True'
     elif (type(primary).__name__ == 'float'):
         other = float(other)
+        if (primary != primary and other != other):
+            return True
+        if (primary == other):
+            return True
         return abs(primary - other) <= FLOATING_POINT_TOLERANCE * max(abs(primary), abs(other))
 
     try:

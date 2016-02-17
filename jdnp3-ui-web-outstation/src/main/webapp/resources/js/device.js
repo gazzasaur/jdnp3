@@ -30,7 +30,10 @@ jdnp3.device.Device = function(location) {
 
 jdnp3.device.Device.prototype.messageReceived = function(message) {
 	if (message.data) {
-		messageObject = jQuery.parseJSON(message.data);
+		messageData = message.data.replace(/([\s\[{.]"value"\s*:\s*)NaN/, '$1"NaN"');
+		messageData = messageData.replace(/([\s\[{.]"value"\s*:\s*)Infinity/, '$1"Infinity"');
+		messageData = messageData.replace(/([\s\[{.]"value"\s*:\s*)-Infinity/, '$1"-Infinity"');
+		messageObject = JSON.parse(messageData);
 		if (messageObject.type in this.messageHandlers) {
 			this.messageHandlers[messageObject.type].processMessage(messageObject);
 		} else {

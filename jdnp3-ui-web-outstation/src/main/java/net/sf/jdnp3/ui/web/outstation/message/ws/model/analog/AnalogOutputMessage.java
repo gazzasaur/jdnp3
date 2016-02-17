@@ -36,7 +36,7 @@ public class AnalogOutputMessage implements DeviceMessage {
 	private ObjectType commandEventType = ANALOG_OUTPUT_COMMAND_EVENT_ANY;
 	
 	private String name = "";
-	private String value = "0";
+	private double value = 0;
 	private boolean online = true;
 	private boolean restart = false;
 	private boolean overRange = false;
@@ -150,11 +150,11 @@ public class AnalogOutputMessage implements DeviceMessage {
 		this.referenceError = referenceError;
 	}
 
-	public String getValue() {
+	public double getValue() {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(double value) {
 		this.value = value;
 	}
 

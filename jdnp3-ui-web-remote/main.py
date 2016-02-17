@@ -51,9 +51,17 @@ outstation.output()
 outstation.set_internal_indicator('device restart', True)
 outstation.set_binary_input(1, 'local forced', True)
 outstation.set_binary_input(0, 'event type', 'variation', 0)
- 
+
+# String 'NaN' or float nan.
+# On wait for it must be aparseable python value or exact value.
+outstation.set_analog_output(0, 'value', 'NaN');
+outstation.wait_for_analog_output(0, 'value', 'NaN');
+
+# On the setter, you may either use the full string Infinity and -Infinity or use the float inf and -inf
+# On wait for it must be aparseable python value or exact value.
 outstation.set_analog_input(0, 'value', 'Infinity');
-outstation.wait_for_analog_input(0, 'value', 'Infinity');
+outstation.set_analog_input(0, 'value', float('inf'));
+outstation.wait_for_analog_input(0, 'value', 'inf');
 outstation.set_analog_input(0, 'value', '1000.0');
 outstation.wait_for_analog_input(0, 'value', '1000.0');
  

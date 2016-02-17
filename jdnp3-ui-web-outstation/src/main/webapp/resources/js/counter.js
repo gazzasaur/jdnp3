@@ -46,14 +46,10 @@ jdnp3.counter.updateCounter = function(index, dataPoint) {
 	document.getElementById(id + "-value").appendChild(document.createTextNode(dataPoint.value));
 
 	for (var property in dataPoint) {
-		console.log(property);
 		if (dataPoint.hasOwnProperty(property) && property in jdnp3.counter.ATTRIBUTE_MAP) {
-			console.log(property);
-
 			document.getElementById(id + "-" + jdnp3.counter.ATTRIBUTE_MAP[property]).checked = dataPoint[property];
 		}
 	}
-	console.log('done');
 	jdnp3.ui.refreshDialog();
 }
 

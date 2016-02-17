@@ -72,6 +72,20 @@ jdnp3.message.Messanger.prototype.messageReceived = function(message) {
 jdnp3.message.Messanger.prototype.sendMessage = function(message) {
 	var messanger = this;
 	jdnp3.schedule.getDefaultScheduler().addTask(function() {
-		messanger.webSocket.send(JSON.stringify(message));
+		messanger.webSocket.send(JSON.stringify(message),  function (key, value) {
+			if (key !== 'value') {
+				return value;
+			}
+			if (value === 'NaN') {
+				return NaN;
+			}
+			if (value === 'Infinity') {
+				return Infinity;
+			}
+			if (value === '-Infinity') {
+				return -Infinity;
+			}
+	        return value;
+		});
 	}, 0);
 }
