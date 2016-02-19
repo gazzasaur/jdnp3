@@ -164,7 +164,7 @@ jdnp3.counter.createRefreshCallback = function(index) {
 			}
 		}
 		
-		for (var i = 0; i < 8; ++i) {
+		for (var i = 0; i < 9; ++i) {
 			var fieldId = 'ci-' + index + '-st-' + i;
 			if (i == dataPoint.staticType.variation) {
 				document.getElementById(fieldId).setAttribute('checked', 'true');
@@ -173,7 +173,7 @@ jdnp3.counter.createRefreshCallback = function(index) {
 			}
 		}
 		
-		for (var i = 0; i < 8; ++i) {
+		for (var i = 0; i < 9; ++i) {
 			var fieldId = 'ci-' + index + '-ev-' + i;
 			if (i == dataPoint.eventType.variation) {
 				document.getElementById(fieldId).setAttribute('checked', 'true');
