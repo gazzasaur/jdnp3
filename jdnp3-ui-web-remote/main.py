@@ -63,7 +63,8 @@ outstation.set_analog_input(0, 'value', 'Infinity');
 outstation.set_analog_input(0, 'value', float('inf'));
 outstation.wait_for_analog_input(0, 'value', 'inf');
 outstation.set_analog_input(0, 'value', '1000.0');
-outstation.wait_for_analog_input(0, 'value', '1000.0');
+outstation.wait_for_analog_input(0, 'value', unicode('1000'));
+outstation.wait_for_analog_input(0, 'value', unicode('1000.0'));
  
 outstation.set_binary_input(0, 'event type', 'variation', 1)
 outstation.set_binary_input(0, 'event type', 'variation', 2)
@@ -83,6 +84,7 @@ outstation.set_counter(1, 'rollover', False)
 for i in range(1,1000):
     outstation_manager.set_counter('Pump Station 1', 'Pump 1', 1, 'value', i)
     outstation.wait_for_counter(1, 'value', i)
+    outstation.wait_for_counter(1, 'value', unicode(i))
 outstation.set_counter(1, 'rollover', True)
 outstation.set_counter(1, 'value', 0)
 
