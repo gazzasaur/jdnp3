@@ -179,7 +179,6 @@ def create_method(method_name):
 outstation_methods = inspect.getmembers(Outstation, predicate=inspect.ismethod)
 for outstation_method in outstation_methods:
     if (outstation_method[0] in [i[0] for i in inspect.getmembers(OutstationManager, predicate=inspect.ismethod)]):
-        print outstation_method[0]
         continue
     
     new_method = create_method(outstation_method[0])
