@@ -65,7 +65,16 @@ outstation.wait_for_analog_input(0, 'value', 'inf');
 outstation.set_analog_input(0, 'value', '1000.0');
 outstation.wait_for_analog_input(0, 'value', unicode('1000'));
 outstation.wait_for_analog_input(0, 'value', unicode('1000.0'));
- 
+
+# Simulate soft restart.
+control.unbindOutstation('Pump Station 1', 'Pump 1', 3, "20000")
+outstation.set_internal_indicator('device restart', True)
+control.bindOutstation('Pump Station 1', 'Pump 1', 3, "20000")
+try:
+    outstation.wait_for_internal_indicator('device restart', False)
+except:
+    print "WARNING: You may not have a master polling this."
+
 outstation.set_binary_input(0, 'event type', 'variation', 1)
 outstation.set_binary_input(0, 'event type', 'variation', 2)
 outstation.set_binary_input(0, 'event type', 'variation', 3)
