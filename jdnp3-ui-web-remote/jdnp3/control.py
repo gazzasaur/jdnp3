@@ -58,6 +58,14 @@ class Control:
         data['address'] = address
         data['dataLinkName'] = dataLinkName
         return self.postMessage(data)
+    
+    def unbindOutstation(self, site, device, address, dataLinkName):
+        data = {'type': 'unbindDevice'};
+        data['site'] = site
+        data['device'] = device
+        data['address'] = address
+        data['dataLinkName'] = dataLinkName
+        return self.postMessage(data)
         
     def getOutstation(self, site, device, output=False):
         data = {'type': 'getDevice', 'site': site, 'device': device}
