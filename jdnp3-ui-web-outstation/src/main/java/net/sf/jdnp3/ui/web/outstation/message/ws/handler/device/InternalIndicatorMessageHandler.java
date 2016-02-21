@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 public class InternalIndicatorMessageHandler implements DeviceMessageHandler {
 	private Logger logger = LoggerFactory.getLogger(InternalIndicatorMessageHandler.class);
-	private static final List<String> TRUSTED_ATTRIBUTES = Arrays.asList("broadcast", "class1Events", "class2Events", "class3Events", "needTime", "localControl", "deviceTrouble", "deviceRestart", "noFunctionCodeSupport", "objectUnknown", "parameterError", "eventBufferOverflow", "alreadyExecuting", "configurationCorrupt");
+	private static final List<String> TRUSTED_ATTRIBUTES = Arrays.asList("broadcast", "class1Events", "class2Events", "class3Events", "needTime", "localControl", "deviceTrouble", "deviceRestart", "noFunctionCodeSupport", "objectUnknown", "parameterError", "eventBufferOverflow", "alreadyExecuting", "configurationCorrupt", "readonly");
 	
 	public boolean canHandle(Message message) {
 		return message instanceof InternalIndicatorMessage;

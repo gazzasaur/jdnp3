@@ -56,6 +56,7 @@ jdnp3.iin.updateInternalIndicators = function(index, dataPoint) {
 			document.getElementById(id + "-" + jdnp3.iin.ATTRIBUTE_MAP[property]).checked = dataPoint[property];
 		}
 	}
+	jdnp3.ui.refreshDialog();
 }
 
 jdnp3.iin.createInternalIndicatorsView = function(dataPoint) {
@@ -77,5 +78,46 @@ jdnp3.iin.createInternalIndicatorsView = function(dataPoint) {
 	view.appendDipSwitch('eo', 'Event Buffer Overflow', '2.3', function() {var attribute = 'eventBufferOverflow'; var dataPoint = jdnp3.iin.internalIndicators.get(index); device.requestChangeSingleAttributeValue('internalIndicator', attribute, !dataPoint[attribute]);});
 	view.appendDipSwitch('ae', 'Already Executing', '2.4', function() {var attribute = 'alreadyExecuting'; var dataPoint = jdnp3.iin.internalIndicators.get(index); device.requestChangeSingleAttributeValue('internalIndicator', attribute, !dataPoint[attribute]);});
 	view.appendDipSwitch('cc', 'Configuration Corrupt', '2.5', function() {var attribute = 'configurationCorrupt'; var dataPoint = jdnp3.iin.internalIndicators.get(index); device.requestChangeSingleAttributeValue('internalIndicator', attribute, !dataPoint[attribute]);});
+	view.appendDialogButton([
+		{text: 'Edit', separate: false, callback: function() {
+			jdnp3.schedule.getDefaultScheduler().addTask(function() {
+				jdnp3.ui.destroyMenu();
+				var refreshCallback = jdnp3.iin.createRefreshCallback();
+				jdnp3.ui.createDialog('Internal Indicators', jdnp3.iin.createDialog(index), refreshCallback);
+				refreshCallback(index);
+			}, 0);
+		}}
+	]);
 	return view.getComponent();
+}
+
+
+jdnp3.iin.createDialog = function(index) {
+	var parent = document.createElement('div');
+	var table = document.createElement('table');
+	table.setAttribute('cellpadding', '5');
+	
+	var staticElementRow = document.createElement('tr');
+	var staticElementCell = document.createElement('td');
+	staticElementCell.appendChild(document.createTextNode('Readonly:'));
+	staticElementRow.appendChild(staticElementCell);
+	var staticElementItems = document.createElement('td');
+	staticElementItems.setAttribute('style', 'text-align: right;');
+	
+	staticElementItems.appendChild(jdnp3.ui.createSlideSwitch('iin-' + index + '-readonly', 'Readonly', 'readonly', function() {var attribute = 'readonly'; var dataPoint = jdnp3.iin.internalIndicators.get(index); device.requestChangeSingleAttributeValue('internalIndicator', attribute, !dataPoint[attribute]);}));
+	staticElementRow.appendChild(staticElementItems);
+	table.appendChild(staticElementRow);
+	
+	parent.appendChild(table);
+	
+	return parent;
+}
+
+jdnp3.iin.createRefreshCallback = function(index) {
+	return function() {
+		var dataPoint = jdnp3.iin.internalIndicators.get(index);
+		
+		var fieldId = 'iin-' + index + '-readonly';
+		document.getElementById(fieldId).checked = dataPoint.readonly;
+	}
 }

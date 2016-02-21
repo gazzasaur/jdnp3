@@ -22,6 +22,7 @@ public class InternalIndicatorsMessage implements DeviceMessage {
 	private String type = "internalIndicators";
 	private String site = "";
 	private String device = "";
+	private boolean readonly = false;
 	
 	private boolean needTime = false;
 	private boolean broadcast = false;
@@ -168,5 +169,13 @@ public class InternalIndicatorsMessage implements DeviceMessage {
 
 	public void setDevice(String device) {
 		this.device = device;
+	}
+
+	public boolean isReadonly() {
+		return readonly;
+	}
+
+	public void setReadonly(boolean readonly) {
+		this.readonly = readonly;
 	}
 }

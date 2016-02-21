@@ -31,6 +31,9 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 	
 	public synchronized void setBroadcast(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.isReadonly()) {
+			return;
+		}
 		internalIndicatorsDataPoint.setBroadcast(value);
 		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 	}
@@ -41,6 +44,9 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 	
 	public synchronized void setClass1Events(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.isReadonly()) {
+			return;
+		}
 		internalIndicatorsDataPoint.setClass1Events(value);
 		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 	}
@@ -51,6 +57,9 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 	
 	public synchronized void setClass2Events(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.isReadonly()) {
+			return;
+		}
 		internalIndicatorsDataPoint.setClass2Events(value);
 		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 	}
@@ -61,6 +70,9 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 	
 	public synchronized void setClass3Events(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.isReadonly()) {
+			return;
+		}
 		internalIndicatorsDataPoint.setClass3Events(value);
 		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 	}
@@ -71,6 +83,9 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 	
 	public synchronized void setNeedTime(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.isReadonly()) {
+			return;
+		}
 		internalIndicatorsDataPoint.setNeedTime(value);
 		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 	}
@@ -81,6 +96,9 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 	
 	public synchronized void setLocalControl(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.isReadonly()) {
+			return;
+		}
 		internalIndicatorsDataPoint.setLocalControl(value);
 		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 	}
@@ -91,6 +109,9 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 	
 	public synchronized void setDeviceTrouble(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.isReadonly()) {
+			return;
+		}
 		internalIndicatorsDataPoint.setDeviceTrouble(value);
 		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 	}
@@ -101,6 +122,9 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 	
 	public synchronized void setDeviceRestart(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.isReadonly()) {
+			return;
+		}
 		internalIndicatorsDataPoint.setDeviceRestart(value);
 		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 	}
@@ -111,6 +135,9 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 	
 	public synchronized void setNoFunctionCodeSupport(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.isReadonly()) {
+			return;
+		}
 		internalIndicatorsDataPoint.setNoFunctionCodeSupport(value);
 		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 	}
@@ -121,6 +148,9 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 	
 	public synchronized void setObjectUnknown(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.isReadonly()) {
+			return;
+		}
 		internalIndicatorsDataPoint.setObjectUnknown(value);
 		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 	}
@@ -131,6 +161,9 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 	
 	public synchronized void setParameterError(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.isReadonly()) {
+			return;
+		}
 		internalIndicatorsDataPoint.setParameterError(value);
 		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 	}
@@ -141,6 +174,9 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 	
 	public synchronized void setEventBufferOverflow(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.isReadonly()) {
+			return;
+		}
 		internalIndicatorsDataPoint.setEventBufferOverflow(value);
 		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 	}
@@ -151,6 +187,9 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 	
 	public synchronized void setAlreadyExecuting(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.isReadonly()) {
+			return;
+		}
 		internalIndicatorsDataPoint.setAlreadyExecuting(value);
 		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 	}
@@ -161,7 +200,20 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 	
 	public synchronized void setConfigurationCorrupt(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.isReadonly()) {
+			return;
+		}
 		internalIndicatorsDataPoint.setConfigurationCorrupt(value);
+		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+	}
+
+	public boolean isReadonly() {
+		return databaseManager.getInternalIndicatorsDataPoint().isReadonly();
+	}
+	
+	public synchronized void setReadonly(boolean value) {
+		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		internalIndicatorsDataPoint.setReadonly(value);
 		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 	}
 }
