@@ -59,6 +59,8 @@ outstation.wait_for_analog_output(0, 'value', 'NaN');
 
 # On the setter, you may either use the full string Infinity and -Infinity or use the float inf and -inf
 # On wait for it must be aparseable python value or exact value.
+outstation.set_analog_input(0, 'value', 0.1);
+outstation.set_analog_input(0, 'static type', 'variation', unicode('5'));
 outstation.set_analog_input(0, 'value', 'Infinity');
 outstation.set_analog_input(0, 'value', float('inf'));
 outstation.wait_for_analog_input(0, 'value', 'inf');

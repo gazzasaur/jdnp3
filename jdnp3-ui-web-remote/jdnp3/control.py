@@ -102,7 +102,7 @@ class Control:
         string_data = response.read()
         if output:
             print string_data
-        data = json.loads(string_data, parse_float=decimal.Decimal)
+        data = json.loads(string_data)
         if (not 'type' in data or data['type'] == 'failure'):
             if ('reason' in data):
                 raise exceptions.RuntimeError(data['reason'])
