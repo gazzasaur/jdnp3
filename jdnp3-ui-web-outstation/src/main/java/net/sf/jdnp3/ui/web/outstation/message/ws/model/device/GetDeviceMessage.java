@@ -18,6 +18,7 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.model.device;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.jdnp3.ui.web.outstation.channel.OutstationBinding;
 import net.sf.jdnp3.ui.web.outstation.database.device.InternalIndicatorsDataPoint;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessage;
@@ -37,6 +38,7 @@ public class GetDeviceMessage implements DeviceMessage {
 	private List<AnalogInputMessage> analogInputPoints = new ArrayList<>();
 	private List<AnalogOutputMessage> analogOutputPoints = new ArrayList<>();
 	private List<CounterMessage> counterPoints = new ArrayList<>();
+	private List<OutstationBinding> outstationBindings = new ArrayList<>();
 	
 	public String getType() {
 		return type;
@@ -104,5 +106,13 @@ public class GetDeviceMessage implements DeviceMessage {
 
 	public void setDevice(String device) {
 		this.device = device;
+	}
+
+	public List<OutstationBinding> getOutstationBindings() {
+		return outstationBindings;
+	}
+
+	public void setOutstationBindings(List<OutstationBinding> outstationBindings) {
+		this.outstationBindings = outstationBindings;
 	}
 }

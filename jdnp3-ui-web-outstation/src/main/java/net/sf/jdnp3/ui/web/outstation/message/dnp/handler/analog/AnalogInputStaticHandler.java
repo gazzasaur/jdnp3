@@ -18,14 +18,14 @@ package net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.jdnp3.dnp3.service.outstation.handler.analog.AnalogInputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class AnalogInputStaticHandler implements AnalogInputStaticReadRequestHandler {
 	private Logger logger = LoggerFactory.getLogger(AnalogInputStaticHandler.class);

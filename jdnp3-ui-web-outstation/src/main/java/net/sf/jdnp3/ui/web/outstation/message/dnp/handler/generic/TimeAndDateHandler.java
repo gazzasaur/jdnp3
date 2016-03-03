@@ -19,12 +19,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.jdnp3.dnp3.service.outstation.handler.time.TimeAndDateRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeAndDateObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TimeAndDateHandler implements TimeAndDateRequestHandler {
 	private Logger logger = LoggerFactory.getLogger(TimeAndDateHandler.class);

@@ -21,6 +21,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.device.InternalIndicatorsDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
@@ -28,8 +29,9 @@ import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoin
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputMessage;
@@ -45,7 +47,7 @@ public class GetDeviceMessageHandler implements DeviceMessageHandler {
 		return message instanceof GetDeviceMessage;
 	}
 
-	public void processMessage(Messanger messanger, DatabaseManager databaseManager, Message message) {
+	public void processMessage(Messanger messanger, OutstationDevice outstationDevice, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
@@ -53,6 +55,7 @@ public class GetDeviceMessageHandler implements DeviceMessageHandler {
 		specificMessage.setBinaryInputPoints(new ArrayList<>());
 
 		try {
+			DatabaseManager databaseManager = outstationDevice.getDatabaseManager();
 			InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
 			specificMessage.setInternalIndicators(internalIndicatorsDataPoint);
 			
@@ -81,6 +84,7 @@ public class GetDeviceMessageHandler implements DeviceMessageHandler {
 				BeanUtils.copyProperties(part, point);
 				specificMessage.getCounterPoints().add(part);
 			}
+			specificMessage.getOutstationBindings().addAll(DataLinkManagerProvider.getDataLinkBindings(outstationDevice));
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

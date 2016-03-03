@@ -24,11 +24,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
-import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
-import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
+import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
 
 @ManagedBean
 @ViewScoped

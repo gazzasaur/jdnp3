@@ -20,8 +20,8 @@ import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
+import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
@@ -50,17 +50,17 @@ public class DeviceMessageHandlerRegistry implements MessageHandler {
 
 	public void processMessage(Messanger messanger, Message message) {
 		DeviceMessage deviceMessage = (DeviceMessage) message;
-		DatabaseManager databaseManager;
+		OutstationDevice outstationDevice;
 		
 		try {
-			databaseManager = DeviceProvider.getDevice(deviceMessage.getSite(), deviceMessage.getDevice()).getDatabaseManager();
+			outstationDevice = DeviceProvider.getDevice(deviceMessage.getSite(), deviceMessage.getDevice());
 		} catch (Exception e) {
 			String reason = format("Cannot find station %s and device %s.", deviceMessage.getSite(), deviceMessage.getDevice());
 			throw new RuntimeException(reason, e);
 		}
 
 		DeviceMessageHandler messageHandler = this.fetchMessageHandler(message);
-		messageHandler.processMessage(messanger, databaseManager, message);
+		messageHandler.processMessage(messanger, outstationDevice, message);
 	}
 
 	public DeviceMessageHandler fetchMessageHandler(Message message) {

@@ -308,6 +308,13 @@ public class DatabaseManager {
 		}
 	}
 
+	public void triggerCounterEvent(long index) {
+		CounterDataPoint counterDataPoint = database.getCounterDataPoints().get((int) index);
+		for (EventListener eventListener : eventListeners) {
+			eventListener.eventReceived(counterDataPoint);
+		}
+	}
+
 	public void clear() {
 		synchronized (database) {
 			database.clear();

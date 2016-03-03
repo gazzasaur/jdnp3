@@ -22,10 +22,10 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
-
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
+
+import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
 
 @ManagedBean
 @ViewScoped

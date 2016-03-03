@@ -15,16 +15,16 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler.device;
 
-import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.database.device.InternalIndicatorsDataPoint;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.InternalIndicatorsMessage;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.sf.jdnp3.ui.web.outstation.database.device.InternalIndicatorsDataPoint;
+import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.InternalIndicatorsMessage;
 
 public class InternalIndicatorsMessageHandler implements DeviceMessageHandler {
 	private Logger logger = LoggerFactory.getLogger(InternalIndicatorsMessageHandler.class);
@@ -33,7 +33,7 @@ public class InternalIndicatorsMessageHandler implements DeviceMessageHandler {
 		return message instanceof InternalIndicatorsMessage;
 	}
 
-	public void processMessage(Messanger messanger, DatabaseManager databaseManager, Message message) {
+	public void processMessage(Messanger messanger, OutstationDevice outstationDevice, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
@@ -41,7 +41,7 @@ public class InternalIndicatorsMessageHandler implements DeviceMessageHandler {
 		InternalIndicatorsDataPoint dataPoint = new InternalIndicatorsDataPoint();
 		try {
 			BeanUtils.copyProperties(dataPoint, specificMessage);
-			databaseManager.setInternalIndicatorDataPoint(dataPoint);
+			outstationDevice.getDatabaseManager().setInternalIndicatorDataPoint(dataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

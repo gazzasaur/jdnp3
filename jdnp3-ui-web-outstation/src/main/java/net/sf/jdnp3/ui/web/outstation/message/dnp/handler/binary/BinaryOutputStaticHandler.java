@@ -18,13 +18,13 @@ package net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
+
 import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryOutputStaticAssignClassRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryOutputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputStaticObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
-
-import org.apache.commons.beanutils.BeanUtils;
 
 public class BinaryOutputStaticHandler implements BinaryOutputStaticReadRequestHandler, BinaryOutputStaticAssignClassRequestHandler {
 	private DatabaseManager databaseManager;

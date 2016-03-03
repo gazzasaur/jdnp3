@@ -4,14 +4,14 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.GenericMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.GenericMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
 public class GenericMessageDecoder implements Decoder.Text<Message> {
 	private final Gson gson = new GsonBuilder().setPrettyPrinting().serializeSpecialFloatingPointValues().create();

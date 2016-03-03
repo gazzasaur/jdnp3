@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
+
 public class DataLinkManagerProvider {
 	private static Map<String, DataLinkManager> dataLinkManagers = new HashMap<>();
 
@@ -54,7 +56,7 @@ public class DataLinkManagerProvider {
 	
 	public synchronized static DataLinkManager registerDataLink(String dataLinkName) {
 		if (!dataLinkManagers.containsKey(dataLinkName)) {
-			dataLinkManagers.put(dataLinkName, new DataLinkManager());
+			dataLinkManagers.put(dataLinkName, new DataLinkManager(dataLinkName));
 		} else {
 			throw new IllegalArgumentException("DataLink already exists: " + dataLinkName);
 		}
@@ -71,5 +73,13 @@ public class DataLinkManagerProvider {
 
 	public synchronized static List<String> getDataLinkNames() {
 		return new ArrayList<>(dataLinkManagers.keySet());
+	}
+	
+	public synchronized static List<OutstationBinding> getDataLinkBindings(OutstationDevice outstationDevice) {
+		List<OutstationBinding> outstationBindings = new ArrayList<>();
+		for (DataLinkManager dataLinkManager : dataLinkManagers.values()) {
+			outstationBindings.addAll(dataLinkManager.getBindings(outstationDevice));
+		}
+		return outstationBindings;
 	}
 }

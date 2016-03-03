@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Graeme Farquharson
+ * Copyright 2016 Graeme Farquharson
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation.message.ws.core;
+package net.sf.jdnp3.ui.web.outstation.channel;
 
-import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+public class OutstationBinding {
+	private int address = 0;
+	private String dataLinkName = "";
+	
+	public int getAddress() {
+		return address;
+	}
+	
+	public void setAddress(int address) {
+		this.address = address;
+	}
 
-public interface DeviceMessageHandler {
-	public boolean canHandle(Message message);
-	public void processMessage(Messanger messanger, OutstationDevice outstationDevice, Message message);
+	public String getDataLinkName() {
+		return dataLinkName;
+	}
+
+	public void setDataLinkName(String dataLinkName) {
+		this.dataLinkName = dataLinkName;
+	}
 }

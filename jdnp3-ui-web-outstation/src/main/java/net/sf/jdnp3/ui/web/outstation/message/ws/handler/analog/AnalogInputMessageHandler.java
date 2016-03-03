@@ -15,16 +15,16 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler.analog;
 
-import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
 public class AnalogInputMessageHandler implements DeviceMessageHandler {
 	private Logger logger = LoggerFactory.getLogger(AnalogInputMessageHandler.class);
@@ -33,7 +33,7 @@ public class AnalogInputMessageHandler implements DeviceMessageHandler {
 		return message instanceof AnalogInputMessage;
 	}
 
-	public void processMessage(Messanger webSocket, DatabaseManager databaseManager, Message message) {
+	public void processMessage(Messanger webSocket, OutstationDevice outstationDevice, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
@@ -42,7 +42,7 @@ public class AnalogInputMessageHandler implements DeviceMessageHandler {
 		AnalogInputDataPoint analogDataPoint = new AnalogInputDataPoint();
 		try {
 			BeanUtils.copyProperties(analogDataPoint, analogInputMessage);
-			databaseManager.setAnalogInputDataPoint(analogDataPoint);
+			outstationDevice.getDatabaseManager().setAnalogInputDataPoint(analogDataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

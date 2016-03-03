@@ -13,38 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation.message.ws.handler.analog;
+package net.sf.jdnp3.ui.web.outstation.message.ws.handler.counter;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.counter.CounterEventMessage;
 
-public class AnalogOutputMessageHandler implements DeviceMessageHandler {
-	private Logger logger = LoggerFactory.getLogger(AnalogOutputMessageHandler.class);
-	
+public class CounterEventMessageHandler implements DeviceMessageHandler {
 	public boolean canHandle(Message message) {
-		return message instanceof AnalogOutputMessage;
+		return message instanceof CounterEventMessage;
 	}
 
 	public void processMessage(Messanger messanger, OutstationDevice outstationDevice, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
-		AnalogOutputMessage analogOutputMessage = (AnalogOutputMessage) message;
-
-		AnalogOutputDataPoint analogDataPoint = new AnalogOutputDataPoint();
-		try {
-			BeanUtils.copyProperties(analogDataPoint, analogOutputMessage);
-			outstationDevice.getDatabaseManager().setAnalogOutputDataPoint(analogDataPoint);
-		} catch (Exception e) {
-			logger.error("Failed to copy object.", e);
-		}
+		CounterEventMessage counterEventMessage = (CounterEventMessage) message;
+		outstationDevice.getDatabaseManager().triggerCounterEvent(counterEventMessage.getIndex());
 	}
 }

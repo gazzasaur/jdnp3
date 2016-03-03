@@ -26,9 +26,14 @@ import net.sf.jdnp3.dnp3.stack.layer.transport.SimpleSynchronisedTransportBindin
 import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 
 public class DataLinkManager {
+	private String dataLinkName;
 	private DataLinkLayer dataLinkLayer;
 	private Map<TransportBindingItem, OutstationDevice> transportBindings = new HashMap<>();
 	
+	public DataLinkManager(String dataLinkName) {
+		this.dataLinkName = dataLinkName;
+	}
+
 	public void bind(int address, OutstationDevice outstationDevice) {
 		SimpleSynchronisedTransportBinding transportBinding = new SimpleSynchronisedTransportBinding();
 		TransportBindingItem dataLinkBinding = new TransportBindingItem(this, transportBinding);
@@ -91,5 +96,18 @@ public class DataLinkManager {
 				binding.getKey().unbind();
 			}
 		}
+	}
+	
+	public List<OutstationBinding> getBindings(OutstationDevice outstation) {
+		List<OutstationBinding> outstationBindings = new ArrayList<>();
+		for (Entry<TransportBindingItem, OutstationDevice> binding : transportBindings.entrySet()) {
+			if (binding.getValue() == outstation) {
+				OutstationBinding outstationBinding = new OutstationBinding();
+				outstationBinding.setAddress(binding.getKey().getAddress());
+				outstationBinding.setDataLinkName(dataLinkName);
+				outstationBindings.add(outstationBinding);
+			}
+		}
+		return outstationBindings;
 	}
 }

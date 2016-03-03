@@ -15,16 +15,16 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler.binary;
 
-import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
 public class BinaryInputMessageHandler implements DeviceMessageHandler {
 	private Logger logger = LoggerFactory.getLogger(BinaryInputMessageHandler.class);
@@ -33,7 +33,7 @@ public class BinaryInputMessageHandler implements DeviceMessageHandler {
 		return message instanceof BinaryInputMessage;
 	}
 
-	public void processMessage(Messanger messanger, DatabaseManager databaseManager, Message message) {
+	public void processMessage(Messanger messanger, OutstationDevice outstationDevice, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
@@ -42,7 +42,7 @@ public class BinaryInputMessageHandler implements DeviceMessageHandler {
 		BinaryInputDataPoint binaryDataPoint = new BinaryInputDataPoint();
 		try {
 			BeanUtils.copyProperties(binaryDataPoint, binaryInputMessage);
-			databaseManager.setBinaryInputDataPoint(binaryDataPoint);
+			outstationDevice.getDatabaseManager().setBinaryInputDataPoint(binaryDataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

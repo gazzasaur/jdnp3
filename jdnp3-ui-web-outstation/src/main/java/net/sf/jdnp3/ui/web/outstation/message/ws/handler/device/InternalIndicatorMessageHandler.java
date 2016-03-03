@@ -18,15 +18,15 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler.device;
 import java.util.Arrays;
 import java.util.List;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
-import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.InternalIndicatorMessage;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.InternalIndicatorMessage;
 
 public class InternalIndicatorMessageHandler implements DeviceMessageHandler {
 	private Logger logger = LoggerFactory.getLogger(InternalIndicatorMessageHandler.class);
@@ -36,7 +36,7 @@ public class InternalIndicatorMessageHandler implements DeviceMessageHandler {
 		return message instanceof InternalIndicatorMessage;
 	}
 
-	public void processMessage(Messanger messanger, DatabaseManager databaseManager, Message message) {
+	public void processMessage(Messanger messanger, OutstationDevice outstationDevice, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
@@ -48,7 +48,7 @@ public class InternalIndicatorMessageHandler implements DeviceMessageHandler {
 		}
 		
 		try {
-			BeanUtils.setProperty(databaseManager.getInternalStatusProvider(), specificMessage.getAttribute(), specificMessage.isValue());
+			BeanUtils.setProperty(outstationDevice.getDatabaseManager().getInternalStatusProvider(), specificMessage.getAttribute(), specificMessage.isValue());
 		} catch (Exception e) {
 			logger.error("Failed to set IIN flag.", e);
 		}

@@ -15,16 +15,17 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler.binary;
 
-import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
-import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryOutputMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryOutputMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
 public class BinaryOutputMessageHandler implements DeviceMessageHandler {
 	private Logger logger = LoggerFactory.getLogger(BinaryOutputMessageHandler.class);
@@ -33,12 +34,13 @@ public class BinaryOutputMessageHandler implements DeviceMessageHandler {
 		return message instanceof BinaryOutputMessage;
 	}
 
-	public void processMessage(Messanger messanger, DatabaseManager databaseManager, Message message) {
+	public void processMessage(Messanger messanger, OutstationDevice outstationDevice, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 		BinaryOutputMessage binaryOutputMessage = (BinaryOutputMessage) message;
 
+		DatabaseManager databaseManager = outstationDevice.getDatabaseManager();
 		BinaryOutputDataPoint binaryDataPoint = new BinaryOutputDataPoint();
 		BinaryOutputDataPoint currentValue = databaseManager.getBinaryOutputDataPoints().get((int) binaryDataPoint.getIndex());
 		
