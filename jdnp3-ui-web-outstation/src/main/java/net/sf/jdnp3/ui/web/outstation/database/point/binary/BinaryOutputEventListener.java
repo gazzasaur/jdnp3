@@ -36,12 +36,16 @@ public class BinaryOutputEventListener implements EventListener {
 	}
 	
 	public void eventReceived(DataPoint dataPoint) {
+		this.eventReceived(dataPoint, new Date().getTime());
+	}
+
+	public void eventReceived(DataPoint dataPoint, long timestamp) {
 		if (dataPoint instanceof BinaryOutputDataPoint) {
 			BinaryOutputEventObjectInstance binaryOutputEventObjectInstance = new BinaryOutputEventObjectInstance();
 			try {
 				BinaryOutputDataPoint binaryDataPoint = (BinaryOutputDataPoint) dataPoint;
 				BeanUtils.copyProperties(binaryOutputEventObjectInstance, binaryDataPoint);
-				binaryOutputEventObjectInstance.setTimestamp(new Date().getTime());
+				binaryOutputEventObjectInstance.setTimestamp(timestamp);
 				binaryOutputEventObjectInstance.setEventClass(binaryDataPoint.getEventClass());
 				binaryOutputEventObjectInstance.setRequestedType(binaryDataPoint.getEventType());
 				outstation.sendEvent(binaryOutputEventObjectInstance);

@@ -36,12 +36,16 @@ public class CounterEventListener implements EventListener {
 	}
 	
 	public void eventReceived(DataPoint dataPoint) {
+		this.eventReceived(dataPoint, new Date().getTime());
+	}
+	
+	public void eventReceived(DataPoint dataPoint, long timestamp) {
 		if (dataPoint instanceof CounterDataPoint) {
 			CounterEventObjectInstance counterEventObjectInstance = new CounterEventObjectInstance();
 			try {
 				CounterDataPoint counterDataPoint = (CounterDataPoint) dataPoint;
 				BeanUtils.copyProperties(counterEventObjectInstance, counterDataPoint);
-				counterEventObjectInstance.setTimestamp(new Date().getTime());
+				counterEventObjectInstance.setTimestamp(timestamp);
 				counterEventObjectInstance.setEventClass(counterDataPoint.getEventClass());
 				counterEventObjectInstance.setRequestedType(counterDataPoint.getEventType());
 				outstation.sendEvent(counterEventObjectInstance);

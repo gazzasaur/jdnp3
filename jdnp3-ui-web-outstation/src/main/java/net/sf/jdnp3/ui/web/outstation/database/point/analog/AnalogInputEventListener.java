@@ -36,12 +36,16 @@ public class AnalogInputEventListener implements EventListener {
 	}
 	
 	public void eventReceived(DataPoint dataPoint) {
+		this.eventReceived(dataPoint, new Date().getTime());
+	}
+	
+	public void eventReceived(DataPoint dataPoint, long timestamp) {
 		if (dataPoint instanceof AnalogInputDataPoint) {
 			AnalogInputEventObjectInstance analogInputEventObjectInstance = new AnalogInputEventObjectInstance();
 			try {
 				AnalogInputDataPoint analogDataPoint = (AnalogInputDataPoint) dataPoint;
 				BeanUtils.copyProperties(analogInputEventObjectInstance, analogDataPoint);
-				analogInputEventObjectInstance.setTimestamp(new Date().getTime());
+				analogInputEventObjectInstance.setTimestamp(timestamp);
 				analogInputEventObjectInstance.setEventClass(analogDataPoint.getEventClass());
 				analogInputEventObjectInstance.setRequestedType(analogDataPoint.getEventType());
 				outstation.sendEvent(analogInputEventObjectInstance);

@@ -294,10 +294,10 @@ public class DatabaseManager {
 		logger.warn("Unimplemented");
 	}
 
-	public void triggerBinaryInputEvent(long index) {
+	public void triggerBinaryInputEvent(long index, long timestamp) {
 		BinaryInputDataPoint binaryDataPoint = database.getBinaryInputDataPoints().get((int) index);
 		for (EventListener eventListener : eventListeners) {
-			eventListener.eventReceived(binaryDataPoint);
+			eventListener.eventReceived(binaryDataPoint, timestamp);
 		}
 	}
 	
