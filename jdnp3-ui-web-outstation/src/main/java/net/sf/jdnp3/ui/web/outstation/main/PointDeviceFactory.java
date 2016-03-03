@@ -45,6 +45,7 @@ import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputEventList
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputEventListener;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterEventListener;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogInputStaticHandler;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogOutputCommandOperator;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryInputStaticHandler;
@@ -189,6 +190,7 @@ public class PointDeviceFactory implements DeviceFactory {
 		databaseManager.addEventListener(new BinaryInputEventListener(outstation));
 		databaseManager.addEventListener(new BinaryOutputEventListener(outstation));
 		databaseManager.addEventListener(new AnalogInputEventListener(outstation));
+		databaseManager.addEventListener(new CounterEventListener(outstation));
 		
 		outstation.setPrimaryAddress(primaryAddress);
 		outstationDevice.setOutstation(outstation);
