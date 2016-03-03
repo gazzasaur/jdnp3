@@ -1,7 +1,6 @@
 import json
 import time
 import random
-import decimal
 import urllib2
 import exceptions
 
