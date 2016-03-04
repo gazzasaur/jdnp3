@@ -31,6 +31,6 @@ public class BinaryOutputEventMessageHandler implements DeviceMessageHandler {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 		BinaryOutputEventMessage specificEventMessage = (BinaryOutputEventMessage) message;
-		outstationDevice.getDatabaseManager().triggerBinaryOutputEvent(specificEventMessage.getIndex());
+		outstationDevice.getDatabaseManager().triggerBinaryOutputEvent(specificEventMessage.getIndex(), specificEventMessage.getTimestamp());
 	}
 }

@@ -16,6 +16,5 @@
 package net.sf.jdnp3.ui.web.outstation.database.core;
 
 public interface EventListener {
-	public void eventReceived(DataPoint dataPoint);
 	public void eventReceived(DataPoint dataPoint, long timestamp);
 }

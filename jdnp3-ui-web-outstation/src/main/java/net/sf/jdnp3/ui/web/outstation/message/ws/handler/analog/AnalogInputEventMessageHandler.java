@@ -31,6 +31,6 @@ public class AnalogInputEventMessageHandler implements DeviceMessageHandler {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 		AnalogInputEventMessage analogInputEventMessage = (AnalogInputEventMessage) message;
-		outstationDevice.getDatabaseManager().triggerAnalogInputEvent(analogInputEventMessage.getIndex());
+		outstationDevice.getDatabaseManager().triggerAnalogInputEvent(analogInputEventMessage.getIndex(), analogInputEventMessage.getTimestamp());
 	}
 }

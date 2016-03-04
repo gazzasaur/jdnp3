@@ -31,6 +31,6 @@ public class CounterEventMessageHandler implements DeviceMessageHandler {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 		CounterEventMessage counterEventMessage = (CounterEventMessage) message;
-		outstationDevice.getDatabaseManager().triggerCounterEvent(counterEventMessage.getIndex());
+		outstationDevice.getDatabaseManager().triggerCounterEvent(counterEventMessage.getIndex(), counterEventMessage.getTimestamp());
 	}
 }

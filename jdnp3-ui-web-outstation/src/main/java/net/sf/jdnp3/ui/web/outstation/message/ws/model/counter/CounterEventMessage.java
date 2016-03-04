@@ -15,6 +15,8 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.model.counter;
 
+import java.util.Date;
+
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
 public class CounterEventMessage implements DeviceMessage {
@@ -22,7 +24,8 @@ public class CounterEventMessage implements DeviceMessage {
 	private long index = 0;
 	private String site = "";
 	private String device = "";
-	
+	private long timestamp = new Date().getTime();
+
 	public String getType() {
 		return type;
 	}
@@ -49,5 +52,13 @@ public class CounterEventMessage implements DeviceMessage {
 
 	public void setDevice(String device) {
 		this.device = device;
+	}
+
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 }
