@@ -1,3 +1,4 @@
+import time
 import jdnp3.device
 import jdnp3.control
 
@@ -98,6 +99,12 @@ for i in range(1,1000):
     outstation.wait_for_counter(1, 'value', unicode(i))
 outstation.set_counter(1, 'rollover', True)
 outstation.set_counter(1, 'value', 0)
+
+outstation.set_counter(0, 'value', 123);
+
+time.sleep(10)
+outstation.trigger_event(0, 'counter event', 1500);
+outstation.trigger_event(0, 'binary input event', 2600);
 
 # Simulate device cold restart.
 control.stop_data_link("20000")

@@ -125,9 +125,12 @@ class Outstation:
         self.set_attribute(data, *args)
         self.set(data)
 
-    def trigger_event(self, index, event_type):
+    def trigger_event(self, index, event_type, *args):
         event = self.camel_case(event_type);
-        self.control.sendMessage(self.site, self.device, {'site': self.site, 'device': self.device, 'type': event, 'index': index})
+        message = {'site': self.site, 'device': self.device, 'type': event, 'index': index}
+        if (len(args) > 0):
+            message['timestamp'] = args[0]
+        self.control.sendMessage(self.site, self.device, message)
         
     def get(self):
         return self.control.getOutstation(self.site, self.device)
