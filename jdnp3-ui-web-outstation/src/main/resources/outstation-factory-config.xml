@@ -3,7 +3,27 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
+	<bean id="binaryInputStaticWithFlags" class="net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType">
+		<constructor-arg name="group" value="1" />
+		<constructor-arg name="variation" value="2" />
+	</bean>
+	<bean id="analogInputStaticInt32" class="net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType">
+		<constructor-arg name="group" value="30" />
+		<constructor-arg name="variation" value="1" />
+	</bean>
+	<bean id="analogInputEventInt32" class="net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType">
+		<constructor-arg name="group" value="32" />
+		<constructor-arg name="variation" value="3" />
+	</bean>
+	
 	<bean id="pumpStationFactory" class="net.sf.jdnp3.ui.web.outstation.main.SimpleDeviceFactory">
+		<!-- Template also available for BO, AI, AO and Counters -->
+		<property name="templateBinaryInputDataPoint">
+			<bean class="net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint">
+				<property name="active" value="true" />
+				<property name="staticType" ref="binaryInputStaticWithFlags" />
+			</bean>
+		</property>
 		<property name="binaryInputDataPoints">
 			<list>
 				<value>Running</value>
@@ -35,19 +55,6 @@
 				<value>Uptime</value>
 			</list>
 		</property>
-	</bean>
-	
-	<bean id="binaryInputStaticWithFlags" class="net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType">
-		<constructor-arg name="group" value="1" />
-		<constructor-arg name="variation" value="2" />
-	</bean>
-	<bean id="analogInputStaticInt32" class="net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType">
-		<constructor-arg name="group" value="30" />
-		<constructor-arg name="variation" value="1" />
-	</bean>
-	<bean id="analogInputEventInt32" class="net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType">
-		<constructor-arg name="group" value="32" />
-		<constructor-arg name="variation" value="3" />
 	</bean>
 	
 	<bean id="muffinFactory" class="net.sf.jdnp3.ui.web.outstation.main.PointDeviceFactory">

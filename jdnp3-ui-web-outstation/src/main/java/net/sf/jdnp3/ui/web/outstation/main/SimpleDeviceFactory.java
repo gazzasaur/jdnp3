@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.rits.cloning.Cloner;
+
 import net.sf.jdnp3.dnp3.service.outstation.core.ByteDataOutstationApplicationRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationFactory;
@@ -37,9 +39,14 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.VariableFormatQualifierRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.VirtualAddressRange;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
+import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputEventListener;
+import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputEventListener;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputEventListener;
+import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterEventListener;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogInputStaticHandler;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogOutputCommandOperator;
@@ -58,6 +65,12 @@ public class SimpleDeviceFactory implements DeviceFactory {
 	private List<String> analogInputDataPoints = new ArrayList<>();
 	private List<String> analogOutputDataPoints = new ArrayList<>();
 	private List<String> counterDataPoints = new ArrayList<>();
+	
+	private BinaryInputDataPoint templateBinaryInputDataPoint = new BinaryInputDataPoint();
+	private BinaryOutputDataPoint templateBinaryOutputDataPoint = new BinaryOutputDataPoint();
+	private AnalogInputDataPoint templateAnalogInputDataPoint = new AnalogInputDataPoint();
+	private AnalogOutputDataPoint templateAnalogOutputDataPoint = new AnalogOutputDataPoint();
+	private CounterDataPoint templateCounterDataPoint = new CounterDataPoint();
 	
 	@SuppressWarnings("serial")
 	private Map<String, Class<? extends Range>> rangeClassMapping = new HashMap<String, Class<? extends Range>>() {{
@@ -90,6 +103,37 @@ public class SimpleDeviceFactory implements DeviceFactory {
 		databaseManager.addAnalogInputDataPoints(analogInputDataPoints.toArray(new String[0]));
 		databaseManager.addAnalogOutputDataPoints(analogOutputDataPoints.toArray(new String[0]));
 		databaseManager.addCounterDataPoints(counterDataPoints.toArray(new String[0]));
+		
+		for (BinaryInputDataPoint dataPoint : databaseManager.getBinaryInputDataPoints()) {
+			BinaryInputDataPoint point = Cloner.standard().deepClone(templateBinaryInputDataPoint);
+			point.setIndex(dataPoint.getIndex());
+			point.setName(dataPoint.getName());
+			databaseManager.setBinaryInputDataPoint(point);
+		}
+		for (BinaryOutputDataPoint dataPoint : databaseManager.getBinaryOutputDataPoints()) {
+			BinaryOutputDataPoint point = Cloner.standard().deepClone(templateBinaryOutputDataPoint);
+			point.setIndex(dataPoint.getIndex());
+			point.setName(dataPoint.getName());
+			databaseManager.setBinaryOutputDataPoint(point);
+		}
+		for (AnalogInputDataPoint dataPoint : databaseManager.getAnalogInputDataPoints()) {
+			AnalogInputDataPoint point = Cloner.standard().deepClone(templateAnalogInputDataPoint);
+			point.setIndex(dataPoint.getIndex());
+			point.setName(dataPoint.getName());
+			databaseManager.setAnalogInputDataPoint(point);
+		}
+		for (AnalogOutputDataPoint dataPoint : databaseManager.getAnalogOutputDataPoints()) {
+			AnalogOutputDataPoint point = Cloner.standard().deepClone(templateAnalogOutputDataPoint);
+			point.setIndex(dataPoint.getIndex());
+			point.setName(dataPoint.getName());
+			databaseManager.setAnalogOutputDataPoint(point);
+		}
+		for (CounterDataPoint dataPoint : databaseManager.getCounterDataPoints()) {
+			CounterDataPoint point = Cloner.standard().deepClone(templateCounterDataPoint);
+			point.setIndex(dataPoint.getIndex());
+			point.setName(dataPoint.getName());
+			databaseManager.setCounterDataPoint(point);
+		}
 		
 		databaseManager.addBinaryInputDataPoints(extendedConfiguration.getBinaryInputPoints().toArray(new String[0]));
 		databaseManager.addBinaryOutputDataPoints(extendedConfiguration.getBinaryOutputPoints().toArray(new String[0]));
@@ -163,5 +207,25 @@ public class SimpleDeviceFactory implements DeviceFactory {
 
 	public void setCounterDataPoints(String... counterDataPoints) {
 		this.counterDataPoints = asList(counterDataPoints);
+	}
+
+	public void setTemplateBinaryInputDataPoint(BinaryInputDataPoint templateBinaryInputDataPoint) {
+		this.templateBinaryInputDataPoint = templateBinaryInputDataPoint;
+	}
+
+	public void setTemplateBinaryOutputDataPoint(BinaryOutputDataPoint templateBinaryOutputDataPoint) {
+		this.templateBinaryOutputDataPoint = templateBinaryOutputDataPoint;
+	}
+
+	public void setTemplateAnalogInputDataPoint(AnalogInputDataPoint templateAnalogInputDataPoint) {
+		this.templateAnalogInputDataPoint = templateAnalogInputDataPoint;
+	}
+
+	public void setTemplateAnalogOutputDataPoint(AnalogOutputDataPoint templateAnalogOutputDataPoint) {
+		this.templateAnalogOutputDataPoint = templateAnalogOutputDataPoint;
+	}
+
+	public void setTemplateCounterDataPoint(CounterDataPoint templateCounterDataPoint) {
+		this.templateCounterDataPoint = templateCounterDataPoint;
 	}
 }
