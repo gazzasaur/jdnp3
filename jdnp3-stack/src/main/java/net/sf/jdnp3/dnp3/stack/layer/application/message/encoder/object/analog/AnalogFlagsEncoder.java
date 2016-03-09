@@ -21,6 +21,7 @@ import java.util.BitSet;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogOutputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogOutputStaticObjectInstance;
 
 public class AnalogFlagsEncoder {
@@ -51,6 +52,19 @@ public class AnalogFlagsEncoder {
 	}
 	
 	public static byte encode(AnalogOutputStaticObjectInstance objectInstance) {
+		BitSet bitSet = new BitSet(8);
+		bitSet.set(6, objectInstance.isReferenceError());
+		bitSet.set(5, objectInstance.isOverRange());
+		bitSet.set(4, objectInstance.isLocalForced());
+		bitSet.set(3, objectInstance.isRemoteForced());
+		bitSet.set(2, objectInstance.isCommunicationsLost());
+		bitSet.set(1, objectInstance.isRestart());
+		bitSet.set(0, objectInstance.isOnline());
+		
+		return bitSetToByte(bitSet);
+	}
+	
+	public static byte encode(AnalogOutputEventObjectInstance objectInstance) {
 		BitSet bitSet = new BitSet(8);
 		bitSet.set(6, objectInstance.isReferenceError());
 		bitSet.set(5, objectInstance.isOverRange());
