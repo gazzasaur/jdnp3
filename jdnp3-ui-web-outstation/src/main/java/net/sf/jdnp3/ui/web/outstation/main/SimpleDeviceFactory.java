@@ -42,6 +42,7 @@ import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputEventListener;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputEventListener;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputEventListener;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
@@ -179,6 +180,7 @@ public class SimpleDeviceFactory implements DeviceFactory {
 		databaseManager.addEventListener(new BinaryInputEventListener(outstation));
 		databaseManager.addEventListener(new BinaryOutputEventListener(outstation));
 		databaseManager.addEventListener(new AnalogInputEventListener(outstation));
+		databaseManager.addEventListener(new AnalogOutputEventListener(outstation));
 		databaseManager.addEventListener(new CounterEventListener(outstation));
 		
 		outstation.setPrimaryAddress(primaryAddress);

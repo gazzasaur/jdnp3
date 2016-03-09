@@ -206,15 +206,15 @@
 		</property>
 	</bean>
 
-<!-- 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"> -->
-<!-- 		<property name="targetObject" ref="deviceMessageHandlerRegistry" /> -->
-<!-- 		<property name="targetMethod" value="registerHandler" /> -->
-<!-- 		<property name="arguments"> -->
-<!-- 			<list> -->
-<!-- 				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.analog.AnalogOutputEventMessageHandler" /> -->
-<!-- 			</list> -->
-<!-- 		</property> -->
-<!-- 	</bean> -->
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="deviceMessageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.analog.AnalogOutputEventMessageHandler" />
+			</list>
+		</property>
+	</bean>
 
 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetObject" ref="deviceMessageHandlerRegistry" />
@@ -391,16 +391,16 @@
 		</property>
 	</bean>
 
-<!-- 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"> -->
-<!-- 		<property name="targetObject" ref="genericMessageRegistry" /> -->
-<!-- 		<property name="targetMethod" value="register" /> -->
-<!-- 		<property name="arguments"> -->
-<!-- 			<list> -->
-<!-- 				<value>analogOutputEvent</value> -->
-<!-- 				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputEventMessage</value> -->
-<!-- 			</list> -->
-<!-- 		</property> -->
-<!-- 	</bean> -->
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>analogOutputEvent</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputEventMessage</value>
+			</list>
+		</property>
+	</bean>
 	
 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetObject" ref="genericMessageRegistry" />
@@ -483,7 +483,7 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetObject" ref="genericMessageRegistry" />
 		<property name="targetMethod" value="register" />

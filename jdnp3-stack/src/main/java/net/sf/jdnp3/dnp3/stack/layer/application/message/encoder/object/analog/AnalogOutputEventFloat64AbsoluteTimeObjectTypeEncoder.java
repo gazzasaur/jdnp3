@@ -28,7 +28,6 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCo
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogOutputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants;
 
 public class AnalogOutputEventFloat64AbsoluteTimeObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {

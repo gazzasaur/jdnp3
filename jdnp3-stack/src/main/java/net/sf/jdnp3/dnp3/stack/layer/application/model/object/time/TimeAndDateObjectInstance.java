@@ -16,6 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.model.object.time;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.TIME_AND_DATE_ABSOLUTE_TIME;
+
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StaticObjectInstance;
 

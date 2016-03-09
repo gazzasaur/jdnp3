@@ -16,6 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.model.object.core;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CLASS_0;
+
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 
 public class Class0ObjectInstance implements ObjectInstance {

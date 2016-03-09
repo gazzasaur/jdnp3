@@ -27,6 +27,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.jdnp3.dnp3.stack.exception.UnknownObjectException;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentRequestDecoder;
@@ -51,10 +55,6 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeDelayObje
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class OutstationApplicationLayer implements ApplicationLayer {
 	private Logger logger = LoggerFactory.getLogger(OutstationApplicationLayer.class);

@@ -16,6 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
+
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;

@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
-import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
+import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public class MultiDataLinkListener implements DataLinkListener {
 	private Logger logger = LoggerFactory.getLogger(MultiDataLinkListener.class);

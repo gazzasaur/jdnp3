@@ -21,12 +21,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class DataLinkDigester {
 	private static final int CHARACTER_TIMEOUT = 500;

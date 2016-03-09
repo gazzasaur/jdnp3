@@ -13,24 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.application.model.object.time;
+package net.sf.jdnp3.ui.web.outstation.message.ws.model.analog;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.UNSYNCHRONISED_CTO;
+import java.util.Date;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
-public class UnsynchronisedCtoObjectInstance implements CtoObjectInstance {
-	private long timestamp = 0;
+public class AnalogOutputEventMessage implements DeviceMessage {
+	private String type = "analogOutputEvent";
+	private long index = 0;
+	private String site = "";
+	private String device = "";
+	private long timestamp = new Date().getTime();
 
+	public String getType() {
+		return type;
+	}
+	
 	public long getIndex() {
-		return 0;
+		return index;
 	}
 
-	public ObjectType getRequestedType() {
-		return UNSYNCHRONISED_CTO;
+	public void setIndex(long index) {
+		this.index = index;
 	}
 
-	public void setRequestedType(ObjectType requestedType) {
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	public String getDevice() {
+		return device;
+	}
+
+	public void setDevice(String device) {
+		this.device = device;
 	}
 
 	public long getTimestamp() {

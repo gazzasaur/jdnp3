@@ -19,6 +19,9 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationRequestHandlerAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.handler.generic.Class2ReadRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.handler.generic.OutstationRequestHandler;
@@ -30,9 +33,6 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Class2ReadRequestAdaptor implements OutstationRequestHandlerAdaptor {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());

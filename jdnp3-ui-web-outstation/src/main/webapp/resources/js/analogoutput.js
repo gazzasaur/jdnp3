@@ -112,7 +112,12 @@ jdnp3.analogoutput.createAnalogOutputView = function(dataPoint) {
 	operationElement.appendChild(operationElementText);
 	
 	view.appendDialogButton([
-	    {text: 'Create Event'},
+		{text: 'Create Event', callback: function() {
+			jdnp3.schedule.getDefaultScheduler().addTask(function() {
+				jdnp3.ui.destroyMenu();
+				device.requestEvent('analogOutputEvent', jdnp3.analogoutput.analogOutputPoints.get(index));
+			}, 0);
+		}},
 	    {text: 'Edit', separate: true, callback: function() {
 	    	jdnp3.schedule.getDefaultScheduler().addTask(function() {
 	    		jdnp3.ui.destroyMenu();

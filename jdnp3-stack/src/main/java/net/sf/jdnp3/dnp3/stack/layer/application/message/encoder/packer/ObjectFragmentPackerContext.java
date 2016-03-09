@@ -16,6 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.RESPONSE;
+
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 
 public class ObjectFragmentPackerContext {

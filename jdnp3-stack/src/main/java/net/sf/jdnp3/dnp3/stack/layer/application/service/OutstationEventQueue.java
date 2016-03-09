@@ -20,11 +20,11 @@ import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.EventObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.EventObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class OutstationEventQueue implements ConfirmationListener {
 	private Logger logger = LoggerFactory.getLogger(OutstationEventQueue.class);

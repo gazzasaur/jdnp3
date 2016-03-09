@@ -20,11 +20,11 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
-import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
+import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class TransportSegmentDigester {
 	private Logger logger = LoggerFactory.getLogger(TransportSegmentDigester.class);

@@ -289,9 +289,12 @@ public class DatabaseManager {
 			eventListener.eventReceived(analogDataPoint, timestamp);
 		}
 	}
-
-	public void triggerAnalogOutputEvent(long index) {
-		logger.warn("Unimplemented");
+	
+	public void triggerAnalogOutputEvent(long index, long timestamp) {
+		AnalogOutputDataPoint dataPoint = database.getAnalogOutputDataPoints().get((int) index);
+		for (EventListener eventListener : eventListeners) {
+			eventListener.eventReceived(dataPoint, timestamp);
+		}
 	}
 
 	public void triggerBinaryInputEvent(long index, long timestamp) {

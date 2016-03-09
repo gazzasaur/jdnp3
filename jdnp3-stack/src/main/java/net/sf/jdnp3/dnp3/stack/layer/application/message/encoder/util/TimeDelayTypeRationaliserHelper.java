@@ -22,13 +22,13 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeDelayObjectInstance;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TimeDelayTypeRationaliserHelper implements ObjectInstanceTypeRationaliserHelper {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());

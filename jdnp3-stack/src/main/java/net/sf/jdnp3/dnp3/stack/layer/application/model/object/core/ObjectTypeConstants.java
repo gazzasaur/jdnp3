@@ -103,7 +103,7 @@ public class ObjectTypeConstants {
 	
 	public static int ANALOG_OUTPUT_EVENT_GROUP = 42;
 	public static ObjectType ANALOG_OUTPUT_EVENT_ANY = new ObjectType(ANALOG_OUTPUT_EVENT_GROUP, 0);
-	public static ObjectType ANALOG_OUTPUT_EVENT_INT32_WITHOUT_TIME = new ObjectType(ANALOG_OUTPUT_EVENT_GROUP, 2);
+	public static ObjectType ANALOG_OUTPUT_EVENT_INT32_WITHOUT_TIME = new ObjectType(ANALOG_OUTPUT_EVENT_GROUP, 1);
 	public static ObjectType ANALOG_OUTPUT_EVENT_INT16_WITHOUT_TIME = new ObjectType(ANALOG_OUTPUT_EVENT_GROUP, 2);
 	public static ObjectType ANALOG_OUTPUT_EVENT_INT32_WITH_TIME = new ObjectType(ANALOG_OUTPUT_EVENT_GROUP, 3);
 	public static ObjectType ANALOG_OUTPUT_EVENT_INT16_WITH_TIME = new ObjectType(ANALOG_OUTPUT_EVENT_GROUP, 4);
