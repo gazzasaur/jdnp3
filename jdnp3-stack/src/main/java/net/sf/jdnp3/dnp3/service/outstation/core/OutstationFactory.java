@@ -16,6 +16,7 @@
 package net.sf.jdnp3.dnp3.service.outstation.core;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectTypeEncoderConstants.OBJECT_TYPE_ENCODERS;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_EVENT_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_STATIC_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_EVENT_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_STATIC_ANY;
@@ -74,6 +75,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.Applicat
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogOutputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogOutputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputStaticObjectInstance;
@@ -145,18 +147,16 @@ public class OutstationFactory {
 	public void addStandardOutstationRequestHandlerAdaptors() {
 		adaptors.add(new StaticReadRequestAdaptor<>(BINARY_INPUT_STATIC_GROUP, BinaryInputStaticObjectInstance.class));
 		adaptors.add(new AssignClassRequestAdaptor<>(BINARY_INPUT_STATIC_GROUP, BinaryInputStaticObjectInstance.class));
-		
 		adaptors.add(new EventReadRequestAdaptor<>(BINARY_INPUT_EVENT_GROUP, BinaryInputEventObjectInstance.class));
 		
 		adaptors.add(new StaticReadRequestAdaptor<>(BINARY_OUTPUT_STATIC_GROUP, BinaryOutputStaticObjectInstance.class));
-		
 		adaptors.add(new EventReadRequestAdaptor<>(BINARY_OUTPUT_EVENT_GROUP, BinaryOutputEventObjectInstance.class));
 
 		adaptors.add(new StaticReadRequestAdaptor<>(COUNTER_STATIC_GROUP, CounterStaticObjectInstance.class));
-
 		adaptors.add(new EventReadRequestAdaptor<>(COUNTER_EVENT_GROUP, CounterEventObjectInstance.class));
 
 		adaptors.add(new StaticReadRequestAdaptor<>(ANALOG_OUTPUT_STATIC_GROUP, AnalogOutputStaticObjectInstance.class));
+		adaptors.add(new EventReadRequestAdaptor<>(ANALOG_OUTPUT_EVENT_GROUP, AnalogOutputEventObjectInstance.class));
 
 		adaptors.add(new Class0ReadRequestAdaptor());
 		adaptors.add(new Class1ReadRequestAdaptor());
