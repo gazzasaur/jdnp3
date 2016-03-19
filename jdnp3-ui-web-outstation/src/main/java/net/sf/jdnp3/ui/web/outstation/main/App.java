@@ -26,6 +26,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Forced Variation:
  *  - Add the ability to force a variation.
  *  - The ability to disable a point.
+ *  
+ *  Bind/Unbind from web-page.
+ *  Timestamp from web-page.
  * 
  * Complete BinaryOutput type:
  * - Add the ability to create control events.
