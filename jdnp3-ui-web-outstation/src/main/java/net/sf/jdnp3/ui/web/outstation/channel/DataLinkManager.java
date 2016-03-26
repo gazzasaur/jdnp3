@@ -90,7 +90,8 @@ public class DataLinkManager {
 	}
 	
 	public void unbind(int address, OutstationDevice outstation) {
-		for (Entry<TransportBindingItem, OutstationDevice> binding : transportBindings.entrySet()) {
+		List<Entry<TransportBindingItem, OutstationDevice>> entries = new ArrayList<>(transportBindings.entrySet());
+		for (Entry<TransportBindingItem, OutstationDevice> binding : entries) {
 			if (binding.getValue() == outstation && binding.getKey().getAddress() == address) {
 				transportBindings.remove(binding.getKey());
 				binding.getKey().unbind();
