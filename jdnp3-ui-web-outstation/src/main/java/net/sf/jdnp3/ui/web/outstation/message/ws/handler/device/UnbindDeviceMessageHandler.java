@@ -36,11 +36,13 @@ public class UnbindDeviceMessageHandler implements MessageHandler {
 		}
 		UnbindDeviceMessage specificMessage = (UnbindDeviceMessage) message;
 		OutstationDevice outstationDevice = DeviceProvider.getDevice(specificMessage.getSite(), specificMessage.getDevice());
+		
 		DataLinkManager dataLinkManager = DataLinkManagerProvider.getDataLinkManager(specificMessage.getDataLinkName());
 		if (specificMessage.getUnbindType().equals(UnbindType.SINGLE)) {
 			dataLinkManager.unbind(specificMessage.getAddress(), outstationDevice);
 		} else {
 			dataLinkManager.unbind(outstationDevice);
 		}
+		DeviceProvider.triggerBindingsUpdate(outstationDevice);
 	}
 }

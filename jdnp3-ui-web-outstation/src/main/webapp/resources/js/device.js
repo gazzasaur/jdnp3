@@ -78,3 +78,16 @@ jdnp3.device.Device.prototype.requestEvent = function(type, dataPoint) {
 		device.messanger.sendMessage(data);
 	}, 0);
 }
+
+jdnp3.device.Device.prototype.unbind = function(site, deviceName, dataLinkName, address) {
+	jdnp3.schedule.getDefaultScheduler().addTask(function() {
+		var data = {
+			'type': 'unbindDevice',
+			'site': site,
+			'device': deviceName,
+			'address': address,
+			'dataLinkName': dataLinkName
+		};
+		device.messanger.sendMessage(data);
+	}, 0);
+}

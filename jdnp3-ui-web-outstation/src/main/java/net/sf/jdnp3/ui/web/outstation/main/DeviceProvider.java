@@ -26,6 +26,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
+import net.sf.jdnp3.ui.web.outstation.channel.OutstationBinding;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseListener;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
@@ -71,13 +73,10 @@ public class DeviceProvider {
 		}
 		devices.get(device.getSite()).put(device.getDevice(), device);
 		
-		List<DatabaseListener> listeners = new ArrayList<>();
-		if (databaseListeners.containsKey(device.getSite()) && databaseListeners.get(device.getSite()).containsKey(device.getDevice())) {
-			listeners.addAll(databaseListeners.get(device.getSite()).get(device.getDevice()));
-		}
+		List<DatabaseListener> listeners = getDatabaseListeners(device.getSite(), device.getDevice());
 		for (DatabaseListener listener : listeners) {
 			device.getDatabaseManager().addDatabaseListener(listener);
-			triggerDatabaseListener(listener, device.getDatabaseManager());
+			triggerDatabaseListener(listener, device);
 		}
 		
 		return devices.get(device.getSite()).get(device.getDevice());
@@ -117,18 +116,18 @@ public class DeviceProvider {
 		}
 		databaseListeners.get(station).get(device).add(databaseListener);
 		
-		DatabaseManager databaseManager = null;
+		OutstationDevice outstationDevice = null;
 		try {
-			databaseManager = DeviceProvider.getDevice(station, device).getDatabaseManager();
-			databaseManager.addDatabaseListener(databaseListener);
+			outstationDevice = DeviceProvider.getDevice(station, device);
+			outstationDevice.getDatabaseManager().addDatabaseListener(databaseListener);
 		} catch (Exception e) {
 			Logger logger = LoggerFactory.getLogger(DeviceProvider.class);
 			logger.debug(format("Cannot retreive device %s:%s.", station, device), e);
 			logger.info(format("No device found for %s:%s.  Registered interest.", station, device));
 		}
 		
-		if (databaseManager != null) {
-			triggerDatabaseListener(databaseListener, databaseManager);
+		if (outstationDevice != null) {
+			triggerDatabaseListener(databaseListener, outstationDevice);
 		}
 	}
 	
@@ -152,8 +151,18 @@ public class DeviceProvider {
 			}
 		}
 	}
-
-	private static void triggerDatabaseListener(DatabaseListener databaseListener, DatabaseManager databaseManager) {
+	
+	public static synchronized void triggerBindingsUpdate(OutstationDevice outstationDevice) {
+		List<DatabaseListener> listeners = getDatabaseListeners(outstationDevice.getSite(), outstationDevice.getDevice());
+		List<OutstationBinding> outstationBindings = DataLinkManagerProvider.getDataLinkBindings(outstationDevice);
+		for (DatabaseListener databaseListener : listeners) {
+			databaseListener.bindingsChanged(outstationBindings);
+		}
+	}
+	
+	private static void triggerDatabaseListener(DatabaseListener databaseListener, OutstationDevice outstationDevice) {
+		DatabaseManager databaseManager = outstationDevice.getDatabaseManager();
+		
 		databaseListener.valueChanged(databaseManager.getInternalIndicatorsDataPoint());
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
@@ -175,5 +184,15 @@ public class DeviceProvider {
 		for (CounterDataPoint counterDataPoint : counterDataPoints) {
 			databaseListener.valueChanged(counterDataPoint);
 		}
+		List<OutstationBinding> outstationBindings = DataLinkManagerProvider.getDataLinkBindings(outstationDevice);
+		databaseListener.bindingsChanged(outstationBindings);
+	}
+	
+	private static List<DatabaseListener> getDatabaseListeners(String site, String device) {
+		List<DatabaseListener> listeners = new ArrayList<>();
+		if (databaseListeners.containsKey(site) && databaseListeners.get(site).containsKey(device)) {
+			listeners.addAll(databaseListeners.get(site).get(device));
+		}
+		return listeners;
 	}
 }

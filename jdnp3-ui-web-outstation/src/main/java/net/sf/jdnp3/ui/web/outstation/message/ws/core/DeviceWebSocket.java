@@ -3,6 +3,8 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.core;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
+import java.util.List;
+
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -15,6 +17,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.sf.jdnp3.ui.web.outstation.channel.OutstationBinding;
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseListener;
 import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
@@ -26,6 +29,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.MessageHandlerRegi
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.MessageHandlerRegistryProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.datalink.OutstationBindingsMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.ModelChangedMessage;
 
 @ServerEndpoint(value="/ws/device", encoders=MessageEncoder.class, decoders=GenericMessageDecoder.class, configurator=DeviceWebSocketConfigurator.class)
@@ -98,6 +102,18 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 			}
 		} else {
 			logger.warn(format("Data point type %s has not been mapped to a message.", dataPoint.getClass()));
+		}
+	}
+
+	public void bindingsChanged(List<OutstationBinding> outstationBindings) {
+		try {
+			OutstationBindingsMessage message = new OutstationBindingsMessage();
+			message.setSite(station);
+			message.setDevice(device);
+			message.setOutstationBindings(outstationBindings);
+			session.getAsyncRemote().sendObject(message);
+		} catch (Exception e) {
+			logger.error("Cannot create message.", e);
 		}
 	}
 }

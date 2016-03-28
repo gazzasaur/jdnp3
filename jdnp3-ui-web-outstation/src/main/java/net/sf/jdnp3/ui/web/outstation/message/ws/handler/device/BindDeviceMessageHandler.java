@@ -37,5 +37,6 @@ public class BindDeviceMessageHandler implements MessageHandler {
 		OutstationDevice outstationDevice = DeviceProvider.getDevice(specificMessage.getSite(), specificMessage.getDevice());
 		DataLinkManager dataLinkManager = DataLinkManagerProvider.getDataLinkManager(specificMessage.getDataLinkName());
 		dataLinkManager.bind(specificMessage.getAddress(), outstationDevice);
+		DeviceProvider.triggerBindingsUpdate(outstationDevice);
 	}
 }

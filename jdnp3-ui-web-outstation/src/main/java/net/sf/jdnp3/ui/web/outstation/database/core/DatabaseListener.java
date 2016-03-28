@@ -15,7 +15,12 @@
  */
 package net.sf.jdnp3.ui.web.outstation.database.core;
 
+import java.util.List;
+
+import net.sf.jdnp3.ui.web.outstation.channel.OutstationBinding;
+
 public interface DatabaseListener {
 	public void modelChanged();
 	public void valueChanged(DataPoint dataPoint);
+	public void bindingsChanged(List<OutstationBinding> outstationBindings);
 }
