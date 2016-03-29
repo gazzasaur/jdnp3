@@ -9,57 +9,42 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:j="http://sf.net/jdnp3/facelets"
 	xmlns:jdnp3="http://java.sun.com/jsf/composite/jdnp3">
-<h:head />
+<h:head>
+	<h:outputScript library="js" name="schedule.js" />
+	<h:outputScript library="js" name="message.js" />
+	<h:outputScript library="js" name="station.js" />
+</h:head>
 
 <h:body>
+	<script>
+		document.addEventListener("DOMContentLoaded", function(event) {
+			var location = document.location.toString().replace(/\bhttp/,'ws').replace(/\/\/.*/,'//') + window.location.host + '/ws/station' + window.location.search;
+			window['station'] = new jdnp3.station.Station(location);
+		});
+	</script>
+
 	<f:facet name="last">
 		<h:outputStylesheet library="css" name="general.css" />
 	</f:facet>
-
-	<f:view>
-		<p:layout>
-			<p:layoutUnit position="west" resizable="true" size="250" minSize="200" maxSize="300">
-				<p:panel header="Device Selection" style="overflow: hidden;">
-					<h:form>
-						<p:tree value="#{uiStationTree.root}" var="node">
-							<p:treeNode>
-								<h:outputText value="#{node}" />
-							</p:treeNode>
-							
-							<p:treeNode type="leaf">
-								<h:commandLink target="_blank" value="#{node.device}" action="#{node.submit}" />
-							</p:treeNode>
-						</p:tree>
-					</h:form>
-				</p:panel>
-			</p:layoutUnit>
-			
-			<p:layoutUnit position="center">
-				<p:panel header="Overview">
-					<p:panelGrid columns="2">
-						<p:outputLabel value="Stations: " />
-						<h:outputText value="#{uiStations.stationCount}" />
-						<p:outputLabel value="Devices: " />
-						<h:outputText value="#{uiStations.deviceCount}" />
-					</p:panelGrid>
-				</p:panel>
-				<p:panel header="Channels">
-					<p:panelGrid columns="2">
-						<p:outputLabel value="Channels: " />
-						<h:outputText value="#{uiStations.dataLinkCount}" />
-						<p:outputLabel value="Connections: " />
-						<h:outputText value="#{uiStations.dataLinkConnectionCount}" />
-						<p:outputLabel value="Bindings: " />
-						<h:outputText value="#{uiStations.dataLinkBindingCount}" />
-					</p:panelGrid>
-				</p:panel>
-				<p:panel header="Bindings">
-					<p:panelGrid columns="2">
-						Coming Soon
-					</p:panelGrid>
-				</p:panel>
-			</p:layoutUnit>
-		</p:layout>
-	</f:view>
+	
+	<div>
+		<div style="float: left;">
+			<div style="margin-bottom: 2px;" class="section-header">
+				<span>Device Selection</span>
+			</div>
+			<div id="device-selection" style="display: block; font-size: 24px;">
+			</div>
+		</div>
+		<div style="overflow: auto;">
+			<div style="margin-left: 10px;">
+				<div style="margin-bottom: 2px;" class="section-header">
+					<span>Overview</span>
+				</div>
+				<div style="font-size: 24px;">
+					<div><span>Status: </span><span id="statusText">Disconnected</span></div>
+				</div>
+			</div>
+		</div>
+	</div>
 </h:body>
 </html>

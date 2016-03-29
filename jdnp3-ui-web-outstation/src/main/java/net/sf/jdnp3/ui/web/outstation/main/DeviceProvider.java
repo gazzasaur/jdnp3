@@ -19,6 +19,7 @@ import static java.lang.String.format;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,7 @@ import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 public class DeviceProvider {
 	private static Map<String, Map<String, OutstationDevice>> devices = new HashMap<>();
 	private static Map<String, Map<String, List<DatabaseListener>>> databaseListeners = new HashMap<>();
+	private static List<DeviceProviderListener> deviceProviderListeners = new ArrayList<>();
 
 	public synchronized static boolean exists(String stationCode, String deviceCode) {
 		return devices.containsKey(stationCode) && devices.get(stationCode).containsKey(deviceCode);
@@ -79,6 +81,7 @@ public class DeviceProvider {
 			triggerDatabaseListener(listener, device);
 		}
 		
+		triggerDeviceProviderListeners();
 		return devices.get(device.getSite()).get(device.getDevice());
 	}
 	
@@ -93,6 +96,7 @@ public class DeviceProvider {
 		if (devices.get(stationCode).isEmpty()) {
 			devices.remove(stationCode);
 		}
+		triggerDeviceProviderListeners();
 	}
 
 	public synchronized static List<String> getStationNames() {
@@ -159,7 +163,35 @@ public class DeviceProvider {
 			databaseListener.bindingsChanged(outstationBindings);
 		}
 	}
+
+	public static synchronized void addDeviceProviderListener(DeviceProviderListener deviceProviderListener) {
+		deviceProviderListeners.add(deviceProviderListener);
+		triggerDeviceProviderListeners();
+	}
+
+	public static synchronized void removeDeviceProviderListener(DeviceProviderListener deviceProviderListener) {
+		deviceProviderListeners.remove(deviceProviderListener);
+	}
 	
+	private static void triggerDeviceProviderListeners() {
+		List<String> siteNames = new ArrayList<>(devices.keySet());
+		Collections.sort(siteNames);
+		
+		SiteListing siteList = new SiteListing();
+		for (String siteName : siteNames) {
+			List<String> deviceNames = new ArrayList<>(devices.get(siteName).keySet());
+			Collections.sort(deviceNames);
+			
+			SiteDeviceList siteDeviceList = new SiteDeviceList();
+			siteDeviceList.setSite(siteName);
+			siteDeviceList.setDevices(deviceNames);
+			siteList.addSiteDeviceList(siteDeviceList);
+		}
+		for (DeviceProviderListener deviceProviderListener : deviceProviderListeners) {
+			deviceProviderListener.updatedSteList(siteList);
+		}
+	}
+
 	private static void triggerDatabaseListener(DatabaseListener databaseListener, OutstationDevice outstationDevice) {
 		DatabaseManager databaseManager = outstationDevice.getDatabaseManager();
 		
