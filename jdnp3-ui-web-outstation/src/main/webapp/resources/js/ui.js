@@ -221,6 +221,52 @@ jdnp3.ui.DataPointItem.prototype.appendDialogButton = function(menuItems, data) 
 	};
 }
 
+jdnp3.ui.createInputPanel = function(title, action) {
+	jdnp3.schedule.getDefaultScheduler().addTask(function() {
+		var container = document.createElement('div');
+		var infoDiv = document.createElement('div');
+		infoDiv.setAttribute('style', 'width: 300px;');
+		var infoSpan = document.createElement('span');
+		infoSpan.innerHTML = 'Enter a value:';
+		infoSpan.setAttribute('style', 'font-size: 18px;');
+		infoDiv.appendChild(infoSpan);
+		container.appendChild(infoDiv);
+		
+		var textField = document.createElement('div');
+		textField.className = 'text-field';
+		textField.setAttribute('style', 'width: 100%; min-width: 250px');
+		container.appendChild(textField);
+		
+		var idPrefix = 'special';
+		var index = 0;
+		
+		var textFieldValue = document.createElement('input');
+		textFieldValue.id = idPrefix + '-' + index + '-newvalue';
+		textFieldValue.value = new Date().getTime();
+		textFieldValue.className = 'text-field-value';
+		textFieldValue.setAttribute('style', 'border: none');
+		textFieldValue.type = 'text';
+		textFieldValue.select();
+		textField.appendChild(textFieldValue);
+		
+		textFieldValue.onkeypress = function(event) {
+			jdnp3.schedule.getDefaultScheduler().addTask(function() {
+				if (event.keyCode == 13) {
+					action(textFieldValue.value);
+					jdnp3.ui.destroyDialog();
+				} else if (event.keyCode == 27) {
+					jdnp3.ui.destroyDialog();
+				};
+			}, 0);
+		}
+		
+		jdnp3.ui.createDialog(title, container, function() {});
+		jdnp3.schedule.getDefaultScheduler().addTask(function() {
+			textFieldValue.select();
+		}, 0);
+	}, 0);
+}
+
 jdnp3.ui.createDialogButton = function(id, menuItems, data) {
 	var data = data || {};
 	var dropDownButtonView = document.createElement('div');

@@ -67,7 +67,7 @@ jdnp3.device.Device.prototype.requestChangeSingleAttributeValue = function(type,
 	}, 0);
 }
 
-jdnp3.device.Device.prototype.requestEvent = function(type, dataPoint) {
+jdnp3.device.Device.prototype.requestEvent = function(type, dataPoint, timestamp) {
 	jdnp3.schedule.getDefaultScheduler().addTask(function() {
 		var data = {
 			'type': type,
@@ -75,6 +75,9 @@ jdnp3.device.Device.prototype.requestEvent = function(type, dataPoint) {
 			'device': dataPoint.device,
 			'index': dataPoint.index
 		};
+		if (timestamp) {
+			data['timestamp'] = timestamp;
+		}
 		device.messanger.sendMessage(data);
 	}, 0);
 }
