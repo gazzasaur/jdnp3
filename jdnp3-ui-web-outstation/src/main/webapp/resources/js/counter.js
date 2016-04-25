@@ -73,6 +73,14 @@ jdnp3.counter.createCounterView = function(dataPoint) {
 	    		device.requestEvent('counterEvent', jdnp3.counter.counterPoints.get(index));
 	    	}, 0);
 	    }},
+	    {text: 'Create Event with Time', callback: function() {
+	    	jdnp3.schedule.getDefaultScheduler().addTask(function() {
+	    		jdnp3.ui.destroyMenu();
+	    		jdnp3.ui.createInputPanel('Enter Event Timestamp', function(value) {
+		    		device.requestEvent('counterEvent', jdnp3.counter.counterPoints.get(index), value);
+	    		});
+	    	}, 0);
+	    }},
 	    {text: 'Edit', separate: true, callback: function() {
 	    	jdnp3.schedule.getDefaultScheduler().addTask(function() {
 	    		jdnp3.ui.destroyMenu();

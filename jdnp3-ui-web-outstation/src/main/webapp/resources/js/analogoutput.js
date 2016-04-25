@@ -118,6 +118,14 @@ jdnp3.analogoutput.createAnalogOutputView = function(dataPoint) {
 				device.requestEvent('analogOutputEvent', jdnp3.analogoutput.analogOutputPoints.get(index));
 			}, 0);
 		}},
+	    {text: 'Create Event with Time', callback: function() {
+	    	jdnp3.schedule.getDefaultScheduler().addTask(function() {
+	    		jdnp3.ui.destroyMenu();
+	    		jdnp3.ui.createInputPanel('Enter Event Timestamp', function(value) {
+		    		device.requestEvent('analogOutputEvent', jdnp3.analogoutput.analogOutputPoints.get(index), value);
+	    		});
+	    	}, 0);
+	    }},
 	    {text: 'Edit', separate: true, callback: function() {
 	    	jdnp3.schedule.getDefaultScheduler().addTask(function() {
 	    		jdnp3.ui.destroyMenu();
