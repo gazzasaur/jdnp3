@@ -1,7 +1,7 @@
 import inspect
 import jdnp3.control
 
-WAIT_TIMEOUT = 1.0
+WAIT_TIMEOUT = 2.0
 FLOATING_POINT_TOLERANCE = 1e-09
 
 class Outstation:
