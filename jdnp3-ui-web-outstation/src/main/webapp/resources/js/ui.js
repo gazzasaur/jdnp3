@@ -365,7 +365,6 @@ jdnp3.ui.createSlideSwitch = function(id, title, label, onclick, data) {
 	data = data || {};
 	
 	var buttonView = document.createElement('div');
-	buttonView.setAttribute('style', 'display: inline-block;' + (data['style'] || ''));
 	buttonView.className = 'slideswitch';
 	buttonView.title = title;
 	

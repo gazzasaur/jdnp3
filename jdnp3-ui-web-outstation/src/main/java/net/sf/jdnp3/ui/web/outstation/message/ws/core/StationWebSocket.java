@@ -65,7 +65,7 @@ public class StationWebSocket implements Messanger, DeviceProviderListener {
     	session.getAsyncRemote().sendObject(message);
     }
 
-	public void updatedSteList(SiteListing siteList) {
+	public void updatedSiteList(SiteListing siteList) {
 		SiteListingMessage siteListingMessage = new SiteListingMessage();
 		siteListingMessage.setSiteDeviceLists(siteList.getSiteDeviceLists());
 		this.sendMessage(siteListingMessage);

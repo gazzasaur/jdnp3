@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.ui.web.outstation.main;
+package net.sf.jdnp3.ui.web.outstation.message.ws.model.device;
 
-public interface DeviceProviderListener {
-	public void updatedSiteList(SiteListing siteList);
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+
+public class ListDevicesMessage implements Message {
+	public String getType() {
+		return "listDevices";
+	}
 }

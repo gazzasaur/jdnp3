@@ -30,6 +30,10 @@ class Control:
         data = {'type': 'destroyAll'};
         return self.postMessage(data)
     
+    def list_outstations(self):
+        data = {'type': 'listDevices'};
+        return self.postMessage(data)
+    
     def createOutstation(self, deviceFactory, site, device, address, binaryInputPoints=[], binaryOutputPoints=[], analogInputPoints=[], analogOutputPoints=[], counterPoints=[], customTypes=[]):
         data = CREATE_DATA()
         data['site'] = site

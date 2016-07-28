@@ -6,7 +6,6 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-	xmlns:p="http://primefaces.org/ui"
 	xmlns:j="http://sf.net/jdnp3/facelets"
 	xmlns:jdnp3="http://java.sun.com/jsf/composite/jdnp3">
 <h:head>
@@ -116,11 +115,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			</table>
 		</div>
 	
-		<p:dialog widgetVar="main-dialog" modal="true">
+		<div id="main-dialog" style="position: fixed; display: block;">
 			<f:facet name="header"><span id="main-dialog-title"></span></f:facet>
 			<div id="main-dialog">
 			</div>
-		</p:dialog>
+		</div>
 	</f:view>
 	
 	<div id="main-menu" onmouseleave="document.getElementById('main-menu').setAttribute('style', 'display: none;');">

@@ -99,6 +99,10 @@ public class DeviceProvider {
 		triggerDeviceProviderListeners();
 	}
 
+	public synchronized static SiteListing gettDeviceList() {
+		return fetchDeviceListings();
+	}
+
 	public synchronized static List<String> getStationNames() {
 		return new ArrayList<>(devices.keySet());
 	}
@@ -172,8 +176,15 @@ public class DeviceProvider {
 	public static synchronized void removeDeviceProviderListener(DeviceProviderListener deviceProviderListener) {
 		deviceProviderListeners.remove(deviceProviderListener);
 	}
-	
+
 	private static void triggerDeviceProviderListeners() {
+		SiteListing deviceListings = fetchDeviceListings();
+		for (DeviceProviderListener deviceProviderListener : deviceProviderListeners) {
+			deviceProviderListener.updatedSiteList(deviceListings);
+		}
+	}
+
+	private static SiteListing fetchDeviceListings() {
 		List<String> siteNames = new ArrayList<>(devices.keySet());
 		Collections.sort(siteNames);
 		
@@ -187,9 +198,7 @@ public class DeviceProvider {
 			siteDeviceList.setDevices(deviceNames);
 			siteList.addSiteDeviceList(siteDeviceList);
 		}
-		for (DeviceProviderListener deviceProviderListener : deviceProviderListeners) {
-			deviceProviderListener.updatedSteList(siteList);
-		}
+		return siteList;
 	}
 
 	private static void triggerDatabaseListener(DatabaseListener databaseListener, OutstationDevice outstationDevice) {

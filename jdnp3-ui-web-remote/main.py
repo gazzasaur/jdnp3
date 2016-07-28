@@ -49,6 +49,12 @@ control.start_data_link("20000")
 config = outstation.get()
 outstation.output()
 
+sitesInfo = control.list_outstations()
+for site in sitesInfo['siteDeviceLists']:
+	print 'Site: %s' % (site['site'])
+	for device in site['devices']:
+		print '\tDevice: %s' % (device)
+
 outstation.set_internal_indicator('device restart', True)
 outstation.set_binary_input(1, 'local forced', True)
 outstation.set_binary_input(0, 'event type', 'variation', 0)
