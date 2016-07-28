@@ -51,9 +51,9 @@ outstation.output()
 
 sitesInfo = control.list_outstations()
 for site in sitesInfo['siteDeviceLists']:
-	print 'Site: %s' % (site['site'])
-	for device in site['devices']:
-		print '\tDevice: %s' % (device)
+    print 'Site: %s' % (site['site'])
+    for device in site['devices']:
+        print '\tDevice: %s' % (device)
 
 outstation.set_internal_indicator('device restart', True)
 outstation.set_binary_input(1, 'local forced', True)
