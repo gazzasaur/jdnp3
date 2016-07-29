@@ -35,12 +35,8 @@ jdnp3.ui.createMenu = function(target, component, data) {
 	mainMenu.appendChild(component);
 	
 	var top = target.getBoundingClientRect().top;
-	var left = target.getBoundingClientRect().right;
-	if (data.orientation == 'bottom') {
-		top = target.getBoundingClientRect().bottom;
-		left = target.getBoundingClientRect().left;
-	}
-	mainMenu.setAttribute('style', 'border: none; outline 0; background: #C4C4C4 -moz-linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)); background: #C4C4C4 -webkit-linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)); box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.8); overflow: hidden; border-radius: 5px; display: block; position: fixed; top: ' + top + 'px; left: ' + left + 'px; ' + (data['style'] || ''));
+	var left = target.getBoundingClientRect().left;
+	mainMenu.setAttribute('style', 'top: ' + top + 'px; left: ' + left + 'px; ' + (data['style'] || ''));
 }
 
 jdnp3.ui.destroyMenu = function() {
@@ -48,7 +44,6 @@ jdnp3.ui.destroyMenu = function() {
 	mainMenu.innerHTML = '';
 	mainMenu.setAttribute('style', 'display: none;');
 }
-
 
 jdnp3.ui.DataPointItem = function(idPrefix, dataPointIndex, dataPointList) {
 	var dataPoint = dataPointList.get(dataPointIndex);
@@ -68,7 +63,6 @@ jdnp3.ui.DataPointItem = function(idPrefix, dataPointIndex, dataPointList) {
 	var viewCell = document.createElement('td');
 	var view = document.createElement('div');
 	this.container.appendChild(viewCell);
-	view.className = "zero-padding";
 	viewCell.appendChild(view);
 	this.view = view;
 }
@@ -178,7 +172,6 @@ jdnp3.ui.DataPointItem.prototype.appendDialogButton = function(menuItems, data) 
 	dropDownButtonLabel.setAttribute('style', 'min-width: 32px; width: 100%;');
 	dropDownButtonLabel.setAttribute('for', id);
 	dropDownButtonLabelText = document.createElement('span');
-	dropDownButtonLabelText.setAttribute('style', 'width: 16px; height: 8px; background-position: -32px -80px; overflow: hidden; display: block; position: relative; left: 16px; margin-left: -8px; top: 50%; margin-top: -8px; background-repeat: no-repeat; background-image: url("/javax.faces.resource/images/ui-icons_38667f_256x240.png.jsf?ln=primefaces-aristo");');
 	dropDownButtonLabel.appendChild(dropDownButtonLabelText);
 	dropDownButtonView.appendChild(dropDownButtonLabel);
 	
@@ -198,10 +191,9 @@ jdnp3.ui.DataPointItem.prototype.appendDialogButton = function(menuItems, data) 
 					var item = document.createElement('div');
 					menu.appendChild(item);
 					var itemSpan = document.createElement('span');
-					item.setAttribute('style', 'padding: 10px;')
 					item.className = 'drop-down-menu-button';
 					item.appendChild(itemSpan);
-					itemSpan.innerHTML = menuItem.text;
+					itemSpan.appendChild(document.createTextNode(menuItem.text));
 					
 					item.onclick = (function(menuItem) {
 						return function(event) {
@@ -284,7 +276,6 @@ jdnp3.ui.createDialogButton = function(id, menuItems, data) {
 	dropDownButtonLabel.setAttribute('style', 'min-width: 32px; width: 100%;');
 	dropDownButtonLabel.setAttribute('for', id);
 	dropDownButtonLabelText = document.createElement('span');
-	dropDownButtonLabelText.setAttribute('style', 'width: 16px; height: 8px; background-position: -32px -80px; overflow: hidden; display: block; position: relative; left: 16px; margin-left: -8px; top: 50%; margin-top: -8px; background-repeat: no-repeat; background-image: url("/javax.faces.resource/images/ui-icons_38667f_256x240.png.jsf?ln=primefaces-aristo");');
 	dropDownButtonLabel.appendChild(dropDownButtonLabelText);
 	dropDownButtonView.appendChild(dropDownButtonLabel);
 	
@@ -304,7 +295,6 @@ jdnp3.ui.createDialogButton = function(id, menuItems, data) {
 					var item = document.createElement('div');
 					menu.appendChild(item);
 					var itemSpan = document.createElement('span');
-					item.setAttribute('style', 'padding: 10px;')
 					item.className = 'drop-down-menu-button';
 					item.appendChild(itemSpan);
 					itemSpan.innerHTML = menuItem.text;

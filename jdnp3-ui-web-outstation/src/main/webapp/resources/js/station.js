@@ -52,6 +52,15 @@ jdnp3.station.Station = function(location) {
 	this.messanger.setConnectionListener(connectionListener);
 	this.messanger.setMessageReceiver(this);
 	this.messanger.connect();
+	
+	var thisObject = this;
+	jdnp3.schedule.getDefaultScheduler().addTask(function() {
+		try {
+			thisObject.messanger.sendMessage({'type': 'listDevices'});
+		} catch (exception) {
+			console.log('WARN: Site listing not available.');
+		}
+	}, 5000, true);
 }
 
 jdnp3.station.Station.prototype.messageReceived = function(message) {

@@ -3,57 +3,50 @@
 }
 
 .glossy-button {
-    border-radius: 8px;
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
+	position: relative;
+	display: inline-block;
+	
+    color: #000;
+    border-radius: 0.25em;
+    border: 1px solid #777777;
     text-shadow: 1px 1px 0px rgba(255,255,255,.5);
     box-shadow:  0px 1px 3px 0px rgba(0, 0, 0, .2);
-    -webkit-box-shadow:  0px 1px 3px 0px rgba(0, 0, 0, .2);    
-	position: relative;
-    color: #000;
-    border: 1px solid #777777;
+    
 	width: 50px;
 	height: 40px;
 	outline: none;
 	overflow: hidden;
 	border: 1px solid #7777FF;
 	background-color: #9999FF;
-	-webkit-user-select: none;
-	-moz-user-select: none;
+	
+	user-select: none;
 	-ms-user-select: none;
-	display: inline-block;
+	-moz-user-select: none;
+	-webkit-user-select: none;
 
-    background: ##7799ff;
-    background: -webkit-linear-gradient(top,  #7799ff 33%, #ddeeff 100%);
-    background: -moz-linear-gradient(top,  #7799ff 33%, #ddeeff 100%);
+    background: #7799ff;
+    background: linear-gradient(to bottom, #7799ff 33%, #ddeeff 100%);
 }
 
 .glossy-button:hover {
-    background: -moz-linear-gradient(top,  #ddeeff 33%, #ddeeff 100%);
-    background: -webkit-linear-gradient(top,  #ddeeff 33%, #ddeeff 100%);
+	background: #ddeeff;
 }
 
 .glossy-button:active {
 	background: #6699ff;
-    background: -moz-linear-gradient(top,  #6699ff 33%, #6699ff 100%);
-    background: -webkit-linear-gradient(top,  #6699ff 33%, #6699ff 100%);
 }
 
 .eventbutton-checkbox:checked+.glossy-button {
-    background: #ff7700;
-    background: -webkit-linear-gradient(top,  #ffaa55 33%, #ffddaa 100%);
-    background: -moz-linear-gradient(top,  #ffaa55 33%, #ffddaa 100%);
+    background: #ffaa55;
+    background: linear-gradient(to bottom,  #ffaa55 33%, #ffddaa 100%);
 }
 
 .eventbutton-checkbox:checked+.glossy-button:hover {
-    background: -moz-linear-gradient(top,  #ffddaa 33%, #ffddaa 100%);
-    background: -webkit-linear-gradient(top,  #ffddaa 33%, #ffddaa 100%);
+    background: #ffddaa;
 }
 
 .eventbutton-checkbox:checked+.glossy-button:active {
-	background: #6699ff;
-    background: -moz-linear-gradient(top,  #ffaa55 33%, #ffaa55 100%);
-    background: -webkit-linear-gradient(top,  #ffaa55 33%, #ffaa55 100%);
+	background: #ffaa55;
 }
 
 .glossy-button:before {
@@ -67,18 +60,17 @@
     display: block;
     position: absolute;
  
-    border-radius: 8px;
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
- 
-    background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0px, rgba(255,255,255,0.7) 2px, rgba(255,255,255,0) 5px);
-    background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0px, rgba(255,255,255,0.7) 2px, rgba(255,255,255,0) 5px);
+    border-radius: 0.25em;
+    background: linear-gradient(to bottom,  rgba(255,255,255,1) 0px, rgba(255,255,255,0.7) 2px, rgba(255,255,255,0) 5px);
 }
 
 .glossy-button span {
-	padding-top: 10px;
-	text-align: center;
-	font-size: 16px;
-	font-weight: bold;
+	width: 100%;
+	height: 100%;
 	display: block;
+	
+	background-size: 1em;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url("/resources/svg/cog.svg");
 }
