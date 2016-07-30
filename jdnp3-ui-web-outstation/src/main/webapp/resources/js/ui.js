@@ -5,21 +5,34 @@ jdnp3.ui.dialog = {};
 jdnp3.ui.dialog['refreshCallback'] = null;
 
 jdnp3.ui.createDialog = function(title, component, refreshCallback) {
-	var mainDialogTitle = document.getElementById('main-dialog-title');
-	mainDialogTitle.innerHTML = title;
-	jdnp3.ui.dialog['refreshCallback'] = refreshCallback;
-	
 	var mainDialog = document.getElementById('main-dialog');
 	mainDialog.innerHTML = '';
+	
+	var mainDialogTitle = document.createElement('div');
+	mainDialogTitle.id = 'main-dialog-title';
+	mainDialogTitle.appendChild(document.createTextNode(title));
+	mainDialog.appendChild(mainDialogTitle);
+	
+	jdnp3.ui.dialog['refreshCallback'] = refreshCallback;
 	mainDialog.appendChild(component);
-	PF('main-dialog').show();
+	document.getElementById('main-dialog-container').removeAttribute('style');
+	document.getElementById('main-dialog-container').onkeypress = function(event) {
+		jdnp3.schedule.getDefaultScheduler().addTask(function() {
+			if (event.keyCode == 13) {
+				jdnp3.ui.destroyDialog();
+			} else if (event.keyCode == 27) {
+				jdnp3.ui.destroyDialog();
+			};
+		}, 0);
+	}
+	document.getElementById('main-dialog-container').focus();
 }
 
 jdnp3.ui.destroyDialog = function() {
 	var mainDialog = document.getElementById('main-dialog');
 	jdnp3.ui.dialog.refreshCallback = null;
 	mainDialog.innerHTML = '';
-	PF('main-dialog').hide();
+	document.getElementById('main-dialog-container').setAttribute('style', 'display: none;');
 }
 
 jdnp3.ui.refreshDialog = function() {
@@ -62,6 +75,7 @@ jdnp3.ui.DataPointItem = function(idPrefix, dataPointIndex, dataPointList) {
 	
 	var viewCell = document.createElement('td');
 	var view = document.createElement('div');
+	view.className = 'point-container';
 	this.container.appendChild(viewCell);
 	viewCell.appendChild(view);
 	this.view = view;
@@ -157,7 +171,7 @@ jdnp3.ui.DataPointItem.prototype.appendDialogButton = function(menuItems, data) 
 	var data = data || {};
 	var id = this.idPrefix + '-' + this.dataPointIndex + '-showmenu';
 	var dropDownButtonView = document.createElement('div');
-	dropDownButtonView.setAttribute('style', 'display: inline-block;');
+	dropDownButtonView.setAttribute('style', 'display: inline-block; height: 40px;');
 	this.view.appendChild(dropDownButtonView);
 	
 	var dropDownButton = document.createElement('input');
@@ -411,6 +425,7 @@ jdnp3.ui.createContextMenuButton = function(id, menuItems, data) {
 	var menuId = id + '-showmenu';
 	var dropDownButtonView = document.createElement('div');
 	dropDownButtonView.setAttribute('style', 'display: inline-block; font-size: 16px;');
+	dropDownButtonView.setAttribute('tabindex', '1');
 	
 	var dropDownButton = document.createElement('input');
 	dropDownButton.id = menuId;
@@ -428,7 +443,7 @@ jdnp3.ui.createContextMenuButton = function(id, menuItems, data) {
 	dropDownButtonLabel.appendChild(dropDownButtonLabelText);
 	dropDownButtonLabelText = document.createElement('span');
 	dropDownButtonLabelText.id = id;
-	dropDownButtonLabelText.setAttribute('style', 'display: block; position: relative; top: -25%;');
+	dropDownButtonLabelText.setAttribute('style', 'display: block; position: relative;');
 	dropDownButtonLabelText.appendChild(document.createTextNode(''));
 	dropDownButtonLabel.appendChild(dropDownButtonLabelText);
 	dropDownButtonView.appendChild(dropDownButtonLabel);
@@ -458,6 +473,7 @@ jdnp3.ui.createContextMenuButton = function(id, menuItems, data) {
 						return function(event) {
 							jdnp3.schedule.getDefaultScheduler().addTask(function() {
 								jdnp3.ui.destroyMenu();
+								dropDownButtonView.focus();
 								var callback = menuItem.callback || function() {};
 								callback();
 							}, 0);

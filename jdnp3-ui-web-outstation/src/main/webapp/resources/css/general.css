@@ -3,17 +3,29 @@ table {
     border-spacing: 0;
 }
 
-td {
-    border-collapse: separate;
-}
-
 table, tr, td {
     margin: 0;
     border: 0;
     padding: 0;
 }
 
-.pointsContainer {
+.station-selection div {
+	margin-left: 1em;
+}
+
+.station-selection a {
+	margin-left: 1em;
+}
+
+.station-selection div.hidden a {
+	display: none;
+}
+
+.point-container {
+	display: flex;
+}
+
+.points-container {
 	text-align: center;
 	display: inline-block;
 }
@@ -37,8 +49,47 @@ table, tr, td {
 	position: fixed;
 }
 
+#main-dialog-container {
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	
+	display: block;
+	position: fixed;
+	text-align: center;
+	
+	background: rgba(0, 0, 0, 0.5);
+}
+
+#main-dialog {
+	margin-top: 5em;
+	display: inline-block;
+	
+	padding: 1em;
+	background: white;
+	border-radius: 1em;
+	box-shadow: 1px 1px 1px 1px;
+}
+
+#main-dialog-title {
+	font-size: 1.5em;
+	margin-bottom: 0.5em;
+}
+
+#main-dialog td {
+	text-align: left;
+}
+
+#main-dialog .glossy-button span {
+	background-image: none;
+	text-align: center;
+	font-size: 1.5em;
+	line-height: 1.75em;
+}
+
 .value-table {
-	margin: 5px;
+	margin: 0.25em;
 }
 
 .menu-button span button {

@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				<tr>
 					<td class="full-text-field-label">Connection Status</td>
 					<td>
-						<div style="top: 0px; bottom: 0px; left: 0px; right: 0px;">
+						<div style="top: 0px; bottom: 0px; left: 0px; right: 0px; display: flex;">
 							<div class="full-text-field-value-view" style="width: 100%" title="Status">
 								<div style="display: table; width: 100%">
 									<span class="full-text-field-value" style="text-align: center; vertical-align: middle; display: table-cell;"><span id="statusText" style="color: red;">Disconnected</span></span>
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					<td class="full-text-field-label">Internal Indicators</td>
 					<td>
 						<div id="internalIndicators" style="display: none;">
-							<table id="internalIndicatorsTable" class="value-table" style="margin-left: auto; margin-right: auto;">
+							<table id="internalIndicatorsTable" style="margin-left: auto; margin-right: auto;">
 							</table>
 						</div>
 					</td>
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			</table>
 		</div>
 	
-		<div id="analogInputs" class="pointsContainer" style="display: none;">
+		<div id="analogInputs" class="points-container" style="display: none;">
 			<div style="margin-bottom: 2px;" class="section-header">
 				<span>Analog Inputs</span>
 			</div>
@@ -115,14 +115,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			</table>
 		</div>
 	
-		<div id="main-dialog" style="position: fixed; display: block;">
-			<f:facet name="header"><span id="main-dialog-title"></span></f:facet>
-			<div id="main-dialog">
-			</div>
-		</div>
 	</f:view>
 	
-	<div id="main-menu" onmouseleave="document.getElementById('main-menu').setAttribute('style', 'display: none;');">
+	<div id="main-menu" onmouseleave="document.getElementById('main-menu').setAttribute('style', 'display: none;');" />
+	<div id="main-dialog-container" tabindex="1" style="display: none;">
+		<div id="main-dialog"></div>
 	</div>
 </h:body>
 </html>
