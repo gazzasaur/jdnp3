@@ -439,7 +439,7 @@ jdnp3.ui.createContextMenuButton = function(id, menuItems, data) {
 	dropDownButtonLabel.setAttribute('style', 'min-width: 32px; ' + (data.style || ''));
 	dropDownButtonLabel.setAttribute('for', menuId);
 	dropDownButtonLabelText = document.createElement('span');
-	dropDownButtonLabelText.setAttribute('style', 'width: 16px; height: 8px; background-position: -32px -80px; overflow: hidden; display: block; position: relative; left: 16px; margin-left: -8px; top: 50%; margin-top: -8px; background-repeat: no-repeat; background-image: url("/javax.faces.resource/images/ui-icons_38667f_256x240.png.jsf?ln=primefaces-aristo");');
+	dropDownButtonLabelText.setAttribute('style', 'width: 16px; height: 8px; overflow: hidden; display: block; position: relative; left: 16px; margin-left: -8px; top: 50%; margin-top: -8px;');
 	dropDownButtonLabel.appendChild(dropDownButtonLabelText);
 	dropDownButtonLabelText = document.createElement('span');
 	dropDownButtonLabelText.id = id;
