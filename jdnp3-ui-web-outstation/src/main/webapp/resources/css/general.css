@@ -9,15 +9,27 @@ table, tr, td {
     padding: 0;
 }
 
-.station-selection div {
-	margin-left: 1em;
+div.site-selection-name {
+	cursor: pointer;
+}
+
+.site-selection-container div {
+	padding-left: 1em;
+}
+
+.site-selection-container:nth-child(2n) {
+	background: #EEEEEE;
+}
+
+.site-selection-container:nth-child(2n+1) {
+	background: #CCCCCC;
 }
 
 .station-selection a {
 	margin-left: 1em;
 }
 
-.station-selection div.hidden a {
+.station-selection div.hidden {
 	display: none;
 }
 

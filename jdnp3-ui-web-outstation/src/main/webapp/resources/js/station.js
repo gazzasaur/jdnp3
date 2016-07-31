@@ -67,17 +67,34 @@ jdnp3.station.SetStationsMessageHandler.prototype.processMessage = function(stat
 			}
 		}
 		
+		var siteContainer = document.createElement('div');
+		siteContainer.className = 'site-selection-container';
+		var siteName = document.createElement('div');
+		siteName.className = 'site-selection-name';
+		siteName.appendChild(document.createTextNode(siteDeviceList.site + ' (' + siteDeviceList.devices.length + ')'));
+		siteContainer.appendChild(siteName);
+		
 		var siteComponent = document.createElement('div');
-		siteComponent.appendChild(document.createTextNode(siteDeviceList.site));
+		siteComponent.className = 'hidden';
+		siteContainer.appendChild(siteComponent);
+		siteName.onclick = function(event) {
+			if (siteComponent.className === 'hidden') {
+				siteComponent.className = '';
+			} else {
+				siteComponent.className = 'hidden';
+			}
+		};
+		
 		var additionalItem = {
 			'site': siteDeviceList.site,
 			'dirty': false,
 			'devices': [],
 			'deviceMap': {},
-			'component': siteComponent
+			'component': siteComponent,
+			'container': siteContainer
 		};
 		jdnp3.station.siteDeviceListings.splice(i, 0, additionalItem);
-		mainContainer.insertBefore(additionalItem.component, mainContainer.children[i]);
+		mainContainer.insertBefore(additionalItem.container, mainContainer.children[i]);
 		jdnp3.station.updateDeviceListing(jdnp3.station.siteDeviceListings[i], siteDeviceList.devices);
 	});
 	
