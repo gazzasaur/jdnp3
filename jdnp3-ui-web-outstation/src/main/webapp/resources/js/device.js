@@ -35,6 +35,12 @@ jdnp3.device.Device.prototype.messageReceived = function(message) {
 		messageData = messageData.replace(/([\s\[{.]"value"\s*:\s*)Infinity/, '$1"Infinity"');
 		messageData = messageData.replace(/([\s\[{.]"value"\s*:\s*)-Infinity/, '$1"-Infinity"');
 		messageObject = JSON.parse(messageData);
+		
+		if (!this.site && messageObject.site) {
+			this.site = messageObject.site;
+			this.device = messageObject.device;
+			document.title = this.site + ' - ' + this.device;
+		}
 		if (messageObject.type in this.messageHandlers) {
 			this.messageHandlers[messageObject.type].processMessage(messageObject);
 		} else {

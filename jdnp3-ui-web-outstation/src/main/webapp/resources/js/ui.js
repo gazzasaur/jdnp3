@@ -96,10 +96,10 @@ jdnp3.ui.DataPointItem.prototype.appendInputText = function(attribute, title, on
 	var idPrefix = this.idPrefix;
 	
 	var valueView = document.createElement('div');
-	valueView.className = 'full-text-field-value-view';
+	valueView.setAttribute('style', 'border-collapse: separate;');
 	valueView.title = title;
 	
-	var value = document.createElement('span');
+	var value = document.createElement('div');
 	value.className = 'full-text-field-value';
 	value.id = id;
 
@@ -110,7 +110,7 @@ jdnp3.ui.DataPointItem.prototype.appendInputText = function(attribute, title, on
 			infoDiv.setAttribute('style', 'width: 300px;');
 			var infoSpan = document.createElement('span');
 			infoSpan.innerHTML = 'Enter a new value:';
-			infoSpan.setAttribute('style', 'font-size: 18px;');
+			infoSpan.setAttribute('style', 'font-size: 1.2em;');
 			infoDiv.appendChild(infoSpan);
 			container.appendChild(infoDiv);
 			
@@ -171,7 +171,7 @@ jdnp3.ui.DataPointItem.prototype.appendDialogButton = function(menuItems, data) 
 	var data = data || {};
 	var id = this.idPrefix + '-' + this.dataPointIndex + '-showmenu';
 	var dropDownButtonView = document.createElement('div');
-	dropDownButtonView.setAttribute('style', 'display: inline-block; height: 40px;');
+	dropDownButtonView.setAttribute('style', 'display: inline-block; height: 2.5em;');
 	this.view.appendChild(dropDownButtonView);
 	
 	var dropDownButton = document.createElement('input');
@@ -183,7 +183,6 @@ jdnp3.ui.DataPointItem.prototype.appendDialogButton = function(menuItems, data) 
 	
 	dropDownButtonLabel = document.createElement('label');
 	dropDownButtonLabel.className = 'glossy-button';
-	dropDownButtonLabel.setAttribute('style', 'min-width: 32px; width: 100%;');
 	dropDownButtonLabel.setAttribute('for', id);
 	dropDownButtonLabelText = document.createElement('span');
 	dropDownButtonLabel.appendChild(dropDownButtonLabelText);
@@ -234,7 +233,7 @@ jdnp3.ui.createInputPanel = function(title, action) {
 		infoDiv.setAttribute('style', 'width: 300px;');
 		var infoSpan = document.createElement('span');
 		infoSpan.innerHTML = 'Enter a value:';
-		infoSpan.setAttribute('style', 'font-size: 18px;');
+		infoSpan.setAttribute('style', 'font-size: 1.2px;');
 		infoDiv.appendChild(infoSpan);
 		container.appendChild(infoDiv);
 		
@@ -424,7 +423,7 @@ jdnp3.ui.createContextMenuButton = function(id, menuItems, data) {
 	
 	var menuId = id + '-showmenu';
 	var dropDownButtonView = document.createElement('div');
-	dropDownButtonView.setAttribute('style', 'display: inline-block; font-size: 16px;');
+	dropDownButtonView.setAttribute('style', 'display: inline-block; font-size: 1em;');
 	dropDownButtonView.setAttribute('tabindex', '1');
 	
 	var dropDownButton = document.createElement('input');

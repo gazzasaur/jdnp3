@@ -23,7 +23,7 @@
 	<h:outputScript library="js" name="message.js" />
 </h:head>
 
-<h:body>
+<h:body style="font-size: 0.9em;">
 <script>
 document.addEventListener("DOMContentLoaded", function(event) {
 	var location = document.location.toString().replace(/\bhttp/,'ws').replace(/\/\/.*/,'//') + window.location.host + '/ws/device' + window.location.search;
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					<td>
 						<div style="top: 0px; bottom: 0px; left: 0px; right: 0px; display: flex;">
 							<div class="full-text-field-value-view" style="width: 100%" title="Status">
-								<div style="display: table; width: 100%">
+								<div style="display: table; width: 100%; border-collapse: separate;">
 									<span class="full-text-field-value" style="text-align: center; vertical-align: middle; display: table-cell;"><span id="statusText" style="color: red;">Disconnected</span></span>
 								</div>
 							</div>

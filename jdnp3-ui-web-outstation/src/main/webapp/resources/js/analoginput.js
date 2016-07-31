@@ -107,7 +107,7 @@ jdnp3.analoginput.createDialog = function(index) {
 	staticElementCell.appendChild(document.createTextNode('Event Class:'));
 	staticElementRow.appendChild(staticElementCell);
 	var staticElementItems = document.createElement('td');
-	staticElementItems.className = 'right-aligned';
+	staticElementItems.setAttribute('style', 'text-align: right;');
 
 	staticElementItems.appendChild(jdnp3.ui.createCheckbox('ai-' + index + '-cl-0', 'Off', 0, function() {var value = 0; var attribute = 'eventClass'; device.requestChangeAttributeValue(jdnp3.analoginput.analogInputPoints.get(index), attribute, value);}, {'style': 'margin-left: 5px;'}));
 	staticElementItems.appendChild(jdnp3.ui.createCheckbox('ai-' + index + '-cl-1', 'Class 1', 1, function() {var value = 1; var attribute = 'eventClass'; device.requestChangeAttributeValue(jdnp3.analoginput.analogInputPoints.get(index), attribute, value);}, {'style': 'margin-left: 5px;'}));
@@ -122,7 +122,7 @@ jdnp3.analoginput.createDialog = function(index) {
 	staticElementCell.appendChild(document.createTextNode('Static Type:'));
 	staticElementRow.appendChild(staticElementCell);
 	var staticElementItems = document.createElement('td');
-	staticElementItems.className = 'right-aligned';
+	staticElementItems.setAttribute('style', 'text-align: right;');
 	
 	staticElementItems.appendChild(jdnp3.ui.createCheckbox('ai-' + index + '-st-0', 'Any', 0, function() {var value = {'group': 30, 'variation': 0}; var attribute = 'staticType'; device.requestChangeAttributeValue(jdnp3.analoginput.analogInputPoints.get(index), attribute, value);}, {'style': 'margin-left: 5px;'}));
 	staticElementItems.appendChild(jdnp3.ui.createCheckbox('ai-' + index + '-st-1', '32-bit Integer with Flags', 1, function() {var value = {'group': 30, 'variation': 1}; var attribute = 'staticType'; device.requestChangeAttributeValue(jdnp3.analoginput.analogInputPoints.get(index), attribute, value);}, {'style': 'margin-left: 5px;'}));
@@ -140,7 +140,7 @@ jdnp3.analoginput.createDialog = function(index) {
 	staticElementCell.appendChild(document.createTextNode('Event Type:'));
 	staticElementRow.appendChild(staticElementCell);
 	var staticElementItems = document.createElement('td');
-	staticElementItems.className = 'right-aligned';
+	staticElementItems.setAttribute('style', 'text-align: right;');
 	
 	staticElementItems.appendChild(jdnp3.ui.createCheckbox('ai-' + index + '-ev-0', 'Any', 0, function() {var value = {'group': 32, 'variation': 0}; var attribute = 'eventType'; device.requestChangeAttributeValue(jdnp3.analoginput.analogInputPoints.get(index), attribute, value);}, {'style': 'margin-left: 5px;'}));
 	staticElementItems.appendChild(jdnp3.ui.createCheckbox('ai-' + index + '-ev-1', '32-bit Integer without Time', 1, function() {var value = {'group': 32, 'variation': 1}; var attribute = 'eventType'; device.requestChangeAttributeValue(jdnp3.analoginput.analogInputPoints.get(index), attribute, value);}, {'style': 'margin-left: 5px;'}));

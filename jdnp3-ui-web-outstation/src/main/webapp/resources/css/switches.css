@@ -1,9 +1,9 @@
 .dipswitch {
 	position: relative;
-	width: 20px;
-	height: 40px;
+	width: 1.25em;
+	height: 2.5em;
 	overflow: hidden;
-	border-radius: 3px;
+	border-radius: 0.25em;
 	border: 1px solid #7777FF;
 	background-color: #9999FF;
 	-webkit-user-select: none;
@@ -17,20 +17,20 @@
 }
 
 .dipswitch-label {
-	width: 18px;
-	height: 38px;
+	width: 1.5em;
+	height: 2.1em;
 	display: block;
 	cursor: pointer;
-	border-radius: 2px;
+	border-radius: 0.25em;
 }
 
 .dipswitch-channel {
 	display: block;
-	top: 6px;
-	bottom: 14px;
-	width: 4px;
-	margin-left: 7px;
-	border-radius: 2px;
+	top: 0.4em;
+	bottom: 0.85em;
+	width: 0.3em;
+	margin-left: 0.44em;
+	border-radius: 0.1em;
 	position: absolute;
 	background: #FFFFFF;
 	border: 1px solid #000000;
@@ -39,11 +39,11 @@
 
 .dipswitch-switch {
 	display: block;
-	top: 16px;
-	width: 4px;
-	height: 8px;
-	margin-left: 7px;
-	border-radius: 2px;
+	top: 1.02em;
+	width: 0.3em;
+	height: 0.6em;
+	margin-left: 0.44em;
+	border-radius: 0.1em;
 	position: absolute;
 	background: #FF0000;
 	border: 1px solid #000000;
@@ -53,8 +53,8 @@
 .dipswitch-text {
 	display: block;
 	position: absolute;
-	top: 26px;
-	font-size: 12px;
+	top: 2.2em;
+	font-size: 0.75em;
 	width: 100%;
 	text-align: center;
 	color: white;
@@ -63,16 +63,16 @@
 }
 
 .dipswitch-checkbox:checked+.dipswitch-label .dipswitch-switch {
-	top: 6px;
+	top: 0.44em;
 	background: #00FF00;
 }
 
 .slideswitch {
 	position: relative;
-	width: 80px;
-	height: 40px;
+	width: 5em;
+	height: 2.5em;
 	overflow: hidden;
-	border-radius: 3px;
+	border-radius: 0.25em;
 	border: 1px solid #7777FF;
 	background-color: #9999FF;
 	-webkit-user-select: none;
@@ -106,8 +106,8 @@
 	width: 50%;
 	height: 100%;
 	padding: 0;
-	line-height: 40px;
-	font-size: 14px;
+	line-height: 2.5em;
+	font-size: 1em;
 	color: white;
 	font-family: Arial;
 	font-weight: bold;

@@ -102,7 +102,7 @@ jdnp3.analogoutput.createAnalogOutputView = function(dataPoint) {
 	operationElement.id = 'ao-' + index + '-os';
 	operationElement.title = 'No Operation';
 	operationElement.className = 'text-field';
-	operationElement.setAttribute('style', 'width: 100px; cursor: pointer;');
+	operationElement.setAttribute('style', 'cursor: pointer;');
 	view.appendItem(operationElement);
 	
 	var operationElementText = document.createElement('span');

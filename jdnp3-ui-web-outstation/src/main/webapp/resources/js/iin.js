@@ -41,8 +41,6 @@ jdnp3.iin.insertInternalIndicators = function(index, dataPoint) {
 }
 
 jdnp3.iin.appendInternalIndicators = function(index, dataPoint) {
-	device.site = dataPoint.site;
-	device.device = dataPoint.device;
 	document.getElementById('internalIndicators').setAttribute('style', 'display: block; margin-bottom: 5px;');
 	document.getElementById('internalIndicatorsTable').appendChild(jdnp3.iin.createInternalIndicatorsView(dataPoint));
 	jdnp3.iin.updateInternalIndicators(index, dataPoint);
