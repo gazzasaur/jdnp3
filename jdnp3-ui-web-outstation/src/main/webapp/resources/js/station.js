@@ -17,7 +17,7 @@ jdnp3.station.updateDeviceListing = function(site, devices) {
 			if (device === site.devices[j].device) {
 				site.devices[j].dirty = false;
 				return;
-			} else if (site.devices[j].device < device) {
+			} else if (site.devices[j].device > device) {
 				break;
 			}
 		}
@@ -62,7 +62,9 @@ jdnp3.station.SetStationsMessageHandler.prototype.processMessage = function(stat
 				jdnp3.station.siteDeviceListings[i].dirty = false;
 				jdnp3.station.updateDeviceListing(jdnp3.station.siteDeviceListings[i], siteDeviceList.devices);
 				return;
-			} else if (jdnp3.station.siteDeviceListings[i].site < siteDeviceList.site) {
+			} else if (jdnp3.station.siteDeviceListings[i].site > siteDeviceList.site) {
+				console.log(jdnp3.station.siteDeviceListings[i].site);
+				console.log(siteDeviceList.site);
 				break;
 			}
 		}
