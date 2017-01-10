@@ -19,6 +19,8 @@ import static java.lang.String.format;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
@@ -50,6 +52,8 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.ModelChangedMessag
 @ServerEndpoint(value="/ws/device", encoders=MessageEncoder.class, decoders=GenericMessageDecoder.class, configurator=DeviceWebSocketConfigurator.class)
 public class DeviceWebSocket implements Messanger, DatabaseListener {
 	private Logger logger = LoggerFactory.getLogger(DeviceWebSocket.class);
+	private Executor executor = Executors.newSingleThreadExecutor();
+
 	
 	private Session session;
 
@@ -111,7 +115,15 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 				}
 				
 				BeanUtils.copyProperties(message, dataPoint);
-				session.getAsyncRemote().sendObject(message);
+				executor.execute(new Runnable() {
+					public void run() {
+						try {
+							session.getBasicRemote().sendObject(message);
+						} catch (Exception e) {
+							logger.error("Failed to send message.", e);
+						}
+					}
+				});
 			} catch (Exception e) {
 				logger.error("Cannot create message.", e);
 			}
