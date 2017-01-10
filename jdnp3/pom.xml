@@ -4,7 +4,7 @@
 
 	<groupId>net.sf.jdnp3</groupId>
 	<artifactId>jdnp3-project</artifactId>
-	<version>0.9.0</version>
+	<version>1.0.0-alpha3</version>
 	<packaging>pom</packaging>
 
 	<name>jdnp3-project</name>
@@ -12,7 +12,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<net.sf.jdnp3.version>0.9.0</net.sf.jdnp3.version>
+		<net.sf.jdnp3.version>1.0.0-alpha3</net.sf.jdnp3.version>
 		<org.slf4j.version>1.7.6</org.slf4j.version>
 	</properties>
 
