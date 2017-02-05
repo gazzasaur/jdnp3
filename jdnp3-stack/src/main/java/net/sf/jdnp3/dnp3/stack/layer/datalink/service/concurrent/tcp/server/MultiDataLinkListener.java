@@ -65,7 +65,8 @@ public class MultiDataLinkListener implements DataLinkListener {
 							dataLinkListener.receiveData(messageProperties, data);
 						} catch (Exception e) {
 							logger.error("Error caught from datalink listener.  Evicting member.", e);
-							listeners.remove(dataLinkListener);
+// FIXME IMPL I have been requested not to remove this here.  This could be dangerous, but it make sense.
+//							listeners.remove(dataLinkListener);
 						}
 					}
 				}
