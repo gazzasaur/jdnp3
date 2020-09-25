@@ -13,7 +13,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<net.sf.jdnp3.version>0.9.8</net.sf.jdnp3.version>
-		<org.slf4j.version>1.7.6</org.slf4j.version>
+		<org.slf4j.version>1.7.25</org.slf4j.version>
 	</properties>
 
 	<build>
