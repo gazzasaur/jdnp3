@@ -24,7 +24,6 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import mockit.integration.junit4.JMockit;
 import net.sf.jdnp3.test.util.list.RandomByteListUtils;
 
 import org.hamcrest.CoreMatchers;
@@ -32,7 +31,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-@RunWith(JMockit.class)
 public class DataLinkFrameTest {
 	private List<Byte> randomData;
 	private DataLinkFrameHeader dataLinkFrameHeader;

@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.rits.cloning.Cloner;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.ByteDataOutstationApplicationRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
@@ -61,6 +61,8 @@ import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic.InternalIndica
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic.TimeAndDateHandler;
 
 public class SimpleDeviceFactory implements DeviceFactory {
+	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
 	private List<String> binaryInputDataPoints = new ArrayList<>();
 	private List<String> binaryOutputDataPoints = new ArrayList<>();
 	private List<String> analogInputDataPoints = new ArrayList<>();
@@ -106,31 +108,31 @@ public class SimpleDeviceFactory implements DeviceFactory {
 		databaseManager.addCounterDataPoints(counterDataPoints.toArray(new String[0]));
 		
 		for (BinaryInputDataPoint dataPoint : databaseManager.getBinaryInputDataPoints()) {
-			BinaryInputDataPoint point = Cloner.standard().deepClone(templateBinaryInputDataPoint);
+			BinaryInputDataPoint point = this.cloneObject(templateBinaryInputDataPoint, BinaryInputDataPoint.class);
 			point.setIndex(dataPoint.getIndex());
 			point.setName(dataPoint.getName());
 			databaseManager.setBinaryInputDataPoint(point);
 		}
 		for (BinaryOutputDataPoint dataPoint : databaseManager.getBinaryOutputDataPoints()) {
-			BinaryOutputDataPoint point = Cloner.standard().deepClone(templateBinaryOutputDataPoint);
+			BinaryOutputDataPoint point = this.cloneObject(templateBinaryOutputDataPoint, BinaryOutputDataPoint.class);
 			point.setIndex(dataPoint.getIndex());
 			point.setName(dataPoint.getName());
 			databaseManager.setBinaryOutputDataPoint(point);
 		}
 		for (AnalogInputDataPoint dataPoint : databaseManager.getAnalogInputDataPoints()) {
-			AnalogInputDataPoint point = Cloner.standard().deepClone(templateAnalogInputDataPoint);
+			AnalogInputDataPoint point = this.cloneObject(templateAnalogInputDataPoint, AnalogInputDataPoint.class);
 			point.setIndex(dataPoint.getIndex());
 			point.setName(dataPoint.getName());
 			databaseManager.setAnalogInputDataPoint(point);
 		}
 		for (AnalogOutputDataPoint dataPoint : databaseManager.getAnalogOutputDataPoints()) {
-			AnalogOutputDataPoint point = Cloner.standard().deepClone(templateAnalogOutputDataPoint);
+			AnalogOutputDataPoint point = this.cloneObject(templateAnalogOutputDataPoint, AnalogOutputDataPoint.class);
 			point.setIndex(dataPoint.getIndex());
 			point.setName(dataPoint.getName());
 			databaseManager.setAnalogOutputDataPoint(point);
 		}
 		for (CounterDataPoint dataPoint : databaseManager.getCounterDataPoints()) {
-			CounterDataPoint point = Cloner.standard().deepClone(templateCounterDataPoint);
+			CounterDataPoint point = this.cloneObject(templateCounterDataPoint, CounterDataPoint.class);
 			point.setIndex(dataPoint.getIndex());
 			point.setName(dataPoint.getName());
 			databaseManager.setCounterDataPoint(point);
@@ -229,5 +231,13 @@ public class SimpleDeviceFactory implements DeviceFactory {
 
 	public void setTemplateCounterDataPoint(CounterDataPoint templateCounterDataPoint) {
 		this.templateCounterDataPoint = templateCounterDataPoint;
+	}
+
+	private <T> T cloneObject(T obj, Class<T> clazz) {
+		try {
+			return OBJECT_MAPPER.readValue(OBJECT_MAPPER.writeValueAsString(obj), clazz);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

@@ -22,7 +22,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.rits.cloning.Cloner;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
 import net.sf.jdnp3.ui.web.outstation.database.device.InternalIndicatorsDataPoint;
@@ -33,6 +33,8 @@ import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoin
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 
 public class DatabaseManager {
+	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
 	private Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
 	
 	private Database database = new Database();
@@ -171,37 +173,37 @@ public class DatabaseManager {
 	
 	public InternalIndicatorsDataPoint getInternalIndicatorsDataPoint() {
 		synchronized (database) {
-			return Cloner.standard().deepClone(database.getIndicatorsDataPoint());
+			return this.cloneObject(database.getIndicatorsDataPoint(), InternalIndicatorsDataPoint.class);
 		}
 	}
 	
 	public List<AnalogInputDataPoint> getAnalogInputDataPoints() {
 		synchronized (database) {
-			return Cloner.standard().deepClone(database.getAnalogInputDataPoints());
+			return this.cloneObjects(database.getAnalogInputDataPoints(), AnalogInputDataPoint.class);
 		}
 	}
 	
 	public List<AnalogOutputDataPoint> getAnalogOutputDataPoints() {
 		synchronized (database) {
-			return Cloner.standard().deepClone(database.getAnalogOutputDataPoints());
+			return this.cloneObjects(database.getAnalogOutputDataPoints(), AnalogOutputDataPoint.class);
 		}
 	}
 	
 	public List<BinaryInputDataPoint> getBinaryInputDataPoints() {
 		synchronized (database) {
-			return Cloner.standard().deepClone(database.getBinaryInputDataPoints());
+			return this.cloneObjects(database.getBinaryInputDataPoints(), BinaryInputDataPoint.class);
 		}
 	}
 	
 	public List<BinaryOutputDataPoint> getBinaryOutputDataPoints() {
 		synchronized (database) {
-			return Cloner.standard().deepClone(database.getBinaryOutputDataPoints());
+			return this.cloneObjects(database.getBinaryOutputDataPoints(), BinaryOutputDataPoint.class);
 		}
 	}
 	
 	public List<CounterDataPoint> getCounterDataPoints() {
 		synchronized (database) {
-			return Cloner.standard().deepClone(database.getCounterDataPoints());
+			return this.cloneObjects(database.getCounterDataPoints(), CounterDataPoint.class);
 		}
 	}
 	
@@ -220,7 +222,7 @@ public class DatabaseManager {
 	
 	public void setAnalogInputDataPoint(AnalogInputDataPoint analogDataPoint) {
 		synchronized (database) {
-			database.setAnalogInputDataPoint(Cloner.standard().deepClone(analogDataPoint));
+			database.setAnalogInputDataPoint(this.cloneObject(analogDataPoint, AnalogInputDataPoint.class));
 		}
 		if (analogDataPoint.getIndex() < database.getAnalogInputDataPoints().size()) {
 			for (DatabaseListener databaseListener : databaseListeners) {
@@ -233,7 +235,7 @@ public class DatabaseManager {
 	
 	public void setAnalogOutputDataPoint(AnalogOutputDataPoint analogDataPoint) {
 		synchronized (database) {
-			database.setAnalogOutputDataPoint(Cloner.standard().deepClone(analogDataPoint));
+			database.setAnalogOutputDataPoint(this.cloneObject(analogDataPoint, AnalogOutputDataPoint.class));
 		}
 		if (analogDataPoint.getIndex() < database.getAnalogOutputDataPoints().size()) {
 			for (DatabaseListener databaseListener : databaseListeners) {
@@ -246,7 +248,7 @@ public class DatabaseManager {
 	
 	public void setBinaryInputDataPoint(BinaryInputDataPoint binaryDataPoint) {
 		synchronized (database) {
-			database.setBinaryInputDataPoint(Cloner.standard().deepClone(binaryDataPoint));
+			database.setBinaryInputDataPoint(this.cloneObject(binaryDataPoint, BinaryInputDataPoint.class));
 		}
 		if (binaryDataPoint.getIndex() < database.getBinaryInputDataPoints().size()) {
 			for (DatabaseListener databaseListener : databaseListeners) {
@@ -259,7 +261,7 @@ public class DatabaseManager {
 	
 	public void setBinaryOutputDataPoint(BinaryOutputDataPoint binaryDataPoint) {
 		synchronized (database) {
-			database.setBinaryOutputDataPoint(Cloner.standard().deepClone(binaryDataPoint));
+			database.setBinaryOutputDataPoint(this.cloneObject(binaryDataPoint, BinaryOutputDataPoint.class));
 		}
 		if (binaryDataPoint.getIndex() < database.getBinaryOutputDataPoints().size()) {
 			for (DatabaseListener databaseListener : databaseListeners) {
@@ -272,7 +274,7 @@ public class DatabaseManager {
 	
 	public void setCounterDataPoint(CounterDataPoint dataPoint) {
 		synchronized (database) {
-			database.setCounterDataPoint(Cloner.standard().deepClone(dataPoint));
+			database.setCounterDataPoint(this.cloneObject(dataPoint, CounterDataPoint.class));
 		}
 		if (dataPoint.getIndex() < database.getCounterDataPoints().size()) {
 			for (DatabaseListener databaseListener : databaseListeners) {
@@ -341,5 +343,21 @@ public class DatabaseManager {
 
 	public void removeEventListener(EventListener eventListener) {
 		eventListeners.remove(eventListener);
+	}
+
+	private <T> T cloneObject(T obj, Class<T> clazz) {
+		try {
+			return OBJECT_MAPPER.readValue(OBJECT_MAPPER.writeValueAsString(obj), clazz);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private <T> List<T> cloneObjects(List<T> obj, Class<T> clazz) {
+		try {
+			return OBJECT_MAPPER.readValue(OBJECT_MAPPER.writeValueAsString(obj), OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

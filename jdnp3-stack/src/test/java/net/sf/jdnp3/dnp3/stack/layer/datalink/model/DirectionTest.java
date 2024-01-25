@@ -15,12 +15,8 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.model;
 
-import mockit.integration.junit4.JMockit;
-
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(JMockit.class)
 public class DirectionTest {
 	@Test
 	public void testEnumCoverage() {

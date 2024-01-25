@@ -24,12 +24,8 @@ import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 
-import mockit.integration.junit4.JMockit;
-
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(JMockit.class)
 public class Crc16Test {
 	@Test
 	public void testConstructor() {

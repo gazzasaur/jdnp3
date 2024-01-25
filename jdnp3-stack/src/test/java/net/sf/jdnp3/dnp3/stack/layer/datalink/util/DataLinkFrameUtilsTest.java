@@ -24,14 +24,11 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Random;
 
-import mockit.integration.junit4.JMockit;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(JMockit.class)
 public class DataLinkFrameUtilsTest {
 	private Random random = new Random();
 	

@@ -20,12 +20,8 @@ import static net.sf.jdnp3.test.util.gast.MasterGast.testSubject;
 import java.util.Arrays;
 import java.util.List;
 
-import mockit.integration.junit4.JMockit;
-
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(JMockit.class)
 public class DataLinkFrameHeaderTest {
 	private static final List<String> PROPERTIES = Arrays.asList("source", "destination", "length", "checkSum", "primary", "direction", "functionCode");
 	

@@ -23,14 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import mockit.integration.junit4.JMockit;
-
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(JMockit.class)
 public class DataUtilsTest {
 	private Random random = new Random();
 	

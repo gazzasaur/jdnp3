@@ -19,14 +19,11 @@ import static java.util.Arrays.asList;
 
 import java.util.List;
 
-import mockit.integration.junit4.JMockit;
 import net.sf.jdnp3.test.util.gast.GetterAndSetterTester;
 import net.sf.jdnp3.test.util.gast.MasterGast;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(JMockit.class)
 public class MessagePropertiesTest {
 	private static final List<String> PROPERTIES = asList("sourceAddress", "destinationAddress", "master", "timeReceived", "channelId");
 	private GetterAndSetterTester gast = MasterGast.createGast(new ChannelIdObjectFactory());

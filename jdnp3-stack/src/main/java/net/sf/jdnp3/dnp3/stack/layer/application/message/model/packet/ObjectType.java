@@ -18,7 +18,10 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet;
 public class ObjectType {
 	private int group = 0;
 	private int variation = 0;
-	
+
+	public ObjectType() {
+	}
+
 	public ObjectType(int group, int variation) {
 		this.group = group;
 		this.variation = variation;

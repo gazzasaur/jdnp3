@@ -18,12 +18,9 @@ package net.sf.jdnp3.dnp3.stack.message;
 import static net.sf.jdnp3.dnp3.stack.message.ChannelIdConstants.SELF_CHANNEL_ID;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import mockit.integration.junit4.JMockit;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(JMockit.class)
 public class ChannelIdConstantsTest {
 	@Test
 	public void testDummyConstructor() {

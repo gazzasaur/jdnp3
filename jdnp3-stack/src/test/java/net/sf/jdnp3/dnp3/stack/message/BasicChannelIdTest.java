@@ -15,12 +15,8 @@
  */
 package net.sf.jdnp3.dnp3.stack.message;
 
-import mockit.integration.junit4.JMockit;
-
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(JMockit.class)
 public class BasicChannelIdTest {
 	
 	@Test

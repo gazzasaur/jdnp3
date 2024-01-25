@@ -17,13 +17,10 @@ package net.sf.jdnp3.dnp3.stack.layer.datalink.util;
 
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkConstants.DNP3_START_BYTES;
 import static org.hamcrest.CoreMatchers.is;
-import mockit.integration.junit4.JMockit;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(JMockit.class)
 public class DataLinkConstantsTest {
 	@Test
 	public void testConstructor() {
