@@ -24,12 +24,11 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import net.sf.jdnp3.test.util.list.RandomByteListUtils;
-
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import net.sf.jdnp3.test.util.list.RandomByteListUtils;
 
 public class DataLinkFrameTest {
 	private List<Byte> randomData;
