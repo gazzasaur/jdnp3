@@ -18,6 +18,30 @@
 		<org.apache.commons.lang3.version>3.8.1</org.apache.commons.lang3.version>
 		<ch.qos.logback.version>1.2.1</ch.qos.logback.version>
 	</properties>
+	
+	<build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generate-code-coverage-report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 
 	<dependencies>
 		<dependency>

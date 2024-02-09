@@ -15,71 +15,71 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.encoder;
 
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.util.Crc16;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkFrameUtils;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-// TODO
+@RunWith(MockitoJUnitRunner.class)
 public class DataLinkFrameHeaderEncoderTest {
-	// Random random = new Random();
+	Random random = new Random();
 	
-	// @Injectable private List<Byte> mockData;
-	// @Injectable private DataLinkFrameHeader mockDataLinkFrameHeader;
+	@Mock private DataLinkFrameHeader mockDataLinkFrameHeader;
 	
-	// @Mocked private Crc16 mockCrc16;
-	// @Mocked private DataUtils mockDataUtils;
-	// @Mocked private DataLinkFrameUtils mockDataLinkFrameUtils;
+	@Mock private DataUtils mockDataUtils;
+	@Mock private DataLinkFrameUtils mockDataLinkFrameUtils;
 	
-	// private int randomCrc;
-	// private int randomLength;
-	// private int randomSource;
-	// private int randomDestination;
-	// private byte randomControlField;
+	private int randomCrc;
+	private int randomLength;
+	private int randomSource;
+	private int randomDestination;
+	private byte randomControlField;
 
-	// @Before
-	// public void setup() {
-	// 	randomCrc = random.nextInt();
-	// 	randomLength = random.nextInt();
-	// 	randomSource = random.nextInt();
-	// 	randomDestination = random.nextInt();
-	// 	randomControlField = (byte) random.nextInt();
-	// }
+	@Before
+	public void setup() {
+		randomCrc = random.nextInt();
+		randomLength = random.nextInt();
+		randomSource = random.nextInt();
+		randomDestination = random.nextInt();
+		randomControlField = (byte) random.nextInt();
+	}
 
-	// @Test
-	// public void testConstructor() {
-	// 	new DataLinkFrameHeaderEncoder();
-	// }
+	@Test
+	public void testConstructor() {
+		new DataLinkFrameHeaderEncoder();
+	}
 	
-	// @Test
-	// public void testEncodeHeader() {
-	// 	new NonStrictExpectations() {{
-	// 		mockDataLinkFrameHeader.getLength(); result = randomLength;
-	// 		mockDataLinkFrameHeader.getSource(); result = randomSource;
-	// 		mockDataLinkFrameHeader.getDestination(); result = randomDestination;
-	// 		DataLinkFrameUtils.computeControlField(mockDataLinkFrameHeader); result = randomControlField;
-	// 	}};
-	// 	new StrictExpectations() {
-	// 		@Mocked ArrayList<Byte> mockArrayList;
-	// 	{
-	// 		ArrayList<Byte> mockBuffer = new ArrayList<Byte>();
-	// 		DataUtils.addInteger(0x6405, 2, mockBuffer);
-	// 		DataUtils.addInteger(randomLength, 1, mockBuffer);
-	// 		DataUtils.addInteger(randomControlField, 1, mockBuffer);
-	// 		DataUtils.addInteger(randomDestination, 2, mockBuffer);
-	// 		DataUtils.addInteger(randomSource, 2, mockBuffer);
-	// 		mockData.addAll(mockBuffer);
-	// 		Crc16.computeCrc(mockBuffer); times = 1; result = randomCrc;
-	// 		DataUtils.addInteger(randomCrc, 2, mockData);
-	// 	}};
-	// 	DataLinkFrameHeaderEncoder.encode(mockDataLinkFrameHeader, mockData);
-	// }
+	@Test
+	public void testEncodeHeader() {
+		when(mockDataLinkFrameHeader.getLength()).thenReturn(randomLength);
+		when(mockDataLinkFrameHeader.getSource()).thenReturn(randomSource);
+		when(mockDataLinkFrameHeader.getDestination()).thenReturn(randomDestination);
+
+		ArrayList<Byte> buffer = new ArrayList<Byte>();
+		DataUtils.addInteger(0x6405, 2, buffer);
+		DataUtils.addInteger(randomLength, 1, buffer);
+		DataUtils.addInteger(randomControlField, 1, buffer);
+		DataUtils.addInteger(randomDestination, 2, buffer);
+		DataUtils.addInteger(randomSource, 2, buffer);
+		ArrayList<Byte> data = new ArrayList<>(buffer);
+
+		try (var staticCrc16 = mockStatic(Crc16.class); var staticDataLinkFrameUtils = mockStatic(DataLinkFrameUtils.class)) {
+			staticCrc16.when(() -> Crc16.computeCrc(buffer)).thenReturn(randomCrc);
+			staticDataLinkFrameUtils.when(() -> DataLinkFrameUtils.computeControlField(mockDataLinkFrameHeader)).thenReturn(randomControlField);
+
+			DataLinkFrameHeaderEncoder.encode(mockDataLinkFrameHeader, data);
+		}
+	}
 }
