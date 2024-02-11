@@ -23,3 +23,4 @@ java -cp ".:jdnp3-ui-web-outstation-0.9.8.jar" net.sf.jdnp3.ui.web.outstation.ma
 Enjoy
 
 ### Roadmap
+* March 24 - Double Bit Binary
