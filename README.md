@@ -24,3 +24,4 @@ Enjoy
 
 ### Roadmap
 * March 24 - Double Bit Binary
+* March 24 - Upgrade to python3
