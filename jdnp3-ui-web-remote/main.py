@@ -51,9 +51,9 @@ outstation.output()
 
 sitesInfo = control.list_outstations()
 for site in sitesInfo['siteDeviceLists']:
-    print 'Site: %s' % (site['site'])
+    print('Site: %s' % (site['site']))
     for device in site['devices']:
-        print '\tDevice: %s' % (device)
+        print('\tDevice: %s' % (device))
 
 outstation.set_internal_indicator('device restart', True)
 outstation.set_binary_input(1, 'local forced', True)
@@ -82,7 +82,7 @@ control.bindOutstation('Pump Station 1', 'Pump 1', 3, "20000")
 try:
     outstation.wait_for_internal_indicator('device restart', False)
 except:
-    print "WARNING: You may not have a master polling this."
+    print("WARNING: You may not have a master polling this.")
 
 outstation.set_binary_input(0, 'event type', 'variation', 1)
 outstation.set_binary_input(0, 'event type', 'variation', 2)

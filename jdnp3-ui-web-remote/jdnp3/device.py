@@ -145,7 +145,7 @@ class Outstation:
 
     def get_attribute(self, data, *args):
         if (len(args) < 1):
-            print "Must specify at least one attribute."
+            print("Must specify at least one attribute.")
             
         for i in range(0, len(args)):
             arg = self.camel_case(args[i])
@@ -155,7 +155,7 @@ class Outstation:
 
     def set_attribute(self, data, *args):
         if (len(args) < 2):
-            print "Must specify at least one attribute and exactly one value."
+            print("Must specify at least one attribute and exactly one value.")
             
         value = args[len(args) - 1]
             

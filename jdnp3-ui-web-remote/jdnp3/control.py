@@ -1,7 +1,7 @@
 import json
 import time
 import random
-import urllib2
+import urllib
 import exceptions
 
 def CREATE_DATA():
@@ -95,8 +95,8 @@ class Control:
     
     def postMessage(self, data, output=False):
         url = self.url
-        request = urllib2.Request(url, json.dumps(data), {'Content-Type': 'application/json'})
-        response = urllib2.urlopen(request)
+        request = urllib.request(url, json.dumps(data), {'Content-Type': 'application/json'})
+        response = urllib.urlopen(request)
         code = response.getcode()
     
         if (code < 200 or code >= 300):
@@ -104,7 +104,7 @@ class Control:
     
         string_data = response.read()
         if output:
-            print string_data
+            print(string_data)
         data = json.loads(string_data)
         if (not 'type' in data or data['type'] == 'failure'):
             if ('reason' in data):
