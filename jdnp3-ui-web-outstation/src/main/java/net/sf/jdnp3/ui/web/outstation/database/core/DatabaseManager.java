@@ -30,6 +30,7 @@ import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 
 public class DatabaseManager {
@@ -219,7 +220,13 @@ public class DatabaseManager {
 			return this.cloneObjects(database.getBinaryInputDataPoints(), BinaryInputDataPoint.class);
 		}
 	}
-	
+
+	public List<DoubleBitBinaryInputDataPoint> getDoubleBitBinaryInputDataPoints() {
+		synchronized (database) {
+			return this.cloneObjects(database.getDoubleBitBinaryInputDataPoints(), DoubleBitBinaryInputDataPoint.class);
+		}
+	}
+
 	public List<BinaryOutputDataPoint> getBinaryOutputDataPoints() {
 		synchronized (database) {
 			return this.cloneObjects(database.getBinaryOutputDataPoints(), BinaryOutputDataPoint.class);
@@ -283,7 +290,20 @@ public class DatabaseManager {
 			logger.warn("Cannot write binary data point of index: " + binaryDataPoint.getIndex());
 		}
 	}
-	
+
+	public void setDoubleBitBinaryInputDataPoint(DoubleBitBinaryInputDataPoint binaryDataPoint) {
+		synchronized (database) {
+			database.setDoubleBitBinaryInputDataPoint(this.cloneObject(binaryDataPoint, DoubleBitBinaryInputDataPoint.class));
+		}
+		if (binaryDataPoint.getIndex() < database.getDoubleBitBinaryInputDataPoints().size()) {
+			for (DatabaseListener databaseListener : databaseListeners) {
+				databaseListener.valueChanged(binaryDataPoint);
+			}
+		} else {
+			logger.warn("Cannot write double bit binary data point of index: " + binaryDataPoint.getIndex());
+		}
+	}
+
 	public void setBinaryOutputDataPoint(BinaryOutputDataPoint binaryDataPoint) {
 		synchronized (database) {
 			database.setBinaryOutputDataPoint(this.cloneObject(binaryDataPoint, BinaryOutputDataPoint.class));

@@ -22,12 +22,10 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryInputStaticAssignClassRequestHandler;
-import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryInputStaticReadRequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.service.outstation.handler.binary.DoubleBitBinaryInputStaticAssignClassRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.binary.DoubleBitBinaryInputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.DoubleBitBinaryInputStaticObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputDataPoint;
 
 public class DoubleBitBinaryInputStaticHandler implements DoubleBitBinaryInputStaticReadRequestHandler, DoubleBitBinaryInputStaticAssignClassRequestHandler {
@@ -41,10 +39,10 @@ public class DoubleBitBinaryInputStaticHandler implements DoubleBitBinaryInputSt
 	
 	public List<DoubleBitBinaryInputStaticObjectInstance> readStatics(long startIndex, long stopIndex) {
 		List<DoubleBitBinaryInputStaticObjectInstance> points = new ArrayList<>();
-		List<DoubleBitBinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
+		List<DoubleBitBinaryInputDataPoint> binaryDataPoints = databaseManager.getDoubleBitBinaryInputDataPoints();
 
 		for (long i = startIndex; i <= stopIndex; ++i) {
-			BinaryInputDataPoint dataPoint = binaryDataPoints.get((int) i);
+			DoubleBitBinaryInputDataPoint dataPoint = binaryDataPoints.get((int) i);
 			copyDataPoint(points, dataPoint);
 		}
 		return points;
@@ -77,7 +75,7 @@ public class DoubleBitBinaryInputStaticHandler implements DoubleBitBinaryInputSt
 		if (index < binaryDataPoints.size()) {
 			DoubleBitBinaryInputDataPoint point = binaryDataPoints.get((int) index);
 			point.setEventClass((int) eventClass);
-			databaseManager.setBinaryInputDataPoint(point);
+			databaseManager.setDoubleBitBinaryInputDataPoint(point);
 		}
 	}
 
@@ -96,7 +94,7 @@ public class DoubleBitBinaryInputStaticHandler implements DoubleBitBinaryInputSt
 		for (long i = startIndex; i <= stopIndex; ++i) {
 			DoubleBitBinaryInputDataPoint binaryDataPoint = binaryDataPoints.get((int) i);
 			binaryDataPoint.setEventClass((int) eventClass);
-			databaseManager.setBinaryInputDataPoint(binaryDataPoint);
+			databaseManager.setDoubleBitBinaryInputDataPoint(binaryDataPoint);
 		}
 	}
 
