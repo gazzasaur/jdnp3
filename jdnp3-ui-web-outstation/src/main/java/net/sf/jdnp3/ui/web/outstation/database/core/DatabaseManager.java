@@ -146,6 +146,31 @@ public class DatabaseManager {
 		}
 	}
 	
+	public void setDoubleBitBinaryInputDatabaseSize(int size) {
+		synchronized (database) {
+			while (database.getDoubleBitBinaryInputDataPoints().size() > size) {
+				database.removeDoubleBitBinaryInputDataPoint();
+			}
+			while (database.getDoubleBitBinaryInputDataPoints().size() < size) {
+				database.addDoubleBitBinaryInputDataPoint();
+			}
+		}
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.modelChanged();
+		}
+	}
+
+	public void addDoubleBitBinaryInputDataPoints(String... names) {
+		synchronized (database) {
+			for (String name : names) {
+				database.addDoubleBitBinaryInputDataPoint(name);
+			}
+		}
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.modelChanged();
+		}
+	}
+	
 	public void setCounterDatabaseSize(int size) {
 		synchronized (database) {
 			while (database.getCounterDataPoints().size() > size) {
