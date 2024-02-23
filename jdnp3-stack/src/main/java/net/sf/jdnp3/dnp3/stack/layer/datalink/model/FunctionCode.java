@@ -16,6 +16,9 @@
 package net.sf.jdnp3.dnp3.stack.layer.datalink.model;
 
 public enum FunctionCode {
+	RESET_LINK_STATES(0),
+	TEST_LINK_STATES(2),
+	CONFIRMED_USER_DATA(3),
 	UNCONFIRMED_USER_DATA(4);
 	
 	private final int code;

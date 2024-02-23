@@ -15,6 +15,9 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.model;
 
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode.RESET_LINK_STATES;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode.TEST_LINK_STATES;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode.CONFIRMED_USER_DATA;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode.UNCONFIRMED_USER_DATA;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -24,11 +27,17 @@ import org.junit.Test;
 public class FunctionCodeTest {
 	@Test
 	public void testEnumCoverage() {
+		FunctionCode.valueOf("RESET_LINK_STATES");
+		FunctionCode.valueOf("TEST_LINK_STATES");
+		FunctionCode.valueOf("CONFIRMED_USER_DATA");
 		FunctionCode.valueOf("UNCONFIRMED_USER_DATA");
 	}
 	
 	@Test
 	public void testFunctionCodeValues() {
+		assertThat(RESET_LINK_STATES.getCode(), is(0));
+		assertThat(TEST_LINK_STATES.getCode(), is(2));
+		assertThat(CONFIRMED_USER_DATA.getCode(), is(3));
 		assertThat(UNCONFIRMED_USER_DATA.getCode(), is(4));
 	}
 }
