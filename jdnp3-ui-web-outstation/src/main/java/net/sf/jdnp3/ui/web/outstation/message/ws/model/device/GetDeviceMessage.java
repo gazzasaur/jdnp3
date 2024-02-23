@@ -23,6 +23,7 @@ import net.sf.jdnp3.ui.web.outstation.database.device.InternalIndicatorsDataPoin
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.DoubleBitBinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.counter.CounterMessage;
@@ -34,6 +35,7 @@ public class GetDeviceMessage implements DeviceMessage {
 	
 	private InternalIndicatorsDataPoint internalIndicators = new InternalIndicatorsDataPoint();
 	private List<BinaryInputMessage> binaryInputPoints = new ArrayList<>();
+	private List<DoubleBitBinaryInputMessage> doubleBitBinaryInputPoints = new ArrayList<>();
 	private List<BinaryOutputMessage> binaryOutputPoints = new ArrayList<>();
 	private List<AnalogInputMessage> analogInputPoints = new ArrayList<>();
 	private List<AnalogOutputMessage> analogOutputPoints = new ArrayList<>();
@@ -50,6 +52,14 @@ public class GetDeviceMessage implements DeviceMessage {
 
 	public void setBinaryInputPoints(List<BinaryInputMessage> binaryInputPoints) {
 		this.binaryInputPoints = binaryInputPoints;
+	}
+
+	public List<DoubleBitBinaryInputMessage> getDoubleBitBinaryInputPoints() {
+		return doubleBitBinaryInputPoints;
+	}
+
+	public void setDoubleBitBinaryInputPoints(List<DoubleBitBinaryInputMessage> doubleBitBinaryInputPoints) {
+		this.doubleBitBinaryInputPoints = doubleBitBinaryInputPoints;
 	}
 
 	public List<BinaryOutputMessage> getBinaryOutputPoints() {

@@ -350,7 +350,14 @@ public class DatabaseManager {
 			eventListener.eventReceived(binaryDataPoint, timestamp);
 		}
 	}
-	
+
+	public void triggerDoubleBitBinaryInputEvent(long index, long timestamp) {
+		DoubleBitBinaryInputDataPoint binaryDataPoint = database.getDoubleBitBinaryInputDataPoints().get((int) index);
+		for (EventListener eventListener : eventListeners) {
+			eventListener.eventReceived(binaryDataPoint, timestamp);
+		}
+	}
+
 	public void triggerBinaryOutputEvent(long index, long timestamp) {
 		BinaryOutputDataPoint binaryDataPoint = database.getBinaryOutputDataPoints().get((int) index);
 		for (EventListener eventListener : eventListeners) {

@@ -95,14 +95,14 @@ public class Database {
 
 	public void addDoubleBitBinaryInputDataPoint() {
 		DoubleBitBinaryInputDataPoint binaryDataPoint = new DoubleBitBinaryInputDataPoint();
-		binaryDataPoint.setIndex(binaryInputDataPoints.size());
-		binaryDataPoint.setName("Point " + binaryInputDataPoints.size());
+		binaryDataPoint.setIndex(doubleBitBinaryInputDataPoints.size());
+		binaryDataPoint.setName("Point " + doubleBitBinaryInputDataPoints.size());
 		doubleBitBinaryInputDataPoints.add(binaryDataPoint);
 	}
 
 	public void addDoubleBitBinaryInputDataPoint(String name) {
 		DoubleBitBinaryInputDataPoint binaryDataPoint = new DoubleBitBinaryInputDataPoint();
-		binaryDataPoint.setIndex(binaryInputDataPoints.size());
+		binaryDataPoint.setIndex(doubleBitBinaryInputDataPoints.size());
 		binaryDataPoint.setName(name);
 		doubleBitBinaryInputDataPoints.add(binaryDataPoint);
 	}
@@ -165,7 +165,7 @@ public class Database {
 
 	public void setDoubleBitBinaryInputDataPoint(DoubleBitBinaryInputDataPoint binaryInputDataPoint) {
 		if (binaryInputDataPoint.getIndex() < doubleBitBinaryInputDataPoints.size()) {
-			binaryInputDataPoint.setName(binaryInputDataPoints.get((int) binaryInputDataPoint.getIndex()).getName());
+			binaryInputDataPoint.setName(doubleBitBinaryInputDataPoints.get((int) binaryInputDataPoint.getIndex()).getName());
 			doubleBitBinaryInputDataPoints.set((int) binaryInputDataPoint.getIndex(), binaryInputDataPoint);
 		}
 	}

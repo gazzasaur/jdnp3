@@ -23,6 +23,7 @@ import java.util.List;
 public class ExtendedConfiguration {
 	private List<CustomType> customTypes = new ArrayList<>();
 	private List<String> binaryInputPoints = new ArrayList<>();
+	private List<String> doubleBitBinaryInputPoints = new ArrayList<>();
 	private List<String> binaryOutputPoints = new ArrayList<>();
 	private List<String> analogInputPoints = new ArrayList<>();
 	private List<String> analogOutputPoints = new ArrayList<>();
@@ -42,6 +43,14 @@ public class ExtendedConfiguration {
 
 	public void setBinaryInputPoints(List<String> binaryInputPoints) {
 		this.binaryInputPoints = new ArrayList<>(binaryInputPoints);
+	}
+
+	public List<String> getDoubleBitBinaryInputPoints() {
+		return unmodifiableList(doubleBitBinaryInputPoints);
+	}
+
+	public void setDoubleBitBinaryInputPoints(List<String> doubleBitBinaryInputPoints) {
+		this.doubleBitBinaryInputPoints = new ArrayList<>(doubleBitBinaryInputPoints);
 	}
 
 	public List<String> getBinaryOutputPoints() {
