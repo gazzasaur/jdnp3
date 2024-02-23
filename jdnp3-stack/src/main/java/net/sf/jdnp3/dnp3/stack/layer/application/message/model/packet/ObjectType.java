@@ -36,7 +36,7 @@ public class ObjectType {
 	}
 
 	public int hashCode() {
-		return new Integer(group).hashCode() + new Integer(variation).hashCode();
+		return Integer.valueOf(group).hashCode() + Integer.valueOf(variation).hashCode();
 	}
 	
 	public boolean equals(Object object) {

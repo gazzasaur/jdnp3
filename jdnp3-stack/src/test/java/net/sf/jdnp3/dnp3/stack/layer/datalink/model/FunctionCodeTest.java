@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.stack.layer.datalink.model;
 
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode.UNCONFIRMED_USER_DATA;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Test;
 

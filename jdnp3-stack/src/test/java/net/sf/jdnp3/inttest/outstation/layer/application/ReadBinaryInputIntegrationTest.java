@@ -21,7 +21,7 @@ import static javax.xml.bind.DatatypeConverter.printHexBinary;
 import static org.apache.commons.lang3.ArrayUtils.toObject;
 import static org.apache.commons.lang3.ArrayUtils.toPrimitive;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;

@@ -22,7 +22,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.Fun
 import static org.apache.commons.lang3.ArrayUtils.toObject;
 import static org.apache.commons.lang3.ArrayUtils.toPrimitive;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 
@@ -38,7 +38,6 @@ import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 public class CustomTypeIntegrationTest {

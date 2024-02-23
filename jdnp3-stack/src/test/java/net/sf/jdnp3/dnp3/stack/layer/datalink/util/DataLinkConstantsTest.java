@@ -18,7 +18,7 @@ package net.sf.jdnp3.dnp3.stack.layer.datalink.util;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkConstants.DNP3_START_BYTES;
 import static org.hamcrest.CoreMatchers.is;
 
-import org.junit.Assert;
+import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 
 public class DataLinkConstantsTest {
@@ -29,6 +29,6 @@ public class DataLinkConstantsTest {
 	
 	@Test
 	public void testConstants() {
-		Assert.assertThat(DNP3_START_BYTES, is(0x6405));
+		assertThat(DNP3_START_BYTES, is(0x6405));
 	}
 }
