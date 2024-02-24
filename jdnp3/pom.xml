@@ -15,7 +15,7 @@
 		<maven.compiler.source>21</maven.compiler.source>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<net.sf.jdnp3.version>0.9.8</net.sf.jdnp3.version>
+		<net.sf.jdnp3.version>0.9.9</net.sf.jdnp3.version>
 		<org.slf4j.version>1.7.36</org.slf4j.version>
 	</properties>
 
