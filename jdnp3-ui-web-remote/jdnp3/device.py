@@ -85,8 +85,28 @@ class Outstation:
         self.set_attribute(data, *args)
         self.set(data)
 
+    def get_double_bit_binary_input(self, index, *args):
+        data = self.get()['doubleBitBinaryInputPoints'][int(index)]
+        return self.get_attribute(data, *args);
+    
+    def wait_for_double_bit_binary_input(self, index, *args):
+        value = args[-1]
+        args_list = list(args)
+        del args_list[-1]
+        args = tuple(args_list)
+        
+        def func():
+            return is_equal(self.get_double_bit_binary_input(int(index), *args), value)
+        if not jdnp3.control.wait_for(func, timeout=WAIT_TIMEOUT):
+            raise RuntimeError('Timeout while waiting for value %s.' % (value))
+        
+    def set_double_bit_binary_input(self, index, *args):
+        data = self.get()['doubleBitBinaryInputPoints'][int(index)]
+        self.set_attribute(data, *args)
+        self.set(data)
+
     def get_binary_output(self, index, *args):
-        data = self.get()['binaryOutputPoints'][int(index)]
+        data = self.get()['doubleBitBinaryOutputPoints'][int(index)]
         return self.get_attribute(data, *args);
     
     def wait_for_binary_output(self, index, *args):

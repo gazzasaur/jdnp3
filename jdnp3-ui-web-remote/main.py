@@ -97,7 +97,9 @@ outstation.trigger_event(0, 'binary output event')
  
 outstation.set_analog_output(1, 'value', -20.3)
 outstation.set_analog_output(1, 'value', 'Infinity')
- 
+
+outstation.set_double_bit_binary_input(0, 'value', 2)
+
 outstation.set_counter(1, 'rollover', False)
 for i in range(1,1000):
     outstation_manager.set_counter('Pump Station 1', 'Pump 1', 1, 'value', str(i))
@@ -106,6 +108,8 @@ outstation.set_counter(1, 'rollover', True)
 outstation.set_counter(1, 'value', 0)
 
 outstation.set_counter(0, 'value', 123);
+
+outstation.set_double_bit_binary_input(0, 'value', 3)
 
 time.sleep(10)
 outstation.trigger_event(0, 'counter event', 1500);

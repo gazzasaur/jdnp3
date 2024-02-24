@@ -13,6 +13,7 @@ def CREATE_DATA():
         'primaryAddress': '',
         'extendedConfiguration': {
             'binaryInputPoints': [],
+            'doubleBitBinaryInputPoints': [],
             'binaryOutputPoints': [],
             'analogInputPoints': [],
             'analogOutputPoints': [],
@@ -33,13 +34,14 @@ class Control:
         data = {'type': 'listDevices'};
         return self.postMessage(data)
     
-    def createOutstation(self, deviceFactory, site, device, address, binaryInputPoints=[], binaryOutputPoints=[], analogInputPoints=[], analogOutputPoints=[], counterPoints=[], customTypes=[]):
+    def createOutstation(self, deviceFactory, site, device, address, binaryInputPoints=[], doubleBitBinaryInputPoints=[],  binaryOutputPoints=[], analogInputPoints=[], analogOutputPoints=[], counterPoints=[], customTypes=[]):
         data = CREATE_DATA()
         data['site'] = site
         data['device'] = device
         data['primaryAddress'] = address
         data['deviceFactory'] = deviceFactory
         data['extendedConfiguration']['binaryInputPoints'] = binaryInputPoints
+        data['extendedConfiguration']['doubleBitBinaryInputPoints'] = doubleBitBinaryInputPoints
         data['extendedConfiguration']['binaryOutputPoints'] = binaryOutputPoints
         data['extendedConfiguration']['analogInputPoints'] = analogInputPoints
         data['extendedConfiguration']['analogOutputPoints'] = analogOutputPoints

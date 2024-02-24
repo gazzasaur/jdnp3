@@ -28,6 +28,7 @@ import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
@@ -35,6 +36,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.DoubleBitBinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.counter.CounterMessage;
@@ -63,6 +65,11 @@ public class GetDeviceMessageHandler implements DeviceMessageHandler {
 				BinaryInputMessage part = new BinaryInputMessage();
 				BeanUtils.copyProperties(part, point);
 				specificMessage.getBinaryInputPoints().add(part);
+			}
+			for (DoubleBitBinaryInputDataPoint point : databaseManager.getDoubleBitBinaryInputDataPoints()) {
+				DoubleBitBinaryInputMessage part = new DoubleBitBinaryInputMessage();
+				BeanUtils.copyProperties(part, point);
+				specificMessage.getDoubleBitBinaryInputPoints().add(part);
 			}
 			for (BinaryOutputDataPoint point : databaseManager.getBinaryOutputDataPoints()) {
 				BinaryOutputMessage part = new BinaryOutputMessage();
