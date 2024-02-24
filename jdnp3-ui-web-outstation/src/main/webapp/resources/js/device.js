@@ -5,6 +5,7 @@ jdnp3.device.Device = function(location) {
 	this.messageHandlers = {};
 	this.messageHandlers['internalIndicators'] = new jdnp3.iin.SetInternalIndicatorsMessageHandler();
 	this.messageHandlers['binaryInputPoint'] = new jdnp3.binaryinput.SetBinaryInputMessageHandler();
+	this.messageHandlers['doubleBitBinaryInputPoint'] = new jdnp3.doublebitbinaryinput.SetDoubleBitBinaryInputMessageHandler();
 	this.messageHandlers['binaryOutputPoint'] = new jdnp3.binaryoutput.SetBinaryOutputMessageHandler();
 	this.messageHandlers['analogInputPoint'] = new jdnp3.analoginput.SetAnalogInputMessageHandler();
 	this.messageHandlers['analogOutputPoint'] = new jdnp3.analogoutput.SetAnalogOutputMessageHandler();

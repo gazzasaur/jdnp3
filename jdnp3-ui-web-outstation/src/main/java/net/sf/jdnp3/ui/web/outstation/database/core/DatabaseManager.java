@@ -292,6 +292,9 @@ public class DatabaseManager {
 	}
 
 	public void setDoubleBitBinaryInputDataPoint(DoubleBitBinaryInputDataPoint binaryDataPoint) {
+		if ((binaryDataPoint.getValue()) < 0 || (binaryDataPoint.getValue() > 3)) {
+			throw new IllegalArgumentException("Unsupported Double Bit Binary Value: " + binaryDataPoint.getValue());
+		}
 		synchronized (database) {
 			database.setDoubleBitBinaryInputDataPoint(this.cloneObject(binaryDataPoint, DoubleBitBinaryInputDataPoint.class));
 		}

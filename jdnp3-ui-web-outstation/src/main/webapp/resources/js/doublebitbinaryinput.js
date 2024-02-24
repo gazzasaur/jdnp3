@@ -12,9 +12,9 @@ jdnp3.doublebitbinaryinput.ATTRIBUTE_MAP.communicationsLost = 'cl';
 jdnp3.doublebitbinaryinput.doubleBitBinaryinputPoints = null;
 jdnp3.schedule.getDefaultScheduler().addTask(function() {
 	jdnp3.doublebitbinaryinput.doubleBitBinaryinputPoints = new jdnp3.pointlist.List(
-		jdnp3.doublebitbinaryinput.insertBinaryInput,
-		jdnp3.doublebitbinaryinput.appendBinaryInput,
-		jdnp3.doublebitbinaryinput.updateBinaryInput
+		jdnp3.doublebitbinaryinput.insertDoubleBitBinaryInput,
+		jdnp3.doublebitbinaryinput.appendDoubleBitBinaryInput,
+		jdnp3.doublebitbinaryinput.updateDoubleBitBinaryInput
 	);
 }, 0);
 
@@ -25,22 +25,28 @@ jdnp3.doublebitbinaryinput.SetDoubleBitBinaryInputMessageHandler.prototype.proce
 	jdnp3.doublebitbinaryinput.doubleBitBinaryinputPoints.add(dataPoint);
 }
 
-jdnp3.doublebitbinaryinput.insertBinaryInput = function(index, dataPoint) {
+jdnp3.doublebitbinaryinput.insertDoubleBitBinaryInput = function(index, dataPoint) {
 	document.getElementById('doubleBitBinaryInputs').setAttribute('style', 'display: inline-block; text-align: center;');
 	var rows = document.getElementById('doubleBitBinaryInputTable').elements
-	rows[index].insertBefore(jdnp3.doublebitbinaryinput.createBinaryInputView(dataPoint));
-	jdnp3.doublebitbinaryinput.updateBinaryInput(index, dataPoint);
+	rows[index].insertBefore(jdnp3.doublebitbinaryinput.createDoubleBitBinaryInputView(dataPoint));
+	jdnp3.doublebitbinaryinput.updateDoubleBitBinaryInput(index, dataPoint);
 }
 
-jdnp3.doublebitbinaryinput.appendBinaryInput = function(index, dataPoint) {
+jdnp3.doublebitbinaryinput.appendDoubleBitBinaryInput = function(index, dataPoint) {
 	document.getElementById('doubleBitBinaryInputs').setAttribute('style', 'display: inline-block; text-align: center;');
-	document.getElementById('doubleBitBinaryInputTable').appendChild(jdnp3.doublebitbinaryinput.createBinaryInputView(dataPoint));
-	jdnp3.doublebitbinaryinput.updateBinaryInput(index, dataPoint);
+	document.getElementById('doubleBitBinaryInputTable').appendChild(jdnp3.doublebitbinaryinput.createDoubleBitBinaryInputView(dataPoint));
+	jdnp3.doublebitbinaryinput.updateDoubleBitBinaryInput(index, dataPoint);
 } 
 
-jdnp3.doublebitbinaryinput.updateBinaryInput = function(index, dataPoint) {
+jdnp3.doublebitbinaryinput.updateDoubleBitBinaryInput = function(index, dataPoint) {
 	var id = 'di-' + dataPoint.index;
-	
+
+	var stringValue = '' + dataPoint.value;
+	if (stringValue.length > 10) {
+		stringValue = parseFloat(dataPoint.value).toExponential();
+	}
+	document.getElementById(id + "-value").innerHTML = dataPoint.value;
+
 	for (var property in dataPoint) {
 		if (dataPoint.hasOwnProperty(property) && property in jdnp3.doublebitbinaryinput.ATTRIBUTE_MAP) {
 			document.getElementById(id + "-" + jdnp3.doublebitbinaryinput.ATTRIBUTE_MAP[property]).checked = dataPoint[property];
@@ -49,7 +55,7 @@ jdnp3.doublebitbinaryinput.updateBinaryInput = function(index, dataPoint) {
 	jdnp3.ui.refreshDialog();
 }
 
-jdnp3.doublebitbinaryinput.createBinaryInputView = function(dataPoint) {
+jdnp3.doublebitbinaryinput.createDoubleBitBinaryInputView = function(dataPoint) {
 	var name = dataPoint.name;
 	var index = dataPoint.index;
 	
