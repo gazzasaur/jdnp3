@@ -1,8 +1,7 @@
 import json
 import time
 import random
-import urllib
-import exceptions
+import urllib.request
 
 def CREATE_DATA():
     return {
@@ -95,22 +94,22 @@ class Control:
     
     def postMessage(self, data, output=False):
         url = self.url
-        request = urllib.request(url, json.dumps(data), {'Content-Type': 'application/json'})
-        response = urllib.urlopen(request)
+        request = urllib.request.Request(url, json.dumps(data).encode(), {'Content-Type': 'application/json'})
+        response = urllib.request.urlopen(request)
         code = response.getcode()
     
         if (code < 200 or code >= 300):
-            raise exceptions.RuntimeError('HTTP request failed.  HTTP Status Code: ' + str(code))
+            raise RuntimeError('HTTP request failed.  HTTP Status Code: ' + str(code))
     
         string_data = response.read()
         if output:
-            print(string_data)
+            print(string_data.decode())
         data = json.loads(string_data)
         if (not 'type' in data or data['type'] == 'failure'):
             if ('reason' in data):
-                raise exceptions.RuntimeError(data['reason'])
+                raise RuntimeError(data['reason'])
             else:
-                raise exceptions.RuntimeError('Cannot decode data.')
+                raise RuntimeError('Cannot decode data.')
         return data
 
 def wait_for(func, sleep=0.100, timeout=1.0, *args):

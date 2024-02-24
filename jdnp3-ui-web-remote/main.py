@@ -32,7 +32,7 @@ counterDataPoints = [
     'Other',
 ]
 
-# Ane object to rule them all.
+# An object to rule them all.
 outstation_manager = jdnp3.device.OutstationManager(HOST_URL)
 
 # Or you could address a single object at a time.
@@ -67,13 +67,13 @@ outstation.wait_for_analog_output(0, 'value', 'NaN');
 # On the setter, you may either use the full string Infinity and -Infinity or use the float inf and -inf
 # On wait for it must be aparseable python value or exact value.
 outstation.set_analog_input(0, 'value', 0.1);
-outstation.set_analog_input(0, 'static type', 'variation', unicode('5'));
+outstation.set_analog_input(0, 'static type', 'variation', '5');
 outstation.set_analog_input(0, 'value', 'Infinity');
 outstation.set_analog_input(0, 'value', float('inf'));
 outstation.wait_for_analog_input(0, 'value', 'inf');
 outstation.set_analog_input(0, 'value', '1000.0');
-outstation.wait_for_analog_input(0, 'value', unicode('1000'));
-outstation.wait_for_analog_input(0, 'value', unicode('1000.0'));
+outstation.wait_for_analog_input(0, 'value', '1000');
+outstation.wait_for_analog_input(0, 'value', '1000.0');
 
 # Simulate soft restart.
 control.unbindOutstation('Pump Station 1', 'Pump 1', 3, "20000")
@@ -100,9 +100,8 @@ outstation.set_analog_output(1, 'value', 'Infinity')
  
 outstation.set_counter(1, 'rollover', False)
 for i in range(1,1000):
-    outstation_manager.set_counter('Pump Station 1', 'Pump 1', 1, 'value', i)
-    outstation.wait_for_counter(1, 'value', i)
-    outstation.wait_for_counter(1, 'value', unicode(i))
+    outstation_manager.set_counter('Pump Station 1', 'Pump 1', 1, 'value', str(i))
+    outstation.wait_for_counter(1, 'value', str(i))
 outstation.set_counter(1, 'rollover', True)
 outstation.set_counter(1, 'value', 0)
 

@@ -179,9 +179,9 @@ def create_method(method_name):
         getattr(outstation, method_name)(*args)
     return new_method
 
-outstation_methods = inspect.getmembers(Outstation, predicate=inspect.ismethod)
+outstation_methods = inspect.getmembers(Outstation, predicate=inspect.isfunction)
 for outstation_method in outstation_methods:
-    if (outstation_method[0] in [i[0] for i in inspect.getmembers(OutstationManager, predicate=inspect.ismethod)]):
+    if (outstation_method[0] in [i[0] for i in inspect.getmembers(OutstationManager, predicate=inspect.isfunction)]):
         continue
     
     new_method = create_method(outstation_method[0])
