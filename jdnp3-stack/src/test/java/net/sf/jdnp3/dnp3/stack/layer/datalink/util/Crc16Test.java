@@ -20,7 +20,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.Crc16.computeCrc;
 import static org.apache.commons.codec.binary.Hex.decodeHex;
 import static org.apache.commons.lang3.ArrayUtils.toObject;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.ArrayList;
 

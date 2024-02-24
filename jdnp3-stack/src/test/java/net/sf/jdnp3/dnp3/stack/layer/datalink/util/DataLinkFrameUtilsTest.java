@@ -20,7 +20,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.OUTSTATION_
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode.UNCONFIRMED_USER_DATA;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkFrameUtils.computeControlField;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Random;
 

@@ -19,6 +19,7 @@
 	<h:outputScript library="js" name="analoginput.js" />
 	<h:outputScript library="js" name="binaryoutput.js" />
 	<h:outputScript library="js" name="binaryinput.js" />
+	<h:outputScript library="js" name="doublebitbinaryinput.js" />
 	<h:outputScript library="js" name="device.js" />
 	<h:outputScript library="js" name="message.js" />
 </h:head>
@@ -74,7 +75,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			<table id="binaryInputTable" class="value-table">
 			</table>
 		</div>
-	
+
+		<div id="doubleBitBinaryInputs" style="display: none;">
+			<div style="margin-bottom: 2px;" class="section-header">
+				<span>Double Bit Binary Inputs</span>
+			</div>
+			<table id="doubleBitBinaryInputTable" class="value-table">
+			</table>
+		</div>
+
 		<div id="binaryOutputs" style="display: none;">
 			<div style="margin-bottom: 2px;" class="section-header">
 				<span>Binary Outputs</span>

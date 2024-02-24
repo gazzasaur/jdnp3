@@ -107,7 +107,7 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 		if (registry.isRegistered(dataPoint.getClass())) {
 			try {
 				Class<? extends Message> messageClass = registry.get(dataPoint.getClass());
-				Message message = messageClass.newInstance();
+				Message message = messageClass.getDeclaredConstructor().newInstance();
 				if (message instanceof DeviceMessage) {
 					DeviceMessage deviceMessage = (DeviceMessage) message;
 					deviceMessage.setSite(station);

@@ -47,12 +47,15 @@ import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputEventListener;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputEventListener;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputEventListener;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterEventListener;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogInputStaticHandler;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogOutputCommandOperator;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryInputStaticHandler;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.CrobOperator;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.DoubleBitBinaryInputStaticHandler;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic.Class0Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic.Class1Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic.Class2Reader;
@@ -64,12 +67,14 @@ public class SimpleDeviceFactory implements DeviceFactory {
 	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
 	private List<String> binaryInputDataPoints = new ArrayList<>();
+	private List<String> doubleBitBinaryInputDataPoints = new ArrayList<>();
 	private List<String> binaryOutputDataPoints = new ArrayList<>();
 	private List<String> analogInputDataPoints = new ArrayList<>();
 	private List<String> analogOutputDataPoints = new ArrayList<>();
 	private List<String> counterDataPoints = new ArrayList<>();
 	
 	private BinaryInputDataPoint templateBinaryInputDataPoint = new BinaryInputDataPoint();
+	private DoubleBitBinaryInputDataPoint templateDoubleBitBinaryInputDataPoint = new DoubleBitBinaryInputDataPoint();
 	private BinaryOutputDataPoint templateBinaryOutputDataPoint = new BinaryOutputDataPoint();
 	private AnalogInputDataPoint templateAnalogInputDataPoint = new AnalogInputDataPoint();
 	private AnalogOutputDataPoint templateAnalogOutputDataPoint = new AnalogOutputDataPoint();
@@ -102,6 +107,7 @@ public class SimpleDeviceFactory implements DeviceFactory {
 		
 		DatabaseManager databaseManager = new DatabaseManager();
 		databaseManager.addBinaryInputDataPoints(binaryInputDataPoints.toArray(new String[0]));
+		databaseManager.addDoubleBitBinaryInputDataPoints(doubleBitBinaryInputDataPoints.toArray(new String[0]));
 		databaseManager.addBinaryOutputDataPoints(binaryOutputDataPoints.toArray(new String[0]));
 		databaseManager.addAnalogInputDataPoints(analogInputDataPoints.toArray(new String[0]));
 		databaseManager.addAnalogOutputDataPoints(analogOutputDataPoints.toArray(new String[0]));
@@ -112,6 +118,12 @@ public class SimpleDeviceFactory implements DeviceFactory {
 			point.setIndex(dataPoint.getIndex());
 			point.setName(dataPoint.getName());
 			databaseManager.setBinaryInputDataPoint(point);
+		}
+		for (DoubleBitBinaryInputDataPoint dataPoint : databaseManager.getDoubleBitBinaryInputDataPoints()) {
+			DoubleBitBinaryInputDataPoint point = this.cloneObject(templateDoubleBitBinaryInputDataPoint, DoubleBitBinaryInputDataPoint.class);
+			point.setIndex(dataPoint.getIndex());
+			point.setName(dataPoint.getName());
+			databaseManager.setDoubleBitBinaryInputDataPoint(point);
 		}
 		for (BinaryOutputDataPoint dataPoint : databaseManager.getBinaryOutputDataPoints()) {
 			BinaryOutputDataPoint point = this.cloneObject(templateBinaryOutputDataPoint, BinaryOutputDataPoint.class);
@@ -139,6 +151,7 @@ public class SimpleDeviceFactory implements DeviceFactory {
 		}
 		
 		databaseManager.addBinaryInputDataPoints(extendedConfiguration.getBinaryInputPoints().toArray(new String[0]));
+		databaseManager.addDoubleBitBinaryInputDataPoints(extendedConfiguration.getDoubleBitBinaryInputPoints().toArray(new String[0]));
 		databaseManager.addBinaryOutputDataPoints(extendedConfiguration.getBinaryOutputPoints().toArray(new String[0]));
 		databaseManager.addAnalogInputDataPoints(extendedConfiguration.getAnalogInputPoints().toArray(new String[0]));
 		databaseManager.addAnalogOutputDataPoints(extendedConfiguration.getAnalogOutputPoints().toArray(new String[0]));
@@ -168,6 +181,7 @@ public class SimpleDeviceFactory implements DeviceFactory {
 		outstationFactory.setInternalStatusProvider(databaseManager.getInternalStatusProvider());
 		
 		Outstation outstation = outstationFactory.createOutstation();
+		outstation.addRequestHandler(new DoubleBitBinaryInputStaticHandler(databaseManager));
 		outstation.addRequestHandler(new BinaryInputStaticHandler(databaseManager));
 		outstation.addRequestHandler(new AnalogInputStaticHandler(databaseManager));
 		outstation.addRequestHandler(new Class0Reader(databaseManager));
@@ -180,6 +194,7 @@ public class SimpleDeviceFactory implements DeviceFactory {
 		outstation.addRequestHandler(new InternalIndicatorWriter(databaseManager.getInternalStatusProvider()));
 		
 		databaseManager.addEventListener(new BinaryInputEventListener(outstation));
+		databaseManager.addEventListener(new DoubleBitBinaryInputEventListener(outstation));
 		databaseManager.addEventListener(new BinaryOutputEventListener(outstation));
 		databaseManager.addEventListener(new AnalogInputEventListener(outstation));
 		databaseManager.addEventListener(new AnalogOutputEventListener(outstation));
@@ -195,6 +210,10 @@ public class SimpleDeviceFactory implements DeviceFactory {
 
 	public void setBinaryInputDataPoints(String... binaryInputDataPoints) {
 		this.binaryInputDataPoints = asList(binaryInputDataPoints);
+	}
+
+	public void setDoubleBitBinaryInputDataPoints(String... doubleBitBinaryInputDataPoints) {
+		this.doubleBitBinaryInputDataPoints = asList(doubleBitBinaryInputDataPoints);
 	}
 
 	public void setBinaryOutputDataPoints(String... binaryOutputDataPoints) {
@@ -215,6 +234,10 @@ public class SimpleDeviceFactory implements DeviceFactory {
 
 	public void setTemplateBinaryInputDataPoint(BinaryInputDataPoint templateBinaryInputDataPoint) {
 		this.templateBinaryInputDataPoint = templateBinaryInputDataPoint;
+	}
+
+	public void setTemplateDoubleBitBinaryInputDataPoint(DoubleBitBinaryInputDataPoint templateDoubleBitBinaryInputDataPoint) {
+		this.templateDoubleBitBinaryInputDataPoint = templateDoubleBitBinaryInputDataPoint;
 	}
 
 	public void setTemplateBinaryOutputDataPoint(BinaryOutputDataPoint templateBinaryOutputDataPoint) {

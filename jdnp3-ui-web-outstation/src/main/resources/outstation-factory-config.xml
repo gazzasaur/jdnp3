@@ -7,6 +7,10 @@
 		<constructor-arg name="group" value="1" />
 		<constructor-arg name="variation" value="2" />
 	</bean>
+	<bean id="doubleBitBinaryInputStaticWithFlags" class="net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType">
+		<constructor-arg name="group" value="3" />
+		<constructor-arg name="variation" value="2" />
+	</bean>
 	<bean id="analogInputStaticInt32" class="net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType">
 		<constructor-arg name="group" value="30" />
 		<constructor-arg name="variation" value="1" />
@@ -30,6 +34,11 @@
 				<value>Low Fuel</value>
 				<value>Non-Urgent Fail</value>
 				<value>Urgent Fail</value>
+			</list>
+		</property>
+		<property name="doubleBitBinaryInputDataPoints">
+			<list>
+				<value>Power State</value>
 			</list>
 		</property>
 		<property name="binaryOutputDataPoints">

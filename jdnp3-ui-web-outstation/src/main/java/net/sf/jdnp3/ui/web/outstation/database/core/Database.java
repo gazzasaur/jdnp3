@@ -25,12 +25,14 @@ import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 
 public class Database {
 	private InternalIndicatorsDataPoint indicatorsDataPoint = new InternalIndicatorsDataPoint();
 	private List<AnalogInputDataPoint> analogInputDataPoints = new ArrayList<>();
 	private List<BinaryInputDataPoint> binaryInputDataPoints = new ArrayList<>();
+	private List<DoubleBitBinaryInputDataPoint> doubleBitBinaryInputDataPoints = new ArrayList<>();
 	private List<AnalogOutputDataPoint> analogOutputDataPoints = new ArrayList<>();
 	private List<BinaryOutputDataPoint> binaryOutputDataPoints = new ArrayList<>();
 	private List<CounterDataPoint> counterDataPoints = new ArrayList<>();
@@ -45,6 +47,10 @@ public class Database {
 
 	public List<BinaryInputDataPoint> getBinaryInputDataPoints() {
 		return unmodifiableList(binaryInputDataPoints);
+	}
+
+	public List<DoubleBitBinaryInputDataPoint> getDoubleBitBinaryInputDataPoints() {
+		return unmodifiableList(doubleBitBinaryInputDataPoints);
 	}
 
 	public List<AnalogOutputDataPoint> getAnalogOutputDataPoints() {
@@ -79,14 +85,28 @@ public class Database {
 		binaryDataPoint.setName("Point " + binaryInputDataPoints.size());
 		binaryInputDataPoints.add(binaryDataPoint);
 	}
-	
+
 	public void addBinaryInputDataPoint(String name) {
 		BinaryInputDataPoint binaryDataPoint = new BinaryInputDataPoint();
 		binaryDataPoint.setIndex(binaryInputDataPoints.size());
 		binaryDataPoint.setName(name);
 		binaryInputDataPoints.add(binaryDataPoint);
 	}
-	
+
+	public void addDoubleBitBinaryInputDataPoint() {
+		DoubleBitBinaryInputDataPoint binaryDataPoint = new DoubleBitBinaryInputDataPoint();
+		binaryDataPoint.setIndex(doubleBitBinaryInputDataPoints.size());
+		binaryDataPoint.setName("Point " + doubleBitBinaryInputDataPoints.size());
+		doubleBitBinaryInputDataPoints.add(binaryDataPoint);
+	}
+
+	public void addDoubleBitBinaryInputDataPoint(String name) {
+		DoubleBitBinaryInputDataPoint binaryDataPoint = new DoubleBitBinaryInputDataPoint();
+		binaryDataPoint.setIndex(doubleBitBinaryInputDataPoints.size());
+		binaryDataPoint.setName(name);
+		doubleBitBinaryInputDataPoints.add(binaryDataPoint);
+	}
+
 	public void addAnalogOutputDataPoint() {
 		AnalogOutputDataPoint analogDataPoint = new AnalogOutputDataPoint();
 		analogDataPoint.setIndex(analogOutputDataPoints.size());
@@ -143,6 +163,13 @@ public class Database {
 		}
 	}
 
+	public void setDoubleBitBinaryInputDataPoint(DoubleBitBinaryInputDataPoint binaryInputDataPoint) {
+		if (binaryInputDataPoint.getIndex() < doubleBitBinaryInputDataPoints.size()) {
+			binaryInputDataPoint.setName(doubleBitBinaryInputDataPoints.get((int) binaryInputDataPoint.getIndex()).getName());
+			doubleBitBinaryInputDataPoints.set((int) binaryInputDataPoint.getIndex(), binaryInputDataPoint);
+		}
+	}
+
 	public void setAnalogOutputDataPoint(AnalogOutputDataPoint analogOutputDataPoint) {
 		if (analogOutputDataPoint.getIndex() < analogOutputDataPoints.size()) {
 			analogOutputDataPoint.setName(analogOutputDataPoints.get((int) analogOutputDataPoint.getIndex()).getName());
@@ -175,7 +202,13 @@ public class Database {
 			binaryInputDataPoints.remove(binaryInputDataPoints.size() - 1);
 		}
 	}
-	
+
+	public void removeDoubleBitBinaryInputDataPoint() {
+		if (doubleBitBinaryInputDataPoints.size() > 0) {
+			doubleBitBinaryInputDataPoints.remove(doubleBitBinaryInputDataPoints.size() - 1);
+		}
+	}
+
 	public void removeAnalogOutputDataPoint() {
 		if (analogOutputDataPoints.size() > 0) {
 			analogOutputDataPoints.remove(analogOutputDataPoints.size() - 1);
@@ -196,6 +229,7 @@ public class Database {
 
 	public void clear() {
 		binaryInputDataPoints.clear();
+		doubleBitBinaryInputDataPoints.clear();
 		binaryOutputDataPoints.clear();
 		analogInputDataPoints.clear();
 		analogOutputDataPoints.clear();

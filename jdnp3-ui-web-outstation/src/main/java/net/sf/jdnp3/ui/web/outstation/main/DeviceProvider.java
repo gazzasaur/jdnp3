@@ -35,6 +35,7 @@ import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 
 public class DeviceProvider {
@@ -208,6 +209,10 @@ public class DeviceProvider {
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
 			databaseListener.valueChanged(binaryDataPoint);
+		}
+		List<DoubleBitBinaryInputDataPoint> doubleBitBinaryDataPoints = databaseManager.getDoubleBitBinaryInputDataPoints();
+		for (DoubleBitBinaryInputDataPoint doubleBitBinaryDataPoint : doubleBitBinaryDataPoints) {
+			databaseListener.valueChanged(doubleBitBinaryDataPoint);
 		}
 		List<BinaryOutputDataPoint> binaryOutputDataPoints = databaseManager.getBinaryOutputDataPoints();
 		for (BinaryOutputDataPoint binaryDataPoint : binaryOutputDataPoints) {

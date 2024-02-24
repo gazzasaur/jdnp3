@@ -13,22 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.message;
+package net.sf.jdnp3.dnp3.service.outstation.handler.binary;
 
-import static net.sf.jdnp3.dnp3.stack.message.ChannelIdConstants.SELF_CHANNEL_ID;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import net.sf.jdnp3.dnp3.service.outstation.handler.generic.StaticReadRequestHandler;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.DoubleBitBinaryInputStaticObjectInstance;
 
-import org.junit.Test;
-
-public class ChannelIdConstantsTest {
-	@Test
-	public void testDummyConstructor() {
-		new ChannelIdConstants();
-	}
-	
-	@Test
-	public void testValue() {
-		assertThat(SELF_CHANNEL_ID, is(SELF_CHANNEL_ID));
-	}
+public interface DoubleBitBinaryInputStaticReadRequestHandler extends StaticReadRequestHandler<DoubleBitBinaryInputStaticObjectInstance> {
 }
