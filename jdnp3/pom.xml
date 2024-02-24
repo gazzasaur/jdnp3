@@ -4,7 +4,7 @@
 
 	<groupId>net.sf.jdnp3</groupId>
 	<artifactId>jdnp3-project</artifactId>
-	<version>0.9.8</version>
+	<version>0.9.9</version>
 	<packaging>pom</packaging>
 
 	<name>jdnp3-project</name>
