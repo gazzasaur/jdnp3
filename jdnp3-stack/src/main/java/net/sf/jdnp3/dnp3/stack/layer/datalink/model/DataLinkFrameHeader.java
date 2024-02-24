@@ -21,6 +21,9 @@ public class DataLinkFrameHeader {
 	private int checkSum = 0;
 	private int destination = 0;
 	private boolean primary = true;
+	private boolean frameCountBit = false;
+	private boolean frameCountValid = false;
+	private boolean dataFlowControl = false;
 	private Direction direction = Direction.MASTER_TO_OUTSTATION;
 	private FunctionCode functionCode = FunctionCode.UNCONFIRMED_USER_DATA;
 	
@@ -79,4 +82,29 @@ public class DataLinkFrameHeader {
 	public void setCheckSum(int checkSum) {
 		this.checkSum = checkSum;
 	}
+
+	public boolean getFrameCountBit() {
+		return frameCountBit;
+	}
+
+	public void setFrameCountBit(boolean frameCountBit) {
+		this.frameCountBit = frameCountBit;
+	}
+	
+	public boolean getFrameCountValid() {
+		return frameCountValid;
+	}
+
+	public void setFrameCountValid(boolean frameCountValid) {
+		this.frameCountValid = frameCountValid;
+	}
+
+	public boolean getDataFlowControl() {
+		return dataFlowControl;
+	}
+
+	public void setDataFlowControl(boolean dataFlowControl) {
+		this.dataFlowControl = dataFlowControl;
+	}
+
 }
