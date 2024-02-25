@@ -1,5 +1,7 @@
 # JDNP3
 
+This project was migrated from https://sourceforge.net/projects/jdnp3/
+
 # Development
 To compile everything using JDK 21.
 
@@ -23,4 +25,4 @@ java -cp ".:jdnp3-ui-web-outstation-0.10.0.jar" net.sf.jdnp3.ui.web.outstation.m
 Enjoy
 
 ### Roadmap
-* March 24 - Double Bit Binary
+* March 24 - Double Bit Binary - Implemented as of version 0.10.0 but as of yet is untested
