@@ -57,6 +57,11 @@ public class DataLinkFrameHeaderDecoder {
 			throw new IllegalArgumentException("No function code matches: " + functionCodeValue);
 		}
 		
+		if (dataLinkFrameHeader.getFunctionCode() != FunctionCode.UNCONFIRMED_USER_DATA){
+			dataLinkFrameHeader.setFrameCountBit((bitSet.get(5)) ? true : false);
+			dataLinkFrameHeader.setFrameCountValid((bitSet.get(4)) ? true : false);
+		}
+
 		dataLinkFrameHeader.setDestination((int) DataUtils.getInteger(DESTINATION_OFFSET, 2, data));
 		dataLinkFrameHeader.setSource((int) DataUtils.getInteger(SOURCE_OFFSET, 2, data));
 		
