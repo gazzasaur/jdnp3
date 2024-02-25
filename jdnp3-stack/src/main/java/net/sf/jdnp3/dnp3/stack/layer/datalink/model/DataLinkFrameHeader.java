@@ -83,7 +83,7 @@ public class DataLinkFrameHeader {
 		this.checkSum = checkSum;
 	}
 
-	public boolean getFrameCountBit() {
+	public boolean isFrameCountBit() {
 		return frameCountBit;
 	}
 
@@ -91,7 +91,7 @@ public class DataLinkFrameHeader {
 		this.frameCountBit = frameCountBit;
 	}
 	
-	public boolean getFrameCountValid() {
+	public boolean isFrameCountValid() {
 		return frameCountValid;
 	}
 
@@ -99,7 +99,7 @@ public class DataLinkFrameHeader {
 		this.frameCountValid = frameCountValid;
 	}
 
-	public boolean getDataFlowControl() {
+	public boolean isDataFlowControl() {
 		return dataFlowControl;
 	}
 
