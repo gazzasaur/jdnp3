@@ -52,16 +52,18 @@ public class DataLinkFrameUtilsTest {
 	
 	@Test
 	public void testComputeControlField() {
-		performControlFieldTest(MASTER_TO_OUTSTATION, true, 0xC4);
-		performControlFieldTest(MASTER_TO_OUTSTATION, false, 0x84);
-		performControlFieldTest(OUTSTATION_TO_MASTER, true, 0x44);
-		performControlFieldTest(OUTSTATION_TO_MASTER, false, 0x04);
+		performControlFieldTest(MASTER_TO_OUTSTATION, true, false, 0xC4);
+		performControlFieldTest(MASTER_TO_OUTSTATION, false, false, 0x84);
+		performControlFieldTest(OUTSTATION_TO_MASTER, true, false, 0x44);
+		performControlFieldTest(OUTSTATION_TO_MASTER, false, false,0x04);
+		performControlFieldTest(OUTSTATION_TO_MASTER, false, true, 0x14);
 	}
 	
-	private void performControlFieldTest(Direction direction, boolean primary, int expectedControlField) {
+	private void performControlFieldTest(Direction direction, boolean primary, boolean dataFlowControl, int expectedControlField) {
 		DataLinkFrameHeader header = createRandomHeader();
 		header.setPrimary(primary);
 		header.setDirection(direction);
+		header.setDataFlowControl(dataFlowControl);
 		assertThat(computeControlField(header), is((byte) expectedControlField));
 	}
 
