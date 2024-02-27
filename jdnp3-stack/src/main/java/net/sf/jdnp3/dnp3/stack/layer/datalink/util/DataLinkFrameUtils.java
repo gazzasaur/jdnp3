@@ -41,6 +41,8 @@ public class DataLinkFrameUtils {
 		BitSet controlField = new BitSet(8);
 		controlField.set(7, dataLinkFrameHeader.getDirection().equals(Direction.MASTER_TO_OUTSTATION));
 		controlField.set(6, dataLinkFrameHeader.isPrimary());
+		controlField.set(5, false);
+		controlField.set(4, dataLinkFrameHeader.isDataFlowControl());
 		byte controlFieldValue = DataUtils.bitSetToByte(controlField);
 		controlFieldValue |= dataLinkFrameHeader.getFunctionCode().getCode();
 		return controlFieldValue;
