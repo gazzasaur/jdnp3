@@ -50,13 +50,14 @@ public class DataLinkFrameUtils {
 	
 	public static String toString(ChannelId channelId, DataLinkFrame dataLinkFrame) {
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(format("Channel Id    : %s\n", channelId));
-		stringBuilder.append(format("Function Code : %s\n", dataLinkFrame.getDataLinkFrameHeader().getFunctionCode()));
-		stringBuilder.append(format("Length        : %s\n", dataLinkFrame.getDataLinkFrameHeader().getLength()));
-		stringBuilder.append(format("Source        : %s\n", dataLinkFrame.getDataLinkFrameHeader().getSource()));
-		stringBuilder.append(format("Destination   : %s\n", dataLinkFrame.getDataLinkFrameHeader().getDestination()));
-		stringBuilder.append(format("Primary       : %s\n", dataLinkFrame.getDataLinkFrameHeader().isPrimary()));
-		stringBuilder.append(format("Direction     : %s\n", dataLinkFrame.getDataLinkFrameHeader().getDirection()));
+		stringBuilder.append(format("Channel Id        : %s\n", channelId));
+		stringBuilder.append(format("Function Code     : %s\n", dataLinkFrame.getDataLinkFrameHeader().getFunctionCode()));
+		stringBuilder.append(format("Length            : %s\n", dataLinkFrame.getDataLinkFrameHeader().getLength()));
+		stringBuilder.append(format("Source            : %s\n", dataLinkFrame.getDataLinkFrameHeader().getSource()));
+		stringBuilder.append(format("Destination       : %s\n", dataLinkFrame.getDataLinkFrameHeader().getDestination()));
+		stringBuilder.append(format("Primary           : %s\n", dataLinkFrame.getDataLinkFrameHeader().isPrimary()));
+		stringBuilder.append(format("Direction         : %s\n", dataLinkFrame.getDataLinkFrameHeader().getDirection()));
+		stringBuilder.append(format("Data Flow Control : %s\n", dataLinkFrame.getDataLinkFrameHeader().isDataFlowControl()));
 		stringBuilder.append(format("Data          : %s", DataUtils.toString(dataLinkFrame.getData())));
 		return stringBuilder.toString();
 	}
