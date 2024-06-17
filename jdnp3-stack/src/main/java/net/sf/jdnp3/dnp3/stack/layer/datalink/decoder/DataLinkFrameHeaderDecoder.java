@@ -48,7 +48,7 @@ public class DataLinkFrameHeaderDecoder {
 		boolean foundFunctionCode = false;
 		int functionCodeValue = data.get(CONTROL_OFFSET) & 0x0F;
 		for (FunctionCode functionCode : FunctionCode.values()) {
-			if (functionCode.getCode() == functionCodeValue) {
+			if (functionCode.isPrimary() == dataLinkFrameHeader.isPrimary() && functionCode.getCode() == functionCodeValue) {
 				dataLinkFrameHeader.setFunctionCode(functionCode);
 				foundFunctionCode = true;
 			}

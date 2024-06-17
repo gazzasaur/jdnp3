@@ -17,22 +17,28 @@ package net.sf.jdnp3.dnp3.stack.layer.datalink.model;
 
 public enum FunctionCode {
 	// Secondary to Primary
-	ACK(0),
-	NACK(1),
-	LINK_STATUS(11),
-	NOT_SUPPORTED(15),
+	ACK(false, 0),
+	NACK(false, 1),
+	LINK_STATUS(false, 11),
+	NOT_SUPPORTED(false, 15),
 
 	// Primary to Secondary
-	RESET_LINK_STATUS(0),
-	TEST_LINK(2),
-	CONFIRMED_USER_DATA(3),
-	UNCONFIRMED_USER_DATA(4),
-	REQUEST_LINK_STATUS(9);
+	RESET_LINK_STATUS(true, 0),
+	TEST_LINK(true, 2),
+	CONFIRMED_USER_DATA(true, 3),
+	UNCONFIRMED_USER_DATA(true, 4),
+	REQUEST_LINK_STATUS(true, 9);
 	
 	private final int code;
+	private final boolean primary;
 	
-	private FunctionCode(int code) {
+	private FunctionCode(boolean primary, int code) {
+		this.primary = primary;
 		this.code = code;
+	}
+
+	public boolean isPrimary() {
+		return primary;
 	}
 
 	public int getCode() {
