@@ -16,7 +16,18 @@
 package net.sf.jdnp3.dnp3.stack.layer.datalink.model;
 
 public enum FunctionCode {
-	UNCONFIRMED_USER_DATA(4);
+	// Secondary to Primary
+	ACK(0),
+	NACK(1),
+	LINK_STATUS(11),
+	NOT_SUPPORTED(15),
+
+	// Primary to Secondary
+	RESET_LINK_STATUS(0),
+	TEST_LINK(2),
+	CONFIRMED_USER_DATA(3),
+	UNCONFIRMED_USER_DATA(4),
+	REQUEST_LINK_STATUS(9);
 	
 	private final int code;
 	

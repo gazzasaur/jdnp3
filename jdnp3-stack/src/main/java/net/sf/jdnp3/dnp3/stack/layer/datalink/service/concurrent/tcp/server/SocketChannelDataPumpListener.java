@@ -62,6 +62,7 @@ public class SocketChannelDataPumpListener implements DataPumpListener {
 				DataLinkFrame dataLinkFrame = dataLinkDigester.getDataLinkFrame();
 				messageProperties.setChannelId(channelId);
 				messageProperties.setTimeReceived(new Date().getTime());
+				messageProperties.setPrimary(dataLinkFrame.getDataLinkFrameHeader().isPrimary());
 				messageProperties.setSourceAddress(dataLinkFrame.getDataLinkFrameHeader().getSource());
 				messageProperties.setDestinationAddress(dataLinkFrame.getDataLinkFrameHeader().getDestination());
 				messageProperties.setMaster(dataLinkFrame.getDataLinkFrameHeader().getDirection().equals(MASTER_TO_OUTSTATION));

@@ -45,7 +45,7 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 	private boolean closed = false;
 	private MultiDataLinkListener multiDataLinkListener = new MultiDataLinkListener();
 	private DataLinkFrameEncoder dataLinkFrameEncoder = new DataLinkFrameEncoderImpl();
-	
+
 	private ExecutorService executorService = null;
 	private DataPump dataPump = null;
 	private String host = "0.0.0.0";

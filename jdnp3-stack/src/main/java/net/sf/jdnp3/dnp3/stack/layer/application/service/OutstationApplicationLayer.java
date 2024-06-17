@@ -277,6 +277,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 
 	private boolean calculateReturnAddress(MessageProperties messageProperties, MessageProperties returnMessageProperties) {
 		boolean broadcast = false;
+		returnMessageProperties.setPrimary(true);
 		returnMessageProperties.setSourceAddress(messageProperties.getDestinationAddress());
 		returnMessageProperties.setDestinationAddress(messageProperties.getSourceAddress());
 		returnMessageProperties.setTimeReceived(messageProperties.getTimeReceived());
