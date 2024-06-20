@@ -56,7 +56,7 @@ public class TransportBindingItem {
 		}
 		this.dataLinkLayer = dataLinkLayer;
 		dataLinkTransportBindingAdaptor = new DataLinkTransportBindingAdaptor(transportBinding);
-		dataLinkInterceptor = new StatefulDataLinkInterceptor(dataLinkLayer, this.address, dataLinkTransportBindingAdaptor);
+		dataLinkInterceptor = new StatefulDataLinkInterceptor(false, dataLinkLayer, this.address, dataLinkTransportBindingAdaptor);
 		dataLinkLayer.addDataLinkLayerListener(dataLinkInterceptor);
 		transportBinding.setDataLinkLayer(dataLinkLayer);
 	}
