@@ -15,6 +15,8 @@
  */
 package net.sf.jdnp3.ui.web.outstation.channel;
 
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.StatefulDataLinkInterceptor;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkInterceptor;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.layer.transport.ApplicationTransportBindingAdaptor;
 import net.sf.jdnp3.dnp3.stack.layer.transport.DataLinkTransportBindingAdaptor;
@@ -27,6 +29,7 @@ public class TransportBindingItem {
 	private OutstationDevice outstationDevice = null;
 	
 	private TransportBinding transportBinding = null;
+	private DataLinkInterceptor dataLinkInterceptor = null;
 	private DataLinkTransportBindingAdaptor dataLinkTransportBindingAdaptor = null;
 	private ApplicationTransportBindingAdaptor applicationTransportBindingAdaptor = null;
 	private DataLinkManager dataLinkManager;
@@ -53,7 +56,8 @@ public class TransportBindingItem {
 		}
 		this.dataLinkLayer = dataLinkLayer;
 		dataLinkTransportBindingAdaptor = new DataLinkTransportBindingAdaptor(transportBinding);
-		dataLinkLayer.addDataLinkLayerListener(dataLinkTransportBindingAdaptor);
+		dataLinkInterceptor = new StatefulDataLinkInterceptor(dataLinkLayer, this.address, dataLinkTransportBindingAdaptor);
+		dataLinkLayer.addDataLinkLayerListener(dataLinkInterceptor);
 		transportBinding.setDataLinkLayer(dataLinkLayer);
 	}
 	
@@ -64,7 +68,7 @@ public class TransportBindingItem {
 			outstationDevice = null;
 		}
 		if (dataLinkLayer != null) {
-			dataLinkLayer.removeDataLinkLayerListener(dataLinkTransportBindingAdaptor);
+			dataLinkLayer.removeDataLinkLayerListener(dataLinkInterceptor);
 			dataLinkLayer = null;
 		}
 	}

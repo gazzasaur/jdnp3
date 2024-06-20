@@ -25,7 +25,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkInterceptor;
 import net.sf.jdnp3.dnp3.stack.message.ChannelId;
 import net.sf.jdnp3.dnp3.stack.nio.DataPump;
 import net.sf.jdnp3.dnp3.stack.nio.DataPumpListener;
@@ -35,13 +35,13 @@ public class ServerSocketChannelDataPumpListener implements DataPumpListener {
 	
 	private DataPump dataPump;
 	private ChannelManager channelManager;
-	private DataLinkListener dataLinkListener;
+	private DataLinkInterceptor dataLinkInterceptor;
 	private ServerSocketChannel serverSocketChannel;
 
-	public ServerSocketChannelDataPumpListener(DataPump dataPump, ChannelManager channelManager, ServerSocketChannel serverSocketChannel, DataLinkListener dataLinkListener) {
+	public ServerSocketChannelDataPumpListener(DataPump dataPump, ChannelManager channelManager, ServerSocketChannel serverSocketChannel, DataLinkInterceptor dataLinkInterceptor) {
 		this.dataPump = dataPump;
 		this.channelManager = channelManager;
-		this.dataLinkListener = dataLinkListener;
+		this.dataLinkInterceptor = dataLinkInterceptor;
 		this.serverSocketChannel = serverSocketChannel;
 	}
 	
@@ -53,7 +53,7 @@ public class ServerSocketChannelDataPumpListener implements DataPumpListener {
 			
 			ChannelId channelId = channelManager.addChannel(socketChannel);
 			logger.info(format("Connection received from %s and has been assigned a channel id of %s.", getRemoteSocketAddress(socketChannel), channelId));
-			dataPump.registerChannel(socketChannel, new SocketChannelDataPumpListener(channelId, channelManager, dataLinkListener));
+			dataPump.registerChannel(socketChannel, new SocketChannelDataPumpListener(channelId, channelManager, dataLinkInterceptor));
 		} catch (Exception e) {
 			logger.error("Failed to accept client socket.", e);
 			try {

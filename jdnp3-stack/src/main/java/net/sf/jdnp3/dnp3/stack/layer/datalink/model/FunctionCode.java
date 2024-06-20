@@ -24,7 +24,7 @@ public enum FunctionCode {
 
 	// Primary to Secondary
 	RESET_LINK_STATUS(true, 0),
-	TEST_LINK(true, 2),
+	TEST_LINK_STATES(true, 2),
 	CONFIRMED_USER_DATA(true, 3),
 	UNCONFIRMED_USER_DATA(true, 4),
 	REQUEST_LINK_STATUS(true, 9);

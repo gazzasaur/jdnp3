@@ -41,6 +41,8 @@ public class DataLinkFrameUtils {
 		BitSet controlField = new BitSet(8);
 		controlField.set(7, dataLinkFrameHeader.getDirection().equals(Direction.MASTER_TO_OUTSTATION));
 		controlField.set(6, dataLinkFrameHeader.isPrimary());
+		controlField.set(5, dataLinkFrameHeader.isFcb());
+		controlField.set(4, dataLinkFrameHeader.isFcvDfc());
 		byte controlFieldValue = DataUtils.bitSetToByte(controlField);
 		controlFieldValue |= dataLinkFrameHeader.getFunctionCode().getCode();
 		return controlFieldValue;
@@ -55,6 +57,8 @@ public class DataLinkFrameUtils {
 		stringBuilder.append(format("Destination   : %s\n", dataLinkFrame.getDataLinkFrameHeader().getDestination()));
 		stringBuilder.append(format("Primary       : %s\n", dataLinkFrame.getDataLinkFrameHeader().isPrimary()));
 		stringBuilder.append(format("Direction     : %s\n", dataLinkFrame.getDataLinkFrameHeader().getDirection()));
+		stringBuilder.append(format("FCB           : %s\n", dataLinkFrame.getDataLinkFrameHeader().isFcb()));
+		stringBuilder.append(format("FCV/DFC       : %s\n", dataLinkFrame.getDataLinkFrameHeader().isFcvDfc()));
 		stringBuilder.append(format("Data          : %s", DataUtils.toString(dataLinkFrame.getData())));
 		return stringBuilder.toString();
 	}

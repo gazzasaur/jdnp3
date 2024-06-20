@@ -22,51 +22,52 @@ import java.util.concurrent.ExecutorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkInterceptor;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
-public class MultiDataLinkListener implements DataLinkListener {
-	private Logger logger = LoggerFactory.getLogger(MultiDataLinkListener.class);
+public class MultiDataLinkInterceptor implements DataLinkInterceptor {
+	private Logger logger = LoggerFactory.getLogger(MultiDataLinkInterceptor.class);
 	
 	private ExecutorService executorService;
-	private List<DataLinkListener> listeners = new ArrayList<DataLinkListener>();
+	private List<DataLinkInterceptor> listeners = new ArrayList<DataLinkInterceptor>();
 	
 	public void setExecutorService(ExecutorService executorService) {
 		this.executorService = executorService;
 	}
 	
-	public void addDataLinkListener(DataLinkListener dataLinkListener) {
+	public void addDataLinkListener(DataLinkInterceptor dataLinkInterceptor) {
 		synchronized (listeners) {
-			listeners.add(dataLinkListener);
+			listeners.add(dataLinkInterceptor);
 		}
 	}
 
-	public void removeDataLinkListener(DataLinkListener dataLinkListener) {
+	public void removeDataLinkListener(DataLinkInterceptor dataLinkInterceptor) {
 		synchronized (listeners) {
-			listeners.remove(dataLinkListener);
+			listeners.remove(dataLinkInterceptor);
 		}
 	}
 
-	public void receiveData(MessageProperties messageProperties, List<Byte> data) {
+	public void receiveData(MessageProperties messageProperties, DataLinkFrame frame) {
 		if (executorService == null) {
 			throw new IllegalStateException("No ExecutorService has been defined.");
 		}
 		
-		List<DataLinkListener> listenersCopy;
+		List<DataLinkInterceptor> listenersCopy;
 		synchronized (listeners) {
 			listenersCopy = new ArrayList<>(listeners);
 		}
 		
-		for (DataLinkListener dataLinkListener : listenersCopy) {
+		for (DataLinkInterceptor dataLinkInterceptor : listenersCopy) {
 			executorService.execute(
 				new Runnable() {
 					public void run() {
 						try {
-							dataLinkListener.receiveData(messageProperties, data);
+							dataLinkInterceptor.receiveData(messageProperties, frame);
 						} catch (Exception e) {
-							logger.error("Error caught from datalink listener.  Evicting member.", e);
-// FIXME IMPL I have been requested not to remove this here.  This could be dangerous, but it make sense.
-//							listeners.remove(dataLinkListener);
+							logger.error("Error caught from datalink interceptor.  Moving on.", e);
+							// FIXME IMPL I have been requested not to remove this here.  This could be dangerous, but it make sense. This should be an option if anything.
+							// listeners.remove(dataLinkListener);
 						}
 					}
 				}

@@ -30,8 +30,8 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.encoder.DataLinkFrameEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.encoder.DataLinkFrameEncoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkInterceptor;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.nio.DataPump;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
@@ -43,7 +43,7 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 	
 	private int mtu = MTU;
 	private boolean closed = false;
-	private MultiDataLinkListener multiDataLinkListener = new MultiDataLinkListener();
+	private MultiDataLinkInterceptor multiDataLinkInterceptor = new MultiDataLinkInterceptor();
 	private DataLinkFrameEncoder dataLinkFrameEncoder = new DataLinkFrameEncoderImpl();
 
 	private ExecutorService executorService = null;
@@ -76,7 +76,7 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 			throw new IllegalStateException("Service already started.");
 		}
 		serverSocketChannel  = TcpServerDataLinkServiceConnector.create(getHost(), getPort());
-		dataPump.registerServerChannel(serverSocketChannel , new ServerSocketChannelDataPumpListener(dataPump, channelManager, serverSocketChannel , multiDataLinkListener));
+		dataPump.registerServerChannel(serverSocketChannel , new ServerSocketChannelDataPumpListener(dataPump, channelManager, serverSocketChannel , multiDataLinkInterceptor));
 	}
 
 	public synchronized void stop() {
@@ -97,15 +97,15 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 		this.stop();
 	}
 
-	public synchronized void addDataLinkLayerListener(DataLinkListener dataLinkListener) {
+	public synchronized void addDataLinkLayerListener(DataLinkInterceptor dataLinkInterceptor) {
 		if (closed) {
 			throw new IllegalStateException("DataLink has been closed and may not be restarted.");
 		}
-		multiDataLinkListener.addDataLinkListener(dataLinkListener);
+		multiDataLinkInterceptor.addDataLinkListener(dataLinkInterceptor);
 	}
 
-	public synchronized void removeDataLinkLayerListener(DataLinkListener dataLinkListener) {
-		multiDataLinkListener.removeDataLinkListener(dataLinkListener);
+	public synchronized void removeDataLinkLayerListener(DataLinkInterceptor dataLinkInterceptor) {
+		multiDataLinkInterceptor.removeDataLinkListener(dataLinkInterceptor);
 	}
 
 	public synchronized void sendData(MessageProperties messageProperties, List<Byte> data) {
@@ -119,20 +119,22 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 		dataLinkFrame.getDataLinkFrameHeader().setFunctionCode(FunctionCode.UNCONFIRMED_USER_DATA);
 		dataLinkFrame.getDataLinkFrameHeader().setDirection((messageProperties.isMaster()) ? MASTER_TO_OUTSTATION : OUTSTATION_TO_MASTER);
 		dataLinkFrame.setData(data);
-		List<Byte> frameData = dataLinkFrameEncoder.encode(dataLinkFrame);
-		
-		logger.debug(String.format("Send data to %s from %s using channel %s: %s", messageProperties.getDestinationAddress(), messageProperties.getSourceAddress(), messageProperties.getChannelId(), DataUtils.toString(frameData)));
+		sendData(messageProperties, dataLinkFrame);
+	}
 
+	public synchronized void sendData(MessageProperties messageProperties, DataLinkFrame frame) {
+		List<Byte> frameData = dataLinkFrameEncoder.encode(frame);
+		logger.debug(String.format("Send data to %s from %s using channel %s: %s", messageProperties.getDestinationAddress(), messageProperties.getSourceAddress(), messageProperties.getChannelId(), DataUtils.toString(frameData)));
 		SocketChannel socketChannel = channelManager.getChannel(messageProperties.getChannelId());
 		dataPump.sendData(socketChannel, frameData);
 	}
-	
+
 	public synchronized void setDataPump(DataPump dataPump) {
 		this.dataPump = dataPump;
 	}
 
 	public synchronized void setExecutorService(ExecutorService executorService) {
-		multiDataLinkListener.setExecutorService(executorService);
+		multiDataLinkInterceptor.setExecutorService(executorService);
 		this.executorService = executorService;
 	}
 

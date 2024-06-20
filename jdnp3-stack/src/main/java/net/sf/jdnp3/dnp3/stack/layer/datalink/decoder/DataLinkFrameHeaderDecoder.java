@@ -44,6 +44,8 @@ public class DataLinkFrameHeaderDecoder {
 		BitSet bitSet = BitSet.valueOf(new byte[] { data.get(CONTROL_OFFSET) });
 		dataLinkFrameHeader.setPrimary((bitSet.get(7)) ? true : false);
 		dataLinkFrameHeader.setDirection((bitSet.get(6)) ? Direction.MASTER_TO_OUTSTATION : Direction.OUTSTATION_TO_MASTER);
+		dataLinkFrameHeader.setFcb((bitSet.get(5)) ? true : false);
+		dataLinkFrameHeader.setFcvDfc((bitSet.get(4)) ? true : false);
 		
 		boolean foundFunctionCode = false;
 		int functionCodeValue = data.get(CONTROL_OFFSET) & 0x0F;

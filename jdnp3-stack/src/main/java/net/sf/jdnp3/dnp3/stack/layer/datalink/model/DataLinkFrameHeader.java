@@ -23,7 +23,13 @@ public class DataLinkFrameHeader {
 	private boolean primary = true;
 	private Direction direction = Direction.MASTER_TO_OUTSTATION;
 	private FunctionCode functionCode = FunctionCode.UNCONFIRMED_USER_DATA;
-	
+
+	// Frame Check Bit
+	private boolean fcb = false;
+
+	// Frame Check Valid for message from PRI or Data Flow Control if from SEC.
+	private boolean fcvDfc = false;
+
 	public int getLength() {
 		return length;
 	}
@@ -78,5 +84,21 @@ public class DataLinkFrameHeader {
 
 	public void setCheckSum(int checkSum) {
 		this.checkSum = checkSum;
+	}
+
+	public boolean isFcb() {
+		return fcb;
+	}
+
+	public void setFcb(boolean fcb) {
+		this.fcb = fcb;
+	}
+
+	public boolean isFcvDfc() {
+		return fcvDfc;
+	}
+
+	public void setFcvDfc(boolean fcvDfc) {
+		this.fcvDfc = fcvDfc;
 	}
 }

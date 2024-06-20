@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.decoder.DataLinkDigester;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkInterceptor;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkFrameUtils;
 import net.sf.jdnp3.dnp3.stack.message.ChannelId;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
@@ -38,13 +38,13 @@ public class SocketChannelDataPumpListener implements DataPumpListener {
 	
 	private ChannelId channelId;
 	private ChannelManager channelManager;
-	private DataLinkListener dataLinkListener;
+	private DataLinkInterceptor dataLinkInterceptor;
 	private DataLinkDigester dataLinkDigester = new DataLinkDigester();
 
-	public SocketChannelDataPumpListener(ChannelId channelId, ChannelManager channelManager, DataLinkListener dataLinkListener) {
+	public SocketChannelDataPumpListener(ChannelId channelId, ChannelManager channelManager, DataLinkInterceptor dataLinkInterceptor) {
 		this.channelId = channelId;
 		this.channelManager = channelManager;
-		this.dataLinkListener = dataLinkListener;
+		this.dataLinkInterceptor = dataLinkInterceptor;
 	}
 	
 	public void connected() {
@@ -66,7 +66,7 @@ public class SocketChannelDataPumpListener implements DataPumpListener {
 				messageProperties.setSourceAddress(dataLinkFrame.getDataLinkFrameHeader().getSource());
 				messageProperties.setDestinationAddress(dataLinkFrame.getDataLinkFrameHeader().getDestination());
 				messageProperties.setMaster(dataLinkFrame.getDataLinkFrameHeader().getDirection().equals(MASTER_TO_OUTSTATION));
-				dataLinkListener.receiveData(messageProperties, dataLinkFrame.getData());
+				dataLinkInterceptor.receiveData(messageProperties, dataLinkFrame);
 				logger.debug("Frame Received\n" + DataLinkFrameUtils.toString(channelId, dataLinkFrame));
 			}
 		} catch (Exception e) {
