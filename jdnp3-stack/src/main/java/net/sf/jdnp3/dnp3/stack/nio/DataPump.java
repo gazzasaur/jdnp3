@@ -35,6 +35,7 @@ public class DataPump {
 		dataPumpWorker.sendData(socketChannel, data);
 	}
 	
+	// FIXME This should be closeable
 	public void start() {
 		if (thread == null || !thread.isAlive()) {
 			thread = new Thread(dataPumpWorker);
