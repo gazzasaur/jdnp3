@@ -62,7 +62,7 @@ public class DataPumpWorker implements Runnable {
 			synchronized (selectionLock) {
 				selector.wakeup();
 				if (!socketChannel.isRegistered()) {
-					socketChannel.register(selector, SelectionKey.OP_READ, new DataPumpItem(65535, new SocketChannelDataPumpTransceiver(), dataListener));
+					socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_CONNECT, new DataPumpItem(65535, new SocketChannelDataPumpTransceiver(), dataListener));
 				} else {
 					logger.warn("Cannot register a socket channel that is already registered.");
 				}
@@ -100,7 +100,19 @@ public class DataPumpWorker implements Runnable {
 					DataPumpItem dataPumpItem = (DataPumpItem) selectionKey.attachment();
 					DataPumpListener dataPumpListener = dataPumpItem.getDataPumpListener();
 					DataPumpTransceiver dataPumpTransceiver = dataPumpItem.getDataPumpTransceiver();
-					
+
+					if (selectionKey.isConnectable()) {
+						try {
+							((SocketChannel) selectionKey.channel()).finishConnect();
+							dataPumpListener.connected();
+						} catch (Exception e) {
+							logger.error("Failed to connect to end point.", e);
+							selectionKey.cancel();
+							selectionKey.channel().close();
+							continue;
+						}
+					}
+
 					if (selectionKey.isAcceptable()) {
 						try {
 							dataPumpListener.connected();
@@ -143,6 +155,7 @@ public class DataPumpWorker implements Runnable {
 							continue;
 						}
 					}
+
 					iterator.remove();
 				}
 			} catch (Exception e) {

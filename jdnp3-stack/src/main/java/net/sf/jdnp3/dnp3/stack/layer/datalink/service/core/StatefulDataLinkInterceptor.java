@@ -1,29 +1,16 @@
-package net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server;
-
-import static java.util.Arrays.asList;
+package net.sf.jdnp3.dnp3.stack.layer.datalink.service.core;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkInterceptor;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 // TODO For master stations this should also be a datalink layer to store state from outstations
 public class StatefulDataLinkInterceptor implements DataLinkInterceptor {
-    private static final List<FunctionCode> ACKED_FUNCTION_CODES = asList(
-        FunctionCode.TEST_LINK_STATES,
-        FunctionCode.RESET_LINK_STATUS,
-        FunctionCode.CONFIRMED_USER_DATA,
-        FunctionCode.REQUEST_LINK_STATUS
-    );
-    
     private long destinationAddress;
     private DataLinkLayer dataLinkLayer;
     private DataLinkListener dataLinkListener;
@@ -48,6 +35,7 @@ public class StatefulDataLinkInterceptor implements DataLinkInterceptor {
         }
         if (frame.getDataLinkFrameHeader().getFunctionCode() == FunctionCode.UNCONFIRMED_USER_DATA) {
             dataLinkListener.receiveData(messageProperties, frame.getData());
+            return;
         }
 
         DataLinkFrame responseFrame = new DataLinkFrame();

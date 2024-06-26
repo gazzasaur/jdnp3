@@ -42,8 +42,8 @@ public class DataLinkFrameHeaderDecoder {
 		}
 		dataLinkFrameHeader.setLength((int) DataUtils.getInteger(LENGTH_OFFSET, 1, data));
 		BitSet bitSet = BitSet.valueOf(new byte[] { data.get(CONTROL_OFFSET) });
-		dataLinkFrameHeader.setPrimary((bitSet.get(7)) ? true : false);
-		dataLinkFrameHeader.setDirection((bitSet.get(6)) ? Direction.MASTER_TO_OUTSTATION : Direction.OUTSTATION_TO_MASTER);
+		dataLinkFrameHeader.setDirection((bitSet.get(7)) ? Direction.MASTER_TO_OUTSTATION : Direction.OUTSTATION_TO_MASTER);
+		dataLinkFrameHeader.setPrimary((bitSet.get(6)) ? true : false);
 		dataLinkFrameHeader.setFcb((bitSet.get(5)) ? true : false);
 		dataLinkFrameHeader.setFcvDfc((bitSet.get(4)) ? true : false);
 		
@@ -58,7 +58,6 @@ public class DataLinkFrameHeaderDecoder {
 		if (!foundFunctionCode) {
 			throw new IllegalArgumentException("No function code matches: " + functionCodeValue);
 		}
-		
 		dataLinkFrameHeader.setDestination((int) DataUtils.getInteger(DESTINATION_OFFSET, 2, data));
 		dataLinkFrameHeader.setSource((int) DataUtils.getInteger(SOURCE_OFFSET, 2, data));
 		

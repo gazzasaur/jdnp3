@@ -20,9 +20,9 @@ public class MessageProperties {
 	private int destinationAddress;
 	
 	private boolean master;
-	private boolean primary;
 	private long timeReceived;
 	private ChannelId channelId;
+	private boolean primary = true;
 	
 	public int getSourceAddress() {
 		return sourceAddress;

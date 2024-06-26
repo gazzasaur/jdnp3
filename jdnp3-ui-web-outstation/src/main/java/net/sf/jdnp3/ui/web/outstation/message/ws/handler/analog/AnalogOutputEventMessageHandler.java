@@ -31,7 +31,6 @@ public class AnalogOutputEventMessageHandler implements DeviceMessageHandler {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 		AnalogOutputEventMessage analogOutputEventMessage = (AnalogOutputEventMessage) message;
-		System.out.println("Trigger");
 		outstationDevice.getDatabaseManager().triggerAnalogOutputEvent(analogOutputEventMessage.getIndex(), analogOutputEventMessage.getTimestamp());
 	}
 }

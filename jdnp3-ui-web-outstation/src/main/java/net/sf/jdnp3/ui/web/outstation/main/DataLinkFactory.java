@@ -17,6 +17,7 @@ package net.sf.jdnp3.ui.web.outstation.main;
 
 import java.util.concurrent.ExecutorService;
 
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.client.TcpClientDataLinkService;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.TcpServerDataLinkService;
 import net.sf.jdnp3.dnp3.stack.nio.DataPump;
 import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManager;
@@ -41,7 +42,21 @@ public class DataLinkFactory {
 		dataLinkManager.setDataLinkLayer(dataLinkLayer);
 		return dataLinkManager;
 	}
-	
+
+	public DataLinkManager createClient(String name, String host, int port) {
+		if (dataPump == null || executorService == null) {
+			throw new RuntimeException("Must specify a data pump and executor service.");
+		}
+		
+		TcpClientDataLinkService dataLinkLayer = new TcpClientDataLinkService(host, port);
+		dataLinkLayer.setExecutorService(executorService);
+		dataLinkLayer.setDataPump(dataPump);
+		
+		DataLinkManager dataLinkManager = DataLinkManagerProvider.registerDataLink(name);
+		dataLinkManager.setDataLinkLayer(dataLinkLayer);
+		return dataLinkManager;
+	}
+
 	public void setDataPump(DataPump dataPump) {
 		this.dataPump = dataPump;
 	}

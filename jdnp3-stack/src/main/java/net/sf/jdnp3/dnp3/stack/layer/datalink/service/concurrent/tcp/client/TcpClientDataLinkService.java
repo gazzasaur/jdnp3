@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server;
+package net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.client;
 
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.MASTER_TO_OUTSTATION;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.OUTSTATION_TO_MASTER;
 
-import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -30,17 +29,23 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.encoder.DataLinkFrameEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.encoder.DataLinkFrameEncoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.ChannelManager;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.SocketChannelDataPumpListener;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.TcpServerDataLinkServiceConnector;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkInterceptor;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.MultiDataLinkInterceptor;
+import net.sf.jdnp3.dnp3.stack.message.ChannelId;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.nio.DataPump;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
-public class TcpServerDataLinkService implements DataLinkLayer {
-	private Logger logger = LoggerFactory.getLogger(TcpServerDataLinkService.class);
+// TODO This is very similat to the server version. Refactor to combine common elements
+public class TcpClientDataLinkService implements DataLinkLayer {
+	private Logger logger = LoggerFactory.getLogger(TcpClientDataLinkService.class);
 	
 	private static final int MTU = 249;
-	
+
 	private int mtu = MTU;
 	private boolean closed = false;
 	private MultiDataLinkInterceptor multiDataLinkInterceptor = new MultiDataLinkInterceptor();
@@ -48,11 +53,20 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 
 	private ExecutorService executorService = null;
 	private DataPump dataPump = null;
-	private String host = "0.0.0.0";
-	private int port = 20000;
 	
 	private ChannelManager channelManager = new ChannelManager();
-	private ServerSocketChannel serverSocketChannel = null;
+	private SocketChannel socketChannel = null;
+
+	private String host;
+
+	private int port;
+
+	private ChannelId channelId;
+
+	public TcpClientDataLinkService(String host, int port) {
+		this.host = host;
+		this.port = port;
+	}
 	
 	public synchronized int getMtu() {
 		return mtu;
@@ -60,6 +74,13 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 
 	public synchronized void setMtu(int mtu) {
 		this.mtu = mtu;
+	}
+
+	public synchronized ChannelId getChannelId() {
+		if (channelId == null) {
+			throw new IllegalStateException("Service has not been started.");
+		}
+		return channelId;
 	}
 
 	public synchronized void start() {
@@ -72,24 +93,32 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 		if (executorService == null) {
 			throw new IllegalStateException("No executor service has been defined.");
 		}
-		if (serverSocketChannel != null) {
+		if (socketChannel != null) {
 			throw new IllegalStateException("Service already started.");
 		}
-		serverSocketChannel  = TcpServerDataLinkServiceConnector.create(getHost(), getPort());
-		dataPump.registerServerChannel(serverSocketChannel , new ServerSocketChannelDataPumpListener(dataPump, channelManager, serverSocketChannel , multiDataLinkInterceptor));
+		// FIXME CRITICAL This will not reconnect! The data pump should own the factory for the client (and optionally server).
+		socketChannel = TcpClientDataLinkServiceConnector.create(getHost(), getPort());
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		channelId = channelManager.addChannel(socketChannel);
+		dataPump.registerChannel(socketChannel, new SocketChannelDataPumpListener(channelId, channelManager, multiDataLinkInterceptor));
 	}
 
 	public synchronized void stop() {
-		if (serverSocketChannel == null) {
+		if (socketChannel == null) {
 			return;
 		}
-		TcpServerDataLinkServiceConnector.closeChannel(serverSocketChannel);
+		TcpServerDataLinkServiceConnector.closeChannel(socketChannel);
 		channelManager.closeAll();
-		serverSocketChannel = null;
+		socketChannel = null;
 	}
 
 	public synchronized boolean isRunning() {
-		return serverSocketChannel != null;
+		return socketChannel != null;
 	}
 	
 	public synchronized void close() {
@@ -113,7 +142,7 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 			throw new IllegalStateException("DataLink has been closed and may not be restarted.");
 		}
 		DataLinkFrame dataLinkFrame = new DataLinkFrame();
-		dataLinkFrame.getDataLinkFrameHeader().setPrimary(true);
+		dataLinkFrame.getDataLinkFrameHeader().setPrimary(messageProperties.isPrimary());
 		dataLinkFrame.getDataLinkFrameHeader().setSource(messageProperties.getSourceAddress());
 		dataLinkFrame.getDataLinkFrameHeader().setDestination(messageProperties.getDestinationAddress());
 		dataLinkFrame.getDataLinkFrameHeader().setFunctionCode(FunctionCode.UNCONFIRMED_USER_DATA);
@@ -142,16 +171,8 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 		return host;
 	}
 
-	public synchronized void setHost(String host) {
-		this.host = host;
-	}
-
 	public synchronized int getPort() {
 		return port;
-	}
-
-	public synchronized void setPort(int port) {
-		this.port = port;
 	}
 	
 	public synchronized int getConnectionCount() {

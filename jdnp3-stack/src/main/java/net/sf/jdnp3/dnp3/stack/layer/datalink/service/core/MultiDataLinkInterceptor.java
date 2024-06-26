@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server;
+package net.sf.jdnp3.dnp3.stack.layer.datalink.service.core;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkInterceptor;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public class MultiDataLinkInterceptor implements DataLinkInterceptor {

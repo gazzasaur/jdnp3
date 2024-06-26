@@ -32,6 +32,7 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkInterceptor;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.MultiDataLinkInterceptor;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.nio.DataPump;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
@@ -75,8 +76,8 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 		if (serverSocketChannel != null) {
 			throw new IllegalStateException("Service already started.");
 		}
-		serverSocketChannel  = TcpServerDataLinkServiceConnector.create(getHost(), getPort());
-		dataPump.registerServerChannel(serverSocketChannel , new ServerSocketChannelDataPumpListener(dataPump, channelManager, serverSocketChannel , multiDataLinkInterceptor));
+		serverSocketChannel = TcpServerDataLinkServiceConnector.create(getHost(), getPort());
+		dataPump.registerServerChannel(serverSocketChannel, new ServerSocketChannelDataPumpListener(dataPump, channelManager, serverSocketChannel, multiDataLinkInterceptor));
 	}
 
 	public synchronized void stop() {
@@ -113,7 +114,7 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 			throw new IllegalStateException("DataLink has been closed and may not be restarted.");
 		}
 		DataLinkFrame dataLinkFrame = new DataLinkFrame();
-		dataLinkFrame.getDataLinkFrameHeader().setPrimary(true);
+		dataLinkFrame.getDataLinkFrameHeader().setPrimary(messageProperties.isPrimary());
 		dataLinkFrame.getDataLinkFrameHeader().setSource(messageProperties.getSourceAddress());
 		dataLinkFrame.getDataLinkFrameHeader().setDestination(messageProperties.getDestinationAddress());
 		dataLinkFrame.getDataLinkFrameHeader().setFunctionCode(FunctionCode.UNCONFIRMED_USER_DATA);

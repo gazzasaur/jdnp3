@@ -15,9 +15,9 @@
  */
 package net.sf.jdnp3.ui.web.outstation.channel;
 
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.StatefulDataLinkInterceptor;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkInterceptor;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.StatefulDataLinkInterceptor;
 import net.sf.jdnp3.dnp3.stack.layer.transport.ApplicationTransportBindingAdaptor;
 import net.sf.jdnp3.dnp3.stack.layer.transport.DataLinkTransportBindingAdaptor;
 import net.sf.jdnp3.dnp3.stack.layer.transport.TransportBinding;
