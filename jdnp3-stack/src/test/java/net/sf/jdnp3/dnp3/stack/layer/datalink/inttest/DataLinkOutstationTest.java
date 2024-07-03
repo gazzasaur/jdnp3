@@ -24,7 +24,6 @@ import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.nio.DataPump;
 
 public class DataLinkOutstationTest {
-    @Ignore
     @Test
     public void testUnconfirmedUserData() throws Exception {
         var testPort = RandomUtils.nextInt(40000, 60000);
