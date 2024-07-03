@@ -1,16 +1,25 @@
 package net.sf.jdnp3.dnp3.stack.layer.datalink.service.core;
 
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.MASTER_TO_OUTSTATION;
+import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.OUTSTATION_TO_MASTER;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkFrameUtils;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 // TODO For master stations this should also be a datalink layer to store state from outstations
 public class StatefulDataLinkInterceptor implements DataLinkInterceptor {
+    private Logger logger = LoggerFactory.getLogger(StatefulDataLinkInterceptor.class);
+
     private long destinationAddress;
     private DataLinkLayer dataLinkLayer;
     private DataLinkListener dataLinkListener;
@@ -43,13 +52,15 @@ public class StatefulDataLinkInterceptor implements DataLinkInterceptor {
         dataLinkFrameHeader.setDestination(frame.getDataLinkFrameHeader().getSource());
         dataLinkFrameHeader.setSource(frame.getDataLinkFrameHeader().getDestination());
         dataLinkFrameHeader.setDirection(master ? Direction.MASTER_TO_OUTSTATION : Direction.OUTSTATION_TO_MASTER);
+        dataLinkFrameHeader.setPrimary(false);
 
         if (messageProperties.isPrimary() && frame.getDataLinkFrameHeader().getFunctionCode() == FunctionCode.RESET_LINK_STATUS) {
             expectedFrameCheckBitState.put(messageProperties.getSourceAddress(), true);
             dataLinkFrameHeader.setFunctionCode(FunctionCode.ACK);
-            dataLinkLayer.sendData(messageProperties, frame);
+            dataLinkFrameHeader.setDirection(frame.getDataLinkFrameHeader().getDirection() == MASTER_TO_OUTSTATION ? MASTER_TO_OUTSTATION : OUTSTATION_TO_MASTER);
+            dataLinkLayer.sendData(messageProperties, responseFrame);
             return;
-        } else if (messageProperties.isPrimary() && frame.getDataLinkFrameHeader().getFunctionCode() == FunctionCode.TEST_LINK_STATES) {
+        } else if (messageProperties.isPrimary() && frame.getDataLinkFrameHeader().isFcvDfc() && frame.getDataLinkFrameHeader().getFunctionCode() == FunctionCode.TEST_LINK_STATES) {
             Boolean expectedFcb = expectedFrameCheckBitState.get(messageProperties.getSourceAddress());
             if (expectedFcb != null && expectedFcb.booleanValue() == frame.getDataLinkFrameHeader().isFcb()) {
                 expectedFrameCheckBitState.put(messageProperties.getSourceAddress(), !expectedFcb.booleanValue());
@@ -57,18 +68,20 @@ public class StatefulDataLinkInterceptor implements DataLinkInterceptor {
             } else {
                 dataLinkFrameHeader.setFunctionCode(FunctionCode.NACK);
             }
-            dataLinkLayer.sendData(messageProperties, frame);
+            dataLinkLayer.sendData(messageProperties, responseFrame);
             return;
         } else if (messageProperties.isPrimary() && frame.getDataLinkFrameHeader().isFcvDfc()) {
             Boolean expectedFcb = expectedFrameCheckBitState.get(messageProperties.getSourceAddress());
             if (expectedFcb != null && expectedFcb.booleanValue() == frame.getDataLinkFrameHeader().isFcb()) {
                 expectedFrameCheckBitState.put(messageProperties.getSourceAddress(), !expectedFcb.booleanValue());
                 dataLinkFrameHeader.setFunctionCode(FunctionCode.ACK);
+                dataLinkListener.receiveData(messageProperties, frame.getData());
             } else {
                 dataLinkFrameHeader.setFunctionCode(FunctionCode.NACK);
             }
-            dataLinkLayer.sendData(messageProperties, frame);
+            dataLinkLayer.sendData(messageProperties, responseFrame);
+            return;
         }
-        dataLinkListener.receiveData(messageProperties, frame.getData());
-    }    
+        logger.error("Unknown payload type: " + frame.getDataLinkFrameHeader().getFunctionCode());
+    }
 }

@@ -70,6 +70,7 @@ public class SocketChannelDataPumpListener implements DataPumpListener {
 				logger.debug("Frame Received\n" + DataLinkFrameUtils.toString(channelId, dataLinkFrame));
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("Failed to process message.", e);
 		}
 	}

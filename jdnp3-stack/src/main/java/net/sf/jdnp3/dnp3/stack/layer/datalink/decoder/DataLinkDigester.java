@@ -51,7 +51,7 @@ public class DataLinkDigester {
 		try {
 			DataLinkFrameHeader dataLinkFrameHeader = new DataLinkFrameHeader();
 			if (detector.detectHeader(dataLinkFrameHeader, frameBuffer) && headerLengthToRawLength(dataLinkFrameHeader.getLength()) <= frameBuffer.size()) {
-				frameReceived(frameBuffer);
+				this.dataLinkFrame = decoder.decode(frameBuffer);
 				frameBuffer = new ArrayList<>(frameBuffer.subList(headerLengthToRawLength(dataLinkFrameHeader.getLength()), frameBuffer.size()));
 				lastDrop = new Date().getTime();
 				return true;
@@ -73,13 +73,6 @@ public class DataLinkDigester {
 			performRapidDrop(frameBuffer);
 		}
 		return false;
-	}
-	
-	private void frameReceived(List<Byte> buffer) {
-		DataLinkFrame dataLinkFrame = decoder.decode(buffer);
-		if (dataLinkFrame.getDataLinkFrameHeader().getFunctionCode() == FunctionCode.UNCONFIRMED_USER_DATA && dataLinkFrame.getDataLinkFrameHeader().isPrimary()) {
-			this.dataLinkFrame = dataLinkFrame;
-		}
 	}
 
 	public DataLinkFrame getDataLinkFrame() {

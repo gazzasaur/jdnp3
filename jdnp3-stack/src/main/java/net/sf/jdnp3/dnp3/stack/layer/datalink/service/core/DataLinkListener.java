@@ -20,5 +20,6 @@ import java.util.List;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public interface DataLinkListener {
+	// TODO Likely provide a handle back to check for nack or handle it under the hood.
 	public void receiveData(MessageProperties messageProperties, List<Byte> data);
 }
