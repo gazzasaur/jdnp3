@@ -16,6 +16,7 @@
 package net.sf.jdnp3.dnp3.service.outstation.adaptor;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DIRECT_OPERATE;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.OPERATE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_COMMAND_CROB;
 
 import java.util.List;
@@ -33,7 +34,8 @@ public class BinaryOutputOperateRequestAdaptor implements OutstationRequestHandl
 	private BinaryOutputOperateRequestHandler serviceRequestHandler = null;
 
 	public boolean canHandle(FunctionCode functionCode, ObjectFragment request) {
-		if (functionCode == DIRECT_OPERATE && request.getObjectFragmentHeader().getObjectType().equals(BINARY_OUTPUT_COMMAND_CROB)) {
+		// FIXME OPERATE currently ignores SELECT
+		if (functionCode == DIRECT_OPERATE && functionCode == OPERATE && request.getObjectFragmentHeader().getObjectType().equals(BINARY_OUTPUT_COMMAND_CROB)) {
 			return true;
 		}
 		return false;

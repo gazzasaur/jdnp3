@@ -33,7 +33,8 @@ public class AnalogOutputOperateRequestAdaptor implements OutstationRequestHandl
 	private AnalogOutputOperateRequestHandler serviceRequestHandler = null;
 
 	public boolean canHandle(FunctionCode functionCode, ObjectFragment request) {
-		if (functionCode == DIRECT_OPERATE && request.getObjectFragmentHeader().getObjectType().getGroup() == ANALOG_OUTPUT_COMMAND_GROUP) {
+		// FIXME Operate currently ignores select
+		if (functionCode == DIRECT_OPERATE && functionCode == DIRECT_OPERATE && request.getObjectFragmentHeader().getObjectType().getGroup() == ANALOG_OUTPUT_COMMAND_GROUP) {
 			return true;
 		}
 		return false;

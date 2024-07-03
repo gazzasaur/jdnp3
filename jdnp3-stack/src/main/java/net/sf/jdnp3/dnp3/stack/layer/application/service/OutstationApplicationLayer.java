@@ -19,7 +19,9 @@ import static java.util.Collections.unmodifiableList;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.CONFIRM;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DELAY_MEASURE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DIRECT_OPERATE;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.OPERATE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.RESPONSE;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.SELECT;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_EVENT_RELATIVE_TIME;
 
 import java.util.ArrayList;
@@ -202,7 +204,8 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		applicationResponseHeader.getApplicationControl().setUnsolicitedResponse(false);
 		applicationResponseHeader.getApplicationControl().setSequenceNumber(request.getHeader().getApplicationControl().getSequenceNumber());
 		
-		if (request.getHeader().getFunctionCode().equals(DIRECT_OPERATE)) {
+		// TODO Currently does not perform state checks
+		if (request.getHeader().getFunctionCode().equals(DIRECT_OPERATE) || request.getHeader().getFunctionCode().equals(SELECT) || request.getHeader().getFunctionCode().equals(OPERATE)) {
 			for (ObjectFragment objectFragment : request.getObjectFragments()) {
 				response.addObjectFragment(objectFragment);
 			}
