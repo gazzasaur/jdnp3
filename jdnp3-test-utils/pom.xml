@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>net.sf.jdnp3</groupId>
 		<artifactId>jdnp3-project</artifactId>
-		<version>0.11.0-alpha-01</version>
+		<version>0.11.0-alpha-02</version>
 		<relativePath>../jdnp3/pom.xml</relativePath>
 	</parent>
 	

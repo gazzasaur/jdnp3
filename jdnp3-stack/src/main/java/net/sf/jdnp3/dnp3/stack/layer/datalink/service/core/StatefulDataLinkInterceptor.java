@@ -5,6 +5,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.OUTSTATION_
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ public class StatefulDataLinkInterceptor implements DataLinkInterceptor {
 
     // Inbound link state tracking (secondary)
     private boolean master;
-    private Map<Integer, Boolean> expectedFrameCheckBitState = new HashMap<>();
+    private Map<Integer, Boolean> expectedFrameCheckBitState = new ConcurrentHashMap<>();
 
     public StatefulDataLinkInterceptor(boolean master, DataLinkLayer dataLinkLayer, long destinationAddress, DataLinkListener dataLinkListener) {
         this.master = master;
