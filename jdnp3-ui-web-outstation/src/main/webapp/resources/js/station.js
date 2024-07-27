@@ -5,6 +5,22 @@ jdnp3.station.siteDeviceListings = [];
 
 jdnp3.station.SetStationsMessageHandler = function() {
 }
+jdnp3.station.SearchResultMessageHandler = function() {
+}
+
+jdnp3.station.FullSearch = function(keyword) {
+	var performFullSearch = function() {
+		try {
+			thisObject.messanger.sendMessage({'type': 'fullSearch'});
+		} catch (exception) {
+			console.log('WARN: Unable to search.');
+		}
+	}
+
+	jdnp3.schedule.getDefaultScheduler().addTask(function() {
+		performFullSearch();
+	}, 10, false);
+}
 
 jdnp3.station.updateDeviceListing = function(site, devices) {
 	site.devices.forEach(function(device) {
@@ -46,6 +62,9 @@ jdnp3.station.updateDeviceListing = function(site, devices) {
 		}
 	});
 	site.devices = deviceListing;
+}
+
+jdnp3.station.SearchResultMessageHandler.prototype.processMessage = function(searchResult) {
 }
 
 jdnp3.station.SetStationsMessageHandler.prototype.processMessage = function(stationMessage) {
@@ -114,6 +133,7 @@ jdnp3.station.SetStationsMessageHandler.prototype.processMessage = function(stat
 jdnp3.station.Station = function(location) {
 	this.messageHandlers = {};
 	this.messageHandlers['siteList'] = new jdnp3.station.SetStationsMessageHandler();
+	this.messageHandlers['searchResult'] = new jdnp3.station.SearchResultMessageHandler();
 	
 	var connectionListener = {};
 	connectionListener.connected = function() {
