@@ -56,15 +56,17 @@ public class CountRangeObjectFragmentPacker implements ObjectFragmentPacker {
 		if (objectTypeEncoder == null) {
 			throw new IllegalArgumentException(format("No encoder found for the operation %s on type %s.", context.getFunctionCode(), objectType));
 		}
-		
+
+		long maxIndex = objectInstances.stream().map(ObjectInstance::getIndex).mapToLong(index -> index).max().orElse(1);
+		int indexSize = calculateOctetCount(maxIndex);
+
 		CountRange countRange = new CountRange();
 		IndexPrefixType indexPrefixType = new IndexPrefixType();
+		indexPrefixType.setOctetCount(indexSize);
 		ObjectFragment objectFragment = new ObjectFragment();
 		objectFragment.getObjectFragmentHeader().setRange(countRange);
 		objectFragment.getObjectFragmentHeader().setObjectType(objectType);
 		objectFragment.getObjectFragmentHeader().setPrefixType(indexPrefixType);
-		
-		long maxIndex = firstInstance.getIndex();
 		
 		ObjectFragmentEncoderContext encoderContext = new ObjectFragmentEncoderContext();
 		encoderContext.setCommonTimeOfOccurrance(context.getTimeReference());
@@ -79,12 +81,7 @@ public class CountRangeObjectFragmentPacker implements ObjectFragmentPacker {
 			if (!nextInstance.getRequestedType().equals(objectType)) {
 				break;
 			}
-			
-			if (maxIndex < nextInstance.getIndex()) {
-				maxIndex = nextInstance.getIndex();
-			}
-			long indexSize = calculateOctetCount(maxIndex);
-			
+						
 			countRange.setCount(countRange.getCount() + 1);
 			long rangeSize = calculateOctetCount(countRange.getCount());
 			
