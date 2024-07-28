@@ -82,11 +82,12 @@ public class StatefulDataLinkInterceptor implements DataLinkInterceptor {
             if (expectedFcb != null && expectedFcb.booleanValue() == frame.getDataLinkFrameHeader().isFcb()) {
                 expectedFrameCheckBitState.put(messageProperties.getSourceAddress(), !expectedFcb.booleanValue());
                 dataLinkFrameHeader.setFunctionCode(FunctionCode.ACK);
+                dataLinkLayer.sendData(messageProperties, responseFrame);
                 dataLinkListener.receiveData(messageProperties, frame.getData());
             } else {
                 dataLinkFrameHeader.setFunctionCode(FunctionCode.NACK);
+                dataLinkLayer.sendData(messageProperties, responseFrame);
             }
-            dataLinkLayer.sendData(messageProperties, responseFrame);
             return;
         }
         logger.error("Unknown payload type: " + frame.getDataLinkFrameHeader().getFunctionCode());
