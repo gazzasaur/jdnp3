@@ -17,6 +17,9 @@ package net.sf.jdnp3.ui.web.outstation.database.point.analog;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_STATIC_ANY;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants;
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
@@ -38,107 +41,117 @@ public class AnalogInputDataPoint implements DataPoint {
 	private ObjectType eventType = ObjectTypeConstants.ANALOG_INPUT_EVENT_ANY;
 	private int eventClass = 1;
 
+	private Map<String, String> tags = new HashMap<>();
+
 	public long getIndex() {
 		return index;
 	}
-
+	
 	public void setIndex(long index) {
 		this.index = index;
 	}
-
+	
 	public String getName() {
 		return name;
 	}
-
+	
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
 	public boolean isOnline() {
 		return online;
 	}
-
+	
 	public void setOnline(boolean online) {
 		this.online = online;
 	}
-
+	
 	public boolean isRestart() {
 		return restart;
 	}
-
+	
 	public void setRestart(boolean restart) {
 		this.restart = restart;
 	}
-
+	
 	public boolean isLocalForced() {
 		return localForced;
 	}
-
+	
 	public void setLocalForced(boolean localForced) {
 		this.localForced = localForced;
 	}
-
+	
 	public boolean isRemoteForced() {
 		return remoteForced;
 	}
-
+	
 	public void setRemoteForced(boolean remoteForced) {
 		this.remoteForced = remoteForced;
 	}
-
+	
 	public boolean isCommunicationsLost() {
 		return communicationsLost;
 	}
-
+	
 	public void setCommunicationsLost(boolean communicationsLost) {
 		this.communicationsLost = communicationsLost;
 	}
-
+	
 	public ObjectType getStaticType() {
 		return staticType;
 	}
-
+	
 	public void setStaticType(ObjectType staticType) {
 		this.staticType = staticType;
 	}
-
+	
 	public ObjectType getEventType() {
 		return eventType;
 	}
-
+	
 	public void setEventType(ObjectType eventType) {
 		this.eventType = eventType;
 	}
-
+	
 	public int getEventClass() {
 		return eventClass;
 	}
-
+	
 	public void setEventClass(int eventClass) {
 		this.eventClass = eventClass;
 	}
-
+	
 	public boolean isOverRange() {
 		return overRange;
 	}
-
+	
 	public void setOverRange(boolean overRange) {
 		this.overRange = overRange;
 	}
-
+	
 	public boolean isReferenceError() {
 		return referenceError;
 	}
-
+	
 	public void setReferenceError(boolean referenceError) {
 		this.referenceError = referenceError;
 	}
-
+	
 	public double getValue() {
 		return value;
 	}
-
+	
 	public void setValue(double value) {
 		this.value = value;
 	}
-}
+
+	public Map<String, String> getTags() {
+		return tags;
+	}
+
+	public void setTags(Map<String, String> tags) {
+		this.tags = tags;
+	}
+}	

@@ -20,6 +20,9 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_STATIC_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StatusCode.SUCCESS;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.OperationType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.TripCloseCode;
@@ -51,6 +54,8 @@ public class BinaryOutputDataPoint implements DataPoint {
 	private ObjectType commandEventType = BINARY_OUTPUT_COMMAND_EVENT_ANY;
 	private int eventClass = 1;
 	private int commandEventClass = 1;
+
+	private Map<String, String> tags = new HashMap<>();
 
 	public long getIndex() {
 		return index;
@@ -219,4 +224,11 @@ public class BinaryOutputDataPoint implements DataPoint {
 	public void setCommandEventClass(int commandEventClass) {
 		this.commandEventClass = commandEventClass;
 	}
-}
+
+	public Map<String, String> getTags() {
+		return tags;
+	}
+
+	public void setTags(Map<String, String> tags) {
+		this.tags = tags;
+	}}

@@ -15,7 +15,10 @@
  */
 package net.sf.jdnp3.ui.web.outstation.database.core;
 
+import java.util.Map;
+
 public interface DataPoint {
 	public long getIndex();
 	public String getName();
+	public Map<String, String> getTags();
 }

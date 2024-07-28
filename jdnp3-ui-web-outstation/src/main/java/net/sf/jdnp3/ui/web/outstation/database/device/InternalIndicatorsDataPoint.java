@@ -15,6 +15,9 @@
  */
 package net.sf.jdnp3.ui.web.outstation.database.device;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 
 
@@ -38,6 +41,8 @@ public class InternalIndicatorsDataPoint implements DataPoint {
 	private boolean alreadyExecuting = false;
 	private boolean configurationCorrupt = false;
 	
+	private Map<String, String> tags = new HashMap<>();
+
 	public long getIndex() {
 		return index;
 	}
@@ -164,5 +169,13 @@ public class InternalIndicatorsDataPoint implements DataPoint {
 
 	public void setReadonly(boolean readonly) {
 		this.readonly = readonly;
+	}
+
+	public Map<String, String> getTags() {
+		return tags;
+	}
+
+	public void setTags(Map<String, String> tags) {
+		this.tags = tags;
 	}
 }

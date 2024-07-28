@@ -18,6 +18,9 @@ package net.sf.jdnp3.ui.web.outstation.database.point.counter;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.COUNTER_EVENT_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.COUNTER_STATIC_ANY;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 
@@ -37,6 +40,8 @@ public class CounterDataPoint implements DataPoint {
 	private ObjectType staticType = COUNTER_STATIC_ANY;
 	private ObjectType eventType = COUNTER_EVENT_ANY;
 	private int eventClass = 1;
+
+	private Map<String, String> tags = new HashMap<>();
 
 	public long getIndex() {
 		return index;
@@ -140,5 +145,13 @@ public class CounterDataPoint implements DataPoint {
 
 	public void setDiscontinuity(boolean discontinuity) {
 		this.discontinuity = discontinuity;
+	}
+
+	public Map<String, String> getTags() {
+		return tags;
+	}
+
+	public void setTags(Map<String, String> tags) {
+		this.tags = tags;
 	}
 }
