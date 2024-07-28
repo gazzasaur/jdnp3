@@ -52,6 +52,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.analog.A
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.analog.AnalogOutputCommandInteger32ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.binary.BinaryInputStaticFlagsObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.binary.CrobObjectTypeDecoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.binary.DoubleBitBinaryInputStaticFlagsObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ByteDataObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.Class0ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.Class1ObjectTypeDecoder;
@@ -182,6 +183,7 @@ public class OutstationFactory {
 	
 	public void addStandardObjectTypeDecoders() {
 		decoders.add(new BinaryInputStaticFlagsObjectTypeDecoder());
+		decoders.add(new DoubleBitBinaryInputStaticFlagsObjectTypeDecoder());
 		decoders.add(new NoDataObjectTypeDecoder(BINARY_INPUT_STATIC_ANY));
 		decoders.add(new Class0ObjectTypeDecoder());
 		decoders.add(new Class1ObjectTypeDecoder());

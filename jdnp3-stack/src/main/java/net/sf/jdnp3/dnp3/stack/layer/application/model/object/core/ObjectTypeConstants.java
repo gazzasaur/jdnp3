@@ -37,6 +37,12 @@ public class ObjectTypeConstants {
 	public static ObjectType DOUBLE_BIT_BINARY_INPUT_STATIC_PACKED = new ObjectType(DOUBLE_BIT_BINARY_INPUT_STATIC_GROUP, 1);
 	public static ObjectType DOUBLE_BIT_BINARY_INPUT_STATIC_FLAGS = new ObjectType(DOUBLE_BIT_BINARY_INPUT_STATIC_GROUP, 2);
 
+	public static int DOUBLE_BIT_BINARY_INPUT_EVENT_GROUP = 4;
+	public static ObjectType DOUBLE_BIT_BINARY_INPUT_EVENT_ANY = new ObjectType(DOUBLE_BIT_BINARY_INPUT_EVENT_GROUP, 0);
+	public static ObjectType DOUBLE_BIT_BINARY_INPUT_EVENT_WITHOUT_TIME = new ObjectType(DOUBLE_BIT_BINARY_INPUT_EVENT_GROUP, 1);
+	public static ObjectType DOUBLE_BIT_BINARY_INPUT_EVENT_ABSOLUTE_TIME = new ObjectType(DOUBLE_BIT_BINARY_INPUT_EVENT_GROUP, 2);
+	public static ObjectType DOUBLE_BIT_BINARY_INPUT_EVENT_RELATIVE_TIME = new ObjectType(DOUBLE_BIT_BINARY_INPUT_EVENT_GROUP, 3);
+
 	public static int BINARY_OUTPUT_STATIC_GROUP = 10;
 	public static ObjectType BINARY_OUTPUT_STATIC_ANY = new ObjectType(10, 0);
 	public static ObjectType BINARY_OUTPUT_STATIC_PACKED = new ObjectType(10, 1);

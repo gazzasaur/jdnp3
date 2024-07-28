@@ -58,6 +58,11 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.B
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryOutputStaticFlagsObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.BinaryOutputStaticPackedObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.CrobObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.DoubleBitBinaryInputEventAbsoluteTimeObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.DoubleBitBinaryInputEventRelativeTimeObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.DoubleBitBinaryInputEventWithoutTimeObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.DoubleBitBinaryInputStaticFlagsObjectTypeEncoder;
+import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary.DoubleBitBinaryInputStaticPackedObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.counter.CounterEventInteger16AbsoluteTimeDeltaObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.counter.CounterEventInteger16AbsoluteTimeObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.counter.CounterEventInteger16DeltaObjectTypeEncoder;
@@ -88,7 +93,14 @@ public class ObjectTypeEncoderConstants {
 		this.add(new BinaryInputEventWithoutTimeObjectTypeEncoder());
 		this.add(new BinaryInputEventAbsoluteTimeObjectTypeEncoder());
 		this.add(new BinaryInputEventRelativeTimeObjectTypeEncoder());
-		
+
+		this.add(new DoubleBitBinaryInputStaticPackedObjectTypeEncoder());
+		this.add(new DoubleBitBinaryInputStaticFlagsObjectTypeEncoder());
+
+		this.add(new DoubleBitBinaryInputEventWithoutTimeObjectTypeEncoder());
+		this.add(new DoubleBitBinaryInputEventAbsoluteTimeObjectTypeEncoder());
+		this.add(new DoubleBitBinaryInputEventRelativeTimeObjectTypeEncoder());
+
 		this.add(new BinaryOutputStaticPackedObjectTypeEncoder());
 		this.add(new BinaryOutputStaticFlagsObjectTypeEncoder());
 		
