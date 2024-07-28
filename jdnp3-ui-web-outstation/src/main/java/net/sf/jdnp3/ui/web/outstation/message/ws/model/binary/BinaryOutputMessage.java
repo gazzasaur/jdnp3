@@ -19,6 +19,9 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_COMMAND_EVENT_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StatusCode.SUCCESS;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.OperationType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.TripCloseCode;
@@ -56,6 +59,8 @@ public class BinaryOutputMessage implements DeviceMessage {
 	private OperationType operationType = OperationType.NUL;
 	private TripCloseCode tripCloseCode = TripCloseCode.NUL;
 	
+	private Map<String, String> tags = new HashMap<>();
+
 	public String getType() {
 		return type;
 	}
@@ -242,5 +247,13 @@ public class BinaryOutputMessage implements DeviceMessage {
 
 	public void setDevice(String device) {
 		this.device = device;
+	}
+
+	public Map<String, String> getTags() {
+		return tags;
+	}
+
+	public void setTags(Map<String, String> tags) {
+		this.tags = tags;
 	}
 }

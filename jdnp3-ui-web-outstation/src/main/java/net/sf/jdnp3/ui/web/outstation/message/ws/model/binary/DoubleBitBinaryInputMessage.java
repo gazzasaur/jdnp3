@@ -17,6 +17,9 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.model.binary;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
@@ -39,6 +42,8 @@ public class DoubleBitBinaryInputMessage implements DeviceMessage {
 	private boolean chatterFilter = false;
 	private boolean communicationsLost = false;
 	
+	private Map<String, String> tags = new HashMap<>();
+
 	public String getType() {
 		return type;
 	}
@@ -153,5 +158,13 @@ public class DoubleBitBinaryInputMessage implements DeviceMessage {
 
 	public void setDevice(String device) {
 		this.device = device;
+	}
+
+	public Map<String, String> getTags() {
+		return tags;
+	}
+
+	public void setTags(Map<String, String> tags) {
+		this.tags = tags;
 	}
 }

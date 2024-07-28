@@ -84,6 +84,11 @@
 			<list>
 				<bean class="net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint">
 					<property name="name" value="Emergency Stop" />
+					<property name="tags">
+						<map key-type="java.lang.String" value-type="java.lang.String"> 
+							<entry key="controls" value="bi0"/>
+						</map>
+					</property>
 				</bean>
 			</list>
 		</property>

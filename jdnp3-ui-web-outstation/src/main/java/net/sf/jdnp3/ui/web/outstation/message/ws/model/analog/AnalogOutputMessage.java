@@ -19,6 +19,9 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StatusCode.SUCCESS;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StatusCode;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
@@ -50,6 +53,8 @@ public class AnalogOutputMessage implements DeviceMessage {
 	private long operatedCount = 0;
 	private StatusCode statusCode = SUCCESS;
 	
+	private Map<String, String> tags = new HashMap<>();
+
 	public String getType() {
 		return type;
 	}
@@ -212,5 +217,13 @@ public class AnalogOutputMessage implements DeviceMessage {
 
 	public void setDevice(String device) {
 		this.device = device;
+	}
+
+	public Map<String, String> getTags() {
+		return tags;
+	}
+
+	public void setTags(Map<String, String> tags) {
+		this.tags = tags;
 	}
 }
