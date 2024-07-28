@@ -15,8 +15,8 @@
  */
 package net.sf.jdnp3.ui.web.outstation.database.point.binary;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_EVENT_ANY;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_STATIC_ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.DOUBLE_BIT_BINARY_INPUT_EVENT_ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.DOUBLE_BIT_BINARY_INPUT_STATIC_ANY;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
@@ -33,8 +33,8 @@ public class DoubleBitBinaryInputDataPoint implements DataPoint {
 	private boolean chatterFilter = false;
 	private boolean communicationsLost = false;
 	
-	private ObjectType staticType = BINARY_INPUT_STATIC_ANY;
-	private ObjectType eventType = BINARY_INPUT_EVENT_ANY;
+	private ObjectType staticType = DOUBLE_BIT_BINARY_INPUT_STATIC_ANY;
+	private ObjectType eventType = DOUBLE_BIT_BINARY_INPUT_EVENT_ANY;
 	private int eventClass = 1;
 
 	public long getIndex() {
