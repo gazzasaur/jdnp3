@@ -12,7 +12,6 @@ import java.util.concurrent.Executors;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.mutable.MutableObject;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;

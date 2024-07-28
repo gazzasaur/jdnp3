@@ -3,7 +3,6 @@ package net.sf.jdnp3.dnp3.stack.layer.datalink.service.core;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.MASTER_TO_OUTSTATION;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.OUTSTATION_TO_MASTER;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,7 +13,6 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode;
-import net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkFrameUtils;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 // TODO For master stations this should also be a datalink layer to store state from outstations
