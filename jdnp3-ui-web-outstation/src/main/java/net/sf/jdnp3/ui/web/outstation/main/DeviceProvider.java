@@ -31,6 +31,8 @@ import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.channel.OutstationBinding;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseListener;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
+import net.sf.jdnp3.ui.web.outstation.database.core.GlobalDatabaseListener;
+import net.sf.jdnp3.ui.web.outstation.database.core.GlobalDatabaseListenerAdaptor;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
@@ -42,6 +44,7 @@ public class DeviceProvider {
 	private static Map<String, Map<String, OutstationDevice>> devices = new HashMap<>();
 	private static Map<String, Map<String, List<DatabaseListener>>> databaseListeners = new HashMap<>();
 	private static List<DeviceProviderListener> deviceProviderListeners = new ArrayList<>();
+	private static List<GlobalDatabaseListenerAdaptor> globalDatabaseListeners = new ArrayList<>();
 
 	public synchronized static boolean exists(String stationCode, String deviceCode) {
 		return devices.containsKey(stationCode) && devices.get(stationCode).containsKey(deviceCode);
@@ -100,6 +103,7 @@ public class DeviceProvider {
 		triggerDeviceProviderListeners();
 	}
 
+	// FIXME Typo
 	public synchronized static SiteListing gettDeviceList() {
 		return fetchDeviceListings();
 	}
@@ -161,6 +165,26 @@ public class DeviceProvider {
 		}
 	}
 	
+	public synchronized static void addGlobalDatabaseListener(GlobalDatabaseListener databaseListener) {
+		var globalDeviceList = DeviceProvider.gettDeviceList();
+		for (var site : globalDeviceList.getSiteDeviceLists()) {
+			for (var device : site.getDevices()) {
+				var adaptor = new GlobalDatabaseListenerAdaptor(site.getSite(), device, databaseListener);
+				DeviceProvider.addDatabaseListener(site.getSite(), device, adaptor);
+				globalDatabaseListeners.add(adaptor);
+			}
+		}
+	}
+	
+	public synchronized static void removeGlobalDatabaseListener(GlobalDatabaseListener databaseListener) {
+		for (var adaptor : new ArrayList<>(globalDatabaseListeners)) {
+			if (adaptor.getDatabaseListener() == databaseListener) {
+				DeviceProvider.removeDatabaseListener(adaptor.getSite(), adaptor.getDevice(), adaptor);
+				globalDatabaseListeners.remove(adaptor);
+			}
+		}
+	}
+
 	public static synchronized void triggerBindingsUpdate(OutstationDevice outstationDevice) {
 		List<DatabaseListener> listeners = getDatabaseListeners(outstationDevice.getSite(), outstationDevice.getDevice());
 		List<OutstationBinding> outstationBindings = DataLinkManagerProvider.getDataLinkBindings(outstationDevice);

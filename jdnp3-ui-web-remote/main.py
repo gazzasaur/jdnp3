@@ -123,6 +123,25 @@ control.start_data_link("20000")
 
 ###
 
+# A global or device specific websocket may also be created for realtime updates.
+#
+# from websockets.sync.client import connect
+#
+# with websockets.sync.client.connect('ws://localhost:8080/ws/globalDevice') as ws:
+#     data = ws.recv() # This is a JSON data point
+#
+#     # Device specific websocket
+#     with connect("ws://localhost:8080/ws/device?stationCode=Muffin%20Factory&deviceCode=Factory%20Floor") as websocket:
+#         # Do stuff here using send and recv
+#         pass
+#
+#     # Everything
+#     with connect("ws://localhost:8080/ws/globalDevice") as websocket:
+#         # Do stuff here using send and recv
+#         pass
+
+###
+
 # aic = jdnp3.control.AnalogInputController(10000, 100, 15000, 50000, 2)
 # 
 # while True:

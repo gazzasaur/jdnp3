@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 Graeme Farquharson
+ * Copyright 2024 Graeme Farquharson
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 package net.sf.jdnp3.ui.web.outstation.message.ws.core;
 
 import static java.lang.String.format;
-import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
-
-import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -34,9 +31,8 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sf.jdnp3.ui.web.outstation.channel.OutstationBinding;
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseListener;
+import net.sf.jdnp3.ui.web.outstation.database.core.GlobalDatabaseListener;
 import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageDecoder;
 import net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistry;
@@ -46,33 +42,19 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.MessageHandlerRegi
 import net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.MessageHandlerRegistryProvider;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.datalink.OutstationBindingsMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.ModelChangedMessage;
 
-@ServerEndpoint(value="/ws/device", encoders=MessageEncoder.class, decoders=GenericMessageDecoder.class, configurator=DeviceWebSocketConfigurator.class)
-public class DeviceWebSocket implements Messanger, DatabaseListener {
-	private Logger logger = LoggerFactory.getLogger(DeviceWebSocket.class);
+@ServerEndpoint(value="/ws/globalDevice", encoders=MessageEncoder.class, decoders=GenericMessageDecoder.class, configurator=GlobalDeviceWebSocketConfigurator.class)
+public class GlobalDeviceWebSocket implements Messanger, GlobalDatabaseListener {
+	private Logger logger = LoggerFactory.getLogger(GlobalDeviceWebSocket.class);
 	private Executor executor = Executors.newSingleThreadExecutor();
-	
+
 	private Session session;
 
-	private String device = "";
-	private String station = "";
-	
 	@OnOpen
 	public void onConnect(Session session, EndpointConfig endpointConfig) {
 		this.session = session;
 		session.setMaxIdleTimeout(0);
-		
-		try {
-			station = (String) defaultIfNull(session.getRequestParameterMap().get("stationCode").get(0), "");
-			device = (String) defaultIfNull(session.getRequestParameterMap().get("deviceCode").get(0), "");
-		} catch (Exception e) {
-		}
-    	
-		if (!station.isEmpty() && !device.isEmpty()) {
-			DeviceProvider.addDatabaseListener(station, device, this);
-		}
+		DeviceProvider.addGlobalDatabaseListener(this);
 	}
 	
     @OnMessage
@@ -84,24 +66,20 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 	
     @OnClose
     public void onClose(Session session) {
-    	DeviceProvider.removeDatabaseListener(station, device, this);
+    	DeviceProvider.removeGlobalDatabaseListener(this);
     }
     
     @OnError
     public void onError(Session session, Throwable throwable) {
     	logger.error("Websocket Error", throwable);
-    	DeviceProvider.removeDatabaseListener(station, device, this);
+    	DeviceProvider.removeGlobalDatabaseListener(this);
     }
     
     public void sendMessage(Message message) {
     	session.getAsyncRemote().sendObject(message);
     }
 
-	public void modelChanged() {
-		session.getAsyncRemote().sendObject(new ModelChangedMessage());
-	}
-
-	public void valueChanged(DataPoint dataPoint) {
+	public void valueChanged(String site, String device, DataPoint dataPoint) {
 		GenericMessageRegistry registry = GenericMessageRegistryProvider.getRegistry();
 		if (registry.isRegistered(dataPoint.getClass())) {
 			try {
@@ -109,7 +87,7 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 				Message message = messageClass.getDeclaredConstructor().newInstance();
 				if (message instanceof DeviceMessage) {
 					DeviceMessage deviceMessage = (DeviceMessage) message;
-					deviceMessage.setSite(station);
+					deviceMessage.setSite(site);
 					deviceMessage.setDevice(device);
 				}
 				
@@ -128,18 +106,6 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 			}
 		} else {
 			logger.warn(format("Data point type %s has not been mapped to a message.", dataPoint.getClass()));
-		}
-	}
-
-	public void bindingsChanged(List<OutstationBinding> outstationBindings) {
-		try {
-			OutstationBindingsMessage message = new OutstationBindingsMessage();
-			message.setSite(station);
-			message.setDevice(device);
-			message.setOutstationBindings(outstationBindings);
-			session.getAsyncRemote().sendObject(message);
-		} catch (Exception e) {
-			logger.error("Cannot create message.", e);
 		}
 	}
 }

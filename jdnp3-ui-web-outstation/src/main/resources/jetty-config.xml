@@ -600,6 +600,16 @@
 		<property name="targetMethod" value="addEndpoint" />
 		<property name="arguments">
 			<list>
+				<value type="java.lang.Class">net.sf.jdnp3.ui.web.outstation.message.ws.core.GlobalDeviceWebSocket</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="serverContainer" />
+		<property name="targetMethod" value="addEndpoint" />
+		<property name="arguments">
+			<list>
 				<value type="java.lang.Class">net.sf.jdnp3.ui.web.outstation.message.ws.core.StationWebSocket</value>
 			</list>
 		</property>
