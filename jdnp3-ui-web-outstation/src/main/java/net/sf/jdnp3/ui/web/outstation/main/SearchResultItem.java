@@ -19,7 +19,9 @@ public class SearchResultItem {
 	private String site = "";
 	private String device = "";
 	private String pointType = "";
+	private String pointName = "";
 	private long pointIndex = 0;
+	private String additionalInformation = "";
 
 	public String getSite() {
 		return site;
@@ -43,7 +45,14 @@ public class SearchResultItem {
 	public void setPointType(String pointType) {
 		this.pointType = pointType;
 	}
-	
+
+	public String getPointName() {
+		return pointName;
+	}
+	public void setPointName(String pointName) {
+		this.pointName = pointName;
+	}
+
 	public long getPointIndex() {
 		return pointIndex;
 	}
@@ -51,4 +60,11 @@ public class SearchResultItem {
 	public void setPointIndex(long pointIndex) {
 		this.pointIndex = pointIndex;
 	}	
+
+	public String getAdditionalInformation() {
+		return additionalInformation;
+	}
+	public void setAdditionalInformation(String additionalInformation) {
+		this.additionalInformation = additionalInformation;
+	}
 }

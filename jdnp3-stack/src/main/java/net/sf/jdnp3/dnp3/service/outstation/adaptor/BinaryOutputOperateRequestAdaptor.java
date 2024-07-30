@@ -35,7 +35,7 @@ public class BinaryOutputOperateRequestAdaptor implements OutstationRequestHandl
 
 	public boolean canHandle(FunctionCode functionCode, ObjectFragment request) {
 		// FIXME OPERATE currently ignores SELECT
-		if (functionCode == DIRECT_OPERATE && functionCode == OPERATE && request.getObjectFragmentHeader().getObjectType().equals(BINARY_OUTPUT_COMMAND_CROB)) {
+		if ((functionCode == DIRECT_OPERATE || functionCode == OPERATE) && request.getObjectFragmentHeader().getObjectType().equals(BINARY_OUTPUT_COMMAND_CROB)) {
 			return true;
 		}
 		return false;

@@ -15,24 +15,19 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.model.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.sf.jdnp3.ui.web.outstation.main.SearchResultItem;
-
-public class SearchResultMessage implements Message {
-	private String type = "searchResult";
-	private List<SearchResultItem> results = new ArrayList<SearchResultItem>();
-
+public class SearchRequestMessage implements Message {
+	private String type = "searchRequest";
+	private String searchTerm = "";
+	
 	public String getType() {
 		return type;
 	}
-	
-	public List<SearchResultItem> getResults() {
-		return results;
+
+	public String getSearchTerm() {
+		return searchTerm;
 	}
 
-	public void setResults(List<SearchResultItem> results) {
-		this.results = results;
+	public void setSearchTerm(String searchTerm) {
+		this.searchTerm = searchTerm;
 	}
 }

@@ -16,6 +16,7 @@
 package net.sf.jdnp3.dnp3.service.outstation.adaptor;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.DIRECT_OPERATE;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.OPERATE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_COMMAND_GROUP;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class AnalogOutputOperateRequestAdaptor implements OutstationRequestHandl
 
 	public boolean canHandle(FunctionCode functionCode, ObjectFragment request) {
 		// FIXME Operate currently ignores select
-		if (functionCode == DIRECT_OPERATE && functionCode == DIRECT_OPERATE && request.getObjectFragmentHeader().getObjectType().getGroup() == ANALOG_OUTPUT_COMMAND_GROUP) {
+		if ((functionCode == DIRECT_OPERATE || functionCode == OPERATE) && request.getObjectFragmentHeader().getObjectType().getGroup() == ANALOG_OUTPUT_COMMAND_GROUP) {
 			return true;
 		}
 		return false;
