@@ -278,7 +278,6 @@
 		</property>
 	</bean>
 
-	<bean id="genericMessageRegistry" class="net.sf.jdnp3.ui.web.outstation.message.ws.decoder.GenericMessageRegistryProvider" factory-method="getRegistry" />
 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetObject" ref="genericMessageRegistry" />
 		<property name="targetMethod" value="register" />

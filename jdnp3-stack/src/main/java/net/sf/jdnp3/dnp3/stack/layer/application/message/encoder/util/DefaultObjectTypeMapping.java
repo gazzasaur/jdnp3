@@ -26,6 +26,8 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_STATIC_PACKED;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.COUNTER_EVENT_INT32_FLAGS_TIME;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.COUNTER_STATIC_INT32;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.DOUBLE_BIT_BINARY_INPUT_EVENT_WITHOUT_TIME;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.DOUBLE_BIT_BINARY_INPUT_STATIC_PACKED;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +42,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInput
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputCrobObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputStaticObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.DoubleBitBinaryInputEventObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.DoubleBitBinaryInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.counter.CounterEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.counter.CounterStaticObjectInstance;
@@ -52,6 +56,8 @@ public class DefaultObjectTypeMapping {
 		this.put(BinaryOutputStaticObjectInstance.class, BINARY_OUTPUT_STATIC_PACKED);
 		this.put(BinaryOutputEventObjectInstance.class, BINARY_OUTPUT_EVENT_ABSOLUTE_TIME);
 		this.put(BinaryOutputCrobObjectInstance.class, BINARY_OUTPUT_COMMAND_CROB);
+		this.put(DoubleBitBinaryInputStaticObjectInstance.class, DOUBLE_BIT_BINARY_INPUT_STATIC_PACKED);
+		this.put(DoubleBitBinaryInputEventObjectInstance.class, DOUBLE_BIT_BINARY_INPUT_EVENT_WITHOUT_TIME);
 		this.put(CounterStaticObjectInstance.class, COUNTER_STATIC_INT32);
 		this.put(CounterEventObjectInstance.class, COUNTER_EVENT_INT32_FLAGS_TIME);
 		this.put(AnalogInputStaticObjectInstance.class, ANALOG_INPUT_STATIC_FLOAT64);

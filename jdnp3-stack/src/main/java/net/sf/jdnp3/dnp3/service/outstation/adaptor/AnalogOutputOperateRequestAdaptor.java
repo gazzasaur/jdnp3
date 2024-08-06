@@ -40,7 +40,7 @@ public class AnalogOutputOperateRequestAdaptor implements OutstationRequestHandl
 		}
 		return false;
 	}
-	
+
 	public void doRequest(FunctionCode functionCode, OutstationEventQueue outstationEventQueue, ObjectFragment request, List<ObjectInstance> response) {
 		if (serviceRequestHandler != null) {
 			for (ObjectInstance objectInstance : request.getObjectInstances()) {
@@ -48,7 +48,7 @@ public class AnalogOutputOperateRequestAdaptor implements OutstationRequestHandl
 			}
 		}
 	}
-	
+
 	public void setRequestHandler(OutstationRequestHandler requestHandler) {
 		if (requestHandler instanceof AnalogOutputOperateRequestHandler) {
 			this.serviceRequestHandler = (AnalogOutputOperateRequestHandler) requestHandler;
