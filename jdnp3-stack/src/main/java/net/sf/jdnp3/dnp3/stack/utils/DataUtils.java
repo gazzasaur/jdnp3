@@ -31,7 +31,17 @@ public class DataUtils {
 		ArrayUtils.reverse(arrayValue);
 		data.addAll(asList(toObject(arrayValue)).subList(0, octetCount));
 	}
-	
+
+	public static long getUnsignedInteger(int index, int octetCount, List<Byte> data) {
+		byte[] rawBuffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
+		for (int i = 0; i < octetCount; ++i) {
+			rawBuffer[i] = data.get(index + i);
+		}
+		ArrayUtils.reverse(rawBuffer);
+		return ByteBuffer.wrap(rawBuffer).getLong();
+	}
+
+	// FIXME Critical: This is being used for unsigned integers in some places.
 	public static long getInteger(int index, int octetCount, List<Byte> data) {
 		byte[] rawBuffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
 		if (data.get(octetCount - 1).byteValue() < 0) {

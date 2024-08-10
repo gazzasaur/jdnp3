@@ -25,9 +25,9 @@ import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 public class IndexRangeDecoderHelper implements RangeDecoderHelper {
 	public Range decode(RangeSpecifierCode rangeSpecifierCode, List<Byte> data) {
 		IndexRange range = new IndexRange();
-		range.setStartIndex(DataUtils.getInteger(0, rangeSpecifierCode.getOctetCount(), data));
-		range.setStopIndex(DataUtils.getInteger(rangeSpecifierCode.getOctetCount(), rangeSpecifierCode.getOctetCount(), data));
-		DataUtils.trim(2* rangeSpecifierCode.getOctetCount(), data);
+		range.setStartIndex(DataUtils.getUnsignedInteger(0, rangeSpecifierCode.getOctetCount(), data));
+		range.setStopIndex(DataUtils.getUnsignedInteger(rangeSpecifierCode.getOctetCount(), rangeSpecifierCode.getOctetCount(), data));
+		DataUtils.trim(2*rangeSpecifierCode.getOctetCount(), data);
 		return range;
 	}
 }

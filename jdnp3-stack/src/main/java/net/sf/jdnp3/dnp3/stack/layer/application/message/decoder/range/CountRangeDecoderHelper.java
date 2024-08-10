@@ -25,7 +25,7 @@ import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 public class CountRangeDecoderHelper implements RangeDecoderHelper {
 	public Range decode(RangeSpecifierCode rangeSpecifierCode, List<Byte> data) {
 		CountRange range = new CountRange();
-		range.setCount(DataUtils.getInteger(0, rangeSpecifierCode.getOctetCount(), data));
+		range.setCount(DataUtils.getUnsignedInteger(0, rangeSpecifierCode.getOctetCount(), data));
 		DataUtils.trim(rangeSpecifierCode.getOctetCount(), data);
 		return range;
 	}

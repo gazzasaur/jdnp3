@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator;
 
-import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getInteger;
+import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getUnsignedInteger;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.trim;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public class IndexPrefixCountRangeItemEnumerator implements ItemEnumerator {
 			throw new IllegalStateException("No items remain.");
 		}
 		++count;
-		long index = getInteger(0, indexPrefixType.getOctetCount(), data);
+		long index = getUnsignedInteger(0, indexPrefixType.getOctetCount(), data);
 		trim(indexPrefixType.getOctetCount(), data);
 		return index;
 	}
