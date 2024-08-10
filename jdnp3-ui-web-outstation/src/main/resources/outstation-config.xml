@@ -3,8 +3,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
-	<bean id="executorService" class="java.util.concurrent.Executors" factory-method="newFixedThreadPool">
-		<constructor-arg value="2" />
+	<bean id="executorService" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetClass" value="java.util.concurrent.Executors" />
+		<property name="targetMethod" value="newFixedThreadPool" />
+		<property name="arguments">
+			<list>
+				<value>2</value>
+			</list>
+		</property>
 	</bean>
 	
 	<bean id="dataPump" class="net.sf.jdnp3.dnp3.stack.nio.DataPump" />
