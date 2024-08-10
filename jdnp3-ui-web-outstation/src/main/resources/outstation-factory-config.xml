@@ -75,7 +75,13 @@
 					<property name="staticType" ref="binaryInputStaticWithFlags" />
 				</bean>
 				<bean class="net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint">
+					<property name="index" value="10" />
 					<property name="name" value="Emergency Stopped" />
+					<property name="staticType" ref="binaryInputStaticWithFlags" />
+				</bean>
+				<bean class="net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint">
+					<property name="name" value="No Fault Found" />
+					<property name="active" value="true" />
 					<property name="staticType" ref="binaryInputStaticWithFlags" />
 				</bean>
 			</list>

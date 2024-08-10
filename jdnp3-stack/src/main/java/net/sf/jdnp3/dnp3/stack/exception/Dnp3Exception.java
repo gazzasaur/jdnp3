@@ -15,7 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.exception;
 
-@SuppressWarnings("serial")
 public class Dnp3Exception extends RuntimeException {
 	public Dnp3Exception(String message) {
 		super(message);

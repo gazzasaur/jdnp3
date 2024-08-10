@@ -25,7 +25,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 
 public class BinaryInputDataPoint implements DataPoint {
-	private long index = 0;
+	private long index = -1;
 	private String name = "";
 	
 	private boolean online = true;

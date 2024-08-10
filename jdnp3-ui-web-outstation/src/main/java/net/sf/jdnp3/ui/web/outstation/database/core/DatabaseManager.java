@@ -47,38 +47,14 @@ public class DatabaseManager {
 		return internalStatusProvider;
 	}
 
-	public void setAnalogInputDatabaseSize(int size) {
-		synchronized (database) {
-			while (database.getAnalogInputDataPoints().size() > size) {
-				database.removeAnalogInputDataPoint();
-			}
-			while (database.getAnalogInputDataPoints().size() < size) {
-				database.addAnalogInputDataPoint();
-			}
-		}
-		for (DatabaseListener databaseListener : databaseListeners) {
-			databaseListener.modelChanged();
-		}
-	}
-
 	public void addAnalogInputDataPoints(String... names) {
 		synchronized (database) {
+			long nextIndex = database.getAnalogInputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
-				database.addAnalogInputDataPoint(name);
-			}
-		}
-		for (DatabaseListener databaseListener : databaseListeners) {
-			databaseListener.modelChanged();
-		}
-	}
-
-	public void setAnalogOutputDatabaseSize(int size) {
-		synchronized (database) {
-			while (database.getAnalogOutputDataPoints().size() > size) {
-				database.removeAnalogOutputDataPoint();
-			}
-			while (database.getAnalogOutputDataPoints().size() < size) {
-				database.addAnalogOutputDataPoint();
+				var dataPoint = new AnalogInputDataPoint();
+				dataPoint.setIndex(++nextIndex);
+				dataPoint.setName(name);
+				database.setAnalogInputDataPoint(dataPoint);
 			}
 		}
 		for (DatabaseListener databaseListener : databaseListeners) {
@@ -88,22 +64,12 @@ public class DatabaseManager {
 
 	public void addAnalogOutputDataPoints(String... names) {
 		synchronized (database) {
+			long nextIndex = database.getAnalogOutputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
-				database.addAnalogOutputDataPoint(name);
-			}
-		}
-		for (DatabaseListener databaseListener : databaseListeners) {
-			databaseListener.modelChanged();
-		}
-	}
-
-	public void setBinaryInputDatabaseSize(int size) {
-		synchronized (database) {
-			while (database.getBinaryInputDataPoints().size() > size) {
-				database.removeBinaryInputDataPoint();
-			}
-			while (database.getBinaryInputDataPoints().size() < size) {
-				database.addBinaryInputDataPoint();
+				var dataPoint = new AnalogOutputDataPoint();
+				dataPoint.setIndex(++nextIndex);
+				dataPoint.setName(name);
+				database.setAnalogOutputDataPoint(dataPoint);
 			}
 		}
 		for (DatabaseListener databaseListener : databaseListeners) {
@@ -113,22 +79,12 @@ public class DatabaseManager {
 
 	public void addBinaryInputDataPoints(String... names) {
 		synchronized (database) {
+			long nextIndex = database.getBinaryInputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
-				database.addBinaryInputDataPoint(name);
-			}
-		}
-		for (DatabaseListener databaseListener : databaseListeners) {
-			databaseListener.modelChanged();
-		}
-	}
-	
-	public void setBinaryOutputDatabaseSize(int size) {
-		synchronized (database) {
-			while (database.getBinaryOutputDataPoints().size() > size) {
-				database.removeBinaryOutputDataPoint();
-			}
-			while (database.getBinaryOutputDataPoints().size() < size) {
-				database.addBinaryOutputDataPoint();
+				var dataPoint = new BinaryInputDataPoint();
+				dataPoint.setIndex(++nextIndex);
+				dataPoint.setName(name);
+				database.setBinaryInputDataPoint(dataPoint);
 			}
 		}
 		for (DatabaseListener databaseListener : databaseListeners) {
@@ -138,22 +94,12 @@ public class DatabaseManager {
 	
 	public void addBinaryOutputDataPoints(String... names) {
 		synchronized (database) {
+			long nextIndex = database.getBinaryOutputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
-				database.addBinaryOutputDataPoint(name);
-			}
-		}
-		for (DatabaseListener databaseListener : databaseListeners) {
-			databaseListener.modelChanged();
-		}
-	}
-	
-	public void setDoubleBitBinaryInputDatabaseSize(int size) {
-		synchronized (database) {
-			while (database.getDoubleBitBinaryInputDataPoints().size() > size) {
-				database.removeDoubleBitBinaryInputDataPoint();
-			}
-			while (database.getDoubleBitBinaryInputDataPoints().size() < size) {
-				database.addDoubleBitBinaryInputDataPoint();
+				var dataPoint = new BinaryOutputDataPoint();
+				dataPoint.setIndex(++nextIndex);
+				dataPoint.setName(name);
+				database.setBinaryOutputDataPoint(dataPoint);
 			}
 		}
 		for (DatabaseListener databaseListener : databaseListeners) {
@@ -163,22 +109,12 @@ public class DatabaseManager {
 
 	public void addDoubleBitBinaryInputDataPoints(String... names) {
 		synchronized (database) {
+			long nextIndex = database.getDoubleBitBinaryInputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
-				database.addDoubleBitBinaryInputDataPoint(name);
-			}
-		}
-		for (DatabaseListener databaseListener : databaseListeners) {
-			databaseListener.modelChanged();
-		}
-	}
-	
-	public void setCounterDatabaseSize(int size) {
-		synchronized (database) {
-			while (database.getCounterDataPoints().size() > size) {
-				database.removeCounterDataPoint();
-			}
-			while (database.getCounterDataPoints().size() < size) {
-				database.addCounterDataPoint();
+				var dataPoint = new DoubleBitBinaryInputDataPoint();
+				dataPoint.setIndex(++nextIndex);
+				dataPoint.setName(name);
+				database.setDoubleBitBinaryInputDataPoint(dataPoint);
 			}
 		}
 		for (DatabaseListener databaseListener : databaseListeners) {
@@ -188,8 +124,12 @@ public class DatabaseManager {
 	
 	public void addCounterDataPoints(String... names) {
 		synchronized (database) {
+			long nextIndex = database.getCounterDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
-				database.addCounterDataPoint(name);
+				var dataPoint = new CounterDataPoint();
+				dataPoint.setIndex(++nextIndex);
+				dataPoint.setName(name);
+				database.setCounterDataPoint(dataPoint);
 			}
 		}
 		for (DatabaseListener databaseListener : databaseListeners) {
@@ -256,12 +196,8 @@ public class DatabaseManager {
 		synchronized (database) {
 			database.setAnalogInputDataPoint(this.cloneObject(analogDataPoint, AnalogInputDataPoint.class));
 		}
-		if (analogDataPoint.getIndex() < database.getAnalogInputDataPoints().size()) {
-			for (DatabaseListener databaseListener : databaseListeners) {
-				databaseListener.valueChanged(database.getAnalogInputDataPoints().get((int) analogDataPoint.getIndex()));
-			}
-		} else {
-			logger.warn("Cannot write analog data point of index: " + analogDataPoint.getIndex());
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.valueChanged(analogDataPoint);
 		}
 	}
 	
@@ -269,12 +205,8 @@ public class DatabaseManager {
 		synchronized (database) {
 			database.setAnalogOutputDataPoint(this.cloneObject(analogDataPoint, AnalogOutputDataPoint.class));
 		}
-		if (analogDataPoint.getIndex() < database.getAnalogOutputDataPoints().size()) {
-			for (DatabaseListener databaseListener : databaseListeners) {
-				databaseListener.valueChanged(analogDataPoint);
-			}
-		} else {
-			logger.warn("Cannot write analog data point of index: " + analogDataPoint.getIndex());
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.valueChanged(analogDataPoint);
 		}
 	}
 	
@@ -282,12 +214,8 @@ public class DatabaseManager {
 		synchronized (database) {
 			database.setBinaryInputDataPoint(this.cloneObject(binaryDataPoint, BinaryInputDataPoint.class));
 		}
-		if (binaryDataPoint.getIndex() < database.getBinaryInputDataPoints().size()) {
-			for (DatabaseListener databaseListener : databaseListeners) {
-				databaseListener.valueChanged(binaryDataPoint);
-			}
-		} else {
-			logger.warn("Cannot write binary data point of index: " + binaryDataPoint.getIndex());
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.valueChanged(binaryDataPoint);
 		}
 	}
 
@@ -298,12 +226,8 @@ public class DatabaseManager {
 		synchronized (database) {
 			database.setDoubleBitBinaryInputDataPoint(this.cloneObject(binaryDataPoint, DoubleBitBinaryInputDataPoint.class));
 		}
-		if (binaryDataPoint.getIndex() < database.getDoubleBitBinaryInputDataPoints().size()) {
-			for (DatabaseListener databaseListener : databaseListeners) {
-				databaseListener.valueChanged(binaryDataPoint);
-			}
-		} else {
-			logger.warn("Cannot write double bit binary data point of index: " + binaryDataPoint.getIndex());
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.valueChanged(binaryDataPoint);
 		}
 	}
 
@@ -311,12 +235,8 @@ public class DatabaseManager {
 		synchronized (database) {
 			database.setBinaryOutputDataPoint(this.cloneObject(binaryDataPoint, BinaryOutputDataPoint.class));
 		}
-		if (binaryDataPoint.getIndex() < database.getBinaryOutputDataPoints().size()) {
-			for (DatabaseListener databaseListener : databaseListeners) {
-				databaseListener.valueChanged(binaryDataPoint);
-			}
-		} else {
-			logger.warn("Cannot write binary output data point of index: " + binaryDataPoint.getIndex());
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.valueChanged(binaryDataPoint);
 		}
 	}
 	
@@ -324,12 +244,8 @@ public class DatabaseManager {
 		synchronized (database) {
 			database.setCounterDataPoint(this.cloneObject(dataPoint, CounterDataPoint.class));
 		}
-		if (dataPoint.getIndex() < database.getCounterDataPoints().size()) {
-			for (DatabaseListener databaseListener : databaseListeners) {
-				databaseListener.valueChanged(dataPoint);
-			}
-		} else {
-			logger.warn("Cannot write data point of index: " + dataPoint.getIndex());
+		for (DatabaseListener databaseListener : databaseListeners) {
+			databaseListener.valueChanged(dataPoint);
 		}
 	}
 

@@ -25,7 +25,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 
 public class CounterDataPoint implements DataPoint {
-	private long index = 0;
+	private long index = -1;
 	private long value = 0;
 	private String name = "";
 	

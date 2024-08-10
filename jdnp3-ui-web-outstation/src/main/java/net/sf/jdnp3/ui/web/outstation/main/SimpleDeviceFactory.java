@@ -80,7 +80,6 @@ public class SimpleDeviceFactory implements DeviceFactory {
 	private AnalogOutputDataPoint templateAnalogOutputDataPoint = new AnalogOutputDataPoint();
 	private CounterDataPoint templateCounterDataPoint = new CounterDataPoint();
 	
-	@SuppressWarnings("serial")
 	private Map<String, Class<? extends Range>> rangeClassMapping = new HashMap<String, Class<? extends Range>>() {{
 		this.put("NoRange", NoRange.class);
 		this.put("CountRange", CountRange.class);
@@ -89,7 +88,6 @@ public class SimpleDeviceFactory implements DeviceFactory {
 		this.put("VariableFormatQualifierRange", VariableFormatQualifierRange.class);
 	}};
 
-	@SuppressWarnings("serial")
 	private Map<String, Class<? extends PrefixType>> prefixTypeClassMapping = new HashMap<String, Class<? extends PrefixType>>() {{
 		this.put("NoPrefixType", NoPrefixType.class);
 		this.put("IndexPrefixType", IndexPrefixType.class);

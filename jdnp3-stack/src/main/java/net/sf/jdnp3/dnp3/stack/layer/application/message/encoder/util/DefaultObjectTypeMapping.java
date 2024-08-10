@@ -49,7 +49,6 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.counter.CounterEve
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.counter.CounterStaticObjectInstance;
 
 public class DefaultObjectTypeMapping {
-	@SuppressWarnings("serial")
 	private Map<Class<? extends ObjectInstance>, ObjectType> mappings = new HashMap<Class<? extends ObjectInstance>, ObjectType>() {{
 		this.put(BinaryInputStaticObjectInstance.class, BINARY_INPUT_STATIC_PACKED);
 		this.put(BinaryInputEventObjectInstance.class, BINARY_INPUT_EVENT_ABSOLUTE_TIME);

@@ -85,7 +85,6 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.time.Tim
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.time.TimeDelayFineObjectTypeEncoder;
 
 public class ObjectTypeEncoderConstants {
-	@SuppressWarnings("serial")
 	public static final List<ObjectTypeEncoder> OBJECT_TYPE_ENCODERS = new ArrayList<ObjectTypeEncoder>() {{
 		this.add(new BinaryInputStaticPackedObjectTypeEncoder());
 		this.add(new BinaryInputStaticFlagsObjectTypeEncoder());

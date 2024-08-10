@@ -19,7 +19,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
@@ -34,26 +33,17 @@ public class BinaryOutputMessageHandler implements DeviceMessageHandler {
 		return message instanceof BinaryOutputMessage;
 	}
 
+	// FIXME Probably shouldn't override all of these from here. Support null on input to prevent overrides
 	public void processMessage(Messanger messanger, OutstationDevice outstationDevice, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 		BinaryOutputMessage binaryOutputMessage = (BinaryOutputMessage) message;
 
-		DatabaseManager databaseManager = outstationDevice.getDatabaseManager();
 		BinaryOutputDataPoint binaryDataPoint = new BinaryOutputDataPoint();
-		BinaryOutputDataPoint currentValue = databaseManager.getBinaryOutputDataPoints().get((int) binaryDataPoint.getIndex());
-		
 		try {
 			BeanUtils.copyProperties(binaryDataPoint, binaryOutputMessage);
-			binaryDataPoint.setOperatedCount(currentValue.getOperatedCount());
-			binaryDataPoint.setCount(currentValue.getCount());
-			binaryDataPoint.setOnTime(currentValue.getOnTime());
-			binaryDataPoint.setOffTime(currentValue.getOffTime());
-			binaryDataPoint.setOperationType(currentValue.getOperationType());
-			binaryDataPoint.setTripCloseCode(currentValue.getTripCloseCode());
-			
-			databaseManager.setBinaryOutputDataPoint(binaryDataPoint);
+			outstationDevice.getDatabaseManager().setBinaryOutputDataPoint(binaryDataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

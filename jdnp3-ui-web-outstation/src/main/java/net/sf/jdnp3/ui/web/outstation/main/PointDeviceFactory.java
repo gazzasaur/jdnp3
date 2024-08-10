@@ -36,6 +36,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.VariableFormatQualifierRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.VirtualAddressRange;
+import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputEventListener;
@@ -45,12 +46,15 @@ import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputEventListener;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputEventListener;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputEventListener;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterEventListener;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogInputStaticHandler;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogOutputCommandOperator;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryInputStaticHandler;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.CrobOperator;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.DoubleBitBinaryInputStaticHandler;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic.Class0Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic.Class1Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic.Class2Reader;
@@ -61,11 +65,11 @@ import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic.TimeAndDateHan
 public class PointDeviceFactory implements DeviceFactory {
 	private List<BinaryInputDataPoint> binaryInputDataPoints = new ArrayList<>();
 	private List<BinaryOutputDataPoint> binaryOutputDataPoints = new ArrayList<>();
+	private List<DoubleBitBinaryInputDataPoint> doubleBitBinaryInputDataPoints = new ArrayList<>();
 	private List<AnalogInputDataPoint> analogInputDataPoints = new ArrayList<>();
 	private List<AnalogOutputDataPoint> analogOutputDataPoints = new ArrayList<>();
 	private List<CounterDataPoint> counterDataPoints = new ArrayList<>();
 	
-	@SuppressWarnings("serial")
 	private Map<String, Class<? extends Range>> rangeClassMapping = new HashMap<String, Class<? extends Range>>() {{
 		this.put("NoRange", NoRange.class);
 		this.put("CountRange", CountRange.class);
@@ -74,7 +78,6 @@ public class PointDeviceFactory implements DeviceFactory {
 		this.put("VariableFormatQualifierRange", VariableFormatQualifierRange.class);
 	}};
 
-	@SuppressWarnings("serial")
 	private Map<String, Class<? extends PrefixType>> prefixTypeClassMapping = new HashMap<String, Class<? extends PrefixType>>() {{
 		this.put("NoPrefixType", NoPrefixType.class);
 		this.put("IndexPrefixType", IndexPrefixType.class);
@@ -91,64 +94,88 @@ public class PointDeviceFactory implements DeviceFactory {
 		outstationDevice.setDevice(deviceName);
 		
 		DatabaseManager databaseManager = new DatabaseManager();
-		
-		List<String> names = new ArrayList<>();
+
+		long nextIndex = databaseManager.getBinaryInputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(0);
 		for (BinaryInputDataPoint dataPoint : binaryInputDataPoints) {
-			names.add(dataPoint.getName());
-		}
-		databaseManager.addBinaryInputDataPoints(names.toArray(new String[0]));
-		for (int i = 0; i < databaseManager.getBinaryInputDataPoints().size(); i++) {
-			BinaryInputDataPoint dataPoint = binaryInputDataPoints.get(i);
-			dataPoint.setIndex(i);
+			if (dataPoint.getIndex() >= 0 && dataPoint.getIndex() < nextIndex) {
+				throw new IllegalArgumentException("Data points must be created in ascending order.");
+			}
+			if (dataPoint.getIndex() < 0) {
+				dataPoint.setIndex(nextIndex++);
+			} else {
+				nextIndex = dataPoint.getIndex() + 1;
+			}
 			databaseManager.setBinaryInputDataPoint(dataPoint);
 		}
-		
-		names.clear();
+
+		nextIndex = databaseManager.getBinaryOutputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(0);
 		for (BinaryOutputDataPoint dataPoint : binaryOutputDataPoints) {
-			names.add(dataPoint.getName());
-		}
-		databaseManager.addBinaryOutputDataPoints(names.toArray(new String[0]));
-		for (int i = 0; i < databaseManager.getBinaryOutputDataPoints().size(); i++) {
-			BinaryOutputDataPoint dataPoint = binaryOutputDataPoints.get(i);
-			dataPoint.setIndex(i);
+			if (dataPoint.getIndex() >= 0 && dataPoint.getIndex() < nextIndex) {
+				throw new IllegalArgumentException("Data points must be created in ascending order.");
+			}
+			if (dataPoint.getIndex() < 0) {
+				dataPoint.setIndex(nextIndex++);
+			} else {
+				nextIndex = dataPoint.getIndex() + 1;
+			}
 			databaseManager.setBinaryOutputDataPoint(dataPoint);
 		}
-		
-		names.clear();
-		for (AnalogInputDataPoint dataPoint : analogInputDataPoints) {
-			names.add(dataPoint.getName());
+
+		nextIndex = databaseManager.getDoubleBitBinaryInputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(0);
+		for (DoubleBitBinaryInputDataPoint dataPoint : doubleBitBinaryInputDataPoints) {
+			if (dataPoint.getIndex() >= 0 && dataPoint.getIndex() < nextIndex) {
+				throw new IllegalArgumentException("Data points must be created in ascending order.");
+			}
+			if (dataPoint.getIndex() < 0) {
+				dataPoint.setIndex(nextIndex++);
+			} else {
+				nextIndex = dataPoint.getIndex() + 1;
+			}
+			databaseManager.setDoubleBitBinaryInputDataPoint(dataPoint);
 		}
-		databaseManager.addAnalogInputDataPoints(names.toArray(new String[0]));
-		for (int i = 0; i < databaseManager.getAnalogInputDataPoints().size(); i++) {
-			AnalogInputDataPoint dataPoint = analogInputDataPoints.get(i);
-			dataPoint.setIndex(i);
+
+		nextIndex = databaseManager.getAnalogInputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(0);
+		for (AnalogInputDataPoint dataPoint : analogInputDataPoints) {
+			if (dataPoint.getIndex() >= 0 && dataPoint.getIndex() < nextIndex) {
+				throw new IllegalArgumentException("Data points must be created in ascending order.");
+			}
+			if (dataPoint.getIndex() < 0) {
+				dataPoint.setIndex(nextIndex++);
+			} else {
+				nextIndex = dataPoint.getIndex() + 1;
+			}
 			databaseManager.setAnalogInputDataPoint(dataPoint);
 		}
-		
-		names.clear();
+
+		nextIndex = databaseManager.getAnalogOutputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(0);
 		for (AnalogOutputDataPoint dataPoint : analogOutputDataPoints) {
-			names.add(dataPoint.getName());
-		}
-		databaseManager.addAnalogOutputDataPoints(names.toArray(new String[0]));
-		for (int i = 0; i < databaseManager.getAnalogOutputDataPoints().size(); i++) {
-			AnalogOutputDataPoint dataPoint = analogOutputDataPoints.get(i);
-			dataPoint.setIndex(i);
+			if (dataPoint.getIndex() >= 0 && dataPoint.getIndex() < nextIndex) {
+				throw new IllegalArgumentException("Data points must be created in ascending order.");
+			}
+			if (dataPoint.getIndex() < 0) {
+				dataPoint.setIndex(nextIndex++);
+			} else {
+				nextIndex = dataPoint.getIndex() + 1;
+			}
 			databaseManager.setAnalogOutputDataPoint(dataPoint);
 		}
-		
-		names.clear();
+
+		nextIndex = databaseManager.getCounterDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(0);
 		for (CounterDataPoint dataPoint : counterDataPoints) {
-			names.add(dataPoint.getName());
-		}
-		databaseManager.addCounterDataPoints(names.toArray(new String[0]));
-		for (int i = 0; i < databaseManager.getCounterDataPoints().size(); i++) {
-			CounterDataPoint dataPoint = counterDataPoints.get(i);
-			dataPoint.setIndex(i);
+			if (dataPoint.getIndex() >= 0 && dataPoint.getIndex() < nextIndex) {
+				throw new IllegalArgumentException("Data points must be created in ascending order.");
+			}
+			if (dataPoint.getIndex() < 0) {
+				dataPoint.setIndex(nextIndex++);
+			} else {
+				nextIndex = dataPoint.getIndex() + 1;
+			}
 			databaseManager.setCounterDataPoint(dataPoint);
 		}
 		
 		databaseManager.addBinaryInputDataPoints(extendedConfiguration.getBinaryInputPoints().toArray(new String[0]));
 		databaseManager.addBinaryOutputDataPoints(extendedConfiguration.getBinaryOutputPoints().toArray(new String[0]));
+		databaseManager.addDoubleBitBinaryInputDataPoints(extendedConfiguration.getDoubleBitBinaryInputPoints().toArray(new String[0]));
 		databaseManager.addAnalogInputDataPoints(extendedConfiguration.getAnalogInputPoints().toArray(new String[0]));
 		databaseManager.addAnalogOutputDataPoints(extendedConfiguration.getAnalogOutputPoints().toArray(new String[0]));
 		databaseManager.addCounterDataPoints(extendedConfiguration.getCounterPoints().toArray(new String[0]));
@@ -179,6 +206,7 @@ public class PointDeviceFactory implements DeviceFactory {
 		Outstation outstation = outstationFactory.createOutstation();
 		outstation.addRequestHandler(new BinaryInputStaticHandler(databaseManager));
 		outstation.addRequestHandler(new AnalogInputStaticHandler(databaseManager));
+		outstation.addRequestHandler(new DoubleBitBinaryInputStaticHandler(databaseManager));
 		outstation.addRequestHandler(new Class0Reader(databaseManager));
 		outstation.addRequestHandler(new Class1Reader());
 		outstation.addRequestHandler(new Class2Reader());
@@ -190,6 +218,7 @@ public class PointDeviceFactory implements DeviceFactory {
 		
 		databaseManager.addEventListener(new BinaryInputEventListener(outstation));
 		databaseManager.addEventListener(new BinaryOutputEventListener(outstation));
+		databaseManager.addEventListener(new DoubleBitBinaryInputEventListener(outstation));
 		databaseManager.addEventListener(new AnalogInputEventListener(outstation));
 		databaseManager.addEventListener(new AnalogOutputEventListener(outstation));
 		databaseManager.addEventListener(new CounterEventListener(outstation));
@@ -208,6 +237,10 @@ public class PointDeviceFactory implements DeviceFactory {
 
 	public void setBinaryOutputDataPoints(BinaryOutputDataPoint... binaryOutputDataPoints) {
 		this.binaryOutputDataPoints = asList(binaryOutputDataPoints);
+	}
+
+	public void setDoubleBitBinaryInputDataPoints(DoubleBitBinaryInputDataPoint... doubleBitBinaryInputDataPoints) {
+		this.doubleBitBinaryInputDataPoints = asList(doubleBitBinaryInputDataPoints);
 	}
 
 	public void setAnalogInputDataPoints(AnalogInputDataPoint... analogInputDataPoints) {

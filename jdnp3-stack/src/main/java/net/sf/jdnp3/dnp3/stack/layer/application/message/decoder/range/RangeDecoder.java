@@ -23,7 +23,6 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFrag
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode;
 
 public class RangeDecoder {
-	@SuppressWarnings("serial")
 	private Map<RangeSpecifierCode, RangeDecoderHelper> helpers = new HashMap<RangeSpecifierCode, RangeDecoderHelper>() {{
 		this.put(RangeSpecifierCode.NO_RANGE, new NoRangeDecoderHelper());
 		this.put(RangeSpecifierCode.ONE_OCTET_INDEX, new IndexRangeDecoderHelper());

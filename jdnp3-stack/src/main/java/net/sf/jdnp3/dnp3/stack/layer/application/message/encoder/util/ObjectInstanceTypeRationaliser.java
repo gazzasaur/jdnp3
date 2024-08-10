@@ -36,7 +36,6 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeDelayObje
 public class ObjectInstanceTypeRationaliser {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	@SuppressWarnings("serial")
 	private Map<Class<? extends ObjectInstance>, ObjectInstanceTypeRationaliserHelper> rationaliserHelpers = new HashMap<Class<? extends ObjectInstance>, ObjectInstanceTypeRationaliserHelper>() {{
 		this.put(BinaryInputStaticObjectInstance.class, new BinaryInputStaticTypeRationaliserHelper());
 		this.put(BinaryInputEventObjectInstance.class, new BinaryInputEventTypeRationaliserHelper());

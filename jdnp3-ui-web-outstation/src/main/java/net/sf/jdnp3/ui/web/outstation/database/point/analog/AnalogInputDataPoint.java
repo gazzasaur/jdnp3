@@ -25,7 +25,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeCon
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 
 public class AnalogInputDataPoint implements DataPoint {
-	private long index = 0;
+	private long index = -1;
 	private String name = "";
 	private double value = 0;
 	

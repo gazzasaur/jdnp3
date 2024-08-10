@@ -15,7 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.exception;
 
-@SuppressWarnings("serial")
 public class UnknownObjectException extends Dnp3Exception {
 	public UnknownObjectException(String message) {
 		super(message);

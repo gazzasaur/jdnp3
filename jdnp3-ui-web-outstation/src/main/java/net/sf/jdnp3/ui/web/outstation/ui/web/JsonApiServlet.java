@@ -41,7 +41,6 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.SuccessMessage;
 
 // FIXME DEBT Remove the dependence on state for the error message.
-@SuppressWarnings("serial")
 public class JsonApiServlet extends HttpServlet implements Messanger {
 	private Logger logger = LoggerFactory.getLogger(JsonApiServlet.class);
 	private Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().setPrettyPrinting().create();

@@ -19,6 +19,8 @@ import static java.util.Collections.unmodifiableList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import net.sf.jdnp3.ui.web.outstation.database.device.InternalIndicatorsDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
@@ -30,201 +32,63 @@ import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 
 public class Database {
 	private InternalIndicatorsDataPoint indicatorsDataPoint = new InternalIndicatorsDataPoint();
-	private List<AnalogInputDataPoint> analogInputDataPoints = new ArrayList<>();
-	private List<BinaryInputDataPoint> binaryInputDataPoints = new ArrayList<>();
-	private List<DoubleBitBinaryInputDataPoint> doubleBitBinaryInputDataPoints = new ArrayList<>();
-	private List<AnalogOutputDataPoint> analogOutputDataPoints = new ArrayList<>();
-	private List<BinaryOutputDataPoint> binaryOutputDataPoints = new ArrayList<>();
-	private List<CounterDataPoint> counterDataPoints = new ArrayList<>();
+	private SortedMap<Long, AnalogInputDataPoint> analogInputDataPoints = new TreeMap<>();
+	private SortedMap<Long, BinaryInputDataPoint> binaryInputDataPoints = new TreeMap<>();
+	private SortedMap<Long, DoubleBitBinaryInputDataPoint> doubleBitBinaryInputDataPoints = new TreeMap<>();
+	private SortedMap<Long, AnalogOutputDataPoint> analogOutputDataPoints = new TreeMap<>();
+	private SortedMap<Long, BinaryOutputDataPoint> binaryOutputDataPoints = new TreeMap<>();
+	private SortedMap<Long, CounterDataPoint> counterDataPoints = new TreeMap<>();
 
 	public InternalIndicatorsDataPoint getIndicatorsDataPoint() {
 		return indicatorsDataPoint;
 	}
 
 	public List<AnalogInputDataPoint> getAnalogInputDataPoints() {
-		return unmodifiableList(analogInputDataPoints);
+		return unmodifiableList(new ArrayList<>(analogInputDataPoints.values()));
 	}
 
 	public List<BinaryInputDataPoint> getBinaryInputDataPoints() {
-		return unmodifiableList(binaryInputDataPoints);
+		return unmodifiableList(new ArrayList<>(binaryInputDataPoints.values()));
 	}
 
 	public List<DoubleBitBinaryInputDataPoint> getDoubleBitBinaryInputDataPoints() {
-		return unmodifiableList(doubleBitBinaryInputDataPoints);
+		return unmodifiableList(new ArrayList<>(doubleBitBinaryInputDataPoints.values()));
 	}
 
 	public List<AnalogOutputDataPoint> getAnalogOutputDataPoints() {
-		return unmodifiableList(analogOutputDataPoints);
+		return unmodifiableList(new ArrayList<>(analogOutputDataPoints.values()));
 	}
 
 	public List<BinaryOutputDataPoint> getBinaryOutputDataPoints() {
-		return unmodifiableList(binaryOutputDataPoints);
+		return unmodifiableList(new ArrayList<>(binaryOutputDataPoints.values()));
 	}
 
 	public List<CounterDataPoint> getCounterDataPoints() {
-		return unmodifiableList(counterDataPoints);
-	}
-	
-	public void addAnalogInputDataPoint() {
-		AnalogInputDataPoint analogDataPoint = new AnalogInputDataPoint();
-		analogDataPoint.setIndex(analogInputDataPoints.size());
-		analogDataPoint.setName("Point " + analogInputDataPoints.size());
-		analogInputDataPoints.add(analogDataPoint);
-	}
-	
-	public void addAnalogInputDataPoint(String name) {
-		AnalogInputDataPoint analogDataPoint = new AnalogInputDataPoint();
-		analogDataPoint.setIndex(analogInputDataPoints.size());
-		analogDataPoint.setName(name);
-		analogInputDataPoints.add(analogDataPoint);
-	}
-	
-	public void addBinaryInputDataPoint() {
-		BinaryInputDataPoint binaryDataPoint = new BinaryInputDataPoint();
-		binaryDataPoint.setIndex(binaryInputDataPoints.size());
-		binaryDataPoint.setName("Point " + binaryInputDataPoints.size());
-		binaryInputDataPoints.add(binaryDataPoint);
+		return unmodifiableList(new ArrayList<>(counterDataPoints.values()));
 	}
 
-	public void addBinaryInputDataPoint(String name) {
-		BinaryInputDataPoint binaryDataPoint = new BinaryInputDataPoint();
-		binaryDataPoint.setIndex(binaryInputDataPoints.size());
-		binaryDataPoint.setName(name);
-		binaryInputDataPoints.add(binaryDataPoint);
+	public void setAnalogInputDataPoint(AnalogInputDataPoint point) {
+		analogInputDataPoints.compute(point.getIndex(), (index, currentPoint) -> point);
+	}
+	
+	public void setBinaryInputDataPoint(BinaryInputDataPoint point) {
+		binaryInputDataPoints.compute(point.getIndex(), (index, currentPoint) -> point);
 	}
 
-	public void addDoubleBitBinaryInputDataPoint() {
-		DoubleBitBinaryInputDataPoint binaryDataPoint = new DoubleBitBinaryInputDataPoint();
-		binaryDataPoint.setIndex(doubleBitBinaryInputDataPoints.size());
-		binaryDataPoint.setName("Point " + doubleBitBinaryInputDataPoints.size());
-		doubleBitBinaryInputDataPoints.add(binaryDataPoint);
+	public void setDoubleBitBinaryInputDataPoint(DoubleBitBinaryInputDataPoint point) {
+		doubleBitBinaryInputDataPoints.compute(point.getIndex(), (index, currentPoint) -> point);
 	}
 
-	public void addDoubleBitBinaryInputDataPoint(String name) {
-		DoubleBitBinaryInputDataPoint binaryDataPoint = new DoubleBitBinaryInputDataPoint();
-		binaryDataPoint.setIndex(doubleBitBinaryInputDataPoints.size());
-		binaryDataPoint.setName(name);
-		doubleBitBinaryInputDataPoints.add(binaryDataPoint);
+	public void setAnalogOutputDataPoint(AnalogOutputDataPoint point) {
+		analogOutputDataPoints.compute(point.getIndex(), (index, currentPoint) -> point);
 	}
 
-	public void addAnalogOutputDataPoint() {
-		AnalogOutputDataPoint analogDataPoint = new AnalogOutputDataPoint();
-		analogDataPoint.setIndex(analogOutputDataPoints.size());
-		analogDataPoint.setName("Point " + analogOutputDataPoints.size());
-		analogOutputDataPoints.add(analogDataPoint);
-	}
-	
-	public void addAnalogOutputDataPoint(String name) {
-		AnalogOutputDataPoint analogDataPoint = new AnalogOutputDataPoint();
-		analogDataPoint.setIndex(analogOutputDataPoints.size());
-		analogDataPoint.setName(name);
-		analogOutputDataPoints.add(analogDataPoint);
-	}
-	
-	public void addBinaryOutputDataPoint() {
-		BinaryOutputDataPoint binaryDataPoint = new BinaryOutputDataPoint();
-		binaryDataPoint.setIndex(binaryOutputDataPoints.size());
-		binaryDataPoint.setName("Point " + binaryOutputDataPoints.size());
-		binaryOutputDataPoints.add(binaryDataPoint);
-	}
-	
-	public void addBinaryOutputDataPoint(String name) {
-		BinaryOutputDataPoint binaryDataPoint = new BinaryOutputDataPoint();
-		binaryDataPoint.setIndex(binaryOutputDataPoints.size());
-		binaryDataPoint.setName(name);
-		binaryOutputDataPoints.add(binaryDataPoint);
-	}
-	
-	public void addCounterDataPoint() {
-		CounterDataPoint dataPoint = new CounterDataPoint();
-		dataPoint.setIndex(counterDataPoints.size());
-		dataPoint.setName("Point " + counterDataPoints.size());
-		counterDataPoints.add(dataPoint);
-	}
-	
-	public void addCounterDataPoint(String name) {
-		CounterDataPoint dataPoint = new CounterDataPoint();
-		dataPoint.setIndex(counterDataPoints.size());
-		dataPoint.setName(name);
-		counterDataPoints.add(dataPoint);
-	}
-	
-	public void setAnalogInputDataPoint(AnalogInputDataPoint analogInputDataPoint) {
-		if (analogInputDataPoint.getIndex() < analogInputDataPoints.size()) {
-			analogInputDataPoint.setName(analogInputDataPoints.get((int) analogInputDataPoint.getIndex()).getName());
-			analogInputDataPoints.set((int) analogInputDataPoint.getIndex(), analogInputDataPoint);
-		}
-	}
-	
-	public void setBinaryInputDataPoint(BinaryInputDataPoint binaryInputDataPoint) {
-		if (binaryInputDataPoint.getIndex() < binaryInputDataPoints.size()) {
-			binaryInputDataPoint.setName(binaryInputDataPoints.get((int) binaryInputDataPoint.getIndex()).getName());
-			binaryInputDataPoints.set((int) binaryInputDataPoint.getIndex(), binaryInputDataPoint);
-		}
+	public void setBinaryOutputDataPoint(BinaryOutputDataPoint point) {
+		binaryOutputDataPoints.compute(point.getIndex(), (index, currentPoint) -> point);
 	}
 
-	public void setDoubleBitBinaryInputDataPoint(DoubleBitBinaryInputDataPoint binaryInputDataPoint) {
-		if (binaryInputDataPoint.getIndex() < doubleBitBinaryInputDataPoints.size()) {
-			binaryInputDataPoint.setName(doubleBitBinaryInputDataPoints.get((int) binaryInputDataPoint.getIndex()).getName());
-			doubleBitBinaryInputDataPoints.set((int) binaryInputDataPoint.getIndex(), binaryInputDataPoint);
-		}
-	}
-
-	public void setAnalogOutputDataPoint(AnalogOutputDataPoint analogOutputDataPoint) {
-		if (analogOutputDataPoint.getIndex() < analogOutputDataPoints.size()) {
-			analogOutputDataPoint.setName(analogOutputDataPoints.get((int) analogOutputDataPoint.getIndex()).getName());
-			analogOutputDataPoints.set((int) analogOutputDataPoint.getIndex(), analogOutputDataPoint);
-		}
-	}
-
-	public void setBinaryOutputDataPoint(BinaryOutputDataPoint binaryDataPoint) {
-		if (binaryDataPoint.getIndex() < binaryOutputDataPoints.size()) {
-			binaryDataPoint.setName(binaryOutputDataPoints.get((int) binaryDataPoint.getIndex()).getName());
-			binaryOutputDataPoints.set((int) binaryDataPoint.getIndex(), binaryDataPoint);
-		}
-	}
-
-	public void setCounterDataPoint(CounterDataPoint dataPoint) {
-		if (dataPoint.getIndex() < counterDataPoints.size()) {
-			dataPoint.setName(counterDataPoints.get((int) dataPoint.getIndex()).getName());
-			counterDataPoints.set((int) dataPoint.getIndex(), dataPoint);
-		}
-	}
-	
-	public void removeAnalogInputDataPoint() {
-		if (analogInputDataPoints.size() > 0) {
-			analogInputDataPoints.remove(analogInputDataPoints.size() - 1);
-		}
-	}
-	
-	public void removeBinaryInputDataPoint() {
-		if (binaryInputDataPoints.size() > 0) {
-			binaryInputDataPoints.remove(binaryInputDataPoints.size() - 1);
-		}
-	}
-
-	public void removeDoubleBitBinaryInputDataPoint() {
-		if (doubleBitBinaryInputDataPoints.size() > 0) {
-			doubleBitBinaryInputDataPoints.remove(doubleBitBinaryInputDataPoints.size() - 1);
-		}
-	}
-
-	public void removeAnalogOutputDataPoint() {
-		if (analogOutputDataPoints.size() > 0) {
-			analogOutputDataPoints.remove(analogOutputDataPoints.size() - 1);
-		}
-	}
-	
-	public void removeBinaryOutputDataPoint() {
-		if (binaryOutputDataPoints.size() > 0) {
-			binaryOutputDataPoints.remove(binaryOutputDataPoints.size() - 1);
-		}
-	}
-	
-	public void removeCounterDataPoint() {
-		if (counterDataPoints.size() > 0) {
-			counterDataPoints.remove(counterDataPoints.size() - 1);
-		}
+	public void setCounterDataPoint(CounterDataPoint point) {
+		counterDataPoints.compute(point.getIndex(), (index, currentPoint) -> point);
 	}
 
 	public void clear() {

@@ -28,7 +28,6 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.VariableFor
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.VirtualAddressRange;
 
 public class RangeEncoder {
-	@SuppressWarnings("serial")
 	private Map<Class<?>, RangeEncoderHelper> helpers = new HashMap<Class<?>, RangeEncoderHelper>() {{
 		this.put(IndexRange.class, new IndexRangeEncoderHelper());
 		this.put(VirtualAddressRange.class, new VirtualAddressRangeEncoderHelper());
