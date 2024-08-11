@@ -33,7 +33,7 @@ Jetty Config has extra features that need to be enabled.
 To compile everything using JDK 21.
 
 1. `cd jdnp3` (the subdirectory in the project, not the root directory of the project)
-2. `mvn install`
+2. `mvn -f jdnp3/pom.xml install`
 
 This will generate an outstation executable based on the version:
 
