@@ -67,6 +67,54 @@ public class Database {
 		return unmodifiableList(new ArrayList<>(counterDataPoints.values()));
 	}
 
+	public AnalogInputDataPoint getAnalogInputDataPoint(long index) {
+		var point = analogInputDataPoints.get(index);
+		if (point == null) {
+			throw new IllegalArgumentException("No point found for index: " + index);
+		}
+		return point;
+	}
+
+	public BinaryInputDataPoint getBinaryInputDataPoint(long index) {
+		var point = binaryInputDataPoints.get(index);
+		if (point == null) {
+			throw new IllegalArgumentException("No point found for index: " + index);
+		}
+		return point;
+	}
+
+	public DoubleBitBinaryInputDataPoint getDoubleBitBinaryInputDataPoint(long index) {
+		var point = doubleBitBinaryInputDataPoints.get(index);
+		if (point == null) {
+			throw new IllegalArgumentException("No point found for index: " + index);
+		}
+		return point;
+	}
+
+	public AnalogOutputDataPoint getAnalogOutputDataPoint(long index) {
+		var point = analogOutputDataPoints.get(index);
+		if (point == null) {
+			throw new IllegalArgumentException("No point found for index: " + index);
+		}
+		return point;
+	}
+
+	public BinaryOutputDataPoint getBinaryOutputDataPoint(long index) {
+		var point = binaryOutputDataPoints.get(index);
+		if (point == null) {
+			throw new IllegalArgumentException("No point found for index: " + index);
+		}
+		return point;
+	}
+
+	public CounterDataPoint getCounterDataPoint(long index) {
+		var point = counterDataPoints.get(index);
+		if (point == null) {
+			throw new IllegalArgumentException("No point found for index: " + index);
+		}
+		return point;
+	}
+
 	public void setAnalogInputDataPoint(AnalogInputDataPoint point) {
 		analogInputDataPoints.compute(point.getIndex(), (index, currentPoint) -> point);
 	}

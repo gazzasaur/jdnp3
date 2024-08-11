@@ -15,7 +15,6 @@
  */
 package net.sf.jdnp3.ui.web.outstation.database.core;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -269,42 +268,42 @@ public class DatabaseManager {
 	}
 
 	public void triggerAnalogInputEvent(long index, long timestamp) {
-		AnalogInputDataPoint analogDataPoint = database.getAnalogInputDataPoints().get((int) index);
+		AnalogInputDataPoint analogDataPoint = database.getAnalogInputDataPoint(index);
 		for (EventListener eventListener : eventListeners) {
 			eventListener.eventReceived(analogDataPoint, timestamp);
 		}
 	}
 	
 	public void triggerAnalogOutputEvent(long index, long timestamp) {
-		AnalogOutputDataPoint dataPoint = database.getAnalogOutputDataPoints().get((int) index);
+		AnalogOutputDataPoint dataPoint = database.getAnalogOutputDataPoint(index);
 		for (EventListener eventListener : eventListeners) {
 			eventListener.eventReceived(dataPoint, timestamp);
 		}
 	}
 
 	public void triggerBinaryInputEvent(long index, long timestamp) {
-		BinaryInputDataPoint binaryDataPoint = database.getBinaryInputDataPoints().get((int) index);
+		BinaryInputDataPoint binaryDataPoint = database.getBinaryInputDataPoint(index);
 		for (EventListener eventListener : eventListeners) {
 			eventListener.eventReceived(binaryDataPoint, timestamp);
 		}
 	}
 
 	public void triggerDoubleBitBinaryInputEvent(long index, long timestamp) {
-		DoubleBitBinaryInputDataPoint binaryDataPoint = database.getDoubleBitBinaryInputDataPoints().get((int) index);
+		DoubleBitBinaryInputDataPoint binaryDataPoint = database.getDoubleBitBinaryInputDataPoint(index);
 		for (EventListener eventListener : eventListeners) {
 			eventListener.eventReceived(binaryDataPoint, timestamp);
 		}
 	}
 
 	public void triggerBinaryOutputEvent(long index, long timestamp) {
-		BinaryOutputDataPoint binaryDataPoint = database.getBinaryOutputDataPoints().get((int) index);
+		BinaryOutputDataPoint binaryDataPoint = database.getBinaryOutputDataPoint(index);
 		for (EventListener eventListener : eventListeners) {
 			eventListener.eventReceived(binaryDataPoint, timestamp);
 		}
 	}
 
 	public void triggerCounterEvent(long index, long timestamp) {
-		CounterDataPoint counterDataPoint = database.getCounterDataPoints().get((int) index);
+		CounterDataPoint counterDataPoint = database.getCounterDataPoint(index);
 		for (EventListener eventListener : eventListeners) {
 			eventListener.eventReceived(counterDataPoint, timestamp);
 		}
