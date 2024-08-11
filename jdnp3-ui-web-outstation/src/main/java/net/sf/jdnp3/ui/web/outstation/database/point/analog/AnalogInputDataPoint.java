@@ -28,7 +28,7 @@ public class AnalogInputDataPoint implements DataPoint {
 	private long index = -1;
 	private String name = "";
 	private double value = 0;
-	
+
 	private boolean online = true;
 	private boolean restart = false;
 	private boolean overRange = false;
@@ -39,7 +39,9 @@ public class AnalogInputDataPoint implements DataPoint {
 	
 	private ObjectType staticType = ANALOG_INPUT_STATIC_ANY;
 	private ObjectType eventType = ObjectTypeConstants.ANALOG_INPUT_EVENT_ANY;
+
 	private int eventClass = 1;
+	private boolean triggerEventOnChange = false;
 
 	private Map<String, String> tags = new HashMap<>();
 
@@ -145,6 +147,14 @@ public class AnalogInputDataPoint implements DataPoint {
 	
 	public void setValue(double value) {
 		this.value = value;
+	}
+
+	public boolean isTriggerEventOnChange() {
+		return triggerEventOnChange;
+	}
+
+	public void setTriggerEventOnChange(boolean triggerEventOnChange) {
+		this.triggerEventOnChange = triggerEventOnChange;
 	}
 
 	public Map<String, String> getTags() {

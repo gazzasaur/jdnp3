@@ -32,6 +32,7 @@ public class DoubleBitBinaryInputMessage implements DeviceMessage {
 	private int eventClass = 1;
 	private ObjectType eventType = ANY;
 	private ObjectType staticType = ANY;
+	private boolean triggerEventOnChange = false;
 	
 	private String name = "";
 	private double value = 0;
@@ -158,6 +159,14 @@ public class DoubleBitBinaryInputMessage implements DeviceMessage {
 
 	public void setDevice(String device) {
 		this.device = device;
+	}
+
+	public boolean isTriggerEventOnChange() {
+		return triggerEventOnChange;
+	}
+
+	public void setTriggerEventOnChange(boolean triggerEventOnChange) {
+		this.triggerEventOnChange = triggerEventOnChange;
 	}
 
 	public Map<String, String> getTags() {

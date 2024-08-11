@@ -39,7 +39,9 @@ public class CounterDataPoint implements DataPoint {
 	
 	private ObjectType staticType = COUNTER_STATIC_ANY;
 	private ObjectType eventType = COUNTER_EVENT_ANY;
+
 	private int eventClass = 1;
+	private boolean triggerEventOnChange = false;
 
 	private Map<String, String> tags = new HashMap<>();
 
@@ -145,6 +147,14 @@ public class CounterDataPoint implements DataPoint {
 
 	public void setDiscontinuity(boolean discontinuity) {
 		this.discontinuity = discontinuity;
+	}
+
+	public boolean isTriggerEventOnChange() {
+		return triggerEventOnChange;
+	}
+
+	public void setTriggerEventOnChange(boolean triggerEventOnChange) {
+		this.triggerEventOnChange = triggerEventOnChange;
 	}
 
 	public Map<String, String> getTags() {

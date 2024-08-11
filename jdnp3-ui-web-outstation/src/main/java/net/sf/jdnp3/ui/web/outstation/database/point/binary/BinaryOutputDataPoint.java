@@ -52,8 +52,10 @@ public class BinaryOutputDataPoint implements DataPoint {
 	private ObjectType staticType = BINARY_OUTPUT_STATIC_ANY;
 	private ObjectType eventType = BINARY_OUTPUT_EVENT_ANY;
 	private ObjectType commandEventType = BINARY_OUTPUT_COMMAND_EVENT_ANY;
+
 	private int eventClass = 1;
 	private int commandEventClass = 1;
+	private boolean triggerEventOnChange = false;
 
 	private Map<String, String> tags = new HashMap<>();
 
@@ -223,6 +225,14 @@ public class BinaryOutputDataPoint implements DataPoint {
 
 	public void setCommandEventClass(int commandEventClass) {
 		this.commandEventClass = commandEventClass;
+	}
+
+	public boolean isTriggerEventOnChange() {
+		return triggerEventOnChange;
+	}
+
+	public void setTriggerEventOnChange(boolean triggerEventOnChange) {
+		this.triggerEventOnChange = triggerEventOnChange;
 	}
 
 	public Map<String, String> getTags() {

@@ -36,6 +36,7 @@ public class AnalogOutputMessage implements DeviceMessage {
 	private int commandEventClass = 1;
 	private ObjectType eventType = ANY;
 	private ObjectType staticType = ANY;
+	private boolean triggerEventOnChange = false;
 	private ObjectType commandEventType = ANALOG_OUTPUT_COMMAND_EVENT_ANY;
 	
 	private String name = "";
@@ -217,6 +218,14 @@ public class AnalogOutputMessage implements DeviceMessage {
 
 	public void setDevice(String device) {
 		this.device = device;
+	}
+
+	public boolean isTriggerEventOnChange() {
+		return triggerEventOnChange;
+	}
+
+	public void setTriggerEventOnChange(boolean triggerEventOnChange) {
+		this.triggerEventOnChange = triggerEventOnChange;
 	}
 
 	public Map<String, String> getTags() {

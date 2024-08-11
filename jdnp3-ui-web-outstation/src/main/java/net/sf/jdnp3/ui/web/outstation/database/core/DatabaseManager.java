@@ -15,6 +15,7 @@
  */
 package net.sf.jdnp3.ui.web.outstation.database.core;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -199,6 +200,9 @@ public class DatabaseManager {
 		for (DatabaseListener databaseListener : databaseListeners) {
 			databaseListener.valueChanged(analogDataPoint);
 		}
+		if (analogDataPoint.isTriggerEventOnChange()) {
+			this.triggerAnalogInputEvent(analogDataPoint.getIndex(), System.currentTimeMillis());
+		}
 	}
 	
 	public void setAnalogOutputDataPoint(AnalogOutputDataPoint analogDataPoint) {
@@ -208,6 +212,9 @@ public class DatabaseManager {
 		for (DatabaseListener databaseListener : databaseListeners) {
 			databaseListener.valueChanged(analogDataPoint);
 		}
+		if (analogDataPoint.isTriggerEventOnChange()) {
+			this.triggerAnalogOutputEvent(analogDataPoint.getIndex(), System.currentTimeMillis());
+		}
 	}
 	
 	public void setBinaryInputDataPoint(BinaryInputDataPoint binaryDataPoint) {
@@ -216,6 +223,9 @@ public class DatabaseManager {
 		}
 		for (DatabaseListener databaseListener : databaseListeners) {
 			databaseListener.valueChanged(binaryDataPoint);
+		}
+		if (binaryDataPoint.isTriggerEventOnChange()) {
+			this.triggerBinaryInputEvent(binaryDataPoint.getIndex(), System.currentTimeMillis());
 		}
 	}
 
@@ -229,6 +239,9 @@ public class DatabaseManager {
 		for (DatabaseListener databaseListener : databaseListeners) {
 			databaseListener.valueChanged(binaryDataPoint);
 		}
+		if (binaryDataPoint.isTriggerEventOnChange()) {
+			this.triggerDoubleBitBinaryInputEvent(binaryDataPoint.getIndex(), System.currentTimeMillis());
+		}
 	}
 
 	public void setBinaryOutputDataPoint(BinaryOutputDataPoint binaryDataPoint) {
@@ -238,6 +251,9 @@ public class DatabaseManager {
 		for (DatabaseListener databaseListener : databaseListeners) {
 			databaseListener.valueChanged(binaryDataPoint);
 		}
+		if (binaryDataPoint.isTriggerEventOnChange()) {
+			this.triggerBinaryOutputEvent(binaryDataPoint.getIndex(), System.currentTimeMillis());
+		}
 	}
 	
 	public void setCounterDataPoint(CounterDataPoint dataPoint) {
@@ -246,6 +262,9 @@ public class DatabaseManager {
 		}
 		for (DatabaseListener databaseListener : databaseListeners) {
 			databaseListener.valueChanged(dataPoint);
+		}
+		if (dataPoint.isTriggerEventOnChange()) {
+			this.triggerCounterEvent(dataPoint.getIndex(), System.currentTimeMillis());
 		}
 	}
 

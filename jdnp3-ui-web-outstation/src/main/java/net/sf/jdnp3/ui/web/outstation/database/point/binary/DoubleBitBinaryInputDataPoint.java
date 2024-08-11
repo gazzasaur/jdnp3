@@ -38,7 +38,9 @@ public class DoubleBitBinaryInputDataPoint implements DataPoint {
 	
 	private ObjectType staticType = DOUBLE_BIT_BINARY_INPUT_STATIC_ANY;
 	private ObjectType eventType = DOUBLE_BIT_BINARY_INPUT_EVENT_ANY;
+
 	private int eventClass = 1;
+	private boolean triggerEventOnChange = false;
 
 	private Map<String, String> tags = new HashMap<>();
 
@@ -136,6 +138,14 @@ public class DoubleBitBinaryInputDataPoint implements DataPoint {
 
 	public void setEventClass(int eventClass) {
 		this.eventClass = eventClass;
+	}
+
+	public boolean isTriggerEventOnChange() {
+		return triggerEventOnChange;
+	}
+
+	public void setTriggerEventOnChange(boolean triggerEventOnChange) {
+		this.triggerEventOnChange = triggerEventOnChange;
 	}
 
 	public Map<String, String> getTags() {
