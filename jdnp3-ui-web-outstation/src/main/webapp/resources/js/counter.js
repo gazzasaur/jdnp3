@@ -101,6 +101,17 @@ jdnp3.counter.createDialog = function(index) {
 	
 	var staticElementRow = document.createElement('tr');
 	var staticElementCell = document.createElement('td');
+	staticElementCell.appendChild(document.createTextNode('Trigger Event On Change:'));
+	staticElementRow.appendChild(staticElementCell);
+	var staticElementItems = document.createElement('td');
+	staticElementItems.setAttribute('style', 'text-align: right;');
+	
+	staticElementItems.appendChild(jdnp3.ui.createSlideSwitch('ci-' + index + '-triggerEventOnChange', 'Trigger Event On Change', 'triggerEventOnChange', function() {var attribute = 'triggerEventOnChange'; var dataPoint = jdnp3.counter.counterPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
+	staticElementRow.appendChild(staticElementItems);
+	table.appendChild(staticElementRow);
+
+	var staticElementRow = document.createElement('tr');
+	var staticElementCell = document.createElement('td');
 	staticElementCell.appendChild(document.createTextNode('Event Class:'));
 	staticElementRow.appendChild(staticElementCell);
 	var staticElementItems = document.createElement('td');
@@ -163,6 +174,9 @@ jdnp3.counter.createRefreshCallback = function(index) {
 	return function() {
 		var dataPoint = jdnp3.counter.counterPoints.get(index);
 		
+		var fieldId = 'ci-' + index + '-triggerEventOnChange';
+		document.getElementById(fieldId).checked = dataPoint.triggerEventOnChange;
+
 		for (var i = 0; i < 4; ++i) {
 			var fieldId = 'ci-' + index + '-cl-' + i;
 			if (i == dataPoint.eventClass) {

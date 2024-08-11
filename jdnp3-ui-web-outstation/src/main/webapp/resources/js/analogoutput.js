@@ -146,6 +146,17 @@ jdnp3.analogoutput.createDialog = function(index) {
 	
 	var staticElementRow = document.createElement('tr');
 	var staticElementCell = document.createElement('td');
+	staticElementCell.appendChild(document.createTextNode('Trigger Event On Change:'));
+	staticElementRow.appendChild(staticElementCell);
+	var staticElementItems = document.createElement('td');
+	staticElementItems.setAttribute('style', 'text-align: right;');
+	
+	staticElementItems.appendChild(jdnp3.ui.createSlideSwitch('ao-' + index + '-triggerEventOnChange', 'Trigger Event On Change', 'triggerEventOnChange', function() {var attribute = 'triggerEventOnChange'; var dataPoint = jdnp3.analogoutput.analogOutputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
+	staticElementRow.appendChild(staticElementItems);
+	table.appendChild(staticElementRow);
+
+	var staticElementRow = document.createElement('tr');
+	var staticElementCell = document.createElement('td');
 	staticElementCell.appendChild(document.createTextNode('Return Status:'));
 	staticElementRow.appendChild(staticElementCell);
 	var staticElementItems = document.createElement('td');
@@ -284,6 +295,9 @@ jdnp3.analogoutput.createRefreshCallback = function(index) {
 	return function() {
 		var dataPoint = jdnp3.analogoutput.analogOutputPoints.get(index);
 		
+		var fieldId = 'ao-' + index + '-triggerEventOnChange';
+		document.getElementById(fieldId).checked = dataPoint.triggerEventOnChange;
+
 		var textElement = document.getElementById('ao-' + index + 'returnstatus');
 		var text = jdnp3.analogoutput.STATUS_CODE_DISPLAY_NAME_MAP[jdnp3.analogoutput.analogOutputPoints.get(index).statusCode];
 		textElement.innerHTML = '';

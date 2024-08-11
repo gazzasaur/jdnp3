@@ -101,7 +101,18 @@ jdnp3.analoginput.createDialog = function(index) {
 	var parent = document.createElement('div');
 	var table = document.createElement('table');
 	table.setAttribute('cellpadding', '5');
+
+	var staticElementRow = document.createElement('tr');
+	var staticElementCell = document.createElement('td');
+	staticElementCell.appendChild(document.createTextNode('Trigger Event On Change:'));
+	staticElementRow.appendChild(staticElementCell);
+	var staticElementItems = document.createElement('td');
+	staticElementItems.setAttribute('style', 'text-align: right;');
 	
+	staticElementItems.appendChild(jdnp3.ui.createSlideSwitch('ai-' + index + '-triggerEventOnChange', 'Trigger Event On Change', 'triggerEventOnChange', function() {var attribute = 'triggerEventOnChange'; var dataPoint = jdnp3.analoginput.analogInputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
+	staticElementRow.appendChild(staticElementItems);
+	table.appendChild(staticElementRow);
+
 	var staticElementRow = document.createElement('tr');
 	var staticElementCell = document.createElement('td');
 	staticElementCell.appendChild(document.createTextNode('Event Class:'));
@@ -163,7 +174,10 @@ jdnp3.analoginput.createDialog = function(index) {
 jdnp3.analoginput.createRefreshCallback = function(index) {
 	return function() {
 		var dataPoint = jdnp3.analoginput.analogInputPoints.get(index);
-		
+
+		var fieldId = 'ai-' + index + '-triggerEventOnChange';
+		document.getElementById(fieldId).checked = dataPoint.triggerEventOnChange;
+
 		for (var i = 0; i < 4; ++i) {
 			var fieldId = 'ai-' + index + '-cl-' + i;
 			if (i == dataPoint.eventClass) {

@@ -134,7 +134,18 @@ jdnp3.binaryoutput.createDialog = function(index) {
 	var parent = document.createElement('div');
 	var table = document.createElement('table');
 	table.setAttribute('cellpadding', '5');
+
+	var staticElementRow = document.createElement('tr');
+	var staticElementCell = document.createElement('td');
+	staticElementCell.appendChild(document.createTextNode('Trigger Event On Change:'));
+	staticElementRow.appendChild(staticElementCell);
+	var staticElementItems = document.createElement('td');
+	staticElementItems.setAttribute('style', 'text-align: right;');
 	
+	staticElementItems.appendChild(jdnp3.ui.createSlideSwitch('bo-' + index + '-triggerEventOnChange', 'Trigger Event On Change', 'triggerEventOnChange', function() {var attribute = 'triggerEventOnChange'; var dataPoint = jdnp3.binaryoutput.binaryOutputPoints.get(index); device.requestChangeAttributeValue(dataPoint, attribute, !dataPoint[attribute]);}));
+	staticElementRow.appendChild(staticElementItems);
+	table.appendChild(staticElementRow);
+
 	var staticElementRow = document.createElement('tr');
 	var staticElementCell = document.createElement('td');
 	staticElementCell.appendChild(document.createTextNode('Return Status:'));
@@ -261,6 +272,9 @@ jdnp3.binaryoutput.createRefreshCallback = function(index) {
 	return function() {
 		var dataPoint = jdnp3.binaryoutput.binaryOutputPoints.get(index);
 		
+		var fieldId = 'bo-' + index + '-triggerEventOnChange';
+		document.getElementById(fieldId).checked = dataPoint.triggerEventOnChange;
+
 		var textElement = document.getElementById('bo-' + index + 'returnstatus');
 		var text = jdnp3.binaryoutput.STATUS_CODE_DISPLAY_NAME_MAP[jdnp3.binaryoutput.binaryOutputPoints.get(index).statusCode];
 		textElement.innerHTML = '';
