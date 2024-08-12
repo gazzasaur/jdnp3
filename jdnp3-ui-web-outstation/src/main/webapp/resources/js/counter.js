@@ -164,7 +164,32 @@ jdnp3.counter.createDialog = function(index) {
 
 	staticElementRow.appendChild(staticElementItems);
 	table.appendChild(staticElementRow)
-	
+
+	var tags = jdnp3.counter.counterPoints.get(index)['tags'];
+
+	if (Object.keys(tags).length) {
+		var staticElementRow = document.createElement('tr');
+		var staticElementCell = document.createElement('td');
+		var staticElementHeader = document.createElement('h3');
+		staticElementHeader.appendChild(document.createTextNode('Tags'));
+		staticElementCell.appendChild(staticElementHeader);
+		staticElementRow.appendChild(staticElementCell);
+		table.appendChild(staticElementRow)
+	}
+
+	for (var tag of Object.keys(tags)) {
+		var staticElementRow = document.createElement('tr');
+		var staticElementCell = document.createElement('td');
+		staticElementCell.setAttribute('style', 'padding-top: 0.5em; padding-bottom: 0.5em;');
+		staticElementCell.appendChild(document.createTextNode(tag));
+		staticElementRow.appendChild(staticElementCell);
+		var staticElementItems = document.createElement('td');
+		staticElementItems.setAttribute('style', 'padding-top: 0.5em; padding-bottom: 0.5em;');
+		staticElementItems.appendChild(document.createTextNode(tags[tag]));
+		staticElementRow.appendChild(staticElementItems);
+		table.appendChild(staticElementRow)
+	}
+
 	parent.appendChild(table);
 	
 	return parent;

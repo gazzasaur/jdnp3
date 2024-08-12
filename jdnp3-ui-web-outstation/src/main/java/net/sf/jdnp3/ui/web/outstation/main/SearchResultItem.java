@@ -26,6 +26,7 @@ public class SearchResultItem {
 	public String getSite() {
 		return site;
 	}
+
 	public void setSite(String site) {
 		this.site = site;
 	}
