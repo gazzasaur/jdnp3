@@ -30,14 +30,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	var locationAttributes = window.location.search.replace('?', '').split('&#38;').map(attributePair => attributePair.split('=').map(value => decodeURIComponent(value)));
 	var stationCode = locationAttributes.filter(candidate => candidate.length == 2).filter(candidate => candidate[0] == 'stationCode').map(candidate => candidate[1]).find(() => true);
 	var deviceCode = locationAttributes.filter(candidate => candidate.length == 2).filter(candidate => candidate[0] == 'deviceCode').map(candidate => candidate[1]).find(() => true);
+	var filterValue = locationAttributes.filter(candidate => candidate.length == 2).filter(candidate => candidate[0] == 'filter').map(candidate => candidate[1]).find(() => true);
 	if (stationCode) {
 		if (deviceCode) {
 			document.getElementById('deviceTitle').innerText = (stationCode + ' - ' + deviceCode);
 		}
 	}
+	if (filterValue) {
+		document.getElementById('filter').value = filterValue;
+	}
 
 	var location = document.location.toString().replace(/\bhttp/,'ws').replace(/\/\/.*/,'//') + window.location.host + '/ws/device' + window.location.search;
 	window['device'] = new jdnp3.device.Device(location);
+
+	document.getElementById('clearFilter').addEventListener("click", () => document.getElementById("filter").value = "")
 });
 </script>
 
@@ -60,6 +66,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
 							<div class="full-text-field-value-view" style="width: 100%" title="Status">
 								<div style="display: table; width: 100%; border-collapse: separate;">
 									<span class="full-text-field-value" style="text-align: center; vertical-align: middle; display: table-cell;"><span id="statusText" style="color: red;">Disconnected</span></span>
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="full-text-field-label">Filter</td>
+					<td>
+						<div style="top: 0px; bottom: 0px; left: 0px; right: 0px; display: flex;">
+							<div class="full-text-field-value-view" style="width: 100%" title="Status">
+								<div class="full-text-field-value" style="display: table; width: 19.25em; border-collapse: separate; box-sizing: border-box;">
+									<input id="filter" class="full-text-field-value" style="outline: none; border: none; text-align: left; vertical-align: middle; display: table-cell; width: 14.5em; box-sizing: border-box;"></input>
+									<div id="clearFilter" style="display: inline-block; width: 1.5em;">&#x2717;</div>
 								</div>
 							</div>
 						</div>

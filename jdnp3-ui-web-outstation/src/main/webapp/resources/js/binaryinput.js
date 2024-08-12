@@ -11,6 +11,7 @@ jdnp3.binaryinput.ATTRIBUTE_MAP.chatterFilter = 'cf';
 jdnp3.binaryinput.ATTRIBUTE_MAP.communicationsLost = 'cl';
 
 jdnp3.binaryinput.binaryInputPoints = null;
+jdnp3.binaryinput.filteredBinaryInputPoints = null;
 jdnp3.schedule.getDefaultScheduler().addTask(function() {
 	jdnp3.binaryinput.binaryInputPoints = new jdnp3.pointlist.List(
 		jdnp3.binaryinput.insertBinaryInput,
