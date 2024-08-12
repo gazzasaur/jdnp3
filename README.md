@@ -48,3 +48,10 @@ To run this, extract the file and run:
 ```
 java -cp ".:jdnp3-ui-web-outstation-0.11.0-alpha-02.jar" net.sf.jdnp3.ui.web.outstation.main.App
 ```
+
+### UI Development
+The UI may be run and dynamically updated to speed up development. To do this:
+
+1. Build the main project using `mvn -f jdnp3/pom.xml install`
+2. Change tot he outstation directory `cd jdnp3-ui-web-outstation`
+3. Start the service using the development configs `mvn exec:java -Dexec.mainClass=net.sf.jdnp3.ui.web.outstation.main.App`
