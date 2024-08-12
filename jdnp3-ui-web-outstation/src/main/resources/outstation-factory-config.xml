@@ -74,6 +74,12 @@
 					<property name="name" value="Conveyer Running" />
 					<property name="active" value="true" />
 					<property name="staticType" ref="binaryInputStaticWithFlags" />
+					<property name="tags">
+						<map key-type="java.lang.String" value-type="java.lang.String"> 
+							<entry key="group" value="belts"/>
+							<entry key="maxSpeed" value="100"/>
+						</map>
+					</property>
 				</bean>
 				<bean class="net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint">
 					<property name="index" value="10" />
