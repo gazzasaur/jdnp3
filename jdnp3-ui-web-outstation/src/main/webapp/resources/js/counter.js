@@ -24,6 +24,40 @@ jdnp3.counter.SetCounterMessageHandler = function() {
 
 jdnp3.counter.SetCounterMessageHandler.prototype.processMessage = function(dataPoint) {
 	jdnp3.counter.counterPoints.add(dataPoint);
+	this.updateFilter(document.getElementById('filter').value || '');
+}
+
+jdnp3.counter.SetCounterMessageHandler.prototype.updateFilter = function(filter) {
+	var points = jdnp3.counter.counterPoints.points;
+	var terms = filter.split(' ').map(v => v.toLowerCase());
+
+	var validCount = 0;
+	for (var point of points) {
+		if (!filter) {
+			document.getElementById('ci-' + point.index + '-view').style.display = '';
+			validCount += 1;
+			continue;
+		}
+		var valid = terms.map(term => {
+			var v = point.name.toLowerCase().includes(term);
+			for (var tagName of Object.keys(point.tags)) {
+				v = v || tagName.toLowerCase().includes(term.toLowerCase());
+				v = v || point.tags[tagName].toLowerCase().includes(term.toLowerCase());
+			}
+			return v;
+		}).filter(v => !v).length == 0;
+		if (!valid) {
+			document.getElementById('ci-' + point.index + '-view').style.display = 'none';
+		} else {
+			document.getElementById('ci-' + point.index + '-view').style.display = '';
+			validCount += 1;
+		}
+	}
+	if (validCount) {
+		document.getElementById('counters').style.display = 'inline-block';
+	} else {
+		document.getElementById('counters').style.display = 'none';
+	}
 }
 
 jdnp3.counter.insertCounter = function(index, dataPoint) {

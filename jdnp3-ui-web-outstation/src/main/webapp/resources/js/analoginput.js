@@ -24,6 +24,40 @@ jdnp3.analoginput.SetAnalogInputMessageHandler = function() {
 
 jdnp3.analoginput.SetAnalogInputMessageHandler.prototype.processMessage = function(dataPoint) {
 	jdnp3.analoginput.analogInputPoints.add(dataPoint);
+	this.updateFilter(document.getElementById('filter').value || '');
+}
+
+jdnp3.analoginput.SetAnalogInputMessageHandler.prototype.updateFilter = function(filter) {
+	var points = jdnp3.analoginput.analogInputPoints.points;
+	var terms = filter.split(' ').map(v => v.toLowerCase());
+
+	var validCount = 0;
+	for (var point of points) {
+		if (!filter) {
+			document.getElementById('ai-' + point.index + '-view').style.display = '';
+			validCount += 1;
+			continue;
+		}
+		var valid = terms.map(term => {
+			var v = point.name.toLowerCase().includes(term);
+			for (var tagName of Object.keys(point.tags)) {
+				v = v || tagName.toLowerCase().includes(term.toLowerCase());
+				v = v || point.tags[tagName].toLowerCase().includes(term.toLowerCase());
+			}
+			return v;
+		}).filter(v => !v).length == 0;
+		if (!valid) {
+			document.getElementById('ai-' + point.index + '-view').style.display = 'none';
+		} else {
+			document.getElementById('ai-' + point.index + '-view').style.display = '';
+			validCount += 1;
+		}
+	}
+	if (validCount) {
+		document.getElementById('analogInputs').style.display = 'inline-block';
+	} else {
+		document.getElementById('analogInputs').style.display = 'none';
+	}
 }
 
 jdnp3.analoginput.insertAnalogInput = function(index, dataPoint) {

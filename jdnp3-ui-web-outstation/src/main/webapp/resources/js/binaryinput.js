@@ -39,7 +39,14 @@ jdnp3.binaryinput.SetBinaryInputMessageHandler.prototype.updateFilter = function
 			validCount += 1;
 			continue;
 		}
-		var valid = terms.map(term => point.name.toLowerCase().includes(term)).filter(v => !v).length == 0;
+		var valid = terms.map(term => {
+			var v = point.name.toLowerCase().includes(term);
+			for (var tagName of Object.keys(point.tags)) {
+				v = v || tagName.toLowerCase().includes(term.toLowerCase());
+				v = v || point.tags[tagName].toLowerCase().includes(term.toLowerCase());
+			}
+			return v;
+		}).filter(v => !v).length == 0;
 		if (!valid) {
 			document.getElementById('bi-' + point.index + '-view').style.display = 'none';
 		} else {

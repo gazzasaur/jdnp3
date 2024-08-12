@@ -45,6 +45,40 @@ jdnp3.analogoutput.SetAnalogOutputMessageHandler = function() {
 
 jdnp3.analogoutput.SetAnalogOutputMessageHandler.prototype.processMessage = function(dataPoint) {
 	jdnp3.analogoutput.analogOutputPoints.add(dataPoint);
+	this.updateFilter(document.getElementById('filter').value || '');
+}
+
+jdnp3.analogoutput.SetAnalogOutputMessageHandler.prototype.updateFilter = function(filter) {
+	var points = jdnp3.analogoutput.analogOutputPoints.points;
+	var terms = filter.split(' ').map(v => v.toLowerCase());
+
+	var validCount = 0;
+	for (var point of points) {
+		if (!filter) {
+			document.getElementById('ao-' + point.index + '-view').style.display = '';
+			validCount += 1;
+			continue;
+		}
+		var valid = terms.map(term => {
+			var v = point.name.toLowerCase().includes(term);
+			for (var tagName of Object.keys(point.tags)) {
+				v = v || tagName.toLowerCase().includes(term.toLowerCase());
+				v = v || point.tags[tagName].toLowerCase().includes(term.toLowerCase());
+			}
+			return v;
+		}).filter(v => !v).length == 0;
+		if (!valid) {
+			document.getElementById('ao-' + point.index + '-view').style.display = 'none';
+		} else {
+			document.getElementById('ao-' + point.index + '-view').style.display = '';
+			validCount += 1;
+		}
+	}
+	if (validCount) {
+		document.getElementById('analogOutputs').style.display = 'inline-block';
+	} else {
+		document.getElementById('analogOutputs').style.display = 'none';
+	}
 }
 
 jdnp3.analogoutput.insertAnalogOutput = function(index, dataPoint) {

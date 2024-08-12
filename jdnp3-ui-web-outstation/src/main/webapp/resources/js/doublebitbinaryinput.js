@@ -23,6 +23,40 @@ jdnp3.doublebitbinaryinput.SetDoubleBitBinaryInputMessageHandler = function() {
 
 jdnp3.doublebitbinaryinput.SetDoubleBitBinaryInputMessageHandler.prototype.processMessage = function(dataPoint) {
 	jdnp3.doublebitbinaryinput.doubleBitBinaryinputPoints.add(dataPoint);
+	this.updateFilter(document.getElementById('filter').value || '');
+}
+
+jdnp3.doublebitbinaryinput.SetDoubleBitBinaryInputMessageHandler.prototype.updateFilter = function(filter) {
+	var points = jdnp3.doublebitbinaryinput.doubleBitBinaryinputPoints.points;
+	var terms = filter.split(' ').map(v => v.toLowerCase());
+
+	var validCount = 0;
+	for (var point of points) {
+		if (!filter) {
+			document.getElementById('di-' + point.index + '-view').style.display = '';
+			validCount += 1;
+			continue;
+		}
+		var valid = terms.map(term => {
+			var v = point.name.toLowerCase().includes(term);
+			for (var tagName of Object.keys(point.tags)) {
+				v = v || tagName.toLowerCase().includes(term.toLowerCase());
+				v = v || point.tags[tagName].toLowerCase().includes(term.toLowerCase());
+			}
+			return v;
+		}).filter(v => !v).length == 0;
+		if (!valid) {
+			document.getElementById('di-' + point.index + '-view').style.display = 'none';
+		} else {
+			document.getElementById('di-' + point.index + '-view').style.display = '';
+			validCount += 1;
+		}
+	}
+	if (validCount) {
+		document.getElementById('doubleBitBinaryInputs').style.display = 'inline-block';
+	} else {
+		document.getElementById('doubleBitBinaryInputs').style.display = 'none';
+	}
 }
 
 jdnp3.doublebitbinaryinput.insertDoubleBitBinaryInput = function(index, dataPoint) {

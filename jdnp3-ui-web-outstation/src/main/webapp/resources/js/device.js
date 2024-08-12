@@ -52,6 +52,11 @@ jdnp3.device.Device.prototype.messageReceived = function(message) {
 
 jdnp3.device.Device.prototype.updateFilter = function(filter) {
 	this.messageHandlers['binaryInputPoint'].updateFilter(filter);
+	this.messageHandlers['doubleBitBinaryInputPoint'].updateFilter(filter);
+	this.messageHandlers['binaryOutputPoint'].updateFilter(filter);
+	this.messageHandlers['analogInputPoint'].updateFilter(filter);
+	this.messageHandlers['analogOutputPoint'].updateFilter(filter);
+	this.messageHandlers['counterPoint'].updateFilter(filter);
 }
 
 jdnp3.device.Device.prototype.requestChangeAttributeValue = function(dataPoint, attribute, value) {
