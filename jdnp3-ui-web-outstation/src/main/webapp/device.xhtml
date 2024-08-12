@@ -43,7 +43,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	var location = document.location.toString().replace(/\bhttp/,'ws').replace(/\/\/.*/,'//') + window.location.host + '/ws/device' + window.location.search;
 	window['device'] = new jdnp3.device.Device(location);
 
-	document.getElementById('clearFilter').addEventListener("click", () => document.getElementById("filter").value = "")
+	document.getElementById('clearFilter').addEventListener("click", () => {
+		document.getElementById("filter").value = "";
+		setTimeout(() => window['device'].updateFilter(document.getElementById("filter").value || ''), 10);
+	});
+	document.getElementById('filter').addEventListener("change", () => {
+		setTimeout(() => window['device'].updateFilter(document.getElementById("filter").value || ''), 10);
+	});
+	document.getElementById('filter').addEventListener("keydown", () => {
+		setTimeout(() => window['device'].updateFilter(document.getElementById("filter").value || ''), 10);
+	});
 });
 </script>
 

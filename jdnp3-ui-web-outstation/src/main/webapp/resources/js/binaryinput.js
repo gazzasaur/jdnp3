@@ -25,6 +25,33 @@ jdnp3.binaryinput.SetBinaryInputMessageHandler = function() {
 
 jdnp3.binaryinput.SetBinaryInputMessageHandler.prototype.processMessage = function(dataPoint) {
 	jdnp3.binaryinput.binaryInputPoints.add(dataPoint);
+	this.updateFilter(document.getElementById('filter').value || '');
+}
+
+jdnp3.binaryinput.SetBinaryInputMessageHandler.prototype.updateFilter = function(filter) {
+	var points = jdnp3.binaryinput.binaryInputPoints.points;
+	var terms = filter.split(' ').map(v => v.toLowerCase());
+
+	var validCount = 0;
+	for (var point of points) {
+		if (!filter) {
+			document.getElementById('bi-' + point.index + '-view').style.display = '';
+			validCount += 1;
+			continue;
+		}
+		var valid = terms.map(term => point.name.toLowerCase().includes(term)).filter(v => !v).length == 0;
+		if (!valid) {
+			document.getElementById('bi-' + point.index + '-view').style.display = 'none';
+		} else {
+			document.getElementById('bi-' + point.index + '-view').style.display = '';
+			validCount += 1;
+		}
+	}
+	if (validCount) {
+		document.getElementById('binaryInputs').style.display = 'inline-block';
+	} else {
+		document.getElementById('binaryInputs').style.display = 'none';
+	}
 }
 
 jdnp3.binaryinput.insertBinaryInput = function(index, dataPoint) {

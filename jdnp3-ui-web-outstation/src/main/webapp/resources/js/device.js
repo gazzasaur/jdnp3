@@ -50,6 +50,10 @@ jdnp3.device.Device.prototype.messageReceived = function(message) {
 	}
 }
 
+jdnp3.device.Device.prototype.updateFilter = function(filter) {
+	this.messageHandlers['binaryInputPoint'].updateFilter(filter);
+}
+
 jdnp3.device.Device.prototype.requestChangeAttributeValue = function(dataPoint, attribute, value) {
 	jdnp3.schedule.getDefaultScheduler().addTask(function() {
 		if (dataPoint.hasOwnProperty(attribute)) {

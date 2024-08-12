@@ -65,6 +65,8 @@ jdnp3.ui.DataPointItem = function(idPrefix, dataPointIndex, dataPointList) {
 	this.idPrefix = idPrefix;
 	
 	this.container = document.createElement('tr');
+	this.container.id = idPrefix + '-' + this.dataPointIndex + '-view';
+
 	if (dataPoint.name) {
 		var nameCell = document.createElement('td');
 		nameCell.id = idPrefix + '-' + this.dataPointIndex + '-name';
