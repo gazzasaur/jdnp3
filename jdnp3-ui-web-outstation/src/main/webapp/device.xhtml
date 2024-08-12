@@ -27,6 +27,15 @@
 <h:body style="font-size: 0.9em;">
 <script>
 document.addEventListener("DOMContentLoaded", function(event) {
+	var locationAttributes = window.location.search.replace('?', '').split('&#38;').map(attributePair => attributePair.split('=').map(value => decodeURIComponent(value)));
+	var stationCode = locationAttributes.filter(candidate => candidate.length == 2).filter(candidate => candidate[0] == 'stationCode').map(candidate => candidate[1]).find(() => true);
+	var deviceCode = locationAttributes.filter(candidate => candidate.length == 2).filter(candidate => candidate[0] == 'deviceCode').map(candidate => candidate[1]).find(() => true);
+	if (stationCode) {
+		if (deviceCode) {
+			document.getElementById('deviceTitle').innerText = (stationCode + ' - ' + deviceCode);
+		}
+	}
+
 	var location = document.location.toString().replace(/\bhttp/,'ws').replace(/\/\/.*/,'//') + window.location.host + '/ws/device' + window.location.search;
 	window['device'] = new jdnp3.device.Device(location);
 });
@@ -41,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	<f:view transient="true">
 		<div>
 			<div style="margin-bottom: 2px;" class="section-header">
-				<span>Device</span>
+				<span id="deviceTitle">Device</span>
 			</div>
 			<table style="margin-left:auto; margin-right: auto;">
 				<tr>

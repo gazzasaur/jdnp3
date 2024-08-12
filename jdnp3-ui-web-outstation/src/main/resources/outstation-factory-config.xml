@@ -26,6 +26,7 @@
 			<bean class="net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint">
 				<property name="active" value="true" />
 				<property name="staticType" ref="binaryInputStaticWithFlags" />
+				<property name="triggerEventOnChange" value="true" />
 			</bean>
 		</property>
 		<property name="binaryInputDataPoints">
