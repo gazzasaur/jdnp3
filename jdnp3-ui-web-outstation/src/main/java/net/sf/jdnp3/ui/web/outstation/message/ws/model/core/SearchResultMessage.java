@@ -22,12 +22,21 @@ import net.sf.jdnp3.ui.web.outstation.main.SearchResultItem;
 
 public class SearchResultMessage implements Message {
 	private String type = "searchResult";
+	private String searchTerm = "";
 	private List<SearchResultItem> results = new ArrayList<SearchResultItem>();
 
 	public String getType() {
 		return type;
 	}
-	
+
+	public String getSearchTerm() {
+		return searchTerm;
+	}
+
+	public void setSearchTerm(String searchTerm) {
+		this.searchTerm = searchTerm;
+	}
+
 	public List<SearchResultItem> getResults() {
 		return results;
 	}

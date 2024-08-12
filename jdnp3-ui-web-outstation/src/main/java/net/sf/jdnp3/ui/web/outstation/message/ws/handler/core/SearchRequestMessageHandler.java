@@ -61,19 +61,20 @@ public class SearchRequestMessageHandler implements MessageHandler {
 			for (SiteDeviceList site : DeviceProvider.gettDeviceList().getSiteDeviceLists()) {
 				for (var deviceName : site.getDevices()) {
 					var device = DeviceProvider.getDevice(site.getSite(), deviceName);
+
 					for (var dataPoint : device.getDatabaseManager().getAnalogInputDataPoints()) {
 						var searchTermsMet = searchableTerms.stream().map(term -> {
-							if (deviceName.contains(term)) {
+							if (deviceName.toLowerCase().contains(term.toLowerCase())) {
 								return true;
 							}
-							if (dataPoint.getName().contains(term)) {
+							if (dataPoint.getName().toLowerCase().contains(term.toLowerCase())) {
 								return true;
 							}
 							for (var tag : dataPoint.getTags().entrySet()) {
-								if (tag.getKey().contains(term)) {
+								if (tag.getKey().toLowerCase().contains(term.toLowerCase())) {
 									return true;
 								}
-								if (tag.getValue().contains(term)) {
+								if (tag.getValue().toLowerCase().contains(term.toLowerCase())) {
 									return true;
 								}
 							}
@@ -86,13 +87,210 @@ public class SearchRequestMessageHandler implements MessageHandler {
 							result.setDevice(deviceName);
 							result.setPointIndex(dataPoint.getIndex());
 							result.setPointName(dataPoint.getName());
-							result.setPointType(dataPoint.getClass().getSimpleName());
+							result.setPointType("analogInputPoint");
 							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).toList()));
 							results.add(result);
 						}
 
 						if (results.size() >= 10) {
 							var resultMessage = new SearchResultMessage();
+							resultMessage.setSearchTerm(searchTerm);
+							resultMessage.setResults(results);
+							messanger.sendMessage(resultMessage);
+							return;
+						}
+					}
+
+					for (var dataPoint : device.getDatabaseManager().getAnalogOutputDataPoints()) {
+						var searchTermsMet = searchableTerms.stream().map(term -> {
+							if (deviceName.toLowerCase().contains(term.toLowerCase())) {
+								return true;
+							}
+							if (dataPoint.getName().toLowerCase().contains(term.toLowerCase())) {
+								return true;
+							}
+							for (var tag : dataPoint.getTags().entrySet()) {
+								if (tag.getKey().toLowerCase().contains(term.toLowerCase())) {
+									return true;
+								}
+								if (tag.getValue().toLowerCase().contains(term.toLowerCase())) {
+									return true;
+								}
+							}
+							return false;
+						}).filter(v -> !v).findAny();
+
+						if (!searchTermsMet.isPresent()) {
+							var result = new SearchResultItem();
+							result.setSite(site.getSite());
+							result.setDevice(deviceName);
+							result.setPointIndex(dataPoint.getIndex());
+							result.setPointName(dataPoint.getName());
+							result.setPointType("analogOutputPoint");
+							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).toList()));
+							results.add(result);
+						}
+
+						if (results.size() >= 10) {
+							var resultMessage = new SearchResultMessage();
+							resultMessage.setSearchTerm(searchTerm);
+							resultMessage.setResults(results);
+							messanger.sendMessage(resultMessage);
+							return;
+						}
+					}
+
+					for (var dataPoint : device.getDatabaseManager().getBinaryInputDataPoints()) {
+						var searchTermsMet = searchableTerms.stream().map(term -> {
+							if (deviceName.toLowerCase().contains(term.toLowerCase())) {
+								return true;
+							}
+							if (dataPoint.getName().toLowerCase().contains(term.toLowerCase())) {
+								return true;
+							}
+							for (var tag : dataPoint.getTags().entrySet()) {
+								if (tag.getKey().toLowerCase().contains(term.toLowerCase())) {
+									return true;
+								}
+								if (tag.getValue().toLowerCase().contains(term.toLowerCase())) {
+									return true;
+								}
+							}
+							return false;
+						}).filter(v -> !v).findAny();
+
+						if (!searchTermsMet.isPresent()) {
+							var result = new SearchResultItem();
+							result.setSite(site.getSite());
+							result.setDevice(deviceName);
+							result.setPointIndex(dataPoint.getIndex());
+							result.setPointName(dataPoint.getName());
+							result.setPointType("binaryInputPoint");
+							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).toList()));
+							results.add(result);
+						}
+
+						if (results.size() >= 10) {
+							var resultMessage = new SearchResultMessage();
+							resultMessage.setSearchTerm(searchTerm);
+							resultMessage.setResults(results);
+							messanger.sendMessage(resultMessage);
+							return;
+						}
+					}
+
+					for (var dataPoint : device.getDatabaseManager().getBinaryOutputDataPoints()) {
+						var searchTermsMet = searchableTerms.stream().map(term -> {
+							if (deviceName.toLowerCase().contains(term.toLowerCase())) {
+								return true;
+							}
+							if (dataPoint.getName().toLowerCase().contains(term.toLowerCase())) {
+								return true;
+							}
+							for (var tag : dataPoint.getTags().entrySet()) {
+								if (tag.getKey().toLowerCase().contains(term.toLowerCase())) {
+									return true;
+								}
+								if (tag.getValue().toLowerCase().contains(term.toLowerCase())) {
+									return true;
+								}
+							}
+							return false;
+						}).filter(v -> !v).findAny();
+
+						if (!searchTermsMet.isPresent()) {
+							var result = new SearchResultItem();
+							result.setSite(site.getSite());
+							result.setDevice(deviceName);
+							result.setPointIndex(dataPoint.getIndex());
+							result.setPointName(dataPoint.getName());
+							result.setPointType("binaryOutputPoint");
+							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).toList()));
+							results.add(result);
+						}
+
+						if (results.size() >= 10) {
+							var resultMessage = new SearchResultMessage();
+							resultMessage.setSearchTerm(searchTerm);
+							resultMessage.setResults(results);
+							messanger.sendMessage(resultMessage);
+							return;
+						}
+					}
+
+					for (var dataPoint : device.getDatabaseManager().getCounterDataPoints()) {
+						var searchTermsMet = searchableTerms.stream().map(term -> {
+							if (deviceName.toLowerCase().contains(term.toLowerCase())) {
+								return true;
+							}
+							if (dataPoint.getName().toLowerCase().contains(term.toLowerCase())) {
+								return true;
+							}
+							for (var tag : dataPoint.getTags().entrySet()) {
+								if (tag.getKey().toLowerCase().contains(term.toLowerCase())) {
+									return true;
+								}
+								if (tag.getValue().toLowerCase().contains(term.toLowerCase())) {
+									return true;
+								}
+							}
+							return false;
+						}).filter(v -> !v).findAny();
+
+						if (!searchTermsMet.isPresent()) {
+							var result = new SearchResultItem();
+							result.setSite(site.getSite());
+							result.setDevice(deviceName);
+							result.setPointIndex(dataPoint.getIndex());
+							result.setPointName(dataPoint.getName());
+							result.setPointType("counterPoint");
+							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).toList()));
+							results.add(result);
+						}
+
+						if (results.size() >= 10) {
+							var resultMessage = new SearchResultMessage();
+							resultMessage.setSearchTerm(searchTerm);
+							resultMessage.setResults(results);
+							messanger.sendMessage(resultMessage);
+							return;
+						}
+					}
+
+					for (var dataPoint : device.getDatabaseManager().getDoubleBitBinaryInputDataPoints()) {
+						var searchTermsMet = searchableTerms.stream().map(term -> {
+							if (deviceName.toLowerCase().contains(term.toLowerCase())) {
+								return true;
+							}
+							if (dataPoint.getName().toLowerCase().contains(term.toLowerCase())) {
+								return true;
+							}
+							for (var tag : dataPoint.getTags().entrySet()) {
+								if (tag.getKey().toLowerCase().contains(term.toLowerCase())) {
+									return true;
+								}
+								if (tag.getValue().toLowerCase().contains(term.toLowerCase())) {
+									return true;
+								}
+							}
+							return false;
+						}).filter(v -> !v).findAny();
+
+						if (!searchTermsMet.isPresent()) {
+							var result = new SearchResultItem();
+							result.setSite(site.getSite());
+							result.setDevice(deviceName);
+							result.setPointIndex(dataPoint.getIndex());
+							result.setPointName(dataPoint.getName());
+							result.setPointType("doubleBitBinaryInputPoint");
+							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).toList()));
+							results.add(result);
+						}
+
+						if (results.size() >= 10) {
+							var resultMessage = new SearchResultMessage();
+							resultMessage.setSearchTerm(searchTerm);
+							resultMessage.setResults(results);
 							messanger.sendMessage(resultMessage);
 							return;
 						}
@@ -101,6 +299,8 @@ public class SearchRequestMessageHandler implements MessageHandler {
 			}
 
 			var resultMessage = new SearchResultMessage();
+			resultMessage.setSearchTerm(searchTerm);
+			resultMessage.setResults(results);
 			messanger.sendMessage(resultMessage);
 			return;
 		});

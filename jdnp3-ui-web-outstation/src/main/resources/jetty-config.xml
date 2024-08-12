@@ -25,7 +25,17 @@
 			</list>
 		</property>
 	</bean>
-	
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.SearchRequestMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetObject" ref="messageHandlerRegistry" />
 		<property name="targetMethod" value="registerHandler" />

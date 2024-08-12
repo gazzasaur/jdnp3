@@ -5,21 +5,8 @@ jdnp3.station.siteDeviceListings = [];
 
 jdnp3.station.SetStationsMessageHandler = function() {
 }
+
 jdnp3.station.SearchResultMessageHandler = function() {
-}
-
-jdnp3.station.FullSearch = function(keyword) {
-	var performFullSearch = function() {
-		try {
-			thisObject.messanger.sendMessage({'type': 'fullSearch'});
-		} catch (exception) {
-			console.log('WARN: Unable to search.');
-		}
-	}
-
-	jdnp3.schedule.getDefaultScheduler().addTask(function() {
-		performFullSearch();
-	}, 10, false);
 }
 
 jdnp3.station.updateDeviceListing = function(site, devices) {
@@ -64,7 +51,38 @@ jdnp3.station.updateDeviceListing = function(site, devices) {
 	site.devices = deviceListing;
 }
 
+jdnp3.station.updateSearchResults = function(searchResult) {
+	var searchResultsPanel = document.getElementById('searchResults');
+	searchResultsPanel.innerHTML = '';
+
+	for (var result of searchResult['results']) {
+		var siteDiv = document.createElement('div');
+		siteDiv.appendChild(document.createTextNode(result['site'] + ' - ' + result['device']))
+		var pointDiv = document.createElement('div');
+		pointDiv.appendChild(document.createTextNode(result['pointName'] + ', ' + result['pointType'].charAt(0).toUpperCase() + result['pointType'].slice(1) + ' at Index ' + result['pointIndex']))
+		var tagsDiv = document.createElement('div');
+		tagsDiv.appendChild(document.createTextNode(result['additionalInformation']));
+
+		var resultDiv = document.createElement('a');
+		resultDiv.appendChild(siteDiv);
+		resultDiv.appendChild(pointDiv);
+		resultDiv.appendChild(tagsDiv);
+		resultDiv.style.color = 'inherit';
+		resultDiv.style.textDecoration = 'none';
+		resultDiv.style.display = 'block';
+		resultDiv.style.cursor = 'pointer';
+		resultDiv.style.borderLeft = '1px solid black';
+		resultDiv.style.borderRight = '1px solid black';
+		resultDiv.style.borderBottom = '1px solid black';
+		resultDiv.onmouseleave = (event) => event.target.style.backgroundColor = '';
+		resultDiv.onmouseenter = (event) => event.target.style.backgroundColor = 'lightgray';
+		resultDiv.href = '/device.jsf?stationCode=' + result['site'] + '&deviceCode=' + result['device'] + '&filter=' + searchResult['searchTerm'];
+		searchResultsPanel.appendChild(resultDiv);
+	}
+}
+
 jdnp3.station.SearchResultMessageHandler.prototype.processMessage = function(searchResult) {
+	jdnp3.station.updateSearchResults(searchResult);
 }
 
 jdnp3.station.SetStationsMessageHandler.prototype.processMessage = function(stationMessage) {
@@ -165,7 +183,23 @@ jdnp3.station.Station = function(location) {
 	
 	jdnp3.schedule.getDefaultScheduler().addTask(function() {
 		updateListings();
-	}, 1000, true);
+	}, 60000, true);
+}
+
+jdnp3.station.Station.prototype.search = function(keyword) {
+	var thisObject = this;
+
+	var performSearch = function() {
+		try {
+			thisObject.messanger.sendMessage({'type': 'searchRequest', 'searchTerm': keyword});
+		} catch (exception) {
+			console.log('WARN: Unable to search.');
+		}
+	}
+
+	jdnp3.schedule.getDefaultScheduler().addTask(function() {
+		performSearch();
+	}, 10, false);
 }
 
 jdnp3.station.Station.prototype.messageReceived = function(message) {

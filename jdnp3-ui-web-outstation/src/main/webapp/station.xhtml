@@ -19,6 +19,8 @@
 		document.addEventListener("DOMContentLoaded", function(event) {
 			var location = document.location.toString().replace(/\bhttp/,'ws').replace(/\/\/.*/,'//') + window.location.host + '/ws/device' + window.location.search;
 			window['station'] = new jdnp3.station.Station(location);
+
+			document.getElementById("searchInput").addEventListener("keydown", (event) => setTimeout(() => window['station'].search(event.target.value), 10));
 		});
 	</script>
 
@@ -54,10 +56,12 @@
 						&#x1F50D;
 					</div>
 					<div style="position: absolute; left: 1.5em; right: 0em;">
-						<input style="position: relative; top: 0; width: 100%; box-sizing: border-box; text-align: left; border: none;" class="text-field-value"></input>
+						<input id="searchInput" style="position: relative; top: 0; width: 100%; box-sizing: border-box; text-align: left; border: none;" class="text-field-value"></input>
 					</div>
 				</div>
-			</div>
+				<div id="searchResults">
+				</div>
+		</div>
 		</div>
 	</div>
 </h:body>
