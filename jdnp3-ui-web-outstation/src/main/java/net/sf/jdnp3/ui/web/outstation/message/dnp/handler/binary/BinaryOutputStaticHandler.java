@@ -24,6 +24,7 @@ import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryOutputStaticAss
 import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryOutputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputStaticObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 
 public class BinaryOutputStaticHandler implements BinaryOutputStaticReadRequestHandler, BinaryOutputStaticAssignClassRequestHandler {
@@ -37,9 +38,10 @@ public class BinaryOutputStaticHandler implements BinaryOutputStaticReadRequestH
 		List<BinaryOutputStaticObjectInstance> points = new ArrayList<>();
 		List<BinaryOutputDataPoint> dataPoints = databaseManager.getBinaryOutputDataPoints();
 
-		for (long i = startIndex; i <= stopIndex; ++i) {
-			BinaryOutputDataPoint dataPoint = dataPoints.get((int) i);
-			copyDataPoint(points, dataPoint);
+		for (BinaryOutputDataPoint dataPoint : dataPoints) {
+			if (dataPoint.getIndex() >= startIndex && dataPoint.getIndex() <= stopIndex) {
+				copyDataPoint(points, dataPoint);
+			}
 		}
 		return points;
 	}
@@ -57,22 +59,17 @@ public class BinaryOutputStaticHandler implements BinaryOutputStaticReadRequestH
 	public List<BinaryOutputStaticObjectInstance> readStatic(long index) {
 		List<BinaryOutputStaticObjectInstance> points = new ArrayList<>();
 		List<BinaryOutputDataPoint> dataPoints = databaseManager.getBinaryOutputDataPoints();
-
-		if (index < dataPoints.size()) {
-			BinaryOutputDataPoint dataPoint = dataPoints.get((int) index);
-			copyDataPoint(points, dataPoint);
-		}
+		dataPoints.stream().filter(dataPoint -> dataPoint.getIndex() == index).findAny().ifPresent(dataPoint -> copyDataPoint(points, dataPoint));
 		return points;
 	}
 	
 	public void assignClass(long index, long eventClass) {
 		List<BinaryOutputDataPoint> dataPoints = databaseManager.getBinaryOutputDataPoints();
 
-		if (index < dataPoints.size()) {
-			BinaryOutputDataPoint dataPoint = dataPoints.get((int) index);
+		dataPoints.stream().filter(dataPoint -> dataPoint.getIndex() == index).findAny().ifPresent(dataPoint -> {
 			dataPoint.setEventClass((int) eventClass);
 			databaseManager.setBinaryOutputDataPoint(dataPoint);
-		}
+		});
 	}
 	
 	public void assignClasses(long eventClass) {
@@ -87,10 +84,11 @@ public class BinaryOutputStaticHandler implements BinaryOutputStaticReadRequestH
 	public void assignClasses(long startIndex, long stopIndex, long eventClass) {
 		List<BinaryOutputDataPoint> dataPoints = databaseManager.getBinaryOutputDataPoints();
 
-		for (long i = startIndex; i <= stopIndex; ++i) {
-			BinaryOutputDataPoint dataPoint = dataPoints.get((int) i);
-			dataPoint.setEventClass((int) eventClass);
-			databaseManager.setBinaryOutputDataPoint(dataPoint);
+		for (BinaryOutputDataPoint dataPoint : dataPoints) {
+			if (dataPoint.getIndex() >= startIndex && dataPoint.getIndex() <= stopIndex) {
+				dataPoint.setEventClass((int) eventClass);
+				databaseManager.setBinaryOutputDataPoint(dataPoint);
+			}
 		}
 	}
 

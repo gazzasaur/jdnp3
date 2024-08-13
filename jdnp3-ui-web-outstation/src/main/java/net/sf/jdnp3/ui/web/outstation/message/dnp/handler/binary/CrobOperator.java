@@ -34,23 +34,22 @@ public class CrobOperator implements BinaryOutputOperateRequestHandler {
 	
 	public BinaryOutputCrobObjectInstance doDirectOperate(BinaryOutputCrobObjectInstance crobObjectInstance) {
 		List<BinaryOutputDataPoint> binaryOutputDataPoints = databaseManager.getBinaryOutputDataPoints();
-		if (binaryOutputDataPoints.size() > crobObjectInstance.getIndex()) {
-			BinaryOutputDataPoint binaryOutputDataPoint = binaryOutputDataPoints.get((int) crobObjectInstance.getIndex());
-			crobObjectInstance.setStatusCode(binaryOutputDataPoint.getStatusCode());
+		binaryOutputDataPoints.stream().filter(dataPoint -> dataPoint.getIndex() == crobObjectInstance.getIndex()).findAny().ifPresent(dataPoint -> {
+			crobObjectInstance.setStatusCode(dataPoint.getStatusCode());
 			
-			binaryOutputDataPoint.setOperatedCount(binaryOutputDataPoint.getOperatedCount() + 1);
+			dataPoint.setOperatedCount(dataPoint.getOperatedCount() + 1);
 			
-			binaryOutputDataPoint.setCount(crobObjectInstance.getCount());
-			binaryOutputDataPoint.setOnTime(crobObjectInstance.getOnTime());
-			binaryOutputDataPoint.setOffTime(crobObjectInstance.getOffTime());
-			binaryOutputDataPoint.setOperationType(crobObjectInstance.getOperationType());
-			binaryOutputDataPoint.setTripCloseCode(crobObjectInstance.getTripCloseCode());
+			dataPoint.setCount(crobObjectInstance.getCount());
+			dataPoint.setOnTime(crobObjectInstance.getOnTime());
+			dataPoint.setOffTime(crobObjectInstance.getOffTime());
+			dataPoint.setOperationType(crobObjectInstance.getOperationType());
+			dataPoint.setTripCloseCode(crobObjectInstance.getTripCloseCode());
 			
-			if (crobObjectInstance.getStatusCode().equals(StatusCode.SUCCESS) && !crobObjectInstance.getOperationType().equals(NUL) && binaryOutputDataPoint.isAutoUpdateOnSuccess()) {
-				binaryOutputDataPoint.setActive(crobObjectInstance.getOperationType().isActive());
+			if (crobObjectInstance.getStatusCode().equals(StatusCode.SUCCESS) && !crobObjectInstance.getOperationType().equals(NUL) && dataPoint.isAutoUpdateOnSuccess()) {
+				dataPoint.setActive(crobObjectInstance.getOperationType().isActive());
 			}
-			databaseManager.setBinaryOutputDataPoint(binaryOutputDataPoint);
-		}
+			databaseManager.setBinaryOutputDataPoint(dataPoint);
+		});
 		return crobObjectInstance;
 	}
 }

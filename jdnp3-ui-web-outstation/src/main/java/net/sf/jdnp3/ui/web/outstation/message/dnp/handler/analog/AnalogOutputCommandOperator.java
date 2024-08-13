@@ -32,17 +32,14 @@ public class AnalogOutputCommandOperator implements AnalogOutputOperateRequestHa
 	
 	public AnalogOutputCommandObjectInstance doDirectOperate(AnalogOutputCommandObjectInstance objectInstance) {
 		List<AnalogOutputDataPoint> analogOutputDataPoints = databaseManager.getAnalogOutputDataPoints();
-		if (analogOutputDataPoints.size() > objectInstance.getIndex()) {
-			AnalogOutputDataPoint analogOutputDataPoint = analogOutputDataPoints.get((int) objectInstance.getIndex());
-			objectInstance.setStatusCode(analogOutputDataPoint.getStatusCode());
-			
-			analogOutputDataPoint.setOperatedCount(analogOutputDataPoint.getOperatedCount() + 1);
-			
-			if (objectInstance.getStatusCode().equals(StatusCode.SUCCESS) && analogOutputDataPoint.isAutoUpdateOnSuccess()) {
-				analogOutputDataPoint.setValue(objectInstance.getValue());
+		analogOutputDataPoints.stream().filter(dataPoint -> dataPoint.getIndex() == objectInstance.getIndex()).findAny().ifPresent(dataPoint -> {
+			objectInstance.setStatusCode(dataPoint.getStatusCode());
+			dataPoint.setOperatedCount(dataPoint.getOperatedCount() + 1);
+			if (objectInstance.getStatusCode().equals(StatusCode.SUCCESS) && dataPoint.isAutoUpdateOnSuccess()) {
+				dataPoint.setValue(objectInstance.getValue());
 			}
-			databaseManager.setAnalogOutputDataPoint(analogOutputDataPoint);
-		}
+			databaseManager.setAnalogOutputDataPoint(dataPoint);
+		});
 		return objectInstance;
 	}
 }

@@ -26,6 +26,7 @@ import net.sf.jdnp3.dnp3.service.outstation.handler.analog.AnalogOutputStaticRea
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogOutputStaticObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 
 public class AnalogOutputStaticHandler implements AnalogOutputStaticReadRequestHandler {
 	private Logger logger = LoggerFactory.getLogger(AnalogOutputStaticHandler.class);
@@ -40,9 +41,10 @@ public class AnalogOutputStaticHandler implements AnalogOutputStaticReadRequestH
 		List<AnalogOutputStaticObjectInstance> points = new ArrayList<>();
 		List<AnalogOutputDataPoint> dataPoints = databaseManager.getAnalogOutputDataPoints();
 
-		for (long i = startIndex; i <= stopIndex; ++i) {
-			AnalogOutputDataPoint dataPoint = dataPoints.get((int) i);
-			copyDataPoint(points, dataPoint);
+		for (AnalogOutputDataPoint dataPoint : dataPoints) {
+			if (dataPoint.getIndex() >= startIndex && dataPoint.getIndex() <= stopIndex) {
+				copyDataPoint(points, dataPoint);
+			}
 		}
 		return points;
 	}
@@ -60,11 +62,7 @@ public class AnalogOutputStaticHandler implements AnalogOutputStaticReadRequestH
 	public List<AnalogOutputStaticObjectInstance> readStatic(long index) {
 		List<AnalogOutputStaticObjectInstance> points = new ArrayList<>();
 		List<AnalogOutputDataPoint> dataPoints = databaseManager.getAnalogOutputDataPoints();
-
-		if (index < dataPoints.size()) {
-			AnalogOutputDataPoint dataPoint = dataPoints.get((int) index);
-			copyDataPoint(points, dataPoint);
-		}
+		dataPoints.stream().filter(dataPoint -> dataPoint.getIndex() == index).findAny().ifPresent(dataPoint -> copyDataPoint(points, dataPoint));
 		return points;
 	}
 

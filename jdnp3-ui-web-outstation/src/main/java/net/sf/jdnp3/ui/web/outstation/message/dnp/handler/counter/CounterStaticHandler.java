@@ -40,9 +40,10 @@ public class CounterStaticHandler implements CounterStaticReadRequestHandler {
 		List<CounterStaticObjectInstance> points = new ArrayList<>();
 		List<CounterDataPoint> dataPoints = databaseManager.getCounterDataPoints();
 
-		for (long i = startIndex; i <= stopIndex; ++i) {
-			CounterDataPoint dataPoint = dataPoints.get((int) i);
-			copyDataPoint(points, dataPoint);
+		for (CounterDataPoint dataPoint : dataPoints) {
+			if (dataPoint.getIndex() >= startIndex && dataPoint.getIndex() <= stopIndex) {
+				copyDataPoint(points, dataPoint);
+			}
 		}
 		return points;
 	}
@@ -60,11 +61,7 @@ public class CounterStaticHandler implements CounterStaticReadRequestHandler {
 	public List<CounterStaticObjectInstance> readStatic(long index) {
 		List<CounterStaticObjectInstance> points = new ArrayList<>();
 		List<CounterDataPoint> dataPoints = databaseManager.getCounterDataPoints();
-
-		if (index < dataPoints.size()) {
-			CounterDataPoint dataPoint = dataPoints.get((int) index);
-			copyDataPoint(points, dataPoint);
-		}
+		dataPoints.stream().filter(dataPoint -> dataPoint.getIndex() == index).findAny().ifPresent(dataPoint -> copyDataPoint(points, dataPoint));
 		return points;
 	}
 

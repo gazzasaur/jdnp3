@@ -26,6 +26,7 @@ import net.sf.jdnp3.dnp3.service.outstation.handler.binary.DoubleBitBinaryInputS
 import net.sf.jdnp3.dnp3.service.outstation.handler.binary.DoubleBitBinaryInputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.DoubleBitBinaryInputStaticObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputDataPoint;
 
 public class DoubleBitBinaryInputStaticHandler implements DoubleBitBinaryInputStaticReadRequestHandler, DoubleBitBinaryInputStaticAssignClassRequestHandler {
@@ -41,9 +42,10 @@ public class DoubleBitBinaryInputStaticHandler implements DoubleBitBinaryInputSt
 		List<DoubleBitBinaryInputStaticObjectInstance> points = new ArrayList<>();
 		List<DoubleBitBinaryInputDataPoint> binaryDataPoints = databaseManager.getDoubleBitBinaryInputDataPoints();
 
-		for (long i = startIndex; i <= stopIndex; ++i) {
-			DoubleBitBinaryInputDataPoint dataPoint = binaryDataPoints.get((int) i);
-			copyDataPoint(points, dataPoint);
+		for (DoubleBitBinaryInputDataPoint dataPoint : binaryDataPoints) {
+			if (dataPoint.getIndex() >= startIndex && dataPoint.getIndex() <= stopIndex) {
+				copyDataPoint(points, dataPoint);
+			}
 		}
 		return points;
 	}
@@ -61,22 +63,17 @@ public class DoubleBitBinaryInputStaticHandler implements DoubleBitBinaryInputSt
 	public List<DoubleBitBinaryInputStaticObjectInstance> readStatic(long index) {
 		List<DoubleBitBinaryInputStaticObjectInstance> points = new ArrayList<>();
 		List<DoubleBitBinaryInputDataPoint> binaryDataPoints = databaseManager.getDoubleBitBinaryInputDataPoints();
-
-		if (index < binaryDataPoints.size()) {
-			DoubleBitBinaryInputDataPoint dataPoint = binaryDataPoints.get((int) index);
-			copyDataPoint(points, dataPoint);
-		}
+		binaryDataPoints.stream().filter(dataPoint -> dataPoint.getIndex() == index).findAny().ifPresent(dataPoint -> copyDataPoint(points, dataPoint));
 		return points;
 	}
 
 	public void assignClass(long index, long eventClass) {
 		List<DoubleBitBinaryInputDataPoint> binaryDataPoints = databaseManager.getDoubleBitBinaryInputDataPoints();
 
-		if (index < binaryDataPoints.size()) {
-			DoubleBitBinaryInputDataPoint point = binaryDataPoints.get((int) index);
-			point.setEventClass((int) eventClass);
-			databaseManager.setDoubleBitBinaryInputDataPoint(point);
-		}
+		binaryDataPoints.stream().filter(dataPoint -> dataPoint.getIndex() == index).findAny().ifPresent(dataPoint -> {
+			dataPoint.setEventClass((int) eventClass);
+			databaseManager.setDoubleBitBinaryInputDataPoint(dataPoint);
+		});
 	}
 
 	public void assignClasses(long eventClass) {
@@ -91,10 +88,11 @@ public class DoubleBitBinaryInputStaticHandler implements DoubleBitBinaryInputSt
 	public void assignClasses(long startIndex, long stopIndex, long eventClass) {
 		List<DoubleBitBinaryInputDataPoint> binaryDataPoints = databaseManager.getDoubleBitBinaryInputDataPoints();
 
-		for (long i = startIndex; i <= stopIndex; ++i) {
-			DoubleBitBinaryInputDataPoint binaryDataPoint = binaryDataPoints.get((int) i);
-			binaryDataPoint.setEventClass((int) eventClass);
-			databaseManager.setDoubleBitBinaryInputDataPoint(binaryDataPoint);
+		for (DoubleBitBinaryInputDataPoint dataPoint : binaryDataPoints) {
+			if (dataPoint.getIndex() >= startIndex && dataPoint.getIndex() <= stopIndex) {
+				dataPoint.setEventClass((int) eventClass);
+				databaseManager.setDoubleBitBinaryInputDataPoint(dataPoint);
+			}
 		}
 	}
 

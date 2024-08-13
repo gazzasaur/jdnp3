@@ -41,9 +41,10 @@ public class BinaryInputStaticHandler implements BinaryInputStaticReadRequestHan
 		List<BinaryInputStaticObjectInstance> points = new ArrayList<>();
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 
-		for (long i = startIndex; i <= stopIndex; ++i) {
-			BinaryInputDataPoint dataPoint = binaryDataPoints.get((int) i);
-			copyDataPoint(points, dataPoint);
+		for (BinaryInputDataPoint dataPoint : binaryDataPoints) {
+			if (dataPoint.getIndex() >= startIndex && dataPoint.getIndex() <= stopIndex) {
+				copyDataPoint(points, dataPoint);
+			}
 		}
 		return points;
 	}
@@ -58,30 +59,24 @@ public class BinaryInputStaticHandler implements BinaryInputStaticReadRequestHan
 		return points;
 	}
 
+	// FIXME All of these are very inefficient across all types.
 	public List<BinaryInputStaticObjectInstance> readStatic(long index) {
 		List<BinaryInputStaticObjectInstance> points = new ArrayList<>();
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
-
-		if (index < binaryDataPoints.size()) {
-			BinaryInputDataPoint dataPoint = binaryDataPoints.get((int) index);
-			copyDataPoint(points, dataPoint);
-		}
+		binaryDataPoints.stream().filter(dataPoint -> dataPoint.getIndex() == index).findAny().ifPresent(dataPoint -> copyDataPoint(points, dataPoint));
 		return points;
 	}
 
 	public void assignClass(long index, long eventClass) {
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
-
-		if (index < binaryDataPoints.size()) {
-			BinaryInputDataPoint point = binaryDataPoints.get((int) index);
-			point.setEventClass((int) eventClass);
-			databaseManager.setBinaryInputDataPoint(point);
-		}
+		binaryDataPoints.stream().filter(dataPoint -> dataPoint.getIndex() == index).findAny().ifPresent(dataPoint -> {
+			dataPoint.setEventClass((int) eventClass);
+			databaseManager.setBinaryInputDataPoint(dataPoint);
+		});
 	}
 
 	public void assignClasses(long eventClass) {
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
-
 		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
 			binaryDataPoint.setEventClass((int) eventClass);
 			databaseManager.setBinaryInputDataPoint(binaryDataPoint);
@@ -91,10 +86,11 @@ public class BinaryInputStaticHandler implements BinaryInputStaticReadRequestHan
 	public void assignClasses(long startIndex, long stopIndex, long eventClass) {
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 
-		for (long i = startIndex; i <= stopIndex; ++i) {
-			BinaryInputDataPoint binaryDataPoint = binaryDataPoints.get((int) i);
-			binaryDataPoint.setEventClass((int) eventClass);
-			databaseManager.setBinaryInputDataPoint(binaryDataPoint);
+		for (BinaryInputDataPoint dataPoint : binaryDataPoints) {
+			if (dataPoint.getIndex() >= startIndex && dataPoint.getIndex() <= stopIndex) {
+				dataPoint.setEventClass((int) eventClass);
+				databaseManager.setBinaryInputDataPoint(dataPoint);
+			}
 		}
 	}
 
