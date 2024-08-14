@@ -29,6 +29,9 @@ public class DataLinkManager {
 	private String dataLinkName;
 	private DataLinkLayer dataLinkLayer;
 	private Map<TransportBindingItem, OutstationDevice> transportBindings = new HashMap<>();
+
+	// TODO Should probably be a properties object.
+	private boolean ignoreFcb = false;
 	
 	public DataLinkManager(String dataLinkName) {
 		this.dataLinkName = dataLinkName;
@@ -39,7 +42,7 @@ public class DataLinkManager {
 		TransportBindingItem dataLinkBinding = new TransportBindingItem(this, transportBinding);
 		outstationDevice.addTransportBinding(dataLinkBinding);
 		dataLinkBinding.bindOutstation(address, outstationDevice);
-		dataLinkBinding.bindDataLink(dataLinkLayer);
+		dataLinkBinding.bindDataLink(dataLinkLayer, ignoreFcb);
 		transportBindings.put(dataLinkBinding, outstationDevice);
 	}
 	
@@ -49,6 +52,10 @@ public class DataLinkManager {
 	
 	public void stop() {
 		dataLinkLayer.stop();
+	}
+
+	public void setIgnoreFcb(boolean ignoreFcb) {
+		this.ignoreFcb = ignoreFcb;
 	}
 	
 	public boolean isRunning() {

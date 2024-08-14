@@ -15,7 +15,6 @@
  */
 package net.sf.jdnp3.ui.web.outstation.channel;
 
-import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkInterceptor;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.StatefulDataLinkInterceptor;
 import net.sf.jdnp3.dnp3.stack.layer.transport.ApplicationTransportBindingAdaptor;
@@ -29,7 +28,7 @@ public class TransportBindingItem {
 	private OutstationDevice outstationDevice = null;
 	
 	private TransportBinding transportBinding = null;
-	private DataLinkInterceptor dataLinkInterceptor = null;
+	private StatefulDataLinkInterceptor dataLinkInterceptor = null;
 	private DataLinkTransportBindingAdaptor dataLinkTransportBindingAdaptor = null;
 	private ApplicationTransportBindingAdaptor applicationTransportBindingAdaptor = null;
 	private DataLinkManager dataLinkManager;
@@ -49,14 +48,19 @@ public class TransportBindingItem {
 		outstationDevice.getOutstation().addApplicationTransport(applicationTransportBindingAdaptor);
 		transportBinding.setApplicationLayer(address, outstationDevice.getOutstation().getApplicationLayer());
 	}
-	
+
 	public void bindDataLink(DataLinkLayer dataLinkLayer) {
+		bindDataLink(dataLinkLayer, false);
+	}
+
+	public void bindDataLink(DataLinkLayer dataLinkLayer, boolean ignoreFcb) {
 		if (this.dataLinkLayer != null) {
 			throw new IllegalStateException("A datalink is already bound.");
 		}
 		this.dataLinkLayer = dataLinkLayer;
 		dataLinkTransportBindingAdaptor = new DataLinkTransportBindingAdaptor(transportBinding);
 		dataLinkInterceptor = new StatefulDataLinkInterceptor(false, dataLinkLayer, this.address, dataLinkTransportBindingAdaptor);
+		dataLinkInterceptor.setIgnoreFcb(ignoreFcb);
 		dataLinkLayer.addDataLinkLayerListener(dataLinkInterceptor);
 		transportBinding.setDataLinkLayer(dataLinkLayer);
 	}

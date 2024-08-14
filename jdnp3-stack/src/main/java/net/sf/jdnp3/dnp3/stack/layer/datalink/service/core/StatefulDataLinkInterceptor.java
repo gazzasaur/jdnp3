@@ -27,11 +27,18 @@ public class StatefulDataLinkInterceptor implements DataLinkInterceptor {
     private boolean master;
     private Map<Integer, Boolean> expectedFrameCheckBitState = new ConcurrentHashMap<>();
 
+    // If this is set, the outstation will ignore the FCB and always ACK messages.
+    private boolean ignoreFcb = false;
+
     public StatefulDataLinkInterceptor(boolean master, DataLinkLayer dataLinkLayer, long destinationAddress, DataLinkListener dataLinkListener) {
         this.master = master;
         this.dataLinkLayer = dataLinkLayer;
         this.dataLinkListener = dataLinkListener;
         this.destinationAddress = destinationAddress;
+    }
+
+    public void setIgnoreFcb(boolean ignoreFcb) {
+        this.ignoreFcb = ignoreFcb;
     }
 
     public void receiveData(MessageProperties messageProperties, DataLinkFrame frame) {
@@ -77,7 +84,7 @@ public class StatefulDataLinkInterceptor implements DataLinkInterceptor {
             return;
         } else if (messageProperties.isPrimary() && frame.getDataLinkFrameHeader().isFcvDfc()) {
             Boolean expectedFcb = expectedFrameCheckBitState.get(messageProperties.getSourceAddress());
-            if (expectedFcb != null && expectedFcb.booleanValue() == frame.getDataLinkFrameHeader().isFcb()) {
+            if (ignoreFcb || expectedFcb != null && expectedFcb.booleanValue() == frame.getDataLinkFrameHeader().isFcb()) {
                 expectedFrameCheckBitState.put(messageProperties.getSourceAddress(), !expectedFcb.booleanValue());
                 dataLinkFrameHeader.setFunctionCode(FunctionCode.ACK);
                 dataLinkLayer.sendData(messageProperties, responseFrame);

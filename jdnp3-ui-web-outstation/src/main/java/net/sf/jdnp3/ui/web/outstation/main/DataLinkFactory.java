@@ -25,6 +25,7 @@ import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
 
 public class DataLinkFactory {
 	private DataPump dataPump;
+	private boolean ignoreFcb = false;
 	private ExecutorService executorService;
 	
 	public DataLinkManager create(String name, String host, int port) {
@@ -53,6 +54,7 @@ public class DataLinkFactory {
 		dataLinkLayer.setDataPump(dataPump);
 		
 		DataLinkManager dataLinkManager = DataLinkManagerProvider.registerDataLink(name);
+		dataLinkManager.setIgnoreFcb(ignoreFcb);
 		dataLinkManager.setDataLinkLayer(dataLinkLayer);
 		return dataLinkManager;
 	}
@@ -60,8 +62,12 @@ public class DataLinkFactory {
 	public void setDataPump(DataPump dataPump) {
 		this.dataPump = dataPump;
 	}
-	
+
 	public void setExecutorService(ExecutorService executorService) {
 		this.executorService = executorService;
+	}
+
+	public void setIgnoreFcb(boolean ignoreFcb) {
+		this.ignoreFcb = ignoreFcb;
 	}
 }
