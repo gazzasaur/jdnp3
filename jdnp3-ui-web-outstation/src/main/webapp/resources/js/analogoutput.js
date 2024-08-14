@@ -110,8 +110,8 @@ jdnp3.analogoutput.updateAnalogOutput = function(index, dataPoint) {
 	}
 	
 	var operationHint = 'Analog Output';
-	document.getElementById('ao-' + index + '-os').setAttribute('title', operationHint);
-	var operationCountElement = document.getElementById('ao-' + index + '-oc')
+	document.getElementById('ao-' + dataPoint.index + '-os').setAttribute('title', operationHint);
+	var operationCountElement = document.getElementById('ao-' + dataPoint.index + '-oc')
 	operationCountElement.innerHTML = '';
 	operationCountElement.appendChild(document.createTextNode(dataPoint.operatedCount));
 	

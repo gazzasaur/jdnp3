@@ -95,7 +95,7 @@ jdnp3.binaryoutput.appendBinaryOutput = function(index, dataPoint) {
 
 jdnp3.binaryoutput.updateBinaryOutput = function(index, dataPoint) {
 	var id = 'bo-' + dataPoint.index;
-	
+
 	for (var property in dataPoint) {
 		if (dataPoint.hasOwnProperty(property) && property in jdnp3.binaryoutput.ATTRIBUTE_MAP) {
 			document.getElementById(id + "-" + jdnp3.binaryoutput.ATTRIBUTE_MAP[property]).checked = dataPoint[property];
@@ -103,8 +103,8 @@ jdnp3.binaryoutput.updateBinaryOutput = function(index, dataPoint) {
 	}
 	
 	var operationHint = 'Operation Type: ' + dataPoint.operationType + ', Trip Close Code: ' + dataPoint.tripCloseCode + ', On Time: ' + dataPoint.onTime + 'ms, Off Time: ' + dataPoint.offTime + 'ms, Pulse Count: ' + dataPoint.count;
-	document.getElementById('bo-' + index + '-os').setAttribute('title', operationHint);
-	var operationCountElement = document.getElementById('bo-' + index + '-oc')
+	document.getElementById('bo-' + dataPoint.index + '-os').setAttribute('title', operationHint);
+	var operationCountElement = document.getElementById('bo-' + dataPoint.index + '-oc')
 	operationCountElement.innerHTML = '';
 	operationCountElement.appendChild(document.createTextNode(dataPoint.operatedCount));
 	
