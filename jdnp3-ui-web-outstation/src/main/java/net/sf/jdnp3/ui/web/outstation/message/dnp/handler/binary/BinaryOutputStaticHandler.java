@@ -24,7 +24,6 @@ import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryOutputStaticAss
 import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryOutputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutputStaticObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 
 public class BinaryOutputStaticHandler implements BinaryOutputStaticReadRequestHandler, BinaryOutputStaticAssignClassRequestHandler {

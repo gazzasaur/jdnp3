@@ -53,4 +53,60 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean id="ship" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetClass" value="net.sf.jdnp3.ui.web.outstation.main.DirectPointDeviceFactory" />
+		<property name="targetMethod" value="create" />
+		<property name="arguments">
+			<list>
+				<value>ship</value>
+				<value>engine-room-1</value>
+				<value>10</value>
+				<list>
+					<bean class="net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint">
+						<property name="name" value="Engine Fail Alarm" />
+					</bean>
+				</list>
+				<list>
+					<bean class="net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint">
+						<property name="name" value="Emergency Stop" />
+					</bean>
+				</list>
+				<list>
+					<bean class="net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputDataPoint">
+						<property name="name" value="Aux Power CB" />
+						<property name="value" value="1" />
+					</bean>
+				</list>
+				<list>
+					<bean class="net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint">
+						<property name="name" value="Engine Temperature" />
+						<property name="value" value="438" />
+					</bean>
+				</list>
+				<list>
+					<bean class="net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint">
+						<property name="name" value="Engine Throttle" />
+						<property name="value" value="100" />
+					</bean>
+				</list>
+				<list>
+					<bean class="net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint">
+						<property name="name" value="Runtime" />
+						<property name="value" value="123767812" />
+					</bean>
+				</list>
+			</list>
+		</property>
+	</bean>
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="20000" />
+		<property name="targetMethod" value="bind" />
+		<property name="arguments">
+			<list>
+				<value>10</value>
+				<ref bean="ship" />
+			</list>
+		</property>
+	</bean>
 </beans>

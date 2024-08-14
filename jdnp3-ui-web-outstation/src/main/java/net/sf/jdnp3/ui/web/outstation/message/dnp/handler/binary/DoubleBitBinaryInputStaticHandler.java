@@ -26,7 +26,6 @@ import net.sf.jdnp3.dnp3.service.outstation.handler.binary.DoubleBitBinaryInputS
 import net.sf.jdnp3.dnp3.service.outstation.handler.binary.DoubleBitBinaryInputStaticReadRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.DoubleBitBinaryInputStaticObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputDataPoint;
 
 public class DoubleBitBinaryInputStaticHandler implements DoubleBitBinaryInputStaticReadRequestHandler, DoubleBitBinaryInputStaticAssignClassRequestHandler {

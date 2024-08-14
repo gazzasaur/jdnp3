@@ -26,7 +26,6 @@ import net.sf.jdnp3.dnp3.service.outstation.handler.analog.AnalogInputStaticRead
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 
 public class AnalogInputStaticHandler implements AnalogInputStaticReadRequestHandler {
 	private Logger logger = LoggerFactory.getLogger(AnalogInputStaticHandler.class);
