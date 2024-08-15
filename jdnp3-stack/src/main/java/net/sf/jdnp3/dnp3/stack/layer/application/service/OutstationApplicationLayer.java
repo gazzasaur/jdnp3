@@ -214,6 +214,15 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			sendData(messageProperties, localData, returnMessageProperties, response);
 			return;
 		}
+		if (internalStatusProvider != null) {
+			try {
+				BeanUtils.copyProperties(applicationResponseHeader.getInternalIndicatorField(), internalStatusProvider);
+			} catch (Exception e) {
+				applicationResponseHeader.getInternalIndicatorField().setDeviceTrouble(true);
+				logger.error("Cannot copy IIN properties.", e);
+			}
+		}
+		applicationResponseHeader.getInternalIndicatorField().setBroadcast(applicationResponseHeader.getInternalIndicatorField().isBroadcast() || broadcast);
 		
 		DefaultObjectTypeMapping mapping = new DefaultObjectTypeMapping();
 		ObjectInstanceTypeRationaliser rationaliser = new ObjectInstanceTypeRationaliser();
@@ -268,16 +277,6 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			ObjectFragmentPackerResult result = packer.pack(context, replyObjects);
 			response.addObjectFragment(result.getObjectFragment());
 		}
-
-		if (internalStatusProvider != null) {
-			try {
-				BeanUtils.copyProperties(applicationResponseHeader.getInternalIndicatorField(), internalStatusProvider);
-			} catch (Exception e) {
-				applicationResponseHeader.getInternalIndicatorField().setDeviceTrouble(true);
-				logger.error("Cannot copy IIN properties.", e);
-			}
-		}
-		applicationResponseHeader.getInternalIndicatorField().setBroadcast(applicationResponseHeader.getInternalIndicatorField().isBroadcast() || broadcast);
 		
 		trySendData(returnMessageProperties, response);
 	}
