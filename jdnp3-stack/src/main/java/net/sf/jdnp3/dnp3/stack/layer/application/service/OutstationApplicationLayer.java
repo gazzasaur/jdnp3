@@ -189,15 +189,6 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		ApplicationFragmentResponse response = new ApplicationFragmentResponse();
 		ApplicationFragmentResponseHeader applicationResponseHeader = response.getHeader();
 		applicationResponseHeader.setFunctionCode(RESPONSE);
-		if (internalStatusProvider != null) {
-			try {
-				BeanUtils.copyProperties(applicationResponseHeader.getInternalIndicatorField(), internalStatusProvider);
-			} catch (Exception e) {
-				applicationResponseHeader.getInternalIndicatorField().setDeviceTrouble(true);
-				logger.error("Cannot copy IIN properties.", e);
-			}
-		}
-		applicationResponseHeader.getInternalIndicatorField().setBroadcast(applicationResponseHeader.getInternalIndicatorField().isBroadcast() || broadcast);
 		applicationResponseHeader.getApplicationControl().setConfirmationRequired(false);
 		applicationResponseHeader.getApplicationControl().setFirstFragmentOfMessage(true);
 		applicationResponseHeader.getApplicationControl().setFinalFragmentOfMessage(true);
@@ -209,9 +200,29 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			for (ObjectFragment objectFragment : request.getObjectFragments()) {
 				response.addObjectFragment(objectFragment);
 			}
+
+			if (internalStatusProvider != null) {
+				try {
+					BeanUtils.copyProperties(applicationResponseHeader.getInternalIndicatorField(), internalStatusProvider);
+				} catch (Exception e) {
+					applicationResponseHeader.getInternalIndicatorField().setDeviceTrouble(true);
+					logger.error("Cannot copy IIN properties.", e);
+				}
+			}
+			applicationResponseHeader.getInternalIndicatorField().setBroadcast(applicationResponseHeader.getInternalIndicatorField().isBroadcast() || broadcast);
+
 			sendData(messageProperties, localData, returnMessageProperties, response);
 			return;
 		}
+		if (internalStatusProvider != null) {
+			try {
+				BeanUtils.copyProperties(applicationResponseHeader.getInternalIndicatorField(), internalStatusProvider);
+			} catch (Exception e) {
+				applicationResponseHeader.getInternalIndicatorField().setDeviceTrouble(true);
+				logger.error("Cannot copy IIN properties.", e);
+			}
+		}
+		applicationResponseHeader.getInternalIndicatorField().setBroadcast(applicationResponseHeader.getInternalIndicatorField().isBroadcast() || broadcast);
 		
 		DefaultObjectTypeMapping mapping = new DefaultObjectTypeMapping();
 		ObjectInstanceTypeRationaliser rationaliser = new ObjectInstanceTypeRationaliser();
