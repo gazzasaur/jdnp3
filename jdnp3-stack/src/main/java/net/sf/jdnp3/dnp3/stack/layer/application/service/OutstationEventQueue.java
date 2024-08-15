@@ -63,6 +63,7 @@ public class OutstationEventQueue implements ConfirmationListener {
 				pendingConfirmation.add(eventObjectInstance);
 			}
 		}
+		setInternalStatus();
 		return requestedEvents;
 	}
 
@@ -77,6 +78,7 @@ public class OutstationEventQueue implements ConfirmationListener {
 				}
 			}
 		}
+		setInternalStatus();
 		return requestedEvents;
 	}
 
@@ -88,10 +90,12 @@ public class OutstationEventQueue implements ConfirmationListener {
 
 	public synchronized void timedOut(EventObjectInstance eventObjectInstance) {
 		pendingConfirmation.remove(eventObjectInstance);
+		setInternalStatus();
 	}
 
 	public synchronized void cancelled(EventObjectInstance eventObjectInstance) {
 		pendingConfirmation.remove(eventObjectInstance);
+		setInternalStatus();
 	}
 	
 	private void setInternalStatus() {
@@ -100,7 +104,7 @@ public class OutstationEventQueue implements ConfirmationListener {
 		}
 		boolean[] classEvents = {false, false, false};
 		for (EventObjectInstance eventObjectInstance : events) {
-			if (eventObjectInstance.getEventClass() >= 1 && eventObjectInstance.getEventClass() <= 3) {
+			if (eventObjectInstance.getEventClass() >= 1 && eventObjectInstance.getEventClass() <= 3 && !pendingConfirmation.contains(eventObjectInstance)) {
 				classEvents[eventObjectInstance.getEventClass() - 1] = true;
 			}
 		}
