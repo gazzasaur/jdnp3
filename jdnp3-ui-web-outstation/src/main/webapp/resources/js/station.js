@@ -76,7 +76,11 @@ jdnp3.station.updateSearchResults = function(searchResult) {
 		resultDiv.style.borderBottom = '1px solid black';
 		resultDiv.onmouseleave = (event) => event.target.style.backgroundColor = '';
 		resultDiv.onmouseenter = (event) => event.target.style.backgroundColor = 'lightgray';
-		resultDiv.href = '/device.jsf?stationCode=' + result['site'] + '&deviceCode=' + result['device'] + '&filter=' + searchResult['searchTerm'];
+
+		// FIXME Add this in when the UX feels better
+		// resultDiv.href = '/device.jsf?stationCode=' + result['site'] + '&deviceCode=' + result['device'] + '&filter=' + searchResult['searchTerm'];
+		resultDiv.href = '/device.jsf?stationCode=' + result['site'] + '&deviceCode=' + result['device'];
+
 		searchResultsPanel.appendChild(resultDiv);
 	}
 }
