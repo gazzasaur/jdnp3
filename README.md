@@ -12,12 +12,12 @@ To run one of the release versions. Download and extract the archive of your cho
 
 Linux:
 ```
-java -cp ".:jdnp3-ui-web-outstation-0.11.0-alpha-02.jar" net.sf.jdnp3.ui.web.outstation.main.App
+java -cp ".:jdnp3-ui-web-outstation-0.12.0.jar" net.sf.jdnp3.ui.web.outstation.main.App
 ```
 
 Windows:
 ```
-java -cp ".;jdnp3-ui-web-outstation-0.11.0-alpha-02.jar" net.sf.jdnp3.ui.web.outstation.main.App
+java -cp ".;jdnp3-ui-web-outstation-0.12.0.jar" net.sf.jdnp3.ui.web.outstation.main.App
 ```
 
 # Upgrading from 0.10
@@ -41,12 +41,12 @@ This will generate an outstation executable based on the version:
 jdnp3/jdnp3-ui-web-outstation/target/jdnp3-ui-web-outstation-<version>-bin.tar.gz
 
 For example
-jdnp3/jdnp3-ui-web-outstation/target/jdnp3-ui-web-outstation-0.11.0-alpha-02-bin.tar.gz
+jdnp3/jdnp3-ui-web-outstation/target/jdnp3-ui-web-outstation-0.12.0-bin.tar.gz
 ```
 
 To run this, extract the file and run:
 ```
-java -cp ".:jdnp3-ui-web-outstation-0.11.0-alpha-02.jar" net.sf.jdnp3.ui.web.outstation.main.App
+java -cp ".:jdnp3-ui-web-outstation-0.12.0.jar" net.sf.jdnp3.ui.web.outstation.main.App
 ```
 
 ### UI Development
