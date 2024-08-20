@@ -7,7 +7,23 @@ jdnp3.ui.dialog['refreshCallback'] = null;
 jdnp3.ui.createDialog = function(title, component, refreshCallback) {
 	var mainDialog = document.getElementById('main-dialog');
 	mainDialog.innerHTML = '';
-	
+
+	var mainDialogClose = document.createElement('div');
+	var mainDialogCloseButton = document.createElement('div');
+	mainDialogCloseButton.innerHTML = '&#x2717;';
+	mainDialogCloseButton.style.border = 'none';
+	mainDialogCloseButton.style.display = 'inline-block';
+	mainDialogCloseButton.style.cursor = 'pointer';
+	mainDialogCloseButton.style.fontSize = '1.5em';
+	mainDialogCloseButton.onclick = () => {
+		jdnp3.schedule.getDefaultScheduler().addTask(function() {
+			jdnp3.ui.destroyDialog();
+		}, 0);
+	};
+	mainDialogClose.style.textAlign = 'right';
+	mainDialogClose.appendChild(mainDialogCloseButton);
+	mainDialog.appendChild(mainDialogClose);
+
 	var mainDialogTitle = document.createElement('div');
 	mainDialogTitle.id = 'main-dialog-title';
 	mainDialogTitle.appendChild(document.createTextNode(title));
@@ -16,15 +32,16 @@ jdnp3.ui.createDialog = function(title, component, refreshCallback) {
 	jdnp3.ui.dialog['refreshCallback'] = refreshCallback;
 	mainDialog.appendChild(component);
 	document.getElementById('main-dialog-container').removeAttribute('style');
-	document.getElementById('main-dialog-container').onkeypress = function(event) {
+	document.getElementById('main-dialog-container').onkeydown = function(event) {
 		jdnp3.schedule.getDefaultScheduler().addTask(function() {
-			if (event.keyCode == 13) {
+			if (event.key == 'Escape') {
 				jdnp3.ui.destroyDialog();
-			} else if (event.keyCode == 27) {
+			} else if (event.key == 'Enter') {
 				jdnp3.ui.destroyDialog();
 			};
 		}, 0);
 	}
+
 	document.getElementById('main-dialog-container').focus();
 }
 
@@ -131,9 +148,9 @@ jdnp3.ui.DataPointItem.prototype.appendInputText = function(attribute, title, on
 			textFieldValue.select();
 			textField.appendChild(textFieldValue);
 			
-			textFieldValue.onkeypress = function(event) {
+			textFieldValue.onkeydown = function(event) {
 				jdnp3.schedule.getDefaultScheduler().addTask(function() {
-					if (event.keyCode == 13) {
+					if (event.key == 'Enter') {
 						var value = document.getElementById(idPrefix + '-' + index + '-newvalue').value;
 						if (value == 'MAX') {
 							value = Number.MAX_VALUE;
@@ -142,7 +159,7 @@ jdnp3.ui.DataPointItem.prototype.appendInputText = function(attribute, title, on
 						}
 						device.requestChangeAttributeValue(dataPointList.get(index), 'value', value);
 						jdnp3.ui.destroyDialog();
-					} else if (event.keyCode == 27) {
+					} else if (event.key == 'Escape') {
 						jdnp3.ui.destroyDialog();
 					};
 				}, 0);
