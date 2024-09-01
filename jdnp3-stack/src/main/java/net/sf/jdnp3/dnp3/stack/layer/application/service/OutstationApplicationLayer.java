@@ -271,9 +271,12 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		context.setFreeSpace(2048 - 32); // Give some room to breath
 		context.setTimeReference(0);
 		context.setFunctionCode(FunctionCode.RESPONSE);
+		CtoObjectInstance previousTimeReference = null;
+
 		while (replyObjects.size() > 0) {
 			if (replyObjects.get(0) instanceof CtoObjectInstance) {
-				context.setTimeReference(((CtoObjectInstance)replyObjects.get(0)).getTimestamp());
+				previousTimeReference = (CtoObjectInstance)replyObjects.get(0);
+				context.setTimeReference(previousTimeReference.getTimestamp());
 			}
 			
 			ObjectFragmentPacker packer = null;
@@ -294,6 +297,9 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 				response.getHeader().getApplicationControl().setConfirmationRequired(true);
 				expectedConfirmationSeqNr = response.getHeader().getApplicationControl().getSequenceNumber();
 				remainingObjects = replyObjects;
+				if (previousTimeReference != null) {
+					remainingObjects.addFirst(previousTimeReference);
+				}
 				break;
 			}
 		}
