@@ -74,6 +74,7 @@ public class IndexRangeObjectFragmentPacker implements ObjectFragmentPacker {
 		encoderContext.setObjectType(objectType);
 		long committedObjectSize = 0;
 		long committedIndexSize = 1;
+		long committedMaxIndex = 0;
 		long overhead = 2;
 		
 		List<Byte> data = new ArrayList<Byte>();
@@ -95,6 +96,7 @@ public class IndexRangeObjectFragmentPacker implements ObjectFragmentPacker {
 			long objectSize = data.size();
 			if (overhead + indexSize + objectSize < context.getFreeSpace()) {
 				objectInstances.remove(0);
+				committedMaxIndex = maxIndex;
 				committedIndexSize = indexSize;
 				committedObjectSize = objectSize;
 				objectFragment.addObjectInstance(nextInstance);
@@ -103,8 +105,8 @@ public class IndexRangeObjectFragmentPacker implements ObjectFragmentPacker {
 			}
 		}
 		
-		indexRange.setStopIndex(maxIndex);
 		indexRange.setStartIndex(minIndex);
+		indexRange.setStopIndex(committedMaxIndex);
 		QualifierField qualifierField = QualifierFieldCalculator.calculate(noPrefixType, indexRange);
 		objectFragment.getObjectFragmentHeader().setQualifierField(qualifierField);
 		
