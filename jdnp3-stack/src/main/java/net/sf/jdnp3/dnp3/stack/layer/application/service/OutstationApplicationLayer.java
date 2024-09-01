@@ -76,6 +76,9 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	private List<ObjectFragmentPacker> packers = new ArrayList<>();
 	private DefaultObjectTypeMapping defaultObjectTypeMapping = new DefaultObjectTypeMapping();
 
+	private int expectedConfirmationSeqNr = -1;
+	private List<ObjectInstance> remainingObjects = new ArrayList<>();
+
 	public DataLinkLayer getDataLinkLayer() {
 		return dataLinkLayer;
 	}
@@ -154,8 +157,15 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			return;
 		}
 		
-		if (request.getHeader().getFunctionCode() == CONFIRM) {
-			for (EventObjectInstance eventObjectInstance : pendingEvents) {
+		boolean firstFragment = true;
+		if (request.getHeader().getFunctionCode() == CONFIRM
+				&& !remainingObjects.isEmpty()
+				&& request.getHeader().getApplicationControl().getSequenceNumber() == expectedConfirmationSeqNr) {
+			responseObjects.addAll(remainingObjects);
+			remainingObjects.clear();
+			firstFragment = false;
+		} else if (request.getHeader().getFunctionCode() == CONFIRM) {
+				for (EventObjectInstance eventObjectInstance : pendingEvents) {
 				eventQueue.confirm(eventObjectInstance);
 			}
 			pendingEvents.clear();
@@ -165,6 +175,8 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 				eventQueue.cancelled(eventObjectInstance);
 			}
 			pendingEvents.clear();
+			remainingObjects.clear();
+			expectedConfirmationSeqNr = -1;
 		}
 		
 		if (request.getHeader().getFunctionCode() == DELAY_MEASURE) {
@@ -190,7 +202,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		ApplicationFragmentResponseHeader applicationResponseHeader = response.getHeader();
 		applicationResponseHeader.setFunctionCode(RESPONSE);
 		applicationResponseHeader.getApplicationControl().setConfirmationRequired(false);
-		applicationResponseHeader.getApplicationControl().setFirstFragmentOfMessage(true);
+		applicationResponseHeader.getApplicationControl().setFirstFragmentOfMessage(firstFragment);
 		applicationResponseHeader.getApplicationControl().setFinalFragmentOfMessage(true);
 		applicationResponseHeader.getApplicationControl().setUnsolicitedResponse(false);
 		applicationResponseHeader.getApplicationControl().setSequenceNumber(request.getHeader().getApplicationControl().getSequenceNumber());
@@ -256,7 +268,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		}
 		
 		ObjectFragmentPackerContext context = new ObjectFragmentPackerContext();
-		context.setFreeSpace(2048);
+		context.setFreeSpace(2048 - 32); // Give some room to breath
 		context.setTimeReference(0);
 		context.setFunctionCode(FunctionCode.RESPONSE);
 		while (replyObjects.size() > 0) {
@@ -265,6 +277,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			}
 			
 			ObjectFragmentPacker packer = null;
+			// TODO Need to consider free space for all packers.
 			for (ObjectFragmentPacker objectFragmentPacker : packers) {
 				if (objectFragmentPacker.canPack(replyObjects.get(0).getClass())){
 					packer = objectFragmentPacker;
@@ -276,6 +289,13 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			
 			ObjectFragmentPackerResult result = packer.pack(context, replyObjects);
 			response.addObjectFragment(result.getObjectFragment());
+			if (result.isAtCapacity()) {
+				response.getHeader().getApplicationControl().setFinalFragmentOfMessage(false);
+				response.getHeader().getApplicationControl().setConfirmationRequired(true);
+				expectedConfirmationSeqNr = response.getHeader().getApplicationControl().getSequenceNumber();
+				remainingObjects = replyObjects;
+				break;
+			}
 		}
 		
 		trySendData(returnMessageProperties, response);
