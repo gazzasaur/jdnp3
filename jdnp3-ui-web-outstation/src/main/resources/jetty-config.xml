@@ -51,7 +51,7 @@
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
 			<list>
-				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.device.GetDevicesMessageHandler" />
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.device.GetDeviceMessageHandler" />
 			</list>
 		</property>
 	</bean>
