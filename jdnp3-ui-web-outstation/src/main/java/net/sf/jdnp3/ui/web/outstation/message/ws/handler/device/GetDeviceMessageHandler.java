@@ -30,8 +30,10 @@ import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
+import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
 import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessage;
@@ -42,11 +44,22 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.counter.CounterMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.GetDeviceMessage;
 
-public class GetDeviceMessageHandler implements DeviceMessageHandler {
+public class GetDeviceMessageHandler implements DeviceMessageHandler, MessageHandler {
 	private Logger logger = LoggerFactory.getLogger(GetDeviceMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof GetDeviceMessage;
+	}
+
+	public void processMessage(Messanger messanger, Message message) {
+		if (!this.canHandle(message)) {
+			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
+		}
+		GetDeviceMessage specificMessage = (GetDeviceMessage) message;
+
+		// FIXME NPE Check
+		var outstation = DeviceProvider.getDevice(specificMessage.getSite(), specificMessage.getDevice());
+		this.processMessage(messanger, outstation, specificMessage);
 	}
 
 	public void processMessage(Messanger messanger, OutstationDevice outstationDevice, Message message) {
