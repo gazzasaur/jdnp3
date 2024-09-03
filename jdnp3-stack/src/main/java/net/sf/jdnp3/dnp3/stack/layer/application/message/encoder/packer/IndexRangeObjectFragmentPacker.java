@@ -102,6 +102,7 @@ public class IndexRangeObjectFragmentPacker implements ObjectFragmentPacker {
 				objectFragment.addObjectInstance(nextInstance);
 			} else {
 				result.setAtCapacity(true);
+				break;
 			}
 		}
 		
