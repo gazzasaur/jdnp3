@@ -291,7 +291,9 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			}
 			
 			ObjectFragmentPackerResult result = packer.pack(context, replyObjects);
-			response.addObjectFragment(result.getObjectFragment());
+			if (result.hasObjectFragment()) {
+				response.addObjectFragment(result.getObjectFragment());
+			}
 			if (result.isAtCapacity()) {
 				response.getHeader().getApplicationControl().setFinalFragmentOfMessage(false);
 				response.getHeader().getApplicationControl().setConfirmationRequired(true);

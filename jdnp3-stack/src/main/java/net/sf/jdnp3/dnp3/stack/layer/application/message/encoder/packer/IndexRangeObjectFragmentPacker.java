@@ -76,6 +76,7 @@ public class IndexRangeObjectFragmentPacker implements ObjectFragmentPacker {
 		long committedIndexSize = 1;
 		long committedMaxIndex = 0;
 		long overhead = 2;
+		long addedObjects = 0;
 		
 		List<Byte> data = new ArrayList<Byte>();
 		
@@ -100,10 +101,15 @@ public class IndexRangeObjectFragmentPacker implements ObjectFragmentPacker {
 				committedIndexSize = indexSize;
 				committedObjectSize = objectSize;
 				objectFragment.addObjectInstance(nextInstance);
+				addedObjects += 1;
 			} else {
 				result.setAtCapacity(true);
 				break;
 			}
+		}
+
+		if (addedObjects == 0) {
+			return result;
 		}
 		
 		indexRange.setStartIndex(minIndex);
