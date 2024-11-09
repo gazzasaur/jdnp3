@@ -295,7 +295,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 				response.addObjectFragment(result.getObjectFragment());
 			}
 			if (result.isAtCapacity()) {
-				response.getHeader().getApplicationControl().setFinalFragmentOfMessage(false);
+				response.getHeader().getApplicationControl().setFinalFragmentOfMessage(replyObjects.size() == 0);
 				response.getHeader().getApplicationControl().setConfirmationRequired(true);
 				expectedConfirmationSeqNr = response.getHeader().getApplicationControl().getSequenceNumber();
 				remainingObjects = replyObjects;
