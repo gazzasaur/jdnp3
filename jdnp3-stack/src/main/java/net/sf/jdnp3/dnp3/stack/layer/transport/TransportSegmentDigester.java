@@ -37,7 +37,7 @@ public class TransportSegmentDigester {
 	
 
 	public boolean digestData(MessageProperties messageProperties, TransportSegment transportSegment, List<Byte> data) {
-		if (data.equals(lastTransportSegment)) {
+		if (data.equals(lastTransportSegment) && !transportSegment.getTransportHeader().isFirstSegment()) {
 			logger.warn("Duplicate packet received from " + messageProperties.getSourceAddress());
 			return false;
 		}
