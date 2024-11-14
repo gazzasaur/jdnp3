@@ -4,18 +4,18 @@
 
 	<groupId>net.sf.jdnp3</groupId>
 	<artifactId>jdnp3-project</artifactId>
-	<version>0.12.1</version>
+	<version>0.12.2</version>
 	<packaging>pom</packaging>
 
 	<name>jdnp3-project</name>
 	<url>https://github.com/gazzasaur/jdnp3</url>
 
 	<properties>
-		<maven.compiler.target>17</maven.compiler.target>
-		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<net.sf.jdnp3.version>0.12.1</net.sf.jdnp3.version>
+		<net.sf.jdnp3.version>0.12.2</net.sf.jdnp3.version>
 		<org.slf4j.version>1.7.36</org.slf4j.version>
 	</properties>
 
@@ -44,8 +44,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>5.4.0</version>
+			<artifactId>mockito-inline</artifactId>
+			<version>4.11.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

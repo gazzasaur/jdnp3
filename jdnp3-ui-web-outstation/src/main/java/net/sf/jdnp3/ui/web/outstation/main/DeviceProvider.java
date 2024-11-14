@@ -166,10 +166,10 @@ public class DeviceProvider {
 	}
 	
 	public synchronized static void addGlobalDatabaseListener(GlobalDatabaseListener databaseListener) {
-		var globalDeviceList = DeviceProvider.gettDeviceList();
-		for (var site : globalDeviceList.getSiteDeviceLists()) {
-			for (var device : site.getDevices()) {
-				var adaptor = new GlobalDatabaseListenerAdaptor(site.getSite(), device, databaseListener);
+		SiteListing globalDeviceList = DeviceProvider.gettDeviceList();
+		for (SiteDeviceList site : globalDeviceList.getSiteDeviceLists()) {
+			for (String device : site.getDevices()) {
+				GlobalDatabaseListenerAdaptor adaptor = new GlobalDatabaseListenerAdaptor(site.getSite(), device, databaseListener);
 				DeviceProvider.addDatabaseListener(site.getSite(), device, adaptor);
 				globalDatabaseListeners.add(adaptor);
 			}
@@ -177,7 +177,7 @@ public class DeviceProvider {
 	}
 	
 	public synchronized static void removeGlobalDatabaseListener(GlobalDatabaseListener databaseListener) {
-		for (var adaptor : new ArrayList<>(globalDatabaseListeners)) {
+		for (GlobalDatabaseListenerAdaptor adaptor : new ArrayList<>(globalDatabaseListeners)) {
 			if (adaptor.getDatabaseListener() == databaseListener) {
 				DeviceProvider.removeDatabaseListener(adaptor.getSite(), adaptor.getDevice(), adaptor);
 				globalDatabaseListeners.remove(adaptor);

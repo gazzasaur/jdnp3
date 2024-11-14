@@ -38,8 +38,8 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputMessage;
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.DoubleBitBinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryOutputMessage;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.DoubleBitBinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.counter.CounterMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.GetDeviceMessage;
@@ -58,7 +58,7 @@ public class GetDeviceMessageHandler implements DeviceMessageHandler, MessageHan
 		GetDeviceMessage specificMessage = (GetDeviceMessage) message;
 
 		// FIXME NPE Check
-		var outstation = DeviceProvider.getDevice(specificMessage.getSite(), specificMessage.getDevice());
+		OutstationDevice outstation = DeviceProvider.getDevice(specificMessage.getSite(), specificMessage.getDevice());
 		this.processMessage(messanger, outstation, specificMessage);
 	}
 

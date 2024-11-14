@@ -26,15 +26,15 @@ import net.sf.jdnp3.dnp3.stack.nio.DataPump;
 public class DataLinkOutstationTest {
     @Test
     public void testUnconfirmedUserData() throws Exception {
-        var testPort = RandomUtils.nextInt(40000, 60000);
+        int testPort = RandomUtils.nextInt(40000, 60000);
 
-        var outstationDataLinkLayer = new TcpServerDataLinkService();
-        var outstationDataLinkInterceptor = new StatefulDataLinkInterceptor(false, outstationDataLinkLayer, 1234, (MessageProperties messageProperties, List<Byte> data) -> {
+        TcpServerDataLinkService outstationDataLinkLayer = new TcpServerDataLinkService();
+        StatefulDataLinkInterceptor outstationDataLinkInterceptor = new StatefulDataLinkInterceptor(false, outstationDataLinkLayer, 1234, (MessageProperties messageProperties, List<Byte> data) -> {
             // Echo the data back.
-            var reply = new ArrayList<>(Arrays.asList(ArrayUtils.toObject("Outstation: ".getBytes())));
+            ArrayList<Byte> reply = new ArrayList<Byte>(Arrays.asList(ArrayUtils.toObject("Outstation: ".getBytes())));
             reply.addAll(data);
 
-            var responseProperties = new MessageProperties();
+            MessageProperties responseProperties = new MessageProperties();
             responseProperties.setChannelId(messageProperties.getChannelId());
             responseProperties.setMaster(false);
             responseProperties.setPrimary(true);
@@ -51,9 +51,9 @@ public class DataLinkOutstationTest {
         outstationDataLinkLayer.addDataLinkLayerListener(outstationDataLinkInterceptor);
         outstationDataLinkLayer.start();
 
-        var echoedResponse = new MutableObject<String>();
-        var masterStationLataLinkLayer = new TcpClientDataLinkService("localhost", testPort);
-        var masterStationDataLinkInterceptor = new StatefulDataLinkInterceptor(true, masterStationLataLinkLayer, 200, (messageProperties, data) -> {
+        MutableObject echoedResponse = new MutableObject<String>();
+        TcpClientDataLinkService masterStationLataLinkLayer = new TcpClientDataLinkService("localhost", testPort);
+        StatefulDataLinkInterceptor masterStationDataLinkInterceptor = new StatefulDataLinkInterceptor(true, masterStationLataLinkLayer, 200, (messageProperties, data) -> {
             synchronized (echoedResponse) {
                 echoedResponse.setValue(new String(ArrayUtils.toPrimitive(data.toArray(new Byte[0]))));
             }
@@ -86,15 +86,15 @@ public class DataLinkOutstationTest {
     @Ignore
     @Test
     public void testConfirmedUserData() throws Exception {
-        var testPort = RandomUtils.nextInt(40000, 60000);
+        int testPort = RandomUtils.nextInt(40000, 60000);
 
-        var outstationDataLinkLayer = new TcpServerDataLinkService();
-        var outstationDataLinkInterceptor = new StatefulDataLinkInterceptor(false, outstationDataLinkLayer, 1234, (MessageProperties messageProperties, List<Byte> data) -> {
+        TcpServerDataLinkService outstationDataLinkLayer = new TcpServerDataLinkService();
+        StatefulDataLinkInterceptor outstationDataLinkInterceptor = new StatefulDataLinkInterceptor(false, outstationDataLinkLayer, 1234, (MessageProperties messageProperties, List<Byte> data) -> {
             // Echo the data back.
-            var reply = new ArrayList<>(Arrays.asList(ArrayUtils.toObject("Outstation: ".getBytes())));
+            ArrayList<Byte> reply = new ArrayList<Byte>(Arrays.asList(ArrayUtils.toObject("Outstation: ".getBytes())));
             reply.addAll(data);
 
-            var responseProperties = new MessageProperties();
+            MessageProperties responseProperties = new MessageProperties();
             responseProperties.setChannelId(messageProperties.getChannelId());
             responseProperties.setMaster(false);
             responseProperties.setPrimary(true);
@@ -111,9 +111,9 @@ public class DataLinkOutstationTest {
         outstationDataLinkLayer.addDataLinkLayerListener(outstationDataLinkInterceptor);
         outstationDataLinkLayer.start();
 
-        var echoedResponse = new MutableObject<String>("Nope");
-        var masterStationLataLinkLayer = new TcpClientDataLinkService("localhost", testPort);
-        var masterStationDataLinkInterceptor = new StatefulDataLinkInterceptor(true, masterStationLataLinkLayer, 200, (messageProperties, data) -> {
+        MutableObject<String> echoedResponse = new MutableObject<String>("Nope");
+        TcpClientDataLinkService masterStationLataLinkLayer = new TcpClientDataLinkService("localhost", testPort);
+        StatefulDataLinkInterceptor masterStationDataLinkInterceptor = new StatefulDataLinkInterceptor(true, masterStationLataLinkLayer, 200, (messageProperties, data) -> {
             synchronized (echoedResponse) {
                 echoedResponse.setValue(new String(ArrayUtils.toPrimitive(data.toArray(new Byte[0]))));
             }
@@ -127,14 +127,14 @@ public class DataLinkOutstationTest {
 
         Thread.sleep(100);
 
-        var messageProperties = new MessageProperties() {{
+        MessageProperties messageProperties = new MessageProperties() {{
             setChannelId(masterStationLataLinkLayer.getChannelId());
             setDestinationAddress(1234);
             setMaster(true);
             setPrimary(true);
             setSourceAddress(200);
         }};
-        var resetDataLinkFrame = new DataLinkFrame() {{
+        DataLinkFrame resetDataLinkFrame = new DataLinkFrame() {{
             getDataLinkFrameHeader().setDestination(messageProperties.getDestinationAddress());
             getDataLinkFrameHeader().setSource(messageProperties.getSourceAddress());
             getDataLinkFrameHeader().setDirection(MASTER_TO_OUTSTATION);
@@ -146,7 +146,7 @@ public class DataLinkOutstationTest {
         }};
         masterStationLataLinkLayer.sendData(messageProperties, resetDataLinkFrame);
 
-        var dataLinkFrame = new DataLinkFrame() {{
+        DataLinkFrame dataLinkFrame = new DataLinkFrame() {{
             getDataLinkFrameHeader().setDestination(messageProperties.getDestinationAddress());
             getDataLinkFrameHeader().setSource(messageProperties.getSourceAddress());
             getDataLinkFrameHeader().setDirection(MASTER_TO_OUTSTATION);
@@ -176,15 +176,15 @@ public class DataLinkOutstationTest {
 
     @Test
     public void testConfirmedUserDataBeforeReset() throws Exception {
-        var testPort = RandomUtils.nextInt(40000, 60000);
+        int testPort = RandomUtils.nextInt(40000, 60000);
 
-        var outstationDataLinkLayer = new TcpServerDataLinkService();
-        var outstationDataLinkInterceptor = new StatefulDataLinkInterceptor(false, outstationDataLinkLayer, 1234, (MessageProperties messageProperties, List<Byte> data) -> {
+        TcpServerDataLinkService outstationDataLinkLayer = new TcpServerDataLinkService();
+        StatefulDataLinkInterceptor outstationDataLinkInterceptor = new StatefulDataLinkInterceptor(false, outstationDataLinkLayer, 1234, (MessageProperties messageProperties, List<Byte> data) -> {
             // Echo the data back.
-            var reply = new ArrayList<>(Arrays.asList(ArrayUtils.toObject("Outstation: ".getBytes())));
+            ArrayList<Byte> reply = new ArrayList<Byte>(Arrays.asList(ArrayUtils.toObject("Outstation: ".getBytes())));
             reply.addAll(data);
 
-            var responseProperties = new MessageProperties();
+            MessageProperties responseProperties = new MessageProperties();
             responseProperties.setChannelId(messageProperties.getChannelId());
             responseProperties.setMaster(false);
             responseProperties.setPrimary(true);
@@ -201,9 +201,9 @@ public class DataLinkOutstationTest {
         outstationDataLinkLayer.addDataLinkLayerListener(outstationDataLinkInterceptor);
         outstationDataLinkLayer.start();
 
-        var echoedResponse = new MutableObject<String>("Nope");
-        var masterStationLataLinkLayer = new TcpClientDataLinkService("localhost", testPort);
-        var masterStationDataLinkInterceptor = new StatefulDataLinkInterceptor(true, masterStationLataLinkLayer, 200, (messageProperties, data) -> {
+        MutableObject<String> echoedResponse = new MutableObject<String>("Nope");
+        TcpClientDataLinkService masterStationLataLinkLayer = new TcpClientDataLinkService("localhost", testPort);
+        StatefulDataLinkInterceptor masterStationDataLinkInterceptor = new StatefulDataLinkInterceptor(true, masterStationLataLinkLayer, 200, (messageProperties, data) -> {
             synchronized (echoedResponse) {
                 echoedResponse.setValue(new String(ArrayUtils.toPrimitive(data.toArray(new Byte[0]))));
             }
@@ -217,14 +217,14 @@ public class DataLinkOutstationTest {
 
         Thread.sleep(100);
 
-        var messageProperties = new MessageProperties() {{
+        MessageProperties messageProperties = new MessageProperties() {{
             setChannelId(masterStationLataLinkLayer.getChannelId());
             setDestinationAddress(1234);
             setMaster(true);
             setPrimary(true);
             setSourceAddress(200);
         }};
-        var dataLinkFrame = new DataLinkFrame() {{
+        DataLinkFrame dataLinkFrame = new DataLinkFrame() {{
             getDataLinkFrameHeader().setDestination(messageProperties.getDestinationAddress());
             getDataLinkFrameHeader().setSource(messageProperties.getSourceAddress());
             getDataLinkFrameHeader().setDirection(MASTER_TO_OUTSTATION);

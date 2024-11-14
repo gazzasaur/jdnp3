@@ -27,6 +27,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -77,7 +78,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	private DefaultObjectTypeMapping defaultObjectTypeMapping = new DefaultObjectTypeMapping();
 
 	private int expectedConfirmationSeqNr = -1;
-	private List<ObjectInstance> remainingObjects = new ArrayList<>();
+	private LinkedList<ObjectInstance> remainingObjects = new LinkedList<ObjectInstance>();
 
 	public DataLinkLayer getDataLinkLayer() {
 		return dataLinkLayer;
@@ -247,7 +248,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		ObjectInstanceSorter sorter = new ObjectInstanceSorter();
 		sorter.sort(responseObjects);
 		
-		List<ObjectInstance> replyObjects = new ArrayList<>();
+		LinkedList<ObjectInstance> replyObjects = new LinkedList<ObjectInstance>();
 		
 		CtoObjectInstance ctoObjectInstance = null;
 		for (ObjectInstance objectInstance : responseObjects) {

@@ -51,7 +51,7 @@ public class DatabaseManager {
 		synchronized (database) {
 			long nextIndex = database.getAnalogInputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
-				var dataPoint = new AnalogInputDataPoint();
+				AnalogInputDataPoint dataPoint = new AnalogInputDataPoint();
 				dataPoint.setIndex(++nextIndex);
 				dataPoint.setName(name);
 				database.setAnalogInputDataPoint(dataPoint);
@@ -66,7 +66,7 @@ public class DatabaseManager {
 		synchronized (database) {
 			long nextIndex = database.getAnalogOutputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
-				var dataPoint = new AnalogOutputDataPoint();
+				AnalogOutputDataPoint dataPoint = new AnalogOutputDataPoint();
 				dataPoint.setIndex(++nextIndex);
 				dataPoint.setName(name);
 				database.setAnalogOutputDataPoint(dataPoint);
@@ -81,7 +81,7 @@ public class DatabaseManager {
 		synchronized (database) {
 			long nextIndex = database.getBinaryInputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
-				var dataPoint = new BinaryInputDataPoint();
+				BinaryInputDataPoint dataPoint = new BinaryInputDataPoint();
 				dataPoint.setIndex(++nextIndex);
 				dataPoint.setName(name);
 				database.setBinaryInputDataPoint(dataPoint);
@@ -96,7 +96,7 @@ public class DatabaseManager {
 		synchronized (database) {
 			long nextIndex = database.getBinaryOutputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
-				var dataPoint = new BinaryOutputDataPoint();
+				BinaryOutputDataPoint dataPoint = new BinaryOutputDataPoint();
 				dataPoint.setIndex(++nextIndex);
 				dataPoint.setName(name);
 				database.setBinaryOutputDataPoint(dataPoint);
@@ -111,7 +111,7 @@ public class DatabaseManager {
 		synchronized (database) {
 			long nextIndex = database.getDoubleBitBinaryInputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
-				var dataPoint = new DoubleBitBinaryInputDataPoint();
+				DoubleBitBinaryInputDataPoint dataPoint = new DoubleBitBinaryInputDataPoint();
 				dataPoint.setIndex(++nextIndex);
 				dataPoint.setName(name);
 				database.setDoubleBitBinaryInputDataPoint(dataPoint);
@@ -126,7 +126,7 @@ public class DatabaseManager {
 		synchronized (database) {
 			long nextIndex = database.getCounterDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
-				var dataPoint = new CounterDataPoint();
+				CounterDataPoint dataPoint = new CounterDataPoint();
 				dataPoint.setIndex(++nextIndex);
 				dataPoint.setName(name);
 				database.setCounterDataPoint(dataPoint);

@@ -17,10 +17,22 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputDataPoint;
+import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
+import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 import net.sf.jdnp3.ui.web.outstation.main.SearchResultItem;
 import net.sf.jdnp3.ui.web.outstation.main.SiteDeviceList;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
@@ -43,34 +55,34 @@ public class SearchRequestMessageHandler implements MessageHandler {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 
-		var searchTerm = ((SearchRequestMessage) message).getSearchTerm();
+		String searchTerm = ((SearchRequestMessage) message).getSearchTerm();
 
 		if (searchTerm == null || searchTerm.length() < 1) {
 			messanger.sendMessage(new SearchResultMessage());
 			return;
 		}
-		var searchTerms = Arrays.asList(searchTerm.split(" "));
+		List<String> searchTerms = Arrays.asList(searchTerm.split(" "));
 		if (searchTerms.size() > 3) {
 			searchTerms = searchTerms.subList(0, 3);
 		}
 
-		var searchableTerms = searchTerms;
+		List<String> searchableTerms = searchTerms;
 		executorService.submit(() -> {
-			var results = new ArrayList<SearchResultItem>();
+			List<SearchResultItem> results = new ArrayList<SearchResultItem>();
 
 			for (SiteDeviceList site : DeviceProvider.gettDeviceList().getSiteDeviceLists()) {
-				for (var deviceName : site.getDevices()) {
-					var device = DeviceProvider.getDevice(site.getSite(), deviceName);
+				for (String deviceName : site.getDevices()) {
+					OutstationDevice device = DeviceProvider.getDevice(site.getSite(), deviceName);
 
-					for (var dataPoint : device.getDatabaseManager().getAnalogInputDataPoints()) {
-						var searchTermsMet = searchableTerms.stream().map(term -> {
+					for (AnalogInputDataPoint dataPoint : device.getDatabaseManager().getAnalogInputDataPoints()) {
+						Optional<Boolean> searchTermsMet = searchableTerms.stream().map(term -> {
 							if (deviceName.toLowerCase().contains(term.toLowerCase())) {
 								return true;
 							}
 							if (dataPoint.getName().toLowerCase().contains(term.toLowerCase())) {
 								return true;
 							}
-							for (var tag : dataPoint.getTags().entrySet()) {
+							for (Map.Entry<String,String> tag : dataPoint.getTags().entrySet()) {
 								if (tag.getKey().toLowerCase().contains(term.toLowerCase())) {
 									return true;
 								}
@@ -82,18 +94,18 @@ public class SearchRequestMessageHandler implements MessageHandler {
 						}).filter(v -> !v).findAny();
 
 						if (!searchTermsMet.isPresent()) {
-							var result = new SearchResultItem();
+							SearchResultItem result = new SearchResultItem();
 							result.setSite(site.getSite());
 							result.setDevice(deviceName);
 							result.setPointIndex(dataPoint.getIndex());
 							result.setPointName(dataPoint.getName());
 							result.setPointType("analogInputPoint");
-							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).toList()));
+							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).collect(Collectors.toList())));
 							results.add(result);
 						}
 
 						if (results.size() >= 10) {
-							var resultMessage = new SearchResultMessage();
+							SearchResultMessage resultMessage = new SearchResultMessage();
 							resultMessage.setSearchTerm(searchTerm);
 							resultMessage.setResults(results);
 							messanger.sendMessage(resultMessage);
@@ -101,15 +113,15 @@ public class SearchRequestMessageHandler implements MessageHandler {
 						}
 					}
 
-					for (var dataPoint : device.getDatabaseManager().getAnalogOutputDataPoints()) {
-						var searchTermsMet = searchableTerms.stream().map(term -> {
+					for (AnalogOutputDataPoint dataPoint : device.getDatabaseManager().getAnalogOutputDataPoints()) {
+						Optional<Boolean> searchTermsMet = searchableTerms.stream().map(term -> {
 							if (deviceName.toLowerCase().contains(term.toLowerCase())) {
 								return true;
 							}
 							if (dataPoint.getName().toLowerCase().contains(term.toLowerCase())) {
 								return true;
 							}
-							for (var tag : dataPoint.getTags().entrySet()) {
+							for (Map.Entry<String,String> tag : dataPoint.getTags().entrySet()) {
 								if (tag.getKey().toLowerCase().contains(term.toLowerCase())) {
 									return true;
 								}
@@ -121,18 +133,18 @@ public class SearchRequestMessageHandler implements MessageHandler {
 						}).filter(v -> !v).findAny();
 
 						if (!searchTermsMet.isPresent()) {
-							var result = new SearchResultItem();
+							SearchResultItem result = new SearchResultItem();
 							result.setSite(site.getSite());
 							result.setDevice(deviceName);
 							result.setPointIndex(dataPoint.getIndex());
 							result.setPointName(dataPoint.getName());
 							result.setPointType("analogOutputPoint");
-							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).toList()));
+							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).collect(Collectors.toList())));
 							results.add(result);
 						}
 
 						if (results.size() >= 10) {
-							var resultMessage = new SearchResultMessage();
+							SearchResultMessage resultMessage = new SearchResultMessage();
 							resultMessage.setSearchTerm(searchTerm);
 							resultMessage.setResults(results);
 							messanger.sendMessage(resultMessage);
@@ -140,15 +152,15 @@ public class SearchRequestMessageHandler implements MessageHandler {
 						}
 					}
 
-					for (var dataPoint : device.getDatabaseManager().getBinaryInputDataPoints()) {
-						var searchTermsMet = searchableTerms.stream().map(term -> {
+					for (BinaryInputDataPoint dataPoint : device.getDatabaseManager().getBinaryInputDataPoints()) {
+						Optional<Boolean> searchTermsMet = searchableTerms.stream().map(term -> {
 							if (deviceName.toLowerCase().contains(term.toLowerCase())) {
 								return true;
 							}
 							if (dataPoint.getName().toLowerCase().contains(term.toLowerCase())) {
 								return true;
 							}
-							for (var tag : dataPoint.getTags().entrySet()) {
+							for (Map.Entry<String,String> tag : dataPoint.getTags().entrySet()) {
 								if (tag.getKey().toLowerCase().contains(term.toLowerCase())) {
 									return true;
 								}
@@ -160,18 +172,18 @@ public class SearchRequestMessageHandler implements MessageHandler {
 						}).filter(v -> !v).findAny();
 
 						if (!searchTermsMet.isPresent()) {
-							var result = new SearchResultItem();
+							SearchResultItem result = new SearchResultItem();
 							result.setSite(site.getSite());
 							result.setDevice(deviceName);
 							result.setPointIndex(dataPoint.getIndex());
 							result.setPointName(dataPoint.getName());
 							result.setPointType("binaryInputPoint");
-							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).toList()));
+							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).collect(Collectors.toList())));
 							results.add(result);
 						}
 
 						if (results.size() >= 10) {
-							var resultMessage = new SearchResultMessage();
+							SearchResultMessage resultMessage = new SearchResultMessage();
 							resultMessage.setSearchTerm(searchTerm);
 							resultMessage.setResults(results);
 							messanger.sendMessage(resultMessage);
@@ -179,15 +191,15 @@ public class SearchRequestMessageHandler implements MessageHandler {
 						}
 					}
 
-					for (var dataPoint : device.getDatabaseManager().getBinaryOutputDataPoints()) {
-						var searchTermsMet = searchableTerms.stream().map(term -> {
+					for (BinaryOutputDataPoint dataPoint : device.getDatabaseManager().getBinaryOutputDataPoints()) {
+						Optional<Boolean> searchTermsMet = searchableTerms.stream().map(term -> {
 							if (deviceName.toLowerCase().contains(term.toLowerCase())) {
 								return true;
 							}
 							if (dataPoint.getName().toLowerCase().contains(term.toLowerCase())) {
 								return true;
 							}
-							for (var tag : dataPoint.getTags().entrySet()) {
+							for (Map.Entry<String, String> tag : dataPoint.getTags().entrySet()) {
 								if (tag.getKey().toLowerCase().contains(term.toLowerCase())) {
 									return true;
 								}
@@ -199,18 +211,18 @@ public class SearchRequestMessageHandler implements MessageHandler {
 						}).filter(v -> !v).findAny();
 
 						if (!searchTermsMet.isPresent()) {
-							var result = new SearchResultItem();
+							SearchResultItem result = new SearchResultItem();
 							result.setSite(site.getSite());
 							result.setDevice(deviceName);
 							result.setPointIndex(dataPoint.getIndex());
 							result.setPointName(dataPoint.getName());
 							result.setPointType("binaryOutputPoint");
-							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).toList()));
+							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).collect(Collectors.toList())));
 							results.add(result);
 						}
 
 						if (results.size() >= 10) {
-							var resultMessage = new SearchResultMessage();
+							SearchResultMessage resultMessage = new SearchResultMessage();
 							resultMessage.setSearchTerm(searchTerm);
 							resultMessage.setResults(results);
 							messanger.sendMessage(resultMessage);
@@ -218,15 +230,15 @@ public class SearchRequestMessageHandler implements MessageHandler {
 						}
 					}
 
-					for (var dataPoint : device.getDatabaseManager().getCounterDataPoints()) {
-						var searchTermsMet = searchableTerms.stream().map(term -> {
+					for (CounterDataPoint dataPoint : device.getDatabaseManager().getCounterDataPoints()) {
+						Optional<Boolean> searchTermsMet = searchableTerms.stream().map(term -> {
 							if (deviceName.toLowerCase().contains(term.toLowerCase())) {
 								return true;
 							}
 							if (dataPoint.getName().toLowerCase().contains(term.toLowerCase())) {
 								return true;
 							}
-							for (var tag : dataPoint.getTags().entrySet()) {
+							for (Map.Entry<String, String> tag : dataPoint.getTags().entrySet()) {
 								if (tag.getKey().toLowerCase().contains(term.toLowerCase())) {
 									return true;
 								}
@@ -238,18 +250,18 @@ public class SearchRequestMessageHandler implements MessageHandler {
 						}).filter(v -> !v).findAny();
 
 						if (!searchTermsMet.isPresent()) {
-							var result = new SearchResultItem();
+							SearchResultItem result = new SearchResultItem();
 							result.setSite(site.getSite());
 							result.setDevice(deviceName);
 							result.setPointIndex(dataPoint.getIndex());
 							result.setPointName(dataPoint.getName());
 							result.setPointType("counterPoint");
-							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).toList()));
+							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).collect(Collectors.toList())));
 							results.add(result);
 						}
 
 						if (results.size() >= 10) {
-							var resultMessage = new SearchResultMessage();
+							SearchResultMessage resultMessage = new SearchResultMessage();
 							resultMessage.setSearchTerm(searchTerm);
 							resultMessage.setResults(results);
 							messanger.sendMessage(resultMessage);
@@ -257,15 +269,15 @@ public class SearchRequestMessageHandler implements MessageHandler {
 						}
 					}
 
-					for (var dataPoint : device.getDatabaseManager().getDoubleBitBinaryInputDataPoints()) {
-						var searchTermsMet = searchableTerms.stream().map(term -> {
+					for (DoubleBitBinaryInputDataPoint dataPoint : device.getDatabaseManager().getDoubleBitBinaryInputDataPoints()) {
+						Optional<Boolean> searchTermsMet = searchableTerms.stream().map(term -> {
 							if (deviceName.toLowerCase().contains(term.toLowerCase())) {
 								return true;
 							}
 							if (dataPoint.getName().toLowerCase().contains(term.toLowerCase())) {
 								return true;
 							}
-							for (var tag : dataPoint.getTags().entrySet()) {
+							for (Map.Entry<String, String> tag : dataPoint.getTags().entrySet()) {
 								if (tag.getKey().toLowerCase().contains(term.toLowerCase())) {
 									return true;
 								}
@@ -277,18 +289,18 @@ public class SearchRequestMessageHandler implements MessageHandler {
 						}).filter(v -> !v).findAny();
 
 						if (!searchTermsMet.isPresent()) {
-							var result = new SearchResultItem();
+							SearchResultItem result = new SearchResultItem();
 							result.setSite(site.getSite());
 							result.setDevice(deviceName);
 							result.setPointIndex(dataPoint.getIndex());
 							result.setPointName(dataPoint.getName());
 							result.setPointType("doubleBitBinaryInputPoint");
-							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).toList()));
+							result.setAdditionalInformation(String.join(", ", dataPoint.getTags().entrySet().stream().map(es -> es.getKey() + ": " + es.getValue()).collect(Collectors.toList())));
 							results.add(result);
 						}
 
 						if (results.size() >= 10) {
-							var resultMessage = new SearchResultMessage();
+							SearchResultMessage resultMessage = new SearchResultMessage();
 							resultMessage.setSearchTerm(searchTerm);
 							resultMessage.setResults(results);
 							messanger.sendMessage(resultMessage);
@@ -298,7 +310,7 @@ public class SearchRequestMessageHandler implements MessageHandler {
 				}
 			}
 
-			var resultMessage = new SearchResultMessage();
+			SearchResultMessage resultMessage = new SearchResultMessage();
 			resultMessage.setSearchTerm(searchTerm);
 			resultMessage.setResults(results);
 			messanger.sendMessage(resultMessage);

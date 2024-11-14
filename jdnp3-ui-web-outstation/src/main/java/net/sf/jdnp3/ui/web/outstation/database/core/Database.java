@@ -68,7 +68,7 @@ public class Database {
 	}
 
 	public AnalogInputDataPoint getAnalogInputDataPoint(long index) {
-		var point = analogInputDataPoints.get(index);
+		AnalogInputDataPoint point = analogInputDataPoints.get(index);
 		if (point == null) {
 			throw new IllegalArgumentException("No point found for index: " + index);
 		}
@@ -76,7 +76,7 @@ public class Database {
 	}
 
 	public BinaryInputDataPoint getBinaryInputDataPoint(long index) {
-		var point = binaryInputDataPoints.get(index);
+		BinaryInputDataPoint point = binaryInputDataPoints.get(index);
 		if (point == null) {
 			throw new IllegalArgumentException("No point found for index: " + index);
 		}
@@ -84,7 +84,7 @@ public class Database {
 	}
 
 	public DoubleBitBinaryInputDataPoint getDoubleBitBinaryInputDataPoint(long index) {
-		var point = doubleBitBinaryInputDataPoints.get(index);
+		DoubleBitBinaryInputDataPoint point = doubleBitBinaryInputDataPoints.get(index);
 		if (point == null) {
 			throw new IllegalArgumentException("No point found for index: " + index);
 		}
@@ -92,7 +92,7 @@ public class Database {
 	}
 
 	public AnalogOutputDataPoint getAnalogOutputDataPoint(long index) {
-		var point = analogOutputDataPoints.get(index);
+		AnalogOutputDataPoint point = analogOutputDataPoints.get(index);
 		if (point == null) {
 			throw new IllegalArgumentException("No point found for index: " + index);
 		}
@@ -100,7 +100,7 @@ public class Database {
 	}
 
 	public BinaryOutputDataPoint getBinaryOutputDataPoint(long index) {
-		var point = binaryOutputDataPoints.get(index);
+		BinaryOutputDataPoint point = binaryOutputDataPoints.get(index);
 		if (point == null) {
 			throw new IllegalArgumentException("No point found for index: " + index);
 		}
@@ -108,7 +108,7 @@ public class Database {
 	}
 
 	public CounterDataPoint getCounterDataPoint(long index) {
-		var point = counterDataPoints.get(index);
+		CounterDataPoint point = counterDataPoints.get(index);
 		if (point == null) {
 			throw new IllegalArgumentException("No point found for index: " + index);
 		}

@@ -25,6 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
@@ -75,7 +76,7 @@ public class DataLinkFrameHeaderEncoderTest {
 		DataUtils.addInteger(randomSource, 2, buffer);
 		ArrayList<Byte> data = new ArrayList<>(buffer);
 
-		try (var staticCrc16 = mockStatic(Crc16.class); var staticDataLinkFrameUtils = mockStatic(DataLinkFrameUtils.class)) {
+		try (MockedStatic<Crc16> staticCrc16 = mockStatic(Crc16.class); MockedStatic<DataLinkFrameUtils> staticDataLinkFrameUtils = mockStatic(DataLinkFrameUtils.class)) {
 			staticCrc16.when(() -> Crc16.computeCrc(buffer)).thenReturn(randomCrc);
 			staticDataLinkFrameUtils.when(() -> DataLinkFrameUtils.computeControlField(mockDataLinkFrameHeader)).thenReturn(randomControlField);
 
