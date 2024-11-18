@@ -19,10 +19,12 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.MessageUtils;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
@@ -37,12 +39,12 @@ public class AnalogOutputMessageHandler implements DeviceMessageHandler {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
-		AnalogOutputMessage analogOutputMessage = (AnalogOutputMessage) message;
+		AnalogOutputMessage pointMessage = (AnalogOutputMessage) message;
 
-		AnalogOutputDataPoint analogDataPoint = new AnalogOutputDataPoint();
 		try {
-			BeanUtils.copyProperties(analogDataPoint, analogOutputMessage);
-			outstationDevice.getDatabaseManager().setAnalogOutputDataPoint(analogDataPoint);
+			AnalogOutputDataPoint dataPoint = outstationDevice.getDatabaseManager().getAnalogOutputDataPoint(pointMessage.getIndex());
+			MessageUtils.copyProperties(dataPoint, pointMessage);
+			outstationDevice.getDatabaseManager().setAnalogOutputDataPoint(dataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

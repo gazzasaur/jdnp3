@@ -148,16 +148,34 @@ public class DatabaseManager {
 			return this.cloneObjects(database.getAnalogInputDataPoints(), AnalogInputDataPoint.class);
 		}
 	}
-	
+
+	public AnalogInputDataPoint getAnalogInputDataPoint(long index) {
+		synchronized (database) {
+			return this.cloneObject(database.getAnalogInputDataPoint(index), AnalogInputDataPoint.class);
+		}
+	}
+
 	public List<AnalogOutputDataPoint> getAnalogOutputDataPoints() {
 		synchronized (database) {
 			return this.cloneObjects(database.getAnalogOutputDataPoints(), AnalogOutputDataPoint.class);
 		}
 	}
-	
+
+	public AnalogOutputDataPoint getAnalogOutputDataPoint(long index) {
+		synchronized (database) {
+			return this.cloneObject(database.getAnalogOutputDataPoint(index), AnalogOutputDataPoint.class);
+		}
+	}
+
 	public List<BinaryInputDataPoint> getBinaryInputDataPoints() {
 		synchronized (database) {
 			return this.cloneObjects(database.getBinaryInputDataPoints(), BinaryInputDataPoint.class);
+		}
+	}
+
+	public BinaryInputDataPoint getBinaryInputDataPoint(long index) {
+		synchronized (database) {
+			return this.cloneObject(database.getBinaryInputDataPoint(index), BinaryInputDataPoint.class);
 		}
 	}
 
@@ -167,18 +185,36 @@ public class DatabaseManager {
 		}
 	}
 
+	public DoubleBitBinaryInputDataPoint getDoubleBitBinaryInputDataPoint(long index) {
+		synchronized (database) {
+			return this.cloneObject(database.getDoubleBitBinaryInputDataPoint(index), DoubleBitBinaryInputDataPoint.class);
+		}
+	}
+
 	public List<BinaryOutputDataPoint> getBinaryOutputDataPoints() {
 		synchronized (database) {
 			return this.cloneObjects(database.getBinaryOutputDataPoints(), BinaryOutputDataPoint.class);
 		}
 	}
-	
+
+	public BinaryOutputDataPoint getBinaryOutputDataPoint(long index) {
+		synchronized (database) {
+			return this.cloneObject(database.getBinaryOutputDataPoint(index), BinaryOutputDataPoint.class);
+		}
+	}
+
 	public List<CounterDataPoint> getCounterDataPoints() {
 		synchronized (database) {
 			return this.cloneObjects(database.getCounterDataPoints(), CounterDataPoint.class);
 		}
 	}
-	
+
+	public CounterDataPoint getCounterDataPoint(long index) {
+		synchronized (database) {
+			return this.cloneObject(database.getCounterDataPoint(index), CounterDataPoint.class);
+		}
+	}
+
 	public void setInternalIndicatorDataPoint(InternalIndicatorsDataPoint dataPoint) {
 		try {
 			synchronized (database) {

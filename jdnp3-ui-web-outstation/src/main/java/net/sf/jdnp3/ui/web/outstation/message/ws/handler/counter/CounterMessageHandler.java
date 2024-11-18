@@ -19,10 +19,12 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.MessageUtils;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.counter.CounterMessage;
 
@@ -37,11 +39,11 @@ public class CounterMessageHandler implements DeviceMessageHandler {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
-		CounterMessage specificMessage = (CounterMessage) message;
+		CounterMessage pointMessage = (CounterMessage) message;
 
-		CounterDataPoint dataPoint = new CounterDataPoint();
 		try {
-			BeanUtils.copyProperties(dataPoint, specificMessage);
+			CounterDataPoint dataPoint = outstationDevice.getDatabaseManager().getCounterDataPoint(pointMessage.getIndex());
+			MessageUtils.copyProperties(dataPoint, pointMessage);
 			outstationDevice.getDatabaseManager().setCounterDataPoint(dataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);

@@ -23,6 +23,7 @@ import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint
 import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.MessageUtils;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
@@ -37,12 +38,12 @@ public class BinaryInputMessageHandler implements DeviceMessageHandler {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
-		BinaryInputMessage binaryInputMessage = (BinaryInputMessage) message;
+		BinaryInputMessage pointMessage = (BinaryInputMessage) message;
 
-		BinaryInputDataPoint binaryDataPoint = new BinaryInputDataPoint();
 		try {
-			BeanUtils.copyProperties(binaryDataPoint, binaryInputMessage);
-			outstationDevice.getDatabaseManager().setBinaryInputDataPoint(binaryDataPoint);
+			BinaryInputDataPoint dataPoint = outstationDevice.getDatabaseManager().getBinaryInputDataPoint(pointMessage.getIndex());
+			MessageUtils.copyProperties(dataPoint, pointMessage);
+			outstationDevice.getDatabaseManager().setBinaryInputDataPoint(dataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

@@ -19,10 +19,12 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
+import net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.MessageUtils;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.DoubleBitBinaryInputMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
@@ -37,12 +39,12 @@ public class DoubleBitBinaryInputMessageHandler implements DeviceMessageHandler 
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
-		DoubleBitBinaryInputMessage binaryInputMessage = (DoubleBitBinaryInputMessage) message;
+		DoubleBitBinaryInputMessage pointMessage = (DoubleBitBinaryInputMessage) message;
 
-		DoubleBitBinaryInputDataPoint binaryDataPoint = new DoubleBitBinaryInputDataPoint();
 		try {
-			BeanUtils.copyProperties(binaryDataPoint, binaryInputMessage);
-			outstationDevice.getDatabaseManager().setDoubleBitBinaryInputDataPoint(binaryDataPoint);
+			DoubleBitBinaryInputDataPoint dataPoint = outstationDevice.getDatabaseManager().getDoubleBitBinaryInputDataPoint(pointMessage.getIndex());
+			MessageUtils.copyProperties(dataPoint, pointMessage);
+			outstationDevice.getDatabaseManager().setDoubleBitBinaryInputDataPoint(dataPoint);
 		} catch (Exception e) {
 			logger.error("Failed to copy object.", e);
 		}

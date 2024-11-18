@@ -24,26 +24,26 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
 public class DoubleBitBinaryInputMessage implements DeviceMessage {
-	private String type = "doubleBitBinaryInputPoint";
+	private String type = "DoubleBitBinaryInputPoInteger";
 	private long index = 0;
 	private String site = "";
 	private String device = "";
 	
-	private int eventClass = 1;
-	private ObjectType eventType = ANY;
-	private ObjectType staticType = ANY;
-	private boolean triggerEventOnChange = false;
+	private Integer eventClass = null;
+	private ObjectType eventType = null;
+	private ObjectType staticType = null;
+	private Boolean triggerEventOnChange = null;
 	
-	private String name = "";
-	private double value = 0;
-	private boolean online = true;
-	private boolean restart = false;
-	private boolean localForced = false;
-	private boolean remoteForced = false;
-	private boolean chatterFilter = false;
-	private boolean communicationsLost = false;
+	private String name = null;
+	private Double value = null;
+	private Boolean online = null;
+	private Boolean restart = null;
+	private Boolean localForced = null;
+	private Boolean remoteForced = null;
+	private Boolean chatterFilter = null;
+	private Boolean communicationsLost = null;
 	
-	private Map<String, String> tags = new HashMap<>();
+	private Map<String, String> tags = null;
 
 	public String getType() {
 		return type;
@@ -57,59 +57,59 @@ public class DoubleBitBinaryInputMessage implements DeviceMessage {
 		this.index = index;
 	}
 	
-	public double getValue() {
+	public Double getValue() {
 		return value;
 	}
 
-	public void setValue(double value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 
-	public boolean isChatterFilter() {
+	public Boolean isChatterFilter() {
 		return chatterFilter;
 	}
 
-	public void setChatterFilter(boolean chatterFilter) {
+	public void setChatterFilter(Boolean chatterFilter) {
 		this.chatterFilter = chatterFilter;
 	}
 
-	public boolean isOnline() {
+	public Boolean isOnline() {
 		return online;
 	}
 
-	public void setOnline(boolean online) {
+	public void setOnline(Boolean online) {
 		this.online = online;
 	}
 
-	public boolean isRestart() {
+	public Boolean isRestart() {
 		return restart;
 	}
 
-	public void setRestart(boolean restart) {
+	public void setRestart(Boolean restart) {
 		this.restart = restart;
 	}
 
-	public boolean isLocalForced() {
+	public Boolean isLocalForced() {
 		return localForced;
 	}
 
-	public void setLocalForced(boolean localForced) {
+	public void setLocalForced(Boolean localForced) {
 		this.localForced = localForced;
 	}
 
-	public boolean isRemoteForced() {
+	public Boolean isRemoteForced() {
 		return remoteForced;
 	}
 
-	public void setRemoteForced(boolean remoteForced) {
+	public void setRemoteForced(Boolean remoteForced) {
 		this.remoteForced = remoteForced;
 	}
 
-	public boolean isCommunicationsLost() {
+	public Boolean isCommunicationsLost() {
 		return communicationsLost;
 	}
 
-	public void setCommunicationsLost(boolean communicationsLost) {
+	public void setCommunicationsLost(Boolean communicationsLost) {
 		this.communicationsLost = communicationsLost;
 	}
 
@@ -121,11 +121,11 @@ public class DoubleBitBinaryInputMessage implements DeviceMessage {
 		this.name = name;
 	}
 
-	public int getEventClass() {
+	public Integer getEventClass() {
 		return eventClass;
 	}
 
-	public void setEventClass(int eventClass) {
+	public void setEventClass(Integer eventClass) {
 		this.eventClass = eventClass;
 	}
 
@@ -161,11 +161,11 @@ public class DoubleBitBinaryInputMessage implements DeviceMessage {
 		this.device = device;
 	}
 
-	public boolean isTriggerEventOnChange() {
+	public Boolean isTriggerEventOnChange() {
 		return triggerEventOnChange;
 	}
 
-	public void setTriggerEventOnChange(boolean triggerEventOnChange) {
+	public void setTriggerEventOnChange(Boolean triggerEventOnChange) {
 		this.triggerEventOnChange = triggerEventOnChange;
 	}
 

@@ -24,27 +24,27 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
 public class CounterMessage implements DeviceMessage {
-	private String type = "counterPoint";
+	private String type = "counterPoInteger";
 	private long index = 0;
 	private String site = "";
 	private String device = "";
 	
-	private int eventClass = 1;
-	private ObjectType eventType = ANY;
-	private ObjectType staticType = ANY;
-	private boolean triggerEventOnChange = false;
+	private Integer eventClass = null;
+	private ObjectType eventType = null;
+	private ObjectType staticType = null;
+	private Boolean triggerEventOnChange = null;
 	
-	private String name = "";
-	private long value = 0;
-	private boolean online = true;
-	private boolean restart = false;
-	private boolean rollover = false;
-	private boolean localForced = false;
-	private boolean remoteForced = false;
-	private boolean discontinuity = false;
-	private boolean communicationsLost = false;
+	private String name = null;
+	private Long value = null;
+	private Boolean online = null;
+	private Boolean restart = null;
+	private Boolean rollover = null;
+	private Boolean localForced = null;
+	private Boolean remoteForced = null;
+	private Boolean discontinuity = null;
+	private Boolean communicationsLost = null;
 	
-	private Map<String, String> tags = new HashMap<>();
+	private Map<String, String> tags = null;
 
 	public String getType() {
 		return type;
@@ -58,43 +58,43 @@ public class CounterMessage implements DeviceMessage {
 		this.index = index;
 	}
 
-	public boolean isOnline() {
+	public Boolean isOnline() {
 		return online;
 	}
 
-	public void setOnline(boolean online) {
+	public void setOnline(Boolean online) {
 		this.online = online;
 	}
 
-	public boolean isRestart() {
+	public Boolean isRestart() {
 		return restart;
 	}
 
-	public void setRestart(boolean restart) {
+	public void setRestart(Boolean restart) {
 		this.restart = restart;
 	}
 
-	public boolean isLocalForced() {
+	public Boolean isLocalForced() {
 		return localForced;
 	}
 
-	public void setLocalForced(boolean localForced) {
+	public void setLocalForced(Boolean localForced) {
 		this.localForced = localForced;
 	}
 
-	public boolean isRemoteForced() {
+	public Boolean isRemoteForced() {
 		return remoteForced;
 	}
 
-	public void setRemoteForced(boolean remoteForced) {
+	public void setRemoteForced(Boolean remoteForced) {
 		this.remoteForced = remoteForced;
 	}
 
-	public boolean isCommunicationsLost() {
+	public Boolean isCommunicationsLost() {
 		return communicationsLost;
 	}
 
-	public void setCommunicationsLost(boolean communicationsLost) {
+	public void setCommunicationsLost(Boolean communicationsLost) {
 		this.communicationsLost = communicationsLost;
 	}
 
@@ -106,11 +106,11 @@ public class CounterMessage implements DeviceMessage {
 		this.name = name;
 	}
 
-	public int getEventClass() {
+	public Integer getEventClass() {
 		return eventClass;
 	}
 
-	public void setEventClass(int eventClass) {
+	public void setEventClass(Integer eventClass) {
 		this.eventClass = eventClass;
 	}
 
@@ -130,27 +130,27 @@ public class CounterMessage implements DeviceMessage {
 		this.staticType = staticType;
 	}
 
-	public long getValue() {
+	public Long getValue() {
 		return value;
 	}
 
-	public void setValue(long value) {
+	public void setValue(Long value) {
 		this.value = value;
 	}
 
-	public boolean isRollover() {
+	public Boolean isRollover() {
 		return rollover;
 	}
 
-	public void setRollover(boolean rollover) {
+	public void setRollover(Boolean rollover) {
 		this.rollover = rollover;
 	}
 
-	public boolean isDiscontinuity() {
+	public Boolean isDiscontinuity() {
 		return discontinuity;
 	}
 
-	public void setDiscontinuity(boolean discontinuity) {
+	public void setDiscontinuity(Boolean discontinuity) {
 		this.discontinuity = discontinuity;
 	}
 
@@ -170,11 +170,11 @@ public class CounterMessage implements DeviceMessage {
 		this.device = device;
 	}
 
-	public boolean isTriggerEventOnChange() {
+	public Boolean isTriggerEventOnChange() {
 		return triggerEventOnChange;
 	}
 
-	public void setTriggerEventOnChange(boolean triggerEventOnChange) {
+	public void setTriggerEventOnChange(Boolean triggerEventOnChange) {
 		this.triggerEventOnChange = triggerEventOnChange;
 	}
 

@@ -20,7 +20,7 @@ import java.util.Date;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
 public class DoubleBitBinaryInputEventMessage implements DeviceMessage {
-	private String type = "doubleBitBinaryInputEvent";
+	private String type = "DoubleBitBinaryInputEvent";
 	private long index = 0;
 	private String site = "";
 	private String device = "";

@@ -27,32 +27,32 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StatusCode;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
 public class AnalogOutputMessage implements DeviceMessage {
-	private String type = "analogOutputPoint";
+	private String type = "analogOutputPoInteger";
 	private long index = 0;
 	private String site = "";
 	private String device = "";
 	
-	private int eventClass = 1;
-	private int commandEventClass = 1;
-	private ObjectType eventType = ANY;
-	private ObjectType staticType = ANY;
-	private boolean triggerEventOnChange = false;
-	private ObjectType commandEventType = ANALOG_OUTPUT_COMMAND_EVENT_ANY;
+	private Integer eventClass = null;
+	private Integer commandEventClass = null;
+	private ObjectType eventType = null;
+	private ObjectType staticType = null;
+	private Boolean triggerEventOnChange = null;
+	private ObjectType commandEventType = null;
 	
-	private String name = "";
-	private double value = 0;
-	private boolean online = true;
-	private boolean restart = false;
-	private boolean overRange = false;
-	private boolean localForced = false;
-	private boolean remoteForced = false;
-	private boolean referenceError = false;
-	private boolean communicationsLost = false;
+	private String name = null;
+	private Double value = null;
+	private Boolean online = null;
+	private Boolean restart = null;
+	private Boolean overRange = null;
+	private Boolean localForced = null;
+	private Boolean remoteForced = null;
+	private Boolean referenceError = null;
+	private Boolean communicationsLost = null;
 	
-	private boolean autoUpdateOnSuccess = true;
+	private Boolean autoUpdateOnSuccess = null;
 	
-	private long operatedCount = 0;
-	private StatusCode statusCode = SUCCESS;
+	private Long operatedCount = null;
+	private StatusCode statusCode = null;
 	
 	private Map<String, String> tags = new HashMap<>();
 
@@ -68,43 +68,43 @@ public class AnalogOutputMessage implements DeviceMessage {
 		this.index = index;
 	}
 	
-	public boolean isOnline() {
+	public Boolean isOnline() {
 		return online;
 	}
 
-	public void setOnline(boolean online) {
+	public void setOnline(Boolean online) {
 		this.online = online;
 	}
 
-	public boolean isRestart() {
+	public Boolean isRestart() {
 		return restart;
 	}
 
-	public void setRestart(boolean restart) {
+	public void setRestart(Boolean restart) {
 		this.restart = restart;
 	}
 
-	public boolean isLocalForced() {
+	public Boolean isLocalForced() {
 		return localForced;
 	}
 
-	public void setLocalForced(boolean localForced) {
+	public void setLocalForced(Boolean localForced) {
 		this.localForced = localForced;
 	}
 
-	public boolean isRemoteForced() {
+	public Boolean isRemoteForced() {
 		return remoteForced;
 	}
 
-	public void setRemoteForced(boolean remoteForced) {
+	public void setRemoteForced(Boolean remoteForced) {
 		this.remoteForced = remoteForced;
 	}
 
-	public boolean isCommunicationsLost() {
+	public Boolean isCommunicationsLost() {
 		return communicationsLost;
 	}
 
-	public void setCommunicationsLost(boolean communicationsLost) {
+	public void setCommunicationsLost(Boolean communicationsLost) {
 		this.communicationsLost = communicationsLost;
 	}
 
@@ -116,11 +116,11 @@ public class AnalogOutputMessage implements DeviceMessage {
 		this.name = name;
 	}
 
-	public int getEventClass() {
+	public Integer getEventClass() {
 		return eventClass;
 	}
 
-	public void setEventClass(int eventClass) {
+	public void setEventClass(Integer eventClass) {
 		this.eventClass = eventClass;
 	}
 
@@ -140,35 +140,35 @@ public class AnalogOutputMessage implements DeviceMessage {
 		this.staticType = staticType;
 	}
 
-	public boolean isOverRange() {
+	public Boolean isOverRange() {
 		return overRange;
 	}
 
-	public void setOverRange(boolean overRange) {
+	public void setOverRange(Boolean overRange) {
 		this.overRange = overRange;
 	}
 
-	public boolean isReferenceError() {
+	public Boolean isReferenceError() {
 		return referenceError;
 	}
 
-	public void setReferenceError(boolean referenceError) {
+	public void setReferenceError(Boolean referenceError) {
 		this.referenceError = referenceError;
 	}
 
-	public double getValue() {
+	public Double getValue() {
 		return value;
 	}
 
-	public void setValue(double value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 
-	public int getCommandEventClass() {
+	public Integer getCommandEventClass() {
 		return commandEventClass;
 	}
 
-	public void setCommandEventClass(int commandEventClass) {
+	public void setCommandEventClass(Integer commandEventClass) {
 		this.commandEventClass = commandEventClass;
 	}
 
@@ -180,19 +180,19 @@ public class AnalogOutputMessage implements DeviceMessage {
 		this.commandEventType = commandEventType;
 	}
 
-	public boolean isAutoUpdateOnSuccess() {
+	public Boolean isAutoUpdateOnSuccess() {
 		return autoUpdateOnSuccess;
 	}
 
-	public void setAutoUpdateOnSuccess(boolean autoUpdateOnSuccess) {
+	public void setAutoUpdateOnSuccess(Boolean autoUpdateOnSuccess) {
 		this.autoUpdateOnSuccess = autoUpdateOnSuccess;
 	}
 
-	public long getOperatedCount() {
+	public Long getOperatedCount() {
 		return operatedCount;
 	}
 
-	public void setOperatedCount(long operatedCount) {
+	public void setOperatedCount(Long operatedCount) {
 		this.operatedCount = operatedCount;
 	}
 
@@ -220,11 +220,11 @@ public class AnalogOutputMessage implements DeviceMessage {
 		this.device = device;
 	}
 
-	public boolean isTriggerEventOnChange() {
+	public Boolean isTriggerEventOnChange() {
 		return triggerEventOnChange;
 	}
 
-	public void setTriggerEventOnChange(boolean triggerEventOnChange) {
+	public void setTriggerEventOnChange(Boolean triggerEventOnChange) {
 		this.triggerEventOnChange = triggerEventOnChange;
 	}
 
