@@ -14,9 +14,9 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<org.apache.commons.beanutils.version>1.9.3</org.apache.commons.beanutils.version>
+		<org.apache.commons.beanutils.version>1.9.4</org.apache.commons.beanutils.version>
 		<org.apache.commons.codec.version>1.11</org.apache.commons.codec.version>
-		<org.apache.commons.lang3.version>3.8.1</org.apache.commons.lang3.version>
+		<org.apache.commons.lang3.version>3.17.0</org.apache.commons.lang3.version>
 	</properties>
 
 	<dependencies>
