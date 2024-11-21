@@ -24,7 +24,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
 public class AnalogInputMessage implements DeviceMessage {
-	private String type = "analogInputPoInteger";
+	private String type = "analogInputPoint";
 	private long index = 0;
 	private String site = "";
 	private String device = "";
@@ -58,7 +58,7 @@ public class AnalogInputMessage implements DeviceMessage {
 		this.index = index;
 	}
 	
-	public Boolean isOnline() {
+	public Boolean getOnline() {
 		return online;
 	}
 
@@ -66,7 +66,7 @@ public class AnalogInputMessage implements DeviceMessage {
 		this.online = online;
 	}
 
-	public Boolean isRestart() {
+	public Boolean getRestart() {
 		return restart;
 	}
 
@@ -74,7 +74,7 @@ public class AnalogInputMessage implements DeviceMessage {
 		this.restart = restart;
 	}
 
-	public Boolean isLocalForced() {
+	public Boolean getLocalForced() {
 		return localForced;
 	}
 
@@ -82,7 +82,7 @@ public class AnalogInputMessage implements DeviceMessage {
 		this.localForced = localForced;
 	}
 
-	public Boolean isRemoteForced() {
+	public Boolean getRemoteForced() {
 		return remoteForced;
 	}
 
@@ -90,7 +90,7 @@ public class AnalogInputMessage implements DeviceMessage {
 		this.remoteForced = remoteForced;
 	}
 
-	public Boolean isCommunicationsLost() {
+	public Boolean getCommunicationsLost() {
 		return communicationsLost;
 	}
 
@@ -130,7 +130,7 @@ public class AnalogInputMessage implements DeviceMessage {
 		this.staticType = staticType;
 	}
 
-	public Boolean isOverRange() {
+	public Boolean getOverRange() {
 		return overRange;
 	}
 
@@ -138,7 +138,7 @@ public class AnalogInputMessage implements DeviceMessage {
 		this.overRange = overRange;
 	}
 
-	public Boolean isReferenceError() {
+	public Boolean getReferenceError() {
 		return referenceError;
 	}
 
@@ -170,7 +170,7 @@ public class AnalogInputMessage implements DeviceMessage {
 		this.device = device;
 	}
 
-	public Boolean isTriggerEventOnChange() {
+	public Boolean getTriggerEventOnChange() {
 		return triggerEventOnChange;
 	}
 

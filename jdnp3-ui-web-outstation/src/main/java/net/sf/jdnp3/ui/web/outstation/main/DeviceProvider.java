@@ -41,6 +41,8 @@ import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInput
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 
 public class DeviceProvider {
+	private static final Logger LOGGER = LoggerFactory.getLogger(DeviceProvider.class);
+
 	private static Map<String, Map<String, OutstationDevice>> devices = new HashMap<>();
 	private static Map<String, Map<String, List<DatabaseListener>>> databaseListeners = new HashMap<>();
 	private static List<DeviceProviderListener> deviceProviderListeners = new ArrayList<>();
@@ -134,9 +136,8 @@ public class DeviceProvider {
 			outstationDevice = DeviceProvider.getDevice(station, device);
 			outstationDevice.getDatabaseManager().addDatabaseListener(databaseListener);
 		} catch (Exception e) {
-			Logger logger = LoggerFactory.getLogger(DeviceProvider.class);
-			logger.debug(format("Cannot retreive device %s:%s.", station, device), e);
-			logger.info(format("No device found for %s:%s.  Registered interest.", station, device));
+			LOGGER.debug(format("Cannot retreive device %s:%s.", station, device), e);
+			LOGGER.info(format("No device found for %s:%s.  Registered interest.", station, device));
 		}
 		
 		if (outstationDevice != null) {
@@ -151,8 +152,16 @@ public class DeviceProvider {
 		if (!databaseListeners.get(station).containsKey(device)) {
 			return;
 		}
-		databaseListeners.get(station).get(device).remove(databaseListener);
 		
+		OutstationDevice outstationDevice = null;
+		try {
+			outstationDevice = DeviceProvider.getDevice(station, device);
+			outstationDevice.getDatabaseManager().removeDatabaseListener(databaseListener);
+		} catch (Exception e) {
+			LOGGER.error(format("No device found for %s:%s.", station, device));
+		}
+		databaseListeners.get(station).get(device).remove(databaseListener);
+
 		if (databaseListeners.containsKey(station)) {
 			if (databaseListeners.get(station).containsKey(device)) {
 				if (databaseListeners.get(station).get(device).size() == 0) {

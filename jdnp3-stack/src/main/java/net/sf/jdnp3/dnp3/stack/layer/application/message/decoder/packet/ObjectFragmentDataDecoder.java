@@ -75,7 +75,7 @@ public class ObjectFragmentDataDecoder {
 			}
 			decoderContext.setCurrentIndex(index);
 			decoderContext.setLastItem(!itemEnumerator.hasNext());
-					
+
 			if (FunctionCodeUtils.hasObjectInstanceData(decoderContext.getFunctionCode())) {
 				objectFragment.addObjectInstance(objectTypeDecoder.decode(decoderContext, data));
 			} else if (objectFragment.getObjectFragmentHeader().getPrefixType() instanceof IndexPrefixType) {

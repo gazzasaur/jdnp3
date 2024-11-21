@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>net.sf.jdnp3</groupId>
 		<artifactId>jdnp3-project</artifactId>
-		<version>0.12.2</version>
+		<version>0.12.3</version>
 		<relativePath>../jdnp3/pom.xml</relativePath>
 	</parent>
 
@@ -16,7 +16,7 @@
 	<properties>
 		<org.apache.commons.beanutils.version>1.9.4</org.apache.commons.beanutils.version>
 		<org.apache.commons.lang3.version>3.17.0</org.apache.commons.lang3.version>
-		<ch.qos.logback.version>1.2.1</ch.qos.logback.version>
+		<ch.qos.logback.version>1.2.13</ch.qos.logback.version>
 	</properties>
 	
 	<build>

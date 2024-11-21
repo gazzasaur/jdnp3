@@ -35,7 +35,7 @@ public class AnalogInputMessageHandler implements DeviceMessageHandler {
 		return message instanceof AnalogInputMessage;
 	}
 
-	public void processMessage(Messanger webSocket, OutstationDevice outstationDevice, Message message) {
+	public void processMessage(Messanger messanger, OutstationDevice outstationDevice, Message message) {
 		if (!this.canHandle(message)) {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}

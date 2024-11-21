@@ -15,10 +15,6 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.model.analog;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_COMMAND_EVENT_ANY;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StatusCode.SUCCESS;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +23,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StatusCode;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
 public class AnalogOutputMessage implements DeviceMessage {
-	private String type = "analogOutputPoInteger";
+	private String type = "analogOutputPoint";
 	private long index = 0;
 	private String site = "";
 	private String device = "";
@@ -68,7 +64,7 @@ public class AnalogOutputMessage implements DeviceMessage {
 		this.index = index;
 	}
 	
-	public Boolean isOnline() {
+	public Boolean getOnline() {
 		return online;
 	}
 
@@ -76,7 +72,7 @@ public class AnalogOutputMessage implements DeviceMessage {
 		this.online = online;
 	}
 
-	public Boolean isRestart() {
+	public Boolean getRestart() {
 		return restart;
 	}
 
@@ -84,7 +80,7 @@ public class AnalogOutputMessage implements DeviceMessage {
 		this.restart = restart;
 	}
 
-	public Boolean isLocalForced() {
+	public Boolean getLocalForced() {
 		return localForced;
 	}
 
@@ -92,7 +88,7 @@ public class AnalogOutputMessage implements DeviceMessage {
 		this.localForced = localForced;
 	}
 
-	public Boolean isRemoteForced() {
+	public Boolean getRemoteForced() {
 		return remoteForced;
 	}
 
@@ -100,7 +96,7 @@ public class AnalogOutputMessage implements DeviceMessage {
 		this.remoteForced = remoteForced;
 	}
 
-	public Boolean isCommunicationsLost() {
+	public Boolean getCommunicationsLost() {
 		return communicationsLost;
 	}
 
@@ -140,7 +136,7 @@ public class AnalogOutputMessage implements DeviceMessage {
 		this.staticType = staticType;
 	}
 
-	public Boolean isOverRange() {
+	public Boolean getOverRange() {
 		return overRange;
 	}
 
@@ -148,7 +144,7 @@ public class AnalogOutputMessage implements DeviceMessage {
 		this.overRange = overRange;
 	}
 
-	public Boolean isReferenceError() {
+	public Boolean getReferenceError() {
 		return referenceError;
 	}
 
@@ -180,7 +176,7 @@ public class AnalogOutputMessage implements DeviceMessage {
 		this.commandEventType = commandEventType;
 	}
 
-	public Boolean isAutoUpdateOnSuccess() {
+	public Boolean getAutoUpdateOnSuccess() {
 		return autoUpdateOnSuccess;
 	}
 
@@ -220,7 +216,7 @@ public class AnalogOutputMessage implements DeviceMessage {
 		this.device = device;
 	}
 
-	public Boolean isTriggerEventOnChange() {
+	public Boolean getTriggerEventOnChange() {
 		return triggerEventOnChange;
 	}
 

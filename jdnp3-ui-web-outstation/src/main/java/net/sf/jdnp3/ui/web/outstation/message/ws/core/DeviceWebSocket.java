@@ -119,7 +119,13 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 						try {
 							session.getBasicRemote().sendObject(message);
 						} catch (Exception e) {
-							logger.error("Failed to send message.", e);
+							logger.error("Failed to send message. Closing Web Socket " + session, e);
+							try {
+								session.close();
+							} catch (Exception wce) {
+								logger.warn("Failed to close web socket.", e);
+							}
+							DeviceWebSocket.this.onClose(session);
 						}
 					}
 				});

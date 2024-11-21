@@ -15,16 +15,13 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.model.binary;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
-
-import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
 public class DoubleBitBinaryInputMessage implements DeviceMessage {
-	private String type = "DoubleBitBinaryInputPoInteger";
+	private String type = "doubleBitBinaryInputPoint";
 	private long index = 0;
 	private String site = "";
 	private String device = "";
@@ -35,7 +32,7 @@ public class DoubleBitBinaryInputMessage implements DeviceMessage {
 	private Boolean triggerEventOnChange = null;
 	
 	private String name = null;
-	private Double value = null;
+	private Long value = null;
 	private Boolean online = null;
 	private Boolean restart = null;
 	private Boolean localForced = null;
@@ -57,15 +54,15 @@ public class DoubleBitBinaryInputMessage implements DeviceMessage {
 		this.index = index;
 	}
 	
-	public Double getValue() {
+	public Long getValue() {
 		return value;
 	}
 
-	public void setValue(Double value) {
+	public void setValue(Long value) {
 		this.value = value;
 	}
 
-	public Boolean isChatterFilter() {
+	public Boolean getChatterFilter() {
 		return chatterFilter;
 	}
 
@@ -73,7 +70,7 @@ public class DoubleBitBinaryInputMessage implements DeviceMessage {
 		this.chatterFilter = chatterFilter;
 	}
 
-	public Boolean isOnline() {
+	public Boolean getOnline() {
 		return online;
 	}
 
@@ -81,7 +78,7 @@ public class DoubleBitBinaryInputMessage implements DeviceMessage {
 		this.online = online;
 	}
 
-	public Boolean isRestart() {
+	public Boolean getRestart() {
 		return restart;
 	}
 
@@ -89,7 +86,7 @@ public class DoubleBitBinaryInputMessage implements DeviceMessage {
 		this.restart = restart;
 	}
 
-	public Boolean isLocalForced() {
+	public Boolean getLocalForced() {
 		return localForced;
 	}
 
@@ -97,7 +94,7 @@ public class DoubleBitBinaryInputMessage implements DeviceMessage {
 		this.localForced = localForced;
 	}
 
-	public Boolean isRemoteForced() {
+	public Boolean getRemoteForced() {
 		return remoteForced;
 	}
 
@@ -105,7 +102,7 @@ public class DoubleBitBinaryInputMessage implements DeviceMessage {
 		this.remoteForced = remoteForced;
 	}
 
-	public Boolean isCommunicationsLost() {
+	public Boolean getCommunicationsLost() {
 		return communicationsLost;
 	}
 
@@ -161,7 +158,7 @@ public class DoubleBitBinaryInputMessage implements DeviceMessage {
 		this.device = device;
 	}
 
-	public Boolean isTriggerEventOnChange() {
+	public Boolean getTriggerEventOnChange() {
 		return triggerEventOnChange;
 	}
 

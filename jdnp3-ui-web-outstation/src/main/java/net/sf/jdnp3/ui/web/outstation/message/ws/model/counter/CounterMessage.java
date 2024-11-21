@@ -24,7 +24,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
 public class CounterMessage implements DeviceMessage {
-	private String type = "counterPoInteger";
+	private String type = "counterPoint";
 	private long index = 0;
 	private String site = "";
 	private String device = "";
@@ -58,7 +58,7 @@ public class CounterMessage implements DeviceMessage {
 		this.index = index;
 	}
 
-	public Boolean isOnline() {
+	public Boolean getOnline() {
 		return online;
 	}
 
@@ -66,7 +66,7 @@ public class CounterMessage implements DeviceMessage {
 		this.online = online;
 	}
 
-	public Boolean isRestart() {
+	public Boolean getRestart() {
 		return restart;
 	}
 
@@ -74,7 +74,7 @@ public class CounterMessage implements DeviceMessage {
 		this.restart = restart;
 	}
 
-	public Boolean isLocalForced() {
+	public Boolean getLocalForced() {
 		return localForced;
 	}
 
@@ -82,7 +82,7 @@ public class CounterMessage implements DeviceMessage {
 		this.localForced = localForced;
 	}
 
-	public Boolean isRemoteForced() {
+	public Boolean getRemoteForced() {
 		return remoteForced;
 	}
 
@@ -90,7 +90,7 @@ public class CounterMessage implements DeviceMessage {
 		this.remoteForced = remoteForced;
 	}
 
-	public Boolean isCommunicationsLost() {
+	public Boolean getCommunicationsLost() {
 		return communicationsLost;
 	}
 
@@ -138,7 +138,7 @@ public class CounterMessage implements DeviceMessage {
 		this.value = value;
 	}
 
-	public Boolean isRollover() {
+	public Boolean getRollover() {
 		return rollover;
 	}
 
@@ -146,7 +146,7 @@ public class CounterMessage implements DeviceMessage {
 		this.rollover = rollover;
 	}
 
-	public Boolean isDiscontinuity() {
+	public Boolean getDiscontinuity() {
 		return discontinuity;
 	}
 
@@ -170,7 +170,7 @@ public class CounterMessage implements DeviceMessage {
 		this.device = device;
 	}
 
-	public Boolean isTriggerEventOnChange() {
+	public Boolean getTriggerEventOnChange() {
 		return triggerEventOnChange;
 	}
 

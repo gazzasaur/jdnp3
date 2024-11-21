@@ -16,15 +16,23 @@
 package net.sf.jdnp3.dnp3.service.outstation.core;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectTypeEncoderConstants.OBJECT_TYPE_ENCODERS;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_EVENT_ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_EVENT_GROUP;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_STATIC_ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_STATIC_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_EVENT_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_STATIC_GROUP;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_EVENT_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_EVENT_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_STATIC_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_STATIC_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_EVENT_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_STATIC_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.COUNTER_EVENT_GROUP;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.COUNTER_STATIC_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.COUNTER_STATIC_GROUP;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.DOUBLE_BIT_BINARY_INPUT_EVENT_ANY;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.DOUBLE_BIT_BINARY_INPUT_STATIC_ANY;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,6 +84,8 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.Applicat
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoderImpl;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputEventObjectInstance;
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogOutputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogOutputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputEventObjectInstance;
@@ -156,6 +166,9 @@ public class OutstationFactory {
 		adaptors.add(new StaticReadRequestAdaptor<>(COUNTER_STATIC_GROUP, CounterStaticObjectInstance.class));
 		adaptors.add(new EventReadRequestAdaptor<>(COUNTER_EVENT_GROUP, CounterEventObjectInstance.class));
 
+		adaptors.add(new StaticReadRequestAdaptor<>(ANALOG_INPUT_STATIC_GROUP, AnalogInputStaticObjectInstance.class));
+		adaptors.add(new EventReadRequestAdaptor<>(ANALOG_INPUT_EVENT_GROUP, AnalogInputEventObjectInstance.class));
+
 		adaptors.add(new StaticReadRequestAdaptor<>(ANALOG_OUTPUT_STATIC_GROUP, AnalogOutputStaticObjectInstance.class));
 		adaptors.add(new EventReadRequestAdaptor<>(ANALOG_OUTPUT_EVENT_GROUP, AnalogOutputEventObjectInstance.class));
 
@@ -184,7 +197,15 @@ public class OutstationFactory {
 	public void addStandardObjectTypeDecoders() {
 		decoders.add(new BinaryInputStaticFlagsObjectTypeDecoder());
 		decoders.add(new DoubleBitBinaryInputStaticFlagsObjectTypeDecoder());
+		// TODO Ensure adaptions layers exist for these.
 		decoders.add(new NoDataObjectTypeDecoder(BINARY_INPUT_STATIC_ANY));
+		decoders.add(new NoDataObjectTypeDecoder(BINARY_INPUT_EVENT_ANY));
+		decoders.add(new NoDataObjectTypeDecoder(DOUBLE_BIT_BINARY_INPUT_STATIC_ANY));
+		decoders.add(new NoDataObjectTypeDecoder(DOUBLE_BIT_BINARY_INPUT_EVENT_ANY));
+		decoders.add(new NoDataObjectTypeDecoder(ANALOG_INPUT_STATIC_ANY));
+		decoders.add(new NoDataObjectTypeDecoder(ANALOG_INPUT_EVENT_ANY));
+		decoders.add(new NoDataObjectTypeDecoder(COUNTER_STATIC_ANY));
+		decoders.add(new NoDataObjectTypeDecoder(COUNTER_STATIC_ANY));
 		decoders.add(new Class0ObjectTypeDecoder());
 		decoders.add(new Class1ObjectTypeDecoder());
 		decoders.add(new Class2ObjectTypeDecoder());

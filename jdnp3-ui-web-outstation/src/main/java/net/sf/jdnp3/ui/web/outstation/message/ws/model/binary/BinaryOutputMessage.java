@@ -29,7 +29,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StatusCode;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
 public class BinaryOutputMessage implements DeviceMessage {
-	private String type = "binaryOutputPoInteger";
+	private String type = "binaryOutputPoint";
 	private long index = 0;
 	private String site = "";
 	private String device = "";
@@ -74,7 +74,7 @@ public class BinaryOutputMessage implements DeviceMessage {
 		this.index = index;
 	}
 	
-	public Boolean isActive() {
+	public Boolean getActive() {
 		return active;
 	}
 
@@ -82,7 +82,7 @@ public class BinaryOutputMessage implements DeviceMessage {
 		this.active = active;
 	}
 
-	public Boolean isOnline() {
+	public Boolean getOnline() {
 		return online;
 	}
 
@@ -90,7 +90,7 @@ public class BinaryOutputMessage implements DeviceMessage {
 		this.online = online;
 	}
 
-	public Boolean isRestart() {
+	public Boolean getRestart() {
 		return restart;
 	}
 
@@ -98,7 +98,7 @@ public class BinaryOutputMessage implements DeviceMessage {
 		this.restart = restart;
 	}
 
-	public Boolean isLocalForced() {
+	public Boolean getLocalForced() {
 		return localForced;
 	}
 
@@ -106,7 +106,7 @@ public class BinaryOutputMessage implements DeviceMessage {
 		this.localForced = localForced;
 	}
 
-	public Boolean isRemoteForced() {
+	public Boolean getRemoteForced() {
 		return remoteForced;
 	}
 
@@ -114,7 +114,7 @@ public class BinaryOutputMessage implements DeviceMessage {
 		this.remoteForced = remoteForced;
 	}
 
-	public Boolean isCommunicationsLost() {
+	public Boolean getCommunicationsLost() {
 		return communicationsLost;
 	}
 
@@ -218,7 +218,7 @@ public class BinaryOutputMessage implements DeviceMessage {
 		this.commandEventType = commandEventType;
 	}
 
-	public Boolean isAutoUpdateOnSuccess() {
+	public Boolean getAutoUpdateOnSuccess() {
 		return autoUpdateOnSuccess;
 	}
 
@@ -250,7 +250,7 @@ public class BinaryOutputMessage implements DeviceMessage {
 		this.device = device;
 	}
 
-	public Boolean isTriggerEventOnChange() {
+	public Boolean getTriggerEventOnChange() {
 		return triggerEventOnChange;
 	}
 

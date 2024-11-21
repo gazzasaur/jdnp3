@@ -15,11 +15,9 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler.analog;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
