@@ -67,7 +67,6 @@ public class StatefulDataLinkInterceptor implements DataLinkInterceptor {
             dataLinkLayer.sendData(messageProperties, responseFrame);
             return;
         } else if (messageProperties.isPrimary() && !frame.getDataLinkFrameHeader().isFcvDfc() && frame.getDataLinkFrameHeader().getFunctionCode() == FunctionCode.REQUEST_LINK_STATUS) {
-            expectedFrameCheckBitState.put(messageProperties.getSourceAddress(), true);
             dataLinkFrameHeader.setFunctionCode(FunctionCode.LINK_STATUS);
             dataLinkFrameHeader.setDirection(frame.getDataLinkFrameHeader().getDirection() == MASTER_TO_OUTSTATION ? OUTSTATION_TO_MASTER : MASTER_TO_OUTSTATION);
             dataLinkLayer.sendData(messageProperties, responseFrame);
