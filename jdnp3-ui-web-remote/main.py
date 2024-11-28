@@ -121,6 +121,16 @@ outstation.set_internal_indicator("device restart", True)
 outstation.wait_for_internal_indicator("device restart", True)
 control.start_data_link("20000")
 
+# Create another RTU on the same datalink
+control.createOutstation('muffinFactory', 'Muffin Factory', 'Factory Floor', 4)
+control.bindOutstation('Muffin Factory', 'Factory Floor', 4, "20000")
+
+outstation = jdnp3.device.Outstation(HOST_URL, "Muffin Factory", "Factory Floor")
+outstation.set_binary_input(10, 'active', True)
+outstation.wait_for_binary_input(10, 'active', True)
+outstation.set_binary_input(10, 'active', False)
+outstation.wait_for_binary_input(10, 'active', False)
+
 ###
 
 # A global or device specific websocket may also be created for realtime updates.

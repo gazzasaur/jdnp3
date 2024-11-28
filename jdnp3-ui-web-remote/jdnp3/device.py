@@ -26,7 +26,7 @@ class Outstation:
         self.set({'type': 'internalIndicator', 'attribute': field, 'value': value})
 
     def get_analog_input(self, index, *args):
-        data = self.get()['analogInputPoints'][int(index)]
+        data = self.get_point('analogInputPoints', int(index))
         return self.get_attribute(data, *args);
 
     def wait_for_analog_input(self, index, *args):
@@ -41,12 +41,12 @@ class Outstation:
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
 
     def set_analog_input(self, index, *args):
-        data = self.get()['analogInputPoints'][int(index)]
+        data = self.get_point('analogInputPoints', int(index))
         self.set_attribute(data, *args)
         self.set(data)
 
     def get_analog_output(self, index, *args):
-        data = self.get()['analogOutputPoints'][int(index)]
+        data = self.get_point('analogOutputPoints', int(index))
         return self.get_attribute(data, *args);
 
     def wait_for_analog_output(self, index, *args):
@@ -61,12 +61,12 @@ class Outstation:
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
 
     def set_analog_output(self, index, *args):
-        data = self.get()['analogOutputPoints'][int(index)]
+        data = self.get_point('analogOutputPoints', int(index))
         self.set_attribute(data, *args)
         self.set(data)
 
     def get_binary_input(self, index, *args):
-        data = self.get()['binaryInputPoints'][int(index)]
+        data = self.get_point('binaryInputPoints', int(index))
         return self.get_attribute(data, *args);
     
     def wait_for_binary_input(self, index, *args):
@@ -79,14 +79,22 @@ class Outstation:
             return is_equal(self.get_binary_input(int(index), *args), value)
         if not jdnp3.control.wait_for(func, timeout=WAIT_TIMEOUT):
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
-        
+
+    def create_or_set_binary_input(self, index, *args):
+        self.set({
+            'site': 'Pump Station 1',
+            'device': 'Pump 1',
+            'index': 100,
+            'type': 'binaryInputPoint',
+        })
+
     def set_binary_input(self, index, *args):
-        data = self.get()['binaryInputPoints'][int(index)]
+        data = self.get_point('binaryInputPoints', int(index))
         self.set_attribute(data, *args)
         self.set(data)
 
     def get_double_bit_binary_input(self, index, *args):
-        data = self.get()['doubleBitBinaryInputPoints'][int(index)]
+        data = self.get_point('doubleBitBinaryInputPoints', int(index))
         return self.get_attribute(data, *args);
     
     def wait_for_double_bit_binary_input(self, index, *args):
@@ -101,12 +109,12 @@ class Outstation:
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
         
     def set_double_bit_binary_input(self, index, *args):
-        data = self.get()['doubleBitBinaryInputPoints'][int(index)]
+        data = self.get_point('doubleBitBinaryInputPoints', int(index))
         self.set_attribute(data, *args)
         self.set(data)
 
     def get_binary_output(self, index, *args):
-        data = self.get()['doubleBitBinaryOutputPoints'][int(index)]
+        data = self.get_point('binaryInputPoints', int(index))
         return self.get_attribute(data, *args);
     
     def wait_for_binary_output(self, index, *args):
@@ -121,12 +129,12 @@ class Outstation:
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
         
     def set_binary_output(self, index, *args):
-        data = self.get()['binaryOutputPoints'][int(index)]
+        data = self.get_point('binaryOutputPoints', int(index))
         self.set_attribute(data, *args)
         self.set(data)
 
     def get_counter(self, index, *args):
-        data = self.get()['counterPoints'][int(index)]
+        data = self.get_point('counterPoints', int(index))
         return self.get_attribute(data, *args);
     
     def wait_for_counter(self, index, *args):
@@ -141,7 +149,7 @@ class Outstation:
             raise RuntimeError('Timeout while waiting for value %s.' % (value))
         
     def set_counter(self, index, *args):
-        data = self.get()['counterPoints'][int(index)]
+        data = self.get_point('counterPoints', int(index))
         self.set_attribute(data, *args)
         self.set(data)
 
@@ -151,6 +159,13 @@ class Outstation:
         if (len(args) > 0):
             message['timestamp'] = args[0]
         self.control.sendMessage(self.site, self.device, message)
+
+    def get_point(self, point_type, index):
+        data = self.get()
+        candidates = [candidate for candidate in data[point_type] if candidate['index'] == index]
+        if len(candidates) == 0:
+            raise Exception('No %s found with an index of %s' % (point_type, index))
+        return candidates[0]
         
     def get(self):
         return self.control.getOutstation(self.site, self.device)
