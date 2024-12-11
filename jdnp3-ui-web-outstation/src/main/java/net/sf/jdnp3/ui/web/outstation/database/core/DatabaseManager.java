@@ -48,6 +48,7 @@ public class DatabaseManager {
 	}
 
 	public void addAnalogInputDataPoints(String... names) {
+		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			long nextIndex = database.getAnalogInputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
@@ -56,13 +57,15 @@ public class DatabaseManager {
 				dataPoint.setName(name);
 				database.setAnalogInputDataPoint(dataPoint);
 			}
+			snapshotDatabaseListeners.addAll(databaseListeners);
 		}
-		for (DatabaseListener databaseListener : databaseListeners) {
+		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.modelChanged();
 		}
 	}
 
 	public void addAnalogOutputDataPoints(String... names) {
+		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			long nextIndex = database.getAnalogOutputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
@@ -71,13 +74,15 @@ public class DatabaseManager {
 				dataPoint.setName(name);
 				database.setAnalogOutputDataPoint(dataPoint);
 			}
+			snapshotDatabaseListeners.addAll(databaseListeners);
 		}
-		for (DatabaseListener databaseListener : databaseListeners) {
+		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.modelChanged();
 		}
 	}
 
 	public void addBinaryInputDataPoints(String... names) {
+		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			long nextIndex = database.getBinaryInputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
@@ -86,13 +91,15 @@ public class DatabaseManager {
 				dataPoint.setName(name);
 				database.setBinaryInputDataPoint(dataPoint);
 			}
+			snapshotDatabaseListeners.addAll(databaseListeners);
 		}
-		for (DatabaseListener databaseListener : databaseListeners) {
+		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.modelChanged();
 		}
 	}
 	
 	public void addBinaryOutputDataPoints(String... names) {
+		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			long nextIndex = database.getBinaryOutputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
@@ -101,13 +108,15 @@ public class DatabaseManager {
 				dataPoint.setName(name);
 				database.setBinaryOutputDataPoint(dataPoint);
 			}
+			snapshotDatabaseListeners.addAll(databaseListeners);
 		}
-		for (DatabaseListener databaseListener : databaseListeners) {
+		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.modelChanged();
 		}
 	}
 
 	public void addDoubleBitBinaryInputDataPoints(String... names) {
+		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			long nextIndex = database.getDoubleBitBinaryInputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
@@ -116,13 +125,15 @@ public class DatabaseManager {
 				dataPoint.setName(name);
 				database.setDoubleBitBinaryInputDataPoint(dataPoint);
 			}
+			snapshotDatabaseListeners.addAll(databaseListeners);
 		}
-		for (DatabaseListener databaseListener : databaseListeners) {
+		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.modelChanged();
 		}
 	}
 	
 	public void addCounterDataPoints(String... names) {
+		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			long nextIndex = database.getCounterDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(-1);
 			for (String name : names) {
@@ -131,8 +142,9 @@ public class DatabaseManager {
 				dataPoint.setName(name);
 				database.setCounterDataPoint(dataPoint);
 			}
+			snapshotDatabaseListeners.addAll(databaseListeners);
 		}
-		for (DatabaseListener databaseListener : databaseListeners) {
+		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.modelChanged();
 		}
 	}
@@ -217,22 +229,26 @@ public class DatabaseManager {
 
 	public void setInternalIndicatorDataPoint(InternalIndicatorsDataPoint dataPoint) {
 		try {
+			List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 			synchronized (database) {
 				BeanUtils.copyProperties(database.getIndicatorsDataPoint(), dataPoint);
+				snapshotDatabaseListeners.addAll(databaseListeners);
+			}
+			for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
+				databaseListener.valueChanged(dataPoint);
 			}
 		} catch (Exception e) {
 			logger.error("Cannot set IIN bits.", e);
 		}
-		for (DatabaseListener databaseListener : databaseListeners) {
-			databaseListener.valueChanged(dataPoint);
-		}
 	}
 	
 	public void setAnalogInputDataPoint(AnalogInputDataPoint analogDataPoint) {
+		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			database.setAnalogInputDataPoint(this.cloneObject(analogDataPoint, AnalogInputDataPoint.class));
+			snapshotDatabaseListeners.addAll(databaseListeners);
 		}
-		for (DatabaseListener databaseListener : databaseListeners) {
+		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.valueChanged(analogDataPoint);
 		}
 		if (analogDataPoint.isTriggerEventOnChange()) {
@@ -241,10 +257,12 @@ public class DatabaseManager {
 	}
 	
 	public void setAnalogOutputDataPoint(AnalogOutputDataPoint analogDataPoint) {
+		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			database.setAnalogOutputDataPoint(this.cloneObject(analogDataPoint, AnalogOutputDataPoint.class));
+			snapshotDatabaseListeners.addAll(databaseListeners);
 		}
-		for (DatabaseListener databaseListener : databaseListeners) {
+		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.valueChanged(analogDataPoint);
 		}
 		if (analogDataPoint.isTriggerEventOnChange()) {
@@ -253,10 +271,12 @@ public class DatabaseManager {
 	}
 	
 	public void setBinaryInputDataPoint(BinaryInputDataPoint binaryDataPoint) {
+		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			database.setBinaryInputDataPoint(this.cloneObject(binaryDataPoint, BinaryInputDataPoint.class));
+			snapshotDatabaseListeners.addAll(databaseListeners);
 		}
-		for (DatabaseListener databaseListener : databaseListeners) {
+		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.valueChanged(binaryDataPoint);
 		}
 		if (binaryDataPoint.isTriggerEventOnChange()) {
@@ -268,10 +288,12 @@ public class DatabaseManager {
 		if ((binaryDataPoint.getValue()) < 0 || (binaryDataPoint.getValue() > 3)) {
 			throw new IllegalArgumentException("Unsupported Double Bit Binary Value: " + binaryDataPoint.getValue());
 		}
+		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			database.setDoubleBitBinaryInputDataPoint(this.cloneObject(binaryDataPoint, DoubleBitBinaryInputDataPoint.class));
+			snapshotDatabaseListeners.addAll(databaseListeners);
 		}
-		for (DatabaseListener databaseListener : databaseListeners) {
+		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.valueChanged(binaryDataPoint);
 		}
 		if (binaryDataPoint.isTriggerEventOnChange()) {
@@ -280,10 +302,12 @@ public class DatabaseManager {
 	}
 
 	public void setBinaryOutputDataPoint(BinaryOutputDataPoint binaryDataPoint) {
+		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			database.setBinaryOutputDataPoint(this.cloneObject(binaryDataPoint, BinaryOutputDataPoint.class));
+			snapshotDatabaseListeners.addAll(databaseListeners);
 		}
-		for (DatabaseListener databaseListener : databaseListeners) {
+		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.valueChanged(binaryDataPoint);
 		}
 		if (binaryDataPoint.isTriggerEventOnChange()) {
@@ -292,10 +316,12 @@ public class DatabaseManager {
 	}
 	
 	public void setCounterDataPoint(CounterDataPoint dataPoint) {
+		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			database.setCounterDataPoint(this.cloneObject(dataPoint, CounterDataPoint.class));
+			snapshotDatabaseListeners.addAll(databaseListeners);
 		}
-		for (DatabaseListener databaseListener : databaseListeners) {
+		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.valueChanged(dataPoint);
 		}
 		if (dataPoint.isTriggerEventOnChange()) {
@@ -346,10 +372,12 @@ public class DatabaseManager {
 	}
 
 	public void clear() {
+		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			database.clear();
+			snapshotDatabaseListeners.addAll(databaseListeners);
 		}
-		for (DatabaseListener databaseListener : databaseListeners) {
+		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.modelChanged();
 		}
 	}

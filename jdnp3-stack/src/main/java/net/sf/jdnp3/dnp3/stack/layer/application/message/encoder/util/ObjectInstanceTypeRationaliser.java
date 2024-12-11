@@ -21,6 +21,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputEventObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogOutputStaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInputEventObjectInstance;
@@ -43,6 +44,7 @@ public class ObjectInstanceTypeRationaliser {
 		this.put(DoubleBitBinaryInputEventObjectInstance.class, new DoubleBitBinaryInputEventTypeRationaliserHelper());
 		this.put(BinaryOutputStaticObjectInstance.class, new BinaryOutputStaticTypeRationaliserHelper());
 		this.put(AnalogInputStaticObjectInstance.class, new AnalogInputStaticTypeRationaliserHelper());
+		this.put(AnalogInputEventObjectInstance.class, new AnalogInputEventTypeRationaliserHelper());
 		this.put(AnalogOutputStaticObjectInstance.class, new AnalogOutputStaticTypeRationaliserHelper());
 		this.put(CounterStaticObjectInstance.class, new CounterStaticTypeRationaliserHelper());
 		this.put(TimeDelayObjectInstance.class, new TimeDelayTypeRationaliserHelper());

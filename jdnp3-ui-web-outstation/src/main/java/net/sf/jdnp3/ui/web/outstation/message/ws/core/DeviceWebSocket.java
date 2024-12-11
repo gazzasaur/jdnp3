@@ -18,10 +18,12 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.core;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import javax.websocket.EncodeException;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -51,8 +53,8 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.ModelChangedMessag
 
 @ServerEndpoint(value="/ws/device", encoders=MessageEncoder.class, decoders=GenericMessageDecoder.class, configurator=DeviceWebSocketConfigurator.class)
 public class DeviceWebSocket implements Messanger, DatabaseListener {
-	private Logger logger = LoggerFactory.getLogger(DeviceWebSocket.class);
-	private Executor executor = Executors.newSingleThreadExecutor();
+	private static final Logger LOGGER = LoggerFactory.getLogger(DeviceWebSocket.class);
+	private static final Executor EXECUTOR = Executors.newSingleThreadExecutor();
 	
 	private Session session;
 
@@ -89,16 +91,36 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
     
     @OnError
     public void onError(Session session, Throwable throwable) {
-    	logger.error("Websocket Error", throwable);
+    	LOGGER.error("Websocket Error", throwable);
     	DeviceProvider.removeDatabaseListener(station, device, this);
     }
     
     public void sendMessage(Message message) {
-    	session.getAsyncRemote().sendObject(message);
+		if (session.isOpen()) {
+			try {
+				session.getAsyncRemote().sendObject(message);
+			} catch(Exception e) {
+				try {
+					session.close();
+				} catch (Exception e1) {
+				}
+				this.onClose(session);
+			}
+		}
     }
 
 	public void modelChanged() {
-		session.getAsyncRemote().sendObject(new ModelChangedMessage());
+		if (session.isOpen()) {
+			try {
+				session.getAsyncRemote().sendObject(new ModelChangedMessage());
+			} catch (Exception e) {
+				try {
+					session.close();
+				} catch (IOException e1) {
+				}
+				this.onClose(session);
+			}
+		}
 	}
 
 	public void valueChanged(DataPoint dataPoint) {
@@ -114,26 +136,26 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 				}
 				
 				BeanUtils.copyProperties(message, dataPoint);
-				executor.execute(new Runnable() {
+				EXECUTOR.execute(new Runnable() {
 					public void run() {
 						try {
-							session.getBasicRemote().sendObject(message);
+							session.getAsyncRemote().sendObject(message);
 						} catch (Exception e) {
-							logger.error("Failed to send message. Closing Web Socket " + session, e);
+							LOGGER.error("Failed to send message. Closing Web Socket " + session, e);
 							try {
 								session.close();
 							} catch (Exception wce) {
-								logger.warn("Failed to close web socket.", e);
+								LOGGER.warn("Failed to close web socket.", e);
 							}
 							DeviceWebSocket.this.onClose(session);
 						}
 					}
 				});
 			} catch (Exception e) {
-				logger.error("Cannot create message.", e);
+				LOGGER.error("Cannot create message.", e);
 			}
 		} else {
-			logger.warn(format("Data point type %s has not been mapped to a message.", dataPoint.getClass()));
+			LOGGER.warn(format("Data point type %s has not been mapped to a message.", dataPoint.getClass()));
 		}
 	}
 
@@ -145,7 +167,7 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 			message.setOutstationBindings(outstationBindings);
 			session.getAsyncRemote().sendObject(message);
 		} catch (Exception e) {
-			logger.error("Cannot create message.", e);
+			LOGGER.error("Cannot create message.", e);
 		}
 	}
 }
