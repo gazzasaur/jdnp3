@@ -17,7 +17,9 @@ package net.sf.jdnp3.dnp3.stack.layer.application.service;
 
 import static java.lang.String.format;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -30,8 +32,8 @@ public class OutstationEventQueue implements ConfirmationListener {
 	private Logger logger = LoggerFactory.getLogger(OutstationEventQueue.class);
 	
 	private InternalStatusProvider internalStatusProvider = null;
-	private List<EventObjectInstance> events = new ArrayList<>();
-	private List<EventObjectInstance> pendingConfirmation = new ArrayList<>();
+	private List<EventObjectInstance> events = new LinkedList<>();
+	private List<EventObjectInstance> pendingConfirmation = new LinkedList<>();
 	
 	public synchronized void setInternalStatusProvider(InternalStatusProvider internalStatusProvider) {
 		this.internalStatusProvider = internalStatusProvider;
