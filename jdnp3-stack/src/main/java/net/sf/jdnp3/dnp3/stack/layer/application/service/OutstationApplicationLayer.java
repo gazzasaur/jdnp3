@@ -23,14 +23,22 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.Fun
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.RESPONSE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.SELECT;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_EVENT_RELATIVE_TIME;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CLASS_1;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CLASS_2;
+import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CLASS_3;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,6 +69,7 @@ import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class OutstationApplicationLayer implements ApplicationLayer {
 	private Logger logger = LoggerFactory.getLogger(OutstationApplicationLayer.class);
+	private static final List<ObjectType> RELATIVE_TIME_TYPES = Arrays.asList(BINARY_INPUT_EVENT_RELATIVE_TIME);
 	
 	private int mtu = 2048;
 	private int address = 2;
@@ -80,49 +89,171 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	private int expectedConfirmationSeqNr = -1;
 	private LinkedList<ObjectInstance> remainingObjects = new LinkedList<ObjectInstance>();
 
-	public DataLinkLayer getDataLinkLayer() {
+	private int nextUnsolicitedSeqNr = 0;
+	private int expectedUnsolicitedSeqNr = -1;
+	private boolean unsolicitedEnabled = false;
+	private volatile MessageProperties unsolicitedMessageProperties = null;
+	private List<EventObjectInstance> pendingUnsolicitedEvents = new ArrayList<>();
+
+	private static final ScheduledExecutorService UNSOLICITED_THREAD_POOL = Executors.newSingleThreadScheduledExecutor();
+
+	public OutstationApplicationLayer() {
+		UNSOLICITED_THREAD_POOL.schedule(() -> this.sendUnsolicited(), 5000 + RandomUtils.secure().randomInt(0, 1000), TimeUnit.MILLISECONDS);
+	}
+	
+	public synchronized DataLinkLayer getDataLinkLayer() {
 		return dataLinkLayer;
 	}
 
-	public void addApplicationTransport(ApplicationTransport applicationTransport) {
+	public synchronized void addApplicationTransport(ApplicationTransport applicationTransport) {
 		this.applicationTransport = applicationTransport;
 	}
 	
-	public void removeApplicationTransport(ApplicationTransport applicationTransport) {
+	public synchronized void removeApplicationTransport(ApplicationTransport applicationTransport) {
 		this.applicationTransport = null;
 	}
 	
-	public void addRequestHandler(OutstationApplicationRequestHandler outstationRequestHandler) {
+	public synchronized void addRequestHandler(OutstationApplicationRequestHandler outstationRequestHandler) {
 		outstationRequestHandlers.add(outstationRequestHandler);
 	}
 	
-	public void addDefaultObjectTypeMapping(Class<? extends ObjectInstance> clazz, ObjectType defaultMapping) {
+	public synchronized void addDefaultObjectTypeMapping(Class<? extends ObjectInstance> clazz, ObjectType defaultMapping) {
 		defaultObjectTypeMapping.addMapping(clazz, defaultMapping);
 	}
 	
-	public void addObjectFragmentPacker(ObjectFragmentPacker packer) {
+	public synchronized void addObjectFragmentPacker(ObjectFragmentPacker packer) {
 		packers.add(packer);
 	}
 	
-	public OutstationEventQueue getOutstationEventQueue() {
+	public synchronized OutstationEventQueue getOutstationEventQueue() {
 		return eventQueue;
 	}
 	
-	public void setEncoder(ApplicationFragmentResponseEncoder encoder) {
+	public synchronized void setEncoder(ApplicationFragmentResponseEncoder encoder) {
 		this.encoder = encoder;
 	}
 	
-	public void setDecoder(ApplicationFragmentRequestDecoder decoder) {
+	public synchronized void setDecoder(ApplicationFragmentRequestDecoder decoder) {
 		this.decoder = decoder;
 	}
 	
-	public void setInternalStatusProvider(InternalStatusProvider internalStatusProvider) {
+	public synchronized void setInternalStatusProvider(InternalStatusProvider internalStatusProvider) {
 		this.internalStatusProvider = internalStatusProvider;
 		eventQueue.setInternalStatusProvider(internalStatusProvider);
 	}
+
+	public synchronized void sendUnsolicited() {
+		if (!unsolicitedEnabled) {
+			expectedUnsolicitedSeqNr = -1;
+			for (EventObjectInstance event : pendingUnsolicitedEvents) {
+				eventQueue.cancelled(event);
+			}
+			pendingUnsolicitedEvents.clear();
+			return;
+		}
+
+		if (expectedUnsolicitedSeqNr >= 0) {
+			// Timed out
+			expectedConfirmationSeqNr = -1;
+			nextUnsolicitedSeqNr += 1;
+			UNSOLICITED_THREAD_POOL.schedule(() -> this.sendUnsolicited(), 1000 + RandomUtils.secure().randomInt(0, 1000), TimeUnit.MILLISECONDS);
+			return;
+		}
+
+		MessageProperties returnMessageProperties = unsolicitedMessageProperties;
+		if (returnMessageProperties == null) {
+			return;
+		}
+
+		List<ObjectInstance> responseObjects = new ArrayList<>();
+		List<ObjectFragment> objectFragments = Arrays.asList(new ObjectFragment() {{
+			getObjectFragmentHeader().setObjectType(CLASS_1);
+		}}, new ObjectFragment() {{
+			getObjectFragmentHeader().setObjectType(CLASS_2);
+		}}, new ObjectFragment() {{
+			getObjectFragmentHeader().setObjectType(CLASS_3);
+		}});
+
+		for (ObjectFragment objectFragment : objectFragments) {
+			for (OutstationApplicationRequestHandler handler : outstationRequestHandlers) {
+				if (handler.canHandle(FunctionCode.READ, objectFragment)) {
+					List<ObjectInstance> localResponse = new ArrayList<>();
+					handler.doRequest(FunctionCode.READ, eventQueue, objectFragment, localResponse);
+					responseObjects.addAll(localResponse);
+					break;
+				}
+			}
+		}
+
+		LinkedList<ObjectInstance> replyObjects = new LinkedList<ObjectInstance>();
+
+		ApplicationFragmentResponse response = new ApplicationFragmentResponse();
+		ApplicationFragmentResponseHeader applicationResponseHeader = response.getHeader();
+		applicationResponseHeader.setFunctionCode(RESPONSE);
+		applicationResponseHeader.getApplicationControl().setConfirmationRequired(false);
+		applicationResponseHeader.getApplicationControl().setFirstFragmentOfMessage(true);
+		applicationResponseHeader.getApplicationControl().setFinalFragmentOfMessage(true);
+		applicationResponseHeader.getApplicationControl().setUnsolicitedResponse(true);
+		applicationResponseHeader.getApplicationControl().setSequenceNumber(nextUnsolicitedSeqNr);
+		
+		CtoObjectInstance ctoObjectInstance = null;
+		for (ObjectInstance objectInstance : responseObjects) {
+			if (objectInstance instanceof EventObjectInstance) {
+				applicationResponseHeader.getApplicationControl().setConfirmationRequired(true);
+				EventObjectInstance eventObjectInstance = (EventObjectInstance) objectInstance;
+				if (RELATIVE_TIME_TYPES.contains(eventObjectInstance.getRequestedType()) && (ctoObjectInstance == null || Math.abs(ctoObjectInstance.getTimestamp() - eventObjectInstance.getTimestamp()) > 32767)) {
+					// FIXME Possibly consider unsynchronised.
+					SynchronisedCtoObjectInstance newCtoObjectInstance = new SynchronisedCtoObjectInstance();
+					newCtoObjectInstance.setTimestamp(eventObjectInstance.getTimestamp());
+					replyObjects.add(newCtoObjectInstance);
+					ctoObjectInstance = newCtoObjectInstance;
+				}
+				
+				pendingUnsolicitedEvents.add((EventObjectInstance) objectInstance);
+			}
+			replyObjects.add(objectInstance);
+		}
+		
+		ObjectFragmentPackerContext context = new ObjectFragmentPackerContext();
+		context.setFreeSpace(2048 - 32); // Give some room to breath
+		context.setTimeReference(0);
+		context.setFunctionCode(FunctionCode.UNSOLICITED_RESPONSE);
+		CtoObjectInstance previousTimeReference = null;
+
+		while (replyObjects.size() > 0) {
+			if (replyObjects.get(0) instanceof CtoObjectInstance) {
+				previousTimeReference = (CtoObjectInstance)replyObjects.get(0);
+				context.setTimeReference(previousTimeReference.getTimestamp());
+			}
+			
+			ObjectFragmentPacker packer = null;
+			// TODO Need to consider free space for all packers.
+			for (ObjectFragmentPacker objectFragmentPacker : packers) {
+				if (objectFragmentPacker.canPack(replyObjects.get(0).getClass())){
+					packer = objectFragmentPacker;
+				}
+			}
+			if (packer == null) {
+				throw new IllegalStateException("No packer found for type: " + replyObjects.get(0).getClass());
+			}
+			
+			ObjectFragmentPackerResult result = packer.pack(context, replyObjects);
+			if (result.hasObjectFragment()) {
+				response.addObjectFragment(result.getObjectFragment());
+			}
+			if (result.isAtCapacity()) {
+				UNSOLICITED_THREAD_POOL.schedule(() -> this.sendUnsolicited(), 1000 + RandomUtils.secure().randomInt(0, 5000), TimeUnit.MILLISECONDS);
+				throw new RuntimeException("Unsolicited response cannot be fragmented.");
+			}
+		}
+
+		UNSOLICITED_THREAD_POOL.schedule(() -> this.sendUnsolicited(), 1000 + RandomUtils.secure().randomInt(0, 5000), TimeUnit.MILLISECONDS);
+		trySendData(returnMessageProperties, response);
+	}
 	
-	public void dataReceived(MessageProperties messageProperties, List<Byte> data) {
+	public synchronized void dataReceived(MessageProperties messageProperties, List<Byte> data) {
 		validateState();
+		
 		List<Byte> localData = new ArrayList<>(data);
 		
 		if (!messageProperties.isMaster()) {
@@ -130,6 +261,11 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		}
 		MessageProperties returnMessageProperties = new MessageProperties();
 		boolean broadcast = calculateReturnAddress(messageProperties, returnMessageProperties);
+		if (!broadcast) {
+			MessageProperties updateUnsolicitedMessageProperties = new MessageProperties();
+			calculateReturnAddress(messageProperties, updateUnsolicitedMessageProperties);
+			unsolicitedMessageProperties = updateUnsolicitedMessageProperties;
+		}
 		
 		List<ObjectInstance> responseObjects = new ArrayList<>();
 		
@@ -157,7 +293,19 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			}
 			return;
 		}
-		
+
+		if (request.getHeader().getFunctionCode() == CONFIRM
+			&& request.getHeader().getApplicationControl().isUnsolicitedResponse()
+			&& request.getHeader().getApplicationControl().getSequenceNumber() == expectedUnsolicitedSeqNr) {
+				for (EventObjectInstance eventObjectInstance : pendingUnsolicitedEvents) {
+					eventQueue.confirm(eventObjectInstance);
+				}
+				pendingUnsolicitedEvents.clear();
+				expectedUnsolicitedSeqNr = -1;
+				nextUnsolicitedSeqNr += 1;
+				return;
+		}
+
 		boolean firstFragment = true;
 		if (request.getHeader().getFunctionCode() == CONFIRM
 				&& !remainingObjects.isEmpty()
@@ -165,8 +313,8 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			responseObjects.addAll(remainingObjects);
 			remainingObjects.clear();
 			firstFragment = false;
-		} else if (request.getHeader().getFunctionCode() == CONFIRM) {
-				for (EventObjectInstance eventObjectInstance : pendingEvents) {
+		} else if (request.getHeader().getFunctionCode() == CONFIRM) { // FIXME This should check the sequence number
+			for (EventObjectInstance eventObjectInstance : pendingEvents) {
 				eventQueue.confirm(eventObjectInstance);
 			}
 			pendingEvents.clear();
@@ -239,7 +387,6 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		
 		DefaultObjectTypeMapping mapping = new DefaultObjectTypeMapping();
 		ObjectInstanceTypeRationaliser rationaliser = new ObjectInstanceTypeRationaliser();
-		List<ObjectType> relativeTimeTypes = Arrays.asList(BINARY_INPUT_EVENT_RELATIVE_TIME);
 		
 		for (ObjectInstance objectInstance : responseObjects) {
 			mapping.performMapping(objectInstance);
@@ -255,7 +402,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			if (objectInstance instanceof EventObjectInstance) {
 				applicationResponseHeader.getApplicationControl().setConfirmationRequired(true);
 				EventObjectInstance eventObjectInstance = (EventObjectInstance) objectInstance;
-				if (relativeTimeTypes.contains(eventObjectInstance.getRequestedType()) && (ctoObjectInstance == null || Math.abs(ctoObjectInstance.getTimestamp() - eventObjectInstance.getTimestamp()) > 32767)) {
+				if (RELATIVE_TIME_TYPES.contains(eventObjectInstance.getRequestedType()) && (ctoObjectInstance == null || Math.abs(ctoObjectInstance.getTimestamp() - eventObjectInstance.getTimestamp()) > 32767)) {
 					// FIXME Possibly consider unsynchronised.
 					SynchronisedCtoObjectInstance newCtoObjectInstance = new SynchronisedCtoObjectInstance();
 					newCtoObjectInstance.setTimestamp(eventObjectInstance.getTimestamp());
@@ -349,15 +496,15 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		applicationTransport.sendData(returnMessageProperties, unmodifiableList(encoder.encode(response)));
 	}
 
-	public void setPrimaryAddress(int address) {
+	public synchronized void setPrimaryAddress(int address) {
 		this.address  = address;
 	}
 
-	public int getMtu() {
+	public synchronized int getMtu() {
 		return mtu;
 	}
 
-	public void setMtu(int mtu) {
+	public synchronized void setMtu(int mtu) {
 		this.mtu = mtu;
 	}
 }
