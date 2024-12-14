@@ -5,7 +5,7 @@ This project was migrated from https://sourceforge.net/projects/jdnp3/
 # Running
 To run one of the release versions. Download and extract the archive of your choice.
 
-1. Install JDK 17 or later.
+1. Install JDK 8 or later.
 2. Extract the contents of a release archive.
 3. Change to the newly extracted directory.
 4. Run the outstation with the command below.
