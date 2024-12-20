@@ -24,7 +24,12 @@ import static org.apache.commons.lang3.ArrayUtils.toPrimitive;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.ByteDataOutstationApplicationRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.core.Outstation;
@@ -36,17 +41,13 @@ import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationTransport;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.slf4j.bridge.SLF4JBridgeHandler;
-
 public class CustomTypeIntegrationTest {
 	private Outstation outstation;
 	private String transportData = "";
 	private MessageProperties dummyMessageProperties;
 	
 	private ApplicationTransport mockApplicationTransport = new ApplicationTransport() {
-		public void sendData(MessageProperties messageProperties, List<Byte> data) {
+		public void sendData(MessageProperties messageProperties, Deque<Byte> data) {
 			transportData = printHexBinary(toPrimitive(data.toArray(new Byte[0])));
 		}
 	};
@@ -69,7 +70,7 @@ public class CustomTypeIntegrationTest {
 	
 	@Test
 	public void readAllDefault() {
-		List<Byte> data = asList(toObject(parseHexBinary("C30246011B01290700000000007F0080000000000000000000000000000000000000000000000009004944")));
+		Deque<Byte> data = new ArrayDeque<>(asList(toObject(parseHexBinary("C30246011B01290700000000007F0080000000000000000000000000000000000000000000000009004944"))));
 		outstation.getApplicationLayer().dataReceived(dummyMessageProperties, data);
 		assertThat(transportData, is("C381000046011B01290700000000007F00800000000000000009005065"));
 	}

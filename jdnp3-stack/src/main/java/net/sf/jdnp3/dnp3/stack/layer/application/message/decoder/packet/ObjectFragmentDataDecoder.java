@@ -16,6 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.exception.UnknownObjectException;
@@ -41,7 +42,7 @@ public class ObjectFragmentDataDecoder {
 		itemEnumeratorFactories.add(itemEnumeratorFactory);
 	}
 
-	public void decode(ApplicationFragmentDecoderContext decoderContext, ObjectFragment objectFragment, List<Byte> data) {
+	public void decode(ApplicationFragmentDecoderContext decoderContext, ObjectFragment objectFragment, Deque<Byte> data) {
 		Range range = objectFragment.getObjectFragmentHeader().getRange();
 		PrefixType prefixType = objectFragment.getObjectFragmentHeader().getPrefixType();
 		

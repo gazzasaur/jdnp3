@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.range;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode.VARIABLE_FORMAT_QUALIFIER;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode;
@@ -34,7 +34,7 @@ public class VariableFormatQualifierRangeEncoderHelper implements RangeEncoderHe
 		throw new IllegalArgumentException("The specified size is too large for DNP: " + specificRange.getCount());
 	}
 	
-	public RangeSpecifierCode encode(Range range, int minOctetCount, List<Byte> data) {
+	public RangeSpecifierCode encode(Range range, int minOctetCount, Deque<Byte> data) {
 		VariableFormatQualifierRange specificRange = (VariableFormatQualifierRange) range;
 		RangeSpecifierCode rangeSpecifierCode = this.calculateRangeSpecifierCode(specificRange, minOctetCount);
 		DataUtils.addInteger(specificRange.getCount(), rangeSpecifierCode.getOctetCount(), data);

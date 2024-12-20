@@ -20,14 +20,14 @@ import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkConstants.DNP3
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkFrameUtils.computeControlField;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
 
 public class DataLinkFrameHeaderEncoder {
-	public static void encode(DataLinkFrameHeader dataLinkFrameHeader, List<Byte> data) {
-		List<Byte> buffer = new ArrayList<>();
+	public static void encode(DataLinkFrameHeader dataLinkFrameHeader, Deque<Byte> data) {
+		Deque<Byte> buffer = new ArrayDeque<>();
 		
 		addInteger(DNP3_START_BYTES, 2, buffer);
 		addInteger(dataLinkFrameHeader.getLength(), 1, buffer);

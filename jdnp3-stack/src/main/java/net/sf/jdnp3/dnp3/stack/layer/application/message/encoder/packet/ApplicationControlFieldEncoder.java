@@ -16,12 +16,12 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet;
 
 import java.util.BitSet;
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationControlField;
 
 public class ApplicationControlFieldEncoder {
-	public void encode(ApplicationControlField applicationControlField, List<Byte> data) {
+	public void encode(ApplicationControlField applicationControlField, Deque<Byte> data) {
 		BitSet flags = new BitSet(8);
 		flags.set(7, applicationControlField.isFirstFragmentOfMessage());
 		flags.set(6, applicationControlField.isFinalFragmentOfMessage());

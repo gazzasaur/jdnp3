@@ -16,7 +16,6 @@
 package net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server;
 
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
@@ -35,7 +34,7 @@ public class TcpServerDataLinkServiceConnector {
 			serverSocketChannel.accept();
 		} catch (Exception e) {
 			closeChannel(serverSocketChannel);
-			throw new RuntimeException(e);
+			throw new RuntimeException("Failed to start server", e);
 		}
 		return serverSocketChannel;
 	}
@@ -45,13 +44,6 @@ public class TcpServerDataLinkServiceConnector {
 			channel.close();
 		} catch (Exception e) {
 			logger.error("Cannot close channel.", e);
-		}
-		try {
-			Socket socket = new Socket();
-			socket.connect(channel.socket().getLocalSocketAddress(), 1000);
-			socket.close();
-		} catch (Exception e) {
-			logger.warn("Channel already closed.", e);
 		}
 	}
 	

@@ -15,11 +15,10 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server;
 
-import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.MASTER_TO_OUTSTATION;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Deque;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,7 @@ import net.sf.jdnp3.dnp3.stack.nio.DataPumpListener;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class SocketChannelDataPumpListener implements DataPumpListener {
-	private Logger logger = LoggerFactory.getLogger(SocketChannelDataPumpListener.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SocketChannelDataPumpListener.class);
 	
 	private ChannelId channelId;
 	private ChannelManager channelManager;
@@ -45,6 +44,7 @@ public class SocketChannelDataPumpListener implements DataPumpListener {
 		this.channelId = channelId;
 		this.channelManager = channelManager;
 		this.dataLinkInterceptor = dataLinkInterceptor;
+		dataLinkInterceptor.connected(channelId);
 	}
 	
 	public void connected() {
@@ -52,11 +52,13 @@ public class SocketChannelDataPumpListener implements DataPumpListener {
 
 	public void disconnected() {
 		channelManager.closeChannel(channelId);
+		dataLinkInterceptor.disconnected(channelId);
 	}
 
-	public void dataReceived(List<Byte> data) {
+	public void dataReceived(Deque<Byte> data) {
 		try {
-			logger.debug(format("Data received on channel %s: %s", channelId, DataUtils.toString(data)));
+			LOGGER.debug("Data received on channel {}: {}", channelId, DataUtils.toString(data));
+
 			if (dataLinkDigester.digest(data)) {
 				MessageProperties messageProperties = new MessageProperties();
 				DataLinkFrame dataLinkFrame = dataLinkDigester.getDataLinkFrame();
@@ -66,12 +68,13 @@ public class SocketChannelDataPumpListener implements DataPumpListener {
 				messageProperties.setSourceAddress(dataLinkFrame.getDataLinkFrameHeader().getSource());
 				messageProperties.setDestinationAddress(dataLinkFrame.getDataLinkFrameHeader().getDestination());
 				messageProperties.setMaster(dataLinkFrame.getDataLinkFrameHeader().getDirection().equals(MASTER_TO_OUTSTATION));
+
 				dataLinkInterceptor.receiveData(messageProperties, dataLinkFrame);
-				logger.debug("Frame Received\n" + DataLinkFrameUtils.toString(channelId, dataLinkFrame));
+				LOGGER.debug("Frame Received\n" + DataLinkFrameUtils.toString(channelId, dataLinkFrame));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("Failed to process message.", e);
+			LOGGER.error("Failed to process message.", e);
 		}
 	}
 }

@@ -21,79 +21,173 @@ import static org.apache.commons.lang3.ArrayUtils.toObject;
 
 import java.nio.ByteBuffer;
 import java.util.BitSet;
-import java.util.List;
+import java.util.Deque;
+import java.util.Iterator;
 
 import org.apache.commons.lang3.ArrayUtils;
 
 public class DataUtils {
-	public static void addInteger(long value, int octetCount, List<Byte> data) {
+	// public static void addInteger(long value, int octetCount, List<Byte> data) {
+	// 	byte[] arrayValue = ByteBuffer.allocate(8).putLong(value).array();
+	// 	ArrayUtils.reverse(arrayValue);
+	// 	data.addAll(asList(toObject(arrayValue)).subList(0, octetCount));
+	// }
+
+	// public static long getUnsignedInteger(int index, int octetCount, List<Byte> data) {
+	// 	byte[] rawBuffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	// 	for (int i = 0; i < octetCount; ++i) {
+	// 		rawBuffer[i] = data.get(index + i);
+	// 	}
+	// 	ArrayUtils.reverse(rawBuffer);
+	// 	return ByteBuffer.wrap(rawBuffer).getLong();
+	// }
+
+	// // FIXME Critical: This is being used for unsigned integers in some places.
+	// public static long getInteger(int index, int octetCount, List<Byte> data) {
+	// 	byte[] rawBuffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	// 	if (data.get(octetCount - 1).byteValue() < 0) {
+	// 		for (int i = 0; i < rawBuffer.length; ++i) {
+	// 			rawBuffer[i] = (byte) 0xFF;
+	// 		}
+	// 	}
+	// 	for (int i = 0; i < octetCount; ++i) {
+	// 		rawBuffer[i] = data.get(index + i);
+	// 	}
+	// 	ArrayUtils.reverse(rawBuffer);
+	// 	return ByteBuffer.wrap(rawBuffer).getLong();
+	// }
+	
+	// public static void addFloat(float value, List<Byte> data) {
+	// 	ByteBuffer byteBuffer = ByteBuffer.allocate(4);
+	// 	byteBuffer.putFloat(value);
+	// 	reverse(byteBuffer.array());
+	// 	data.addAll(asList(toObject(byteBuffer.array())));
+	// }
+
+	// public static double getFloat(int index, List<Byte> data) {
+	// 	byte[] rawBuffer = { 0, 0, 0, 0 };
+	// 	for (int i = 0; i < rawBuffer.length; ++i) {
+	// 		rawBuffer[i] = data.get(index + i);
+	// 	}
+	// 	ArrayUtils.reverse(rawBuffer);
+	// 	return ByteBuffer.wrap(rawBuffer).getFloat();
+	// }
+
+	// public static void addDouble(double value, List<Byte> data) {
+	// 	ByteBuffer byteBuffer = ByteBuffer.allocate(8);
+	// 	byteBuffer.putDouble(value);
+	// 	reverse(byteBuffer.array());
+	// 	data.addAll(asList(toObject(byteBuffer.array())));
+	// }
+	
+	// public static double getDouble(int index, List<Byte> data) {
+	// 	byte[] rawBuffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	// 	for (int i = 0; i < rawBuffer.length; ++i) {
+	// 		rawBuffer[i] = data.get(index + i);
+	// 	}
+	// 	ArrayUtils.reverse(rawBuffer);
+	// 	return ByteBuffer.wrap(rawBuffer).getDouble();
+	// }
+
+	// public static void trim(long count, List<Byte> data) {
+	// 	if (data.size() < count) {
+	// 		data.clear();
+	// 	} else if (count > 0) {
+	// 		for (int i = 0; i < count; ++i) {
+	// 			data.remove(0);
+	// 		}
+	// 	}
+	// }
+	
+	// public static byte bitSetToByte(BitSet bitSet) {
+	// 	byte[] byteArray = bitSet.toByteArray();
+	// 	if (byteArray.length > 0) {
+	// 		return byteArray[0];
+	// 	}
+	// 	return 0;
+	// }
+	
+	// public static String toString(List<Byte> data) {
+	// 	StringBuilder stringBuilder = new StringBuilder();
+	// 	for (Byte dataByte : data) {
+	// 		stringBuilder.append(String.format("%02X", dataByte));
+	// 	}
+	// 	return stringBuilder.toString();
+	// }
+
+	public static void addInteger(long value, int octetCount, Deque<Byte> data) {
 		byte[] arrayValue = ByteBuffer.allocate(8).putLong(value).array();
 		ArrayUtils.reverse(arrayValue);
 		data.addAll(asList(toObject(arrayValue)).subList(0, octetCount));
 	}
 
-	public static long getUnsignedInteger(int index, int octetCount, List<Byte> data) {
+	public static long getUnsignedInteger(int index, int octetCount, Deque<Byte> data) {
 		byte[] rawBuffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
+		Iterator<Byte> it = DataUtils.seek(data, index);
 		for (int i = 0; i < octetCount; ++i) {
-			rawBuffer[i] = data.get(index + i);
+			rawBuffer[i] = it.next();
 		}
 		ArrayUtils.reverse(rawBuffer);
 		return ByteBuffer.wrap(rawBuffer).getLong();
 	}
 
 	// FIXME Critical: This is being used for unsigned integers in some places.
-	public static long getInteger(int index, int octetCount, List<Byte> data) {
+	public static long getInteger(int index, int octetCount, Deque<Byte> data) {
 		byte[] rawBuffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
-		if (data.get(octetCount - 1).byteValue() < 0) {
-			for (int i = 0; i < rawBuffer.length; ++i) {
+		Iterator<Byte> it = DataUtils.seek(data, index);
+		for (int i = 0; i < octetCount; ++i) {
+			rawBuffer[i] = it.next();
+		}
+		if (rawBuffer[octetCount - 1] < 0) {
+			for (int i = octetCount; i < rawBuffer.length; ++i) {
 				rawBuffer[i] = (byte) 0xFF;
 			}
-		}
-		for (int i = 0; i < octetCount; ++i) {
-			rawBuffer[i] = data.get(index + i);
 		}
 		ArrayUtils.reverse(rawBuffer);
 		return ByteBuffer.wrap(rawBuffer).getLong();
 	}
 	
-	public static void addFloat(float value, List<Byte> data) {
+	public static void addFloat(float value, Deque<Byte> data) {
 		ByteBuffer byteBuffer = ByteBuffer.allocate(4);
 		byteBuffer.putFloat(value);
 		reverse(byteBuffer.array());
 		data.addAll(asList(toObject(byteBuffer.array())));
 	}
 
-	public static double getFloat(int index, List<Byte> data) {
+	public static double getFloat(int index, Deque<Byte> data) {
 		byte[] rawBuffer = { 0, 0, 0, 0 };
+		Iterator<Byte> it = DataUtils.seek(data, index);
 		for (int i = 0; i < rawBuffer.length; ++i) {
-			rawBuffer[i] = data.get(index + i);
+			rawBuffer[i] = it.next();
 		}
 		ArrayUtils.reverse(rawBuffer);
 		return ByteBuffer.wrap(rawBuffer).getFloat();
 	}
 
-	public static void addDouble(double value, List<Byte> data) {
+	public static void addDouble(double value, Deque<Byte> data) {
 		ByteBuffer byteBuffer = ByteBuffer.allocate(8);
 		byteBuffer.putDouble(value);
 		reverse(byteBuffer.array());
 		data.addAll(asList(toObject(byteBuffer.array())));
 	}
 	
-	public static double getDouble(int index, List<Byte> data) {
+	public static double getDouble(int index, Deque<Byte> data) {
 		byte[] rawBuffer = { 0, 0, 0, 0, 0, 0, 0, 0 };
+		Iterator<Byte> it = DataUtils.seek(data, index);
 		for (int i = 0; i < rawBuffer.length; ++i) {
-			rawBuffer[i] = data.get(index + i);
+			rawBuffer[i] = it.next();
 		}
 		ArrayUtils.reverse(rawBuffer);
 		return ByteBuffer.wrap(rawBuffer).getDouble();
 	}
 
-	public static void trim(long count, List<Byte> data) {
+	// FIXME Do this in bulk
+	public static void trim(long count, Deque<Byte> data) {
 		if (data.size() < count) {
 			data.clear();
 		} else if (count > 0) {
 			for (int i = 0; i < count; ++i) {
-				data.remove(0);
+				data.removeFirst();
 			}
 		}
 	}
@@ -106,11 +200,19 @@ public class DataUtils {
 		return 0;
 	}
 	
-	public static String toString(List<Byte> data) {
+	public static String toString(Deque<Byte> data) {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (Byte dataByte : data) {
 			stringBuilder.append(String.format("%02X", dataByte));
 		}
 		return stringBuilder.toString();
+	}
+
+	public static <T> Iterator<T> seek(Deque<T> deque, int index) {
+		Iterator<T> it = deque.iterator();
+		for (int i = 0; i < index; ++i) {
+			it.next();
+		}
+		return it;
 	}
 }

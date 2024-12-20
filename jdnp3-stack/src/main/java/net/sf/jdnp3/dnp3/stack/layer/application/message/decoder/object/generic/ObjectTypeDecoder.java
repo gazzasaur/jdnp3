@@ -15,12 +15,12 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public interface ObjectTypeDecoder {
 	public boolean canDecode(ApplicationFragmentDecoderContext decoderContext);
-	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, List<Byte> data);
+	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, Deque<Byte> data);
 }

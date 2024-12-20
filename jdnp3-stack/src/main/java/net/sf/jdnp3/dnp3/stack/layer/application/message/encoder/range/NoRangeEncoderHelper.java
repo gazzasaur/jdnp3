@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.range;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
@@ -28,7 +28,7 @@ public class NoRangeEncoderHelper implements RangeEncoderHelper {
 		return RangeSpecifierCode.NO_RANGE;
 	}
 	
-	public RangeSpecifierCode encode(Range range, int minOctetCount, List<Byte> data) {
+	public RangeSpecifierCode encode(Range range, int minOctetCount, Deque<Byte> data) {
 		return this.calculateRangeSpecifierCode(range, minOctetCount);
 	}
 }

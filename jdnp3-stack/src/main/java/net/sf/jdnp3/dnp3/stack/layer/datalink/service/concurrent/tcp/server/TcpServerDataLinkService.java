@@ -20,7 +20,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.OUTSTATION_
 
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.List;
+import java.util.Deque;
 import java.util.concurrent.ExecutorService;
 
 import org.slf4j.Logger;
@@ -38,7 +38,7 @@ import net.sf.jdnp3.dnp3.stack.nio.DataPump;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class TcpServerDataLinkService implements DataLinkLayer {
-	private Logger logger = LoggerFactory.getLogger(TcpServerDataLinkService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TcpServerDataLinkService.class);
 	
 	private static final int MTU = 249;
 	
@@ -109,7 +109,7 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 		multiDataLinkInterceptor.removeDataLinkListener(dataLinkInterceptor);
 	}
 
-	public synchronized void sendData(MessageProperties messageProperties, List<Byte> data) {
+	public synchronized void sendData(MessageProperties messageProperties, Deque<Byte> data) {
 		if (closed) {
 			throw new IllegalStateException("DataLink has been closed and may not be restarted.");
 		}
@@ -124,8 +124,8 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 	}
 
 	public synchronized void sendData(MessageProperties messageProperties, DataLinkFrame frame) {
-		List<Byte> frameData = dataLinkFrameEncoder.encode(frame);
-		logger.debug(String.format("Send data to %s from %s using channel %s: %s", messageProperties.getDestinationAddress(), messageProperties.getSourceAddress(), messageProperties.getChannelId(), DataUtils.toString(frameData)));
+		Deque<Byte> frameData = dataLinkFrameEncoder.encode(frame);
+		LOGGER.debug("Send data to {} from {} using channel {}: {}", messageProperties.getDestinationAddress(), messageProperties.getSourceAddress(), messageProperties.getChannelId(), DataUtils.toString(frameData));
 		SocketChannel socketChannel = channelManager.getChannel(messageProperties.getChannelId());
 		dataPump.sendData(socketChannel, frameData);
 	}
@@ -153,9 +153,5 @@ public class TcpServerDataLinkService implements DataLinkLayer {
 
 	public synchronized void setPort(int port) {
 		this.port = port;
-	}
-	
-	public synchronized int getConnectionCount() {
-		return channelManager.getChannels().size();
 	}
 }

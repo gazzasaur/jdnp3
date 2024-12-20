@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.analog;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_COMMAND_FLOAT64;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
@@ -31,7 +31,7 @@ public class AnalogOutputCommandFloat64ObjectTypeDecoder implements ObjectTypeDe
 		return decoderContext.getObjectType().equals(ANALOG_OUTPUT_COMMAND_FLOAT64);
 	}
 	
-	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, List<Byte> data) {
+	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, Deque<Byte> data) {
 		if (!this.canDecode(decoderContext)) {
 			throw new IllegalArgumentException("Unable to decode data.");
 		}
@@ -40,7 +40,7 @@ public class AnalogOutputCommandFloat64ObjectTypeDecoder implements ObjectTypeDe
 		command.setIndex(decoderContext.getCurrentIndex());
 		
 		double value = DataUtils.getDouble(0, data);
-		long statusCode = DataUtils.getInteger(8, 1, data);
+		long statusCode = DataUtils.getUnsignedInteger(8, 1, data);
 		
 		command.setValue(value);
 		for (StatusCode status : StatusCode.values()) {

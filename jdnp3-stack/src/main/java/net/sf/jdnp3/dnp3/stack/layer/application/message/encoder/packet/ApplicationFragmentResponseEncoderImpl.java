@@ -15,8 +15,8 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Deque;
+import java.util.LinkedList;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentResponse;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
@@ -29,8 +29,8 @@ public class ApplicationFragmentResponseEncoderImpl implements ApplicationFragme
 		this.objectFragmentEncoder = objectFragmentEncoder;
 	}
 
-	public List<Byte> encode(ApplicationFragmentResponse fragment) {
-		List<Byte> data = new ArrayList<>();
+	public Deque<Byte> encode(ApplicationFragmentResponse fragment) {
+		LinkedList<Byte> data = new LinkedList<>();
 		applicationHeaderEncoder.encode(fragment.getHeader(), data);
 		
 		ObjectFragmentEncoderContext context = new ObjectFragmentEncoderContext();

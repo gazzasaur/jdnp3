@@ -15,7 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util;
 
-import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_STATIC_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT32;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT64;
@@ -43,7 +42,7 @@ public class AnalogInputStaticTypeRationaliserHelper implements ObjectInstanceTy
 	public void rationalise(ObjectInstance objectInstance) {
 		AnalogInputStaticObjectInstance specificInstance = (AnalogInputStaticObjectInstance) objectInstance;
 		if (!validObjectTypes.contains(specificInstance.getRequestedType())) {
-			logger.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
+			logger.warn("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass());
 			objectInstance.setRequestedType(ANY);
 		}
 		boolean otherFlags = !specificInstance.isOnline() ||
@@ -57,11 +56,11 @@ public class AnalogInputStaticTypeRationaliserHelper implements ObjectInstanceTy
 			objectInstance.setRequestedType(ANALOG_INPUT_STATIC_FLOAT32);
 		}
 		if (specificInstance.getRequestedType().equals(ANALOG_INPUT_STATIC_INT16_NO_FLAGS) && otherFlags) {
-			logger.warn(format(ANALOG_INPUT_STATIC_INT16_NO_FLAGS.toString() + " format requested but flags are required."));
+			logger.warn(ANALOG_INPUT_STATIC_INT16_NO_FLAGS.toString() + " format requested but flags are required.");
 			specificInstance.setRequestedType(ANALOG_INPUT_STATIC_INT16);
 		}
 		if (specificInstance.getRequestedType().equals(ANALOG_INPUT_STATIC_INT32_NO_FLAGS) && otherFlags) {
-			logger.warn(format(ANALOG_INPUT_STATIC_INT32_NO_FLAGS.toString() + " format requested but flags are required."));
+			logger.warn(ANALOG_INPUT_STATIC_INT32_NO_FLAGS.toString() + " format requested but flags are required.");
 			specificInstance.setRequestedType(ANALOG_INPUT_STATIC_INT32);
 		}
 	}

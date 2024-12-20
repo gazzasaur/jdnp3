@@ -20,6 +20,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Rang
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode.TWO_OCTET_INDEX;
 
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
@@ -40,7 +41,7 @@ public class IndexRangeEncoderHelper implements RangeEncoderHelper {
 		throw new IllegalArgumentException("The specified index is too large for DNP: " + specificRange.getStopIndex());
 	}
 	
-	public RangeSpecifierCode encode(Range range, int minOctetCount, List<Byte> data) {
+	public RangeSpecifierCode encode(Range range, int minOctetCount, Deque<Byte> data) {
 		IndexRange specificRange = (IndexRange) range;
 		RangeSpecifierCode rangeSpecifierCode = calculateRangeSpecifierCode(specificRange, minOctetCount);
 		DataUtils.addInteger(specificRange.getStartIndex(), rangeSpecifierCode.getOctetCount(), data);

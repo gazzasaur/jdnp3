@@ -15,12 +15,12 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.transport;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.BitSet;
-import java.util.List;
+import java.util.Deque;
 
 public class TransportSegmentEncoderImpl implements TransportSegmentEncoder {
-	public List<Byte> encode(TransportSegment transportSegment) {
+	public Deque<Byte> encode(TransportSegment transportSegment) {
 		BitSet flags = new BitSet();
 		flags.set(7, transportSegment.getTransportHeader().isFinalSegment());
 		flags.set(6, transportSegment.getTransportHeader().isFirstSegment());
@@ -28,7 +28,7 @@ public class TransportSegmentEncoderImpl implements TransportSegmentEncoder {
 		byte value = (rawFlags.length > 0) ? rawFlags[0] : 0;
 		value |= transportSegment.getTransportHeader().getSequenceNumber();
 		
-		List<Byte> data = new ArrayList<>();
+		Deque<Byte> data = new ArrayDeque<>();
 		data.add(value);
 		data.addAll(transportSegment.getData());
 		return data;

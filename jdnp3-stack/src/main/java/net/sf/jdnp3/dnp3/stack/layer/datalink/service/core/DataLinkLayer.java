@@ -15,16 +15,15 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.service.core;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public interface DataLinkLayer {
 	public int getMtu();
-	public int getConnectionCount();
 
-	public void sendData(MessageProperties messageProperties, List<Byte> encode);
+	public void sendData(MessageProperties messageProperties, Deque<Byte> encode);
 	public void sendData(MessageProperties messageProperties, DataLinkFrame frame);
 	
 	public void addDataLinkLayerListener(DataLinkInterceptor listener);

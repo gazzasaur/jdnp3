@@ -16,10 +16,11 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog;
 
 import static java.lang.String.format;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCodeUtils.isResponseCode;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_STATIC_FLOAT32;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addFloat;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
@@ -30,10 +31,10 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstanc
 
 public class AnalogInputStaticFloat32ObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(ANALOG_INPUT_STATIC_FLOAT32);
+		return isResponseCode(functionCode) && objectType.equals(ANALOG_INPUT_STATIC_FLOAT32);
 	}
 
-	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
+	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, Deque<Byte> data) {
 		if (!this.canEncode(context.getFunctionCode(), context.getObjectType())) {
 			throw new IllegalArgumentException(format("Cannot encode the given value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}

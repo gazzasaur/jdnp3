@@ -20,7 +20,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.DOUBLE_BIT_BINARY_INPUT_STATIC_FLAGS;
 
 import java.util.BitSet;
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
@@ -36,7 +36,7 @@ public class DoubleBitBinaryInputStaticFlagsObjectTypeDecoder implements ObjectT
 		return objectType.equals(DOUBLE_BIT_BINARY_INPUT_STATIC_FLAGS);
 	}
 
-	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
+	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, Deque<Byte> data) {
 		if (!this.canEncode(context.getFunctionCode(), context.getObjectType())) {
 			throw new IllegalArgumentException(format("Cannot decode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
@@ -49,12 +49,12 @@ public class DoubleBitBinaryInputStaticFlagsObjectTypeDecoder implements ObjectT
 		return decoderContext.getObjectType().equals(BINARY_INPUT_STATIC_FLAGS);
 	}
 
-	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, List<Byte> data) {
+	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, Deque<Byte> data) {
 		DoubleBitBinaryInputStaticObjectInstance objectInstance = new DoubleBitBinaryInputStaticObjectInstance();
 		objectInstance.setIndex(decoderContext.getCurrentIndex());
 		objectInstance.setRequestedType(decoderContext.getObjectType());
 		
-		BitSet bitSet = BitSet.valueOf(new byte[] {data.remove(0)});
+		BitSet bitSet = BitSet.valueOf(new byte[] {data.pollFirst()});
 		objectInstance.setValue((bitSet.get(7) ? 0x02 : 0x00) + (bitSet.get(6) ? 0x01 : 0x00));
 		objectInstance.setChatterFilter(bitSet.get(5));
 		objectInstance.setLocalForced(bitSet.get(4));

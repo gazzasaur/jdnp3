@@ -15,12 +15,10 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.service;
 
-import static java.lang.String.format;
-
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,17 +39,19 @@ public class OutstationEventQueue implements ConfirmationListener {
 	
 	public synchronized void addEvent(EventObjectInstance eventObjectInstance) {
 		if (eventObjectInstance.getEventClass() < 1 || eventObjectInstance.getEventClass() > 3) {
-			logger.info(format("Ignoring event of type %s and event class of %d.", eventObjectInstance.getClass(), eventObjectInstance.getEventClass()));
+			logger.info("Ignoring event of type {} and event class of {}.", eventObjectInstance.getClass(), eventObjectInstance.getEventClass());
 			return;
 		}
 		
-		for (int i = 0; i < events.size(); ++i) {
-			EventObjectInstance current = events.get(i);
+		ListIterator<EventObjectInstance> currentEvents = events.listIterator();
+		while (currentEvents.hasNext()) {
+			EventObjectInstance current = currentEvents.next();
 			if (eventObjectInstance.getTimestamp() < current.getTimestamp()) {
-				events.add(i, eventObjectInstance);
+				currentEvents.previous();
+				currentEvents.add(eventObjectInstance);
 				setInternalStatus();
 				return;
-			}
+			}			
 		}
 		events.add(eventObjectInstance);
 		setInternalStatus();
@@ -69,7 +69,7 @@ public class OutstationEventQueue implements ConfirmationListener {
 		return requestedEvents;
 	}
 
-	public List<ObjectInstance> request(EventObjectInstanceSelector selector, long returnLimit) {
+	public synchronized List<ObjectInstance> request(EventObjectInstanceSelector selector, long returnLimit) {
 		List<ObjectInstance> requestedEvents = new ArrayList<>();
 		for (EventObjectInstance eventObjectInstance : events) {
 			if (selector.select(eventObjectInstance) && !pendingConfirmation.contains(eventObjectInstance)) {

@@ -1,12 +1,12 @@
 package net.sf.jdnp3.dnp3.stack.layer.datalink.inttest;
 
+import static java.util.Arrays.asList;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.MASTER_TO_OUTSTATION;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.concurrent.Executors;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -29,9 +29,9 @@ public class DataLinkOutstationTest {
         int testPort = RandomUtils.nextInt(40000, 60000);
 
         TcpServerDataLinkService outstationDataLinkLayer = new TcpServerDataLinkService();
-        StatefulDataLinkInterceptor outstationDataLinkInterceptor = new StatefulDataLinkInterceptor(false, outstationDataLinkLayer, 1234, (MessageProperties messageProperties, List<Byte> data) -> {
+        StatefulDataLinkInterceptor outstationDataLinkInterceptor = new StatefulDataLinkInterceptor(false, outstationDataLinkLayer, 1234, (MessageProperties messageProperties, Deque<Byte> data) -> {
             // Echo the data back.
-            ArrayList<Byte> reply = new ArrayList<Byte>(Arrays.asList(ArrayUtils.toObject("Outstation: ".getBytes())));
+            Deque<Byte> reply = new ArrayDeque<Byte>(asList(ArrayUtils.toObject("Outstation: ".getBytes())));
             reply.addAll(data);
 
             MessageProperties responseProperties = new MessageProperties();
@@ -51,7 +51,7 @@ public class DataLinkOutstationTest {
         outstationDataLinkLayer.addDataLinkLayerListener(outstationDataLinkInterceptor);
         outstationDataLinkLayer.start();
 
-        MutableObject echoedResponse = new MutableObject<String>();
+        MutableObject<String> echoedResponse = new MutableObject<String>();
         TcpClientDataLinkService masterStationLataLinkLayer = new TcpClientDataLinkService("localhost", testPort);
         StatefulDataLinkInterceptor masterStationDataLinkInterceptor = new StatefulDataLinkInterceptor(true, masterStationLataLinkLayer, 200, (messageProperties, data) -> {
             synchronized (echoedResponse) {
@@ -73,7 +73,7 @@ public class DataLinkOutstationTest {
             setMaster(true);
             setPrimary(true);
             setSourceAddress(200);
-        }}, Arrays.asList(ArrayUtils.toObject("Hi".getBytes())));
+        }}, new ArrayDeque<>(asList(ArrayUtils.toObject("Hi".getBytes()))));
 
         Thread.sleep(100);
 
@@ -89,9 +89,9 @@ public class DataLinkOutstationTest {
         int testPort = RandomUtils.nextInt(40000, 60000);
 
         TcpServerDataLinkService outstationDataLinkLayer = new TcpServerDataLinkService();
-        StatefulDataLinkInterceptor outstationDataLinkInterceptor = new StatefulDataLinkInterceptor(false, outstationDataLinkLayer, 1234, (MessageProperties messageProperties, List<Byte> data) -> {
+        StatefulDataLinkInterceptor outstationDataLinkInterceptor = new StatefulDataLinkInterceptor(false, outstationDataLinkLayer, 1234, (MessageProperties messageProperties, Deque<Byte> data) -> {
             // Echo the data back.
-            ArrayList<Byte> reply = new ArrayList<Byte>(Arrays.asList(ArrayUtils.toObject("Outstation: ".getBytes())));
+            Deque<Byte> reply = new ArrayDeque<Byte>(asList(ArrayUtils.toObject("Outstation: ".getBytes())));
             reply.addAll(data);
 
             MessageProperties responseProperties = new MessageProperties();
@@ -142,7 +142,7 @@ public class DataLinkOutstationTest {
             getDataLinkFrameHeader().setFcvDfc(false);
             getDataLinkFrameHeader().setFunctionCode(FunctionCode.RESET_LINK_STATUS);
             getDataLinkFrameHeader().setPrimary(true);
-            setData(Arrays.asList(ArrayUtils.toObject("Hi".getBytes())));
+            setData(new ArrayDeque<>(asList(ArrayUtils.toObject("Hi".getBytes()))));
         }};
         masterStationLataLinkLayer.sendData(messageProperties, resetDataLinkFrame);
 
@@ -154,7 +154,7 @@ public class DataLinkOutstationTest {
             getDataLinkFrameHeader().setFcvDfc(true);
             getDataLinkFrameHeader().setFunctionCode(FunctionCode.CONFIRMED_USER_DATA);
             getDataLinkFrameHeader().setPrimary(true);
-            setData(Arrays.asList(ArrayUtils.toObject("Hi".getBytes())));
+            setData(new ArrayDeque<>(asList(ArrayUtils.toObject("Hi".getBytes()))));
         }};
         masterStationLataLinkLayer.sendData(messageProperties, dataLinkFrame);
 
@@ -162,7 +162,7 @@ public class DataLinkOutstationTest {
 
         assertThat(echoedResponse.getValue(), is("Outstation: Hi"));
 
-        dataLinkFrame.setData(Arrays.asList(ArrayUtils.toObject("Yo".getBytes())));
+        dataLinkFrame.setData(new ArrayDeque<>(asList(ArrayUtils.toObject("Yo".getBytes()))));
         dataLinkFrame.getDataLinkFrameHeader().setFcb(false);
         masterStationLataLinkLayer.sendData(messageProperties, dataLinkFrame);
 
@@ -179,9 +179,9 @@ public class DataLinkOutstationTest {
         int testPort = RandomUtils.nextInt(40000, 60000);
 
         TcpServerDataLinkService outstationDataLinkLayer = new TcpServerDataLinkService();
-        StatefulDataLinkInterceptor outstationDataLinkInterceptor = new StatefulDataLinkInterceptor(false, outstationDataLinkLayer, 1234, (MessageProperties messageProperties, List<Byte> data) -> {
+        StatefulDataLinkInterceptor outstationDataLinkInterceptor = new StatefulDataLinkInterceptor(false, outstationDataLinkLayer, 1234, (MessageProperties messageProperties, Deque<Byte> data) -> {
             // Echo the data back.
-            ArrayList<Byte> reply = new ArrayList<Byte>(Arrays.asList(ArrayUtils.toObject("Outstation: ".getBytes())));
+            Deque<Byte> reply = new ArrayDeque<Byte>(asList(ArrayUtils.toObject("Outstation: ".getBytes())));
             reply.addAll(data);
 
             MessageProperties responseProperties = new MessageProperties();
@@ -232,7 +232,7 @@ public class DataLinkOutstationTest {
             getDataLinkFrameHeader().setFcvDfc(true);
             getDataLinkFrameHeader().setFunctionCode(FunctionCode.CONFIRMED_USER_DATA);
             getDataLinkFrameHeader().setPrimary(true);
-            setData(Arrays.asList(ArrayUtils.toObject("Hi".getBytes())));
+            setData(new ArrayDeque<>(asList(ArrayUtils.toObject("Hi".getBytes()))));
         }};
         masterStationLataLinkLayer.sendData(messageProperties, dataLinkFrame);
 

@@ -24,7 +24,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import org.junit.Before;
@@ -50,7 +52,7 @@ public class ReadBinaryInputIntegrationTest {
 	private List<BinaryInputStaticObjectInstance> dummyBinaryInputStaticObjectInstances;
 	
 	private ApplicationTransport mockApplicationTransport = new ApplicationTransport() {
-		public void sendData(MessageProperties messageProperties, List<Byte> data) {
+		public void sendData(MessageProperties messageProperties, Deque<Byte> data) {
 			transportData = printHexBinary(toPrimitive(data.toArray(new Byte[0])));
 		}
 	};
@@ -88,7 +90,7 @@ public class ReadBinaryInputIntegrationTest {
 		when(mockBinaryInputStaticReadRequestHandler.getObjectInstanceClass()).thenReturn(BinaryInputStaticObjectInstance.class);
 		when(mockBinaryInputStaticReadRequestHandler.readStatics()).thenReturn(dummyBinaryInputStaticObjectInstances);
 
-		List<Byte> data = asList(toObject(parseHexBinary("C701010006")));
+		Deque<Byte> data = new ArrayDeque<>(asList(toObject(parseHexBinary("C701010006"))));
 		outstation.addRequestHandler(mockBinaryInputStaticReadRequestHandler);
 		outstation.getApplicationLayer().dataReceived(dummyMessageProperties, data);
 		assertThat(transportData, is("C7810000010100000000010201FF0000018080"));
@@ -99,9 +101,9 @@ public class ReadBinaryInputIntegrationTest {
 		when(mockBinaryInputStaticReadRequestHandler.getObjectInstanceClass()).thenReturn(BinaryInputStaticObjectInstance.class);
 		when(mockBinaryInputStaticReadRequestHandler.readStatics(0, 2)).thenReturn(dummyBinaryInputStaticObjectInstances);
 
-		List<Byte> dataShort = asList(toObject(parseHexBinary("C7010100000002")));
-		List<Byte> dataLong = asList(toObject(parseHexBinary("C70101000100000200")));
-		List<Byte> dataExtraLong = asList(toObject(parseHexBinary("C7010100020000000002000000")));
+		Deque<Byte> dataShort = new ArrayDeque<>(asList(toObject(parseHexBinary("C7010100000002"))));
+		Deque<Byte> dataLong = new ArrayDeque<>(asList(toObject(parseHexBinary("C70101000100000200"))));
+		Deque<Byte> dataExtraLong = new ArrayDeque<>(asList(toObject(parseHexBinary("C7010100020000000002000000"))));
 		outstation.addRequestHandler(mockBinaryInputStaticReadRequestHandler);
 		outstation.getApplicationLayer().dataReceived(dummyMessageProperties, dataShort);
 		assertThat(transportData, is("C7810000010100000000010201FF0000018080"));
@@ -116,7 +118,7 @@ public class ReadBinaryInputIntegrationTest {
 		when(mockBinaryInputStaticReadRequestHandler.getObjectInstanceClass()).thenReturn(BinaryInputStaticObjectInstance.class);
 		when(mockBinaryInputStaticReadRequestHandler.readStatic(1)).thenReturn(asList(dummyBinaryInputStaticObjectInstances.get(1)));
 
-		List<Byte> data = asList(toObject(parseHexBinary("C70101002801000100")));
+		Deque<Byte> data = new ArrayDeque<>(asList(toObject(parseHexBinary("C70101002801000100"))));
 		outstation.addRequestHandler(mockBinaryInputStaticReadRequestHandler);
 		outstation.getApplicationLayer().dataReceived(dummyMessageProperties, data);
 		assertThat(transportData, is("C7810000010200FFFF80"));

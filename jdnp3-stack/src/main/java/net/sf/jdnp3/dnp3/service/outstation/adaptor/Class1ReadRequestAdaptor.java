@@ -35,7 +35,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeCon
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 public class Class1ReadRequestAdaptor implements OutstationRequestHandlerAdaptor {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(Class1ReadRequestAdaptor.class);
 	
 	private Class1ReadRequestHandler serviceRequestHandler = null;
 	
@@ -59,7 +59,7 @@ public class Class1ReadRequestAdaptor implements OutstationRequestHandlerAdaptor
 			}
 			
 			if (result == null) {
-				logger.warn("Cannot perform a read request on the class for the range type of: " + range.getClass());
+				LOGGER.warn("Cannot perform a read request on the class for the range type of: " + range.getClass());
 			} else {
 				for (ObjectInstance objectInstance : result) {
 					if (objectInstance.getRequestedType().equals(ANY)) {

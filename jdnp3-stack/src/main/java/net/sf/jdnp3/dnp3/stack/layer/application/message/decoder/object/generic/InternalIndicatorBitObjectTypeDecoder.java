@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.INTERNAL_INDICATIONS_PACKED;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.InternalIndicatorBitObjectInstance;
@@ -29,14 +29,14 @@ public class InternalIndicatorBitObjectTypeDecoder implements ObjectTypeDecoder 
 		return decoderContext.getObjectType().equals(INTERNAL_INDICATIONS_PACKED);
 	}
 
-	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, List<Byte> data) {
+	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, Deque<Byte> data) {
 		if (!this.canDecode(decoderContext)) {
 			throw new IllegalArgumentException("Cannot decode data.");
 		}
 		
-		long value = DataUtils.getInteger(0, 1, data);
+		long value = DataUtils.getUnsignedInteger(0, 1, data);
 		if (decoderContext.getCurrentIndex() > 7) {
-			value = DataUtils.getInteger(0, 1, data);
+			value = DataUtils.getUnsignedInteger(0, 1, data);
 		}
 		
 		InternalIndicatorBitObjectInstance objectInstance = new InternalIndicatorBitObjectInstance();

@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentRequest;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentRequestHeader;
@@ -25,16 +25,16 @@ import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 public class ApplicationFragmentRequestHeaderDecoder {
 	public ApplicationControlFieldDecoder acfDecoder = new ApplicationControlFieldDecoder();
 	
-	public void decode(ApplicationFragmentRequest request, List<Byte> data) {
+	public void decode(ApplicationFragmentRequest request, Deque<Byte> data) {
 		if (data.size() < 2) {
-			throw new IllegalStateException("Cannot decode request.  Data is too small.");
+			throw new IllegalStateException("Cannot decode request.  Data is too small. ");
 		}
 		
 		ApplicationFragmentRequestHeader header = request.getHeader();
 		acfDecoder.decode(header.getApplicationControl(), data);
 		
 		boolean found = false;
-		int funcionCodeValue = (int) DataUtils.getInteger(0, 1, data);
+		int funcionCodeValue = (int) DataUtils.getUnsignedInteger(0, 1, data);
 		for (FunctionCode functionCode : FunctionCode.values()) {
 			if (functionCode.getCode() == funcionCodeValue) {
 				header.setFunctionCode(functionCode);
@@ -48,6 +48,6 @@ public class ApplicationFragmentRequestHeaderDecoder {
 			throw new IllegalArgumentException("A response function code was received when a request was expected.");
 		}
 		
-		data.remove(0);
+		data.pollFirst();
 	}
 }

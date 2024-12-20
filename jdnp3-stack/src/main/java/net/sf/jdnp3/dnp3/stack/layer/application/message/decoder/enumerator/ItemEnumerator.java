@@ -15,9 +15,9 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator;
 
-import java.util.List;
+import java.util.Deque;
 
 public interface ItemEnumerator {
 	public boolean hasNext();
-	public long next(List<Byte> data);
+	public long next(Deque<Byte> data);
 }

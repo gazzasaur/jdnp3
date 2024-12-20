@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;
@@ -32,7 +32,7 @@ public class NoDataObjectTypeDecoder implements ObjectTypeDecoder {
 		return decoderContext.getObjectType().equals(objectType);
 	}
 	
-	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, List<Byte> data) {
+	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, Deque<Byte> data) {
 		throw new UnsupportedOperationException("Object does not contain data.");
 	}
 }

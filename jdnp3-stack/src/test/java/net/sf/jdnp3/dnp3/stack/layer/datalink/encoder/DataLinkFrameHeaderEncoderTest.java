@@ -18,7 +18,7 @@ package net.sf.jdnp3.dnp3.stack.layer.datalink.encoder;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 
 import org.junit.Before;
@@ -68,13 +68,13 @@ public class DataLinkFrameHeaderEncoderTest {
 		when(mockDataLinkFrameHeader.getSource()).thenReturn(randomSource);
 		when(mockDataLinkFrameHeader.getDestination()).thenReturn(randomDestination);
 
-		ArrayList<Byte> buffer = new ArrayList<Byte>();
+		LinkedList<Byte> buffer = new LinkedList<Byte>();
 		DataUtils.addInteger(0x6405, 2, buffer);
 		DataUtils.addInteger(randomLength, 1, buffer);
 		DataUtils.addInteger(randomControlField, 1, buffer);
 		DataUtils.addInteger(randomDestination, 2, buffer);
 		DataUtils.addInteger(randomSource, 2, buffer);
-		ArrayList<Byte> data = new ArrayList<>(buffer);
+		LinkedList<Byte> data = new LinkedList<>(buffer);
 
 		try (MockedStatic<Crc16> staticCrc16 = mockStatic(Crc16.class); MockedStatic<DataLinkFrameUtils> staticDataLinkFrameUtils = mockStatic(DataLinkFrameUtils.class)) {
 			staticCrc16.when(() -> Crc16.computeCrc(buffer)).thenReturn(randomCrc);

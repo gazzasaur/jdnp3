@@ -19,7 +19,8 @@ import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectTypeEncoderConstants.OBJECT_TYPE_ENCODERS;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.EncoderUtils.calculateOctetCount;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
@@ -73,7 +74,7 @@ public class SingleObjectFragmentPacker implements ObjectFragmentPacker {
 		encoderContext.setObjectType(objectType);
 		long overhead = 2;
 		
-		List<Byte> data = new ArrayList<Byte>();
+		Deque<Byte> data = new ArrayDeque<Byte>();
 		
 		countRange.setCount(1);
 		long rangeSize = calculateOctetCount(countRange.getCount());

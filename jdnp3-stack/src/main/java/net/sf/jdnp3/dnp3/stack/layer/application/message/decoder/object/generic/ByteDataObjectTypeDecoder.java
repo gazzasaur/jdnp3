@@ -22,6 +22,7 @@ import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.trim;
 import static org.apache.commons.lang3.ArrayUtils.toObject;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
@@ -40,11 +41,11 @@ public class ByteDataObjectTypeDecoder {
 		this.responseData = new ArrayList<>(asList(toObject(parseHexBinary(responseData))));
 	}
 
-	public boolean canDecode(ApplicationFragmentDecoderContext decoderContext, List<Byte> data) {
-		return functionCode.equals(decoderContext.getFunctionCode()) && (data.size() >= expectedData.size()) && expectedData.equals(data.subList(0, expectedData.size()));
+	public boolean canDecode(ApplicationFragmentDecoderContext decoderContext, Deque<Byte> data) {
+		return functionCode.equals(decoderContext.getFunctionCode()) && (data.size() >= expectedData.size()) && expectedData.equals(new ArrayList<>(data).subList(0, expectedData.size()));
 	}
 	
-	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, List<Byte> data) {
+	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, Deque<Byte> data) {
 		if (!this.canDecode(decoderContext, data)) {
 			throw new IllegalArgumentException("Cannot decode data.");
 		}

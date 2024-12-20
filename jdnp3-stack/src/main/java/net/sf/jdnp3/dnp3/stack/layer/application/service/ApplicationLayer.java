@@ -15,11 +15,11 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.service;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public interface ApplicationLayer {
 	public int getMtu();
-	public void dataReceived(MessageProperties messageProperties, List<Byte> data);
+	public void dataReceived(MessageProperties messageProperties, Deque<Byte> data);
 }

@@ -15,7 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util;
 
-import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_EVENT_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_EVENT_FLOAT32_ABSOLUTE_TIME;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_INPUT_EVENT_FLOAT32_WITHOUT_TIME;
@@ -69,7 +68,7 @@ public class AnalogInputEventTypeRationaliserHelper implements ObjectInstanceTyp
 	public void rationalise(ObjectInstance objectInstance) {
 		AnalogInputEventObjectInstance specificInstance = (AnalogInputEventObjectInstance) objectInstance;
 		if (!validObjectTypes.contains(specificInstance.getRequestedType())) {
-			logger.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
+			logger.warn("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass());
 			objectInstance.setRequestedType(ANY);
 		}
 		if (groupObjectTypes.contains(specificInstance.getRequestedType())) {

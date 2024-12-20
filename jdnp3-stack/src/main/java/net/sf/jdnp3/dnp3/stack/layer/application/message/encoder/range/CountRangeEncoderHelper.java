@@ -20,6 +20,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Rang
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode.TWO_OCTET_OBJECT_COUNT;
 
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
@@ -40,7 +41,7 @@ public class CountRangeEncoderHelper implements RangeEncoderHelper {
 		throw new IllegalArgumentException("The specified count is too large for DNP: " + specificRange.getCount());
 	}
 	
-	public RangeSpecifierCode encode(Range range, int minOctetCount, List<Byte> data) {
+	public RangeSpecifierCode encode(Range range, int minOctetCount, Deque<Byte> data) {
 		CountRange specificRange = (CountRange) range;
 		RangeSpecifierCode rangeSpecifierCode = this.calculateRangeSpecifierCode(specificRange, minOctetCount);
 		DataUtils.addInteger(specificRange.getCount(), rangeSpecifierCode.getOctetCount(), data);

@@ -15,10 +15,10 @@
  */
 package net.sf.jdnp3.dnp3.stack.nio;
 
-import java.util.List;
+import java.util.Deque;
 
 public interface DataPumpListener {
 	public void connected();
 	public void disconnected();
-	public void dataReceived(List<Byte> data);
+	public void dataReceived(Deque<Byte> data);
 }

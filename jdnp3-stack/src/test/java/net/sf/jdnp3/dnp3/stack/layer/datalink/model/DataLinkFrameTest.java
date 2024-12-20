@@ -22,9 +22,10 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -53,17 +54,15 @@ public class DataLinkFrameTest {
 		DataLinkFrame subject = new DataLinkFrame();
 		assertThat(subject.getData(), notNullValue());
 		assertThat(subject.getData().size(), is(0));
-		assertThat(subject.getData().getClass().getCanonicalName(), CoreMatchers.is("java.util.Collections.UnmodifiableRandomAccessList"));
 	}
 	
 	@Test
 	public void testDataNewValue() {
 		DataLinkFrame subject = new DataLinkFrame();
-		subject.setData(randomData);
-		assertThat(subject.getData(), equalTo(randomData));
+		subject.setData(new ArrayDeque<>(randomData));
+		assertThat(new ArrayList<>(subject.getData()), equalTo(new ArrayList<>(randomData)));
 		assertThat(subject.getData().size(), is(randomData.size()));
 		assertThat(subject.getData(), not(sameInstance(randomData)));
-		assertThat(subject.getData().getClass().getCanonicalName(), CoreMatchers.is("java.util.Collections.UnmodifiableRandomAccessList"));
 		RandomByteListUtils.randomise(randomData);
 		assertThat(subject.getData(), not(equalTo(randomData)));
 	}

@@ -16,13 +16,13 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet;
 
 import java.util.BitSet;
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.InternalIndicatorField;
 
 public class InternalIndicatorsEncoder {
 	
-	public void encode(InternalIndicatorField internalIndicatorField, List<Byte> data) {
+	public void encode(InternalIndicatorField internalIndicatorField, Deque<Byte> data) {
 		BitSet flags = new BitSet(16);
 		flags.set(13, internalIndicatorField.isConfigurationCorrupt());
 		flags.set(12, internalIndicatorField.isAlreadyExecuting());

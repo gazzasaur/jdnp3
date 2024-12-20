@@ -16,9 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.transport;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,18 +25,17 @@ import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class TransportSegmentDigester {
-	private Logger logger = LoggerFactory.getLogger(TransportSegmentDigester.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TransportSegmentDigester.class);
 	
 	private int applicationMtu = 0;
 	private int lastSequenceNumber = 0;
 	private Deque<Byte> receiveBuffer = null;
-	private List<Byte> applicationData = null;
-	private List<Byte> lastTransportSegment = new ArrayList<>();
-	
+	private Deque<Byte> applicationData = null;
+	private Deque<Byte> lastTransportSegment = new ArrayDeque<>();
 
-	public boolean digestData(MessageProperties messageProperties, TransportSegment transportSegment, List<Byte> data) {
+	public boolean digestData(MessageProperties messageProperties, TransportSegment transportSegment, Deque<Byte> data) {
 		if (data.equals(lastTransportSegment) && !transportSegment.getTransportHeader().isFirstSegment()) {
-			logger.warn("Duplicate packet received from " + messageProperties.getSourceAddress());
+			LOGGER.warn("Duplicate packet received from " + messageProperties.getSourceAddress());
 			return false;
 		}
 
@@ -46,30 +43,30 @@ public class TransportSegmentDigester {
 			receiveBuffer = new ArrayDeque<>();
 			receiveBuffer.addAll(transportSegment.getData());
 			lastSequenceNumber = transportSegment.getTransportHeader().getSequenceNumber();
-			lastTransportSegment = new ArrayList<>(data);
+			lastTransportSegment = new ArrayDeque<>(data);
 			
 			if (receiveBuffer.size() > applicationMtu) {
 				int receivedSize = receiveBuffer.size();
 				receiveBuffer.clear();
-				logger.warn(String.format("Received %s bytes but the MTU onlypermits %s.", receivedSize, applicationMtu));
+				LOGGER.warn("Received {} bytes but the MTU onlypermits {}.", receivedSize, applicationMtu);
 			} else if (transportSegment.getTransportHeader().isFinalSegment()) {
-				applicationData = new ArrayList<Byte>(receiveBuffer);
+				applicationData = new ArrayDeque<Byte>(receiveBuffer);
 				receiveBuffer = new ArrayDeque<Byte>();
-				logger.debug("Application Data Assembled: " + DataUtils.toString(applicationData));
+				LOGGER.debug("Application Data Assembled: {}", DataUtils.toString(applicationData));
 				return true;
 			}
 		} else if (receiveBuffer != null) {
 			if ((lastSequenceNumber + 1)%64 == transportSegment.getTransportHeader().getSequenceNumber()) {
 				receiveBuffer.addAll(transportSegment.getData());
 				lastSequenceNumber = transportSegment.getTransportHeader().getSequenceNumber();
-				lastTransportSegment = new ArrayList<>(data);
+				lastTransportSegment = new ArrayDeque<>(data);
 				
 				if (receiveBuffer.size() > applicationMtu) {
 					int receivedSize = receiveBuffer.size();
 					receiveBuffer.clear();
-					logger.warn(String.format("Received %s bytes but the MTU onlypermits %s.", receivedSize, applicationMtu));
+					LOGGER.warn("Received {} bytes but the MTU onlypermits {}.", receivedSize, applicationMtu);
 				} else if (transportSegment.getTransportHeader().isFinalSegment()) {
-					applicationData = new ArrayList<Byte>(receiveBuffer);
+					applicationData = new ArrayDeque<Byte>(receiveBuffer);
 					receiveBuffer = new ArrayDeque<Byte>();
 					return true;
 				}
@@ -78,11 +75,11 @@ public class TransportSegmentDigester {
 		return false;
 	}
 
-	public List<Byte> pollData() {
+	public Deque<Byte> pollData() {
 		if (applicationData == null) {
 			throw new IllegalArgumentException("Application data is not ready.");
 		}
-		List<Byte> returnValue = applicationData;
+		Deque<Byte> returnValue = applicationData;
 		applicationData = null;
 		return returnValue;
 	}

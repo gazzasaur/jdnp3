@@ -15,8 +15,6 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler.core;
 
-import static java.lang.String.format;
-
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -52,14 +50,14 @@ public class DestroyAllMessageHandler implements MessageHandler {
 					try {
 						DeviceProvider.unregisterDevice(stationName, deviceName);
 					} catch (Exception e) {
-						logger.warn(format("Cannot destroy device %s:%s.", stationName, deviceName), e);
+						logger.warn("Cannot destroy device %s:%s.", stationName, deviceName, e);
 						FailureMessage failureMessage = new FailureMessage();
 						failureMessage.setReason("Failed to destroy all devices.  Please check log for details.");
 						responseMessage = failureMessage;
 					}
 				}
 			} catch (Exception e) {
-				logger.warn(format("Cannot destroy station %s.", stationName), e);
+				logger.warn("Cannot destroy station %s.", stationName, e);
 				FailureMessage failureMessage = new FailureMessage();
 				failureMessage.setReason("Failed to destroy all devices.  Please check log for details.");
 				responseMessage = failureMessage;

@@ -18,6 +18,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet;
 import static java.lang.String.format;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ByteDataObjectTypeEncoder;
@@ -33,7 +34,7 @@ public class ObjectFragmentEncoder {
 	private ByteDataObjectTypeEncoder byteDataObjectTypeEncoder = new ByteDataObjectTypeEncoder();
 	private ObjectFragmentHeaderEncoder objectFragmentHeaderEncoder = new ObjectFragmentHeaderEncoder();
 	
-	public void encode(ObjectFragmentEncoderContext context, ObjectFragment objectFragment, List<Byte> data) {
+	public void encode(ObjectFragmentEncoderContext context, ObjectFragment objectFragment, Deque<Byte> data) {
 		if (context.getObjectType().equals(ObjectTypeConstants.CUSTOM) && objectFragment.getObjectInstances().size() == 1) {
 			ObjectInstance objectInstance = objectFragment.getObjectInstances().get(0);
 			byteDataObjectTypeEncoder.encode(objectInstance, data);

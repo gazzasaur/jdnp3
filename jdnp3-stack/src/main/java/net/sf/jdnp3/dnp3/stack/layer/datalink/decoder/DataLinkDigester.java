@@ -17,9 +17,10 @@ package net.sf.jdnp3.dnp3.stack.layer.datalink.decoder;
 
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkFrameUtils.headerLengthToRawLength;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Deque;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,23 +36,24 @@ public class DataLinkDigester {
 	
 	private long lastDrop;
 	private int maximumReceiveDataSize = 65535;
-	private List<Byte> frameBuffer = new ArrayList<>();
+	private Deque<Byte> frameBuffer = new ArrayDeque<>();
 	private DataLinkFrameDecoder decoder = new DataLinkFrameDecoderImpl();
 	private DataLinkFrameHeaderDetector detector = new DataLinkFrameHeaderDetector();
 	
 	private DataLinkFrame dataLinkFrame = null;
 	
-	public boolean digest(List<Byte> data) {
+	// FIXME The linked list for the frame buffer may not be the best choice.
+	public boolean digest(Deque<Byte> data) {
 		if (frameBuffer.isEmpty()) {
 			lastDrop = new Date().getTime();
 		}
 		frameBuffer.addAll(data);
-		
+
 		try {
 			DataLinkFrameHeader dataLinkFrameHeader = new DataLinkFrameHeader();
 			if (detector.detectHeader(dataLinkFrameHeader, frameBuffer) && headerLengthToRawLength(dataLinkFrameHeader.getLength()) <= frameBuffer.size()) {
 				this.dataLinkFrame = decoder.decode(frameBuffer);
-				frameBuffer = new ArrayList<>(frameBuffer.subList(headerLengthToRawLength(dataLinkFrameHeader.getLength()), frameBuffer.size()));
+				frameBuffer = new ArrayDeque<>(new ArrayList<>(frameBuffer).subList(headerLengthToRawLength(dataLinkFrameHeader.getLength()), frameBuffer.size()));
 				lastDrop = new Date().getTime();
 				return true;
 			}
@@ -83,19 +85,19 @@ public class DataLinkDigester {
 		return returnFrame;
 	}
 
-	private void performRapidDrop(List<Byte> data) {
+	private void performRapidDrop(Deque<Byte> data) {
 		if (data.size() < 1) {
 			return;
 		}
-		List<Byte> droppedData = new ArrayList<>();
-		droppedData.add(data.remove(0));
+		Deque<Byte> droppedData = new ArrayDeque<>();
+		droppedData.offerLast(data.pollFirst());
 		for (int i = 0; i < mtu; ++i) {
 			try {
 				DataLinkFrameHeader dataLinkFrameHeader = new DataLinkFrameHeader();
 				detector.detectHeader(dataLinkFrameHeader, data);
 				break;
 			} catch (Exception e) {
-				droppedData.add(data.remove(0));
+				droppedData.offerLast(data.pollFirst());
 			}
 		}
 		StringBuilder stringBuilder = new StringBuilder();

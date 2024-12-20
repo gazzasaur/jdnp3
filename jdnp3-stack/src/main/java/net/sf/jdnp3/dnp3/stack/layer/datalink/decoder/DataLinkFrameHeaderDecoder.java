@@ -17,8 +17,10 @@ package net.sf.jdnp3.dnp3.stack.layer.datalink.decoder;
 
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.util.DataLinkConstants.DNP3_START_BYTES;
 
+import java.util.ArrayDeque;
 import java.util.BitSet;
-import java.util.List;
+import java.util.Deque;
+import java.util.Iterator;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
@@ -26,6 +28,7 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.util.Crc16;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
+// FIXME This ieterated through the header several times. This could be improved.
 public class DataLinkFrameHeaderDecoder {
 	private static final int LENGTH_OFFSET = 2;
 	private static final int SOURCE_OFFSET = 6;
@@ -33,22 +36,23 @@ public class DataLinkFrameHeaderDecoder {
 	private static final int DESTINATION_OFFSET = 4;
 	private static final int MINIMUM_HEADER_SIZE = 10;
 
-	public void decode(DataLinkFrameHeader dataLinkFrameHeader, List<Byte> data) {
+	public void decode(DataLinkFrameHeader dataLinkFrameHeader, Deque<Byte> data) {
 		if (data.size() < MINIMUM_HEADER_SIZE) {
 			throw new IllegalArgumentException("Cannot parse the data as the header is too small.");
 		}
-		if (DataUtils.getInteger(0, 2, data) != DNP3_START_BYTES) {
+		if (DataUtils.getUnsignedInteger(0, 2, data) != DNP3_START_BYTES) {
 			throw new IllegalArgumentException("Start byte were not detected.");
 		}
-		dataLinkFrameHeader.setLength((int) DataUtils.getInteger(LENGTH_OFFSET, 1, data));
-		BitSet bitSet = BitSet.valueOf(new byte[] { data.get(CONTROL_OFFSET) });
+		byte controlByte = DataUtils.seek(data, CONTROL_OFFSET).next();
+		dataLinkFrameHeader.setLength((int) DataUtils.getUnsignedInteger(LENGTH_OFFSET, 1, data));
+		BitSet bitSet = BitSet.valueOf(new byte[] { controlByte });
 		dataLinkFrameHeader.setDirection((bitSet.get(7)) ? Direction.MASTER_TO_OUTSTATION : Direction.OUTSTATION_TO_MASTER);
 		dataLinkFrameHeader.setPrimary((bitSet.get(6)) ? true : false);
 		dataLinkFrameHeader.setFcb((bitSet.get(5)) ? true : false);
 		dataLinkFrameHeader.setFcvDfc((bitSet.get(4)) ? true : false);
 		
 		boolean foundFunctionCode = false;
-		int functionCodeValue = data.get(CONTROL_OFFSET) & 0x0F;
+		int functionCodeValue = controlByte & 0x0F;
 		for (FunctionCode functionCode : FunctionCode.values()) {
 			if (functionCode.isPrimary() == dataLinkFrameHeader.isPrimary() && functionCode.getCode() == functionCodeValue) {
 				dataLinkFrameHeader.setFunctionCode(functionCode);
@@ -58,11 +62,16 @@ public class DataLinkFrameHeaderDecoder {
 		if (!foundFunctionCode) {
 			throw new IllegalArgumentException("No function code matches: " + functionCodeValue);
 		}
-		dataLinkFrameHeader.setDestination((int) DataUtils.getInteger(DESTINATION_OFFSET, 2, data));
-		dataLinkFrameHeader.setSource((int) DataUtils.getInteger(SOURCE_OFFSET, 2, data));
+		dataLinkFrameHeader.setDestination((int) DataUtils.getUnsignedInteger(DESTINATION_OFFSET, 2, data));
+		dataLinkFrameHeader.setSource((int) DataUtils.getUnsignedInteger(SOURCE_OFFSET, 2, data));
 		
-		dataLinkFrameHeader.setCheckSum((int) DataUtils.getInteger(8, 2, data));
-		int calculatedCheckSum = Crc16.computeCrc(data.subList(0, 8));
+		dataLinkFrameHeader.setCheckSum((int) DataUtils.getUnsignedInteger(8, 2, data));
+		Deque<Byte> headerChunk = new ArrayDeque<>();
+		Iterator<Byte> it = data.iterator();
+		for (int i = 0; i < 8; ++i) {
+			headerChunk.offerLast(it.next());
+		}
+		int calculatedCheckSum = Crc16.computeCrc(headerChunk);
 		if (calculatedCheckSum != dataLinkFrameHeader.getCheckSum()) {
 			throw new IllegalStateException("Invalid checksum.");
 		}

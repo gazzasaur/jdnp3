@@ -16,9 +16,9 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.binary;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_COMMAND_CROB;
-import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getInteger;
+import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getUnsignedInteger;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
@@ -34,7 +34,7 @@ public class CrobObjectTypeDecoder implements ObjectTypeDecoder {
 		return decoderContext.getObjectType().equals(BINARY_OUTPUT_COMMAND_CROB);
 	}
 	
-	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, List<Byte> data) {
+	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, Deque<Byte> data) {
 		if (!this.canDecode(decoderContext)) {
 			throw new IllegalArgumentException("Unable to decode data.");
 		}
@@ -42,8 +42,8 @@ public class CrobObjectTypeDecoder implements ObjectTypeDecoder {
 		BinaryOutputCrobObjectInstance crob = new BinaryOutputCrobObjectInstance();
 		crob.setIndex(decoderContext.getCurrentIndex());
 		
-		long firstByte = DataUtils.getInteger(0, 1, data);
-		long lastByte = DataUtils.getInteger(10, 1, data);
+		long firstByte = DataUtils.getUnsignedInteger(0, 1, data);
+		long lastByte = DataUtils.getUnsignedInteger(10, 1, data);
 		long opTypeCode = firstByte & 0xF;
 		long tccCode = (firstByte >> 6) & 0x3;
 		long statusCode = lastByte & 0x7F;
@@ -71,9 +71,9 @@ public class CrobObjectTypeDecoder implements ObjectTypeDecoder {
 			}
 		}
 		
-		crob.setCount(getInteger(1, 1, data));
-		crob.setOnTime(getInteger(2, 4, data));
-		crob.setOffTime(getInteger(6, 4, data));
+		crob.setCount(getUnsignedInteger(1, 1, data));
+		crob.setOnTime(getUnsignedInteger(2, 4, data));
+		crob.setOffTime(getUnsignedInteger(6, 4, data));
 		
 		DataUtils.trim(11, data);
 		return crob;

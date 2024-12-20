@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
 
 import static java.lang.String.format;
 
-import java.util.List;
+import java.util.Deque;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public class ApplicationFragmentRequestDecoderImpl implements ApplicationFragmen
 		this.objectFragmentDecoder = objectFragmentDecoder;
 	}
 	
-	public ApplicationFragmentRequest decode(ApplicationFragmentDecoderContext decoderContext, ApplicationFragmentRequest applicationFragmentRequest, List<Byte> data) {
+	public ApplicationFragmentRequest decode(ApplicationFragmentDecoderContext decoderContext, ApplicationFragmentRequest applicationFragmentRequest, Deque<Byte> data) {
 		decoder.decode(applicationFragmentRequest, data);
 		decoderContext.setFunctionCode(applicationFragmentRequest.getHeader().getFunctionCode());
 		ApplicationControlField applicationControl = applicationFragmentRequest.getHeader().getApplicationControl();

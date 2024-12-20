@@ -15,11 +15,11 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.range;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode;
 
 public interface RangeDecoderHelper {
-	public Range decode(RangeSpecifierCode rangeSpecifierCode, List<Byte> data);
+	public Range decode(RangeSpecifierCode rangeSpecifierCode, Deque<Byte> data);
 }

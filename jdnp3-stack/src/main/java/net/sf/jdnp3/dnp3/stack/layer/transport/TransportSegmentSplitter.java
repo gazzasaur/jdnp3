@@ -15,7 +15,9 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.transport;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
@@ -23,7 +25,7 @@ import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 public class TransportSegmentSplitter {
 	private int dataLinkMtu = 0;
 
-	public List<TransportSegment> splitData(MessageProperties messageProperties, List<Byte> data) {
+	public List<TransportSegment> splitData(MessageProperties messageProperties, Deque<Byte> data) {
 		if (dataLinkMtu <= 0) {
 			throw new IllegalStateException("The DataLink MTU must be greater than 0 but was " + dataLinkMtu);
 		}
@@ -40,7 +42,8 @@ public class TransportSegmentSplitter {
 			transportSegment.getTransportHeader().setFirstSegment(i == 0);
 			transportSegment.getTransportHeader().setFinalSegment(i == (parts - 1));
 			transportSegment.getTransportHeader().setSequenceNumber(++sequenceNumber);
-			transportSegment.setData(new ArrayList<Byte>(data.subList(i * (dataLinkMtu - 1), ((i + 1) * (dataLinkMtu - 1) > data.size()) ? data.size() : ((i + 1) * (dataLinkMtu - 1)))));
+			List<Byte> dataArray = new ArrayList<>(data);
+			transportSegment.setData(new ArrayDeque<Byte>(dataArray.subList(i * (dataLinkMtu - 1), ((i + 1) * (dataLinkMtu - 1) > dataArray.size()) ? dataArray.size() : ((i + 1) * (dataLinkMtu - 1)))));
 			sequenceNumber %= 64;
 			
 			transportSegments.add(transportSegment);

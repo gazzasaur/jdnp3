@@ -19,24 +19,24 @@ import static java.lang.String.format;
 import static org.apache.commons.lang3.ArrayUtils.toPrimitive;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class DataPumpSendBuffer {
 	private int maxBufferSize = 0;
 	private ByteBuffer sendBuffer;
 	private int currentCacheBufferSize = 0;
-	private List<List<Byte>> sendCacheBuffer = new ArrayList<>();
+	private Deque<Deque<Byte>> sendCacheBuffer = new ArrayDeque<>();
 	
 	public DataPumpSendBuffer(int maxBufferSize) {
 		this.maxBufferSize = maxBufferSize;
 	}
 	
-	public ByteBuffer getSendBuffer() {
+	public synchronized ByteBuffer getSendBuffer() {
 		if (sendBuffer != null && sendBuffer.remaining() > 0) {
 			return sendBuffer;
 		} else if ((sendBuffer == null || sendBuffer.remaining() == 0) && sendCacheBuffer.size() > 0) {
-			List<Byte> newData = sendCacheBuffer.remove(0);
+			Deque<Byte> newData = sendCacheBuffer.pollFirst();
 			sendBuffer = ByteBuffer.wrap(toPrimitive(newData.toArray(new Byte[0])));
 			currentCacheBufferSize -= newData.size();
 			return sendBuffer;
@@ -45,15 +45,10 @@ public class DataPumpSendBuffer {
 		}
 	}
 	
-	public void addData(List<Byte> data) {
-		int freeSpace = maxBufferSize;
-		if (sendBuffer != null) {
-			freeSpace -= sendBuffer.remaining();
-		}
-		freeSpace -= currentCacheBufferSize;
-		
+	public synchronized void addData(Deque<Byte> data) {
+		int freeSpace = maxBufferSize - currentCacheBufferSize;
 		if (data.size() <= freeSpace) {
-			sendCacheBuffer.add(new ArrayList<>(data));
+			sendCacheBuffer.add(data);
 			currentCacheBufferSize += data.size();
 		} else {
 			throw new RuntimeException(format("Not enough free space in buffer.  Buffer Size: %s, Free Space: %s, Data Size %s.", maxBufferSize, freeSpace, data.size()));

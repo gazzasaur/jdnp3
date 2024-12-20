@@ -18,7 +18,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getUnsignedInteger;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.trim;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
@@ -37,7 +37,7 @@ public class IndexPrefixCountRangeItemEnumerator implements ItemEnumerator {
 		return count < countRange.getCount();
 	}
 	
-	public long next(List<Byte> data) {
+	public long next(Deque<Byte> data) {
 		if (!this.hasNext()) {
 			throw new IllegalStateException("No items remain.");
 		}

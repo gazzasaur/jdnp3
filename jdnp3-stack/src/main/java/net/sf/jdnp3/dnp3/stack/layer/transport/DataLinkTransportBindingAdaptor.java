@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.transport;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkListener;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
@@ -27,7 +27,7 @@ public class DataLinkTransportBindingAdaptor implements DataLinkListener {
 		this.transportBinding = transportBinding;
 	}
 	
-	public void receiveData(MessageProperties messageProperties, List<Byte> data) {
+	public void receiveData(MessageProperties messageProperties, Deque<Byte> data) {
 		transportBinding.receiveDataLinkData(messageProperties, data);
 	}
 }

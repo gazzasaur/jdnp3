@@ -15,12 +15,12 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.transport;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class TransportSegment {
 	private TransportHeader transportHeader = new TransportHeader();
-	private List<Byte> data = new ArrayList<>();
+	private Deque<Byte> data = new ArrayDeque<>();
 	
 	public TransportHeader getTransportHeader() {
 		return transportHeader;
@@ -30,11 +30,11 @@ public class TransportSegment {
 		this.transportHeader = transportHeader;
 	}
 
-	public List<Byte> getData() {
+	public Deque<Byte> getData() {
 		return data;
 	}
 
-	public void setData(List<Byte> data) {
+	public void setData(Deque<Byte> data) {
 		this.data = data;
 	}
 }

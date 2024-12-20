@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.time;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.TIME_DELAY_FINE;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
@@ -30,7 +30,7 @@ public class TimeDelayCoarseObjectTypeDecoder implements ObjectTypeDecoder {
 		return decoderContext.getObjectType().equals(TIME_DELAY_FINE);
 	}
 	
-	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, List<Byte> data) {
+	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, Deque<Byte> data) {
 		if (!this.canDecode(decoderContext)) {
 			throw new IllegalArgumentException("Unable to decode data.");
 		}

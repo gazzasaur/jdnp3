@@ -15,10 +15,10 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentRequest;
 
 public interface ApplicationFragmentRequestDecoder {
-	public ApplicationFragmentRequest decode(ApplicationFragmentDecoderContext decoderContext, ApplicationFragmentRequest request, List<Byte> data);
+	public ApplicationFragmentRequest decode(ApplicationFragmentDecoderContext decoderContext, ApplicationFragmentRequest request, Deque<Byte> data);
 }

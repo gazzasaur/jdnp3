@@ -15,14 +15,14 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentRequestHeader;
 
 public class ApplicationFragmentRequestHeaderEncoder {
 	private ApplicationControlFieldEncoder applicationControlEncoder = new ApplicationControlFieldEncoder();
 	
-	public void encode(ApplicationFragmentRequestHeader header, List<Byte> data) {
+	public void encode(ApplicationFragmentRequestHeader header, Deque<Byte> data) {
 		applicationControlEncoder.encode(header.getApplicationControl(), data);
 		data.add((byte) header.getFunctionCode().getCode());
 	}

@@ -19,7 +19,8 @@ import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectTypeEncoderConstants.OBJECT_TYPE_ENCODERS;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.EncoderUtils.calculateOctetCount;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
@@ -78,7 +79,7 @@ public class IndexRangeObjectFragmentPacker implements ObjectFragmentPacker {
 		long overhead = 2;
 		long addedObjects = 0;
 		
-		List<Byte> data = new ArrayList<Byte>();
+		Deque<Byte> data = new ArrayDeque<Byte>();
 		
 		while (objectInstances.size() > 0) {
 			ObjectInstance nextInstance = objectInstances.get(0);

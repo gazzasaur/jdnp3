@@ -31,14 +31,6 @@ public class DataLinkManagerProvider {
 		return dataLinkManagers.size();
 	}
 
-	public synchronized static int getDataLinkConnectionCount() {
-		int total = 0;
-		for (DataLinkManager dataLinkManager : dataLinkManagers.values()) {
-			total += dataLinkManager.getConnectionCount();
-		}
-		return total;
-	}
-
 	public synchronized static int getDataLinkBindingCount() {
 		int total = 0;
 		for (DataLinkManager dataLinkManager : dataLinkManagers.values()) {

@@ -15,15 +15,15 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.ObjectPrefixCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode;
 
 public class QualifierDecoder {
-	public void decode(QualifierField qualifierField, List<Byte> data) {
-		byte value = data.remove(0);
+	public void decode(QualifierField qualifierField, Deque<Byte> data) {
+		byte value = data.pollFirst();
 		int prefixCodeValue = (value >> 4) & 0x07;
 		int rangeSpecifierCodeValue = value & 0x0F;
 		

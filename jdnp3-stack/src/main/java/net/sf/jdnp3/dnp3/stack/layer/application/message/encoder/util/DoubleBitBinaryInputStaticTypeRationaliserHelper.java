@@ -15,7 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util;
 
-import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CLASS_0;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.DOUBLE_BIT_BINARY_INPUT_STATIC_ANY;
@@ -40,7 +39,7 @@ public class DoubleBitBinaryInputStaticTypeRationaliserHelper implements ObjectI
 	public void rationalise(ObjectInstance objectInstance) {
 		DoubleBitBinaryInputStaticObjectInstance specificInstance = (DoubleBitBinaryInputStaticObjectInstance) objectInstance;
 		if (!validObjectTypes.contains(specificInstance.getRequestedType())) {
-			logger.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
+			logger.warn("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass());
 			objectInstance.setRequestedType(ANY);
 		}
 		if (!specificInstance.isOnline()
@@ -51,7 +50,7 @@ public class DoubleBitBinaryInputStaticTypeRationaliserHelper implements ObjectI
 				|| specificInstance.isCommunicationsLost()
 				|| specificInstance.getRequestedType().equals(DOUBLE_BIT_BINARY_INPUT_STATIC_FLAGS)) {
 			if (specificInstance.getRequestedType().equals(ObjectTypeConstants.DOUBLE_BIT_BINARY_INPUT_STATIC_PACKED)) {
-				logger.warn(format("Packed format requested but flags are required."));
+				logger.warn("Packed format requested but flags are required.");
 			}
 			objectInstance.setRequestedType(DOUBLE_BIT_BINARY_INPUT_STATIC_FLAGS);
 		} else {

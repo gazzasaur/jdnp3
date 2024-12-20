@@ -56,6 +56,20 @@ public class DirectPointDeviceFactory {
 			List<AnalogInputDataPoint> analogInputDataPoints,
 			List<AnalogOutputDataPoint> analogOutputDataPoints,
 			List<CounterDataPoint> counterDataPoints) {
+		return create(siteName, deviceName, primaryAddress, false, binaryInputDataPoints, binaryOutputDataPoints, doubleBitBinaryInputDataPoints, analogInputDataPoints, analogOutputDataPoints, counterDataPoints);
+	}
+
+	public static OutstationDevice create(
+			String siteName,
+			String deviceName,
+			int primaryAddress,
+			boolean supportUnsolicited,
+			List<BinaryInputDataPoint> binaryInputDataPoints,
+			List<BinaryOutputDataPoint> binaryOutputDataPoints,
+			List<DoubleBitBinaryInputDataPoint> doubleBitBinaryInputDataPoints,
+			List<AnalogInputDataPoint> analogInputDataPoints,
+			List<AnalogOutputDataPoint> analogOutputDataPoints,
+			List<CounterDataPoint> counterDataPoints) {
 		OutstationDevice outstationDevice = new OutstationDevice();
 		outstationDevice.setSite(siteName);
 		outstationDevice.setDevice(deviceName);
@@ -141,6 +155,8 @@ public class DirectPointDeviceFactory {
 		}
 
 		OutstationFactory outstationFactory = new OutstationFactory();
+
+		outstationFactory.setUnsolicitedEnabled(supportUnsolicited);
 		
 		outstationFactory.addOutstationApplicationRequestHandler(new ByteDataOutstationApplicationRequestHandler());
 		outstationFactory.addStandardObjectTypeEncoders();

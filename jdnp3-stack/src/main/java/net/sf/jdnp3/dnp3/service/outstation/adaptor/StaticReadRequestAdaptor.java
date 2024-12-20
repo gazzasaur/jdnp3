@@ -36,7 +36,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StaticObjectI
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 public class StaticReadRequestAdaptor<E extends StaticObjectInstance> implements OutstationRequestHandlerAdaptor {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(StaticReadRequestAdaptor.class);
 	
 	private int group;
 	private Class<E> clazz;
@@ -73,7 +73,7 @@ public class StaticReadRequestAdaptor<E extends StaticObjectInstance> implements
 			}
 			
 			if (result == null) {
-				logger.warn(String.format("Cannot perform a read request on the static input qith a prefix type of %s and a range of %s.", prefixType.getClass(), range.getClass()));
+				LOGGER.warn("Cannot perform a read request on the static input qith a prefix type of %s and a range of %s.", prefixType.getClass(), range.getClass());
 			} else {
 				for (E objectInstance : result) {
 					objectInstance.setRequestedType(request.getObjectFragmentHeader().getObjectType());

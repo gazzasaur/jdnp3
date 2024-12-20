@@ -15,12 +15,12 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.range;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode;
 
 public interface RangeEncoderHelper {
 	public RangeSpecifierCode calculateRangeSpecifierCode(Range range, int minOctetCount);
-	public RangeSpecifierCode encode(Range range, int minOctetCount, List<Byte> data);
+	public RangeSpecifierCode encode(Range range, int minOctetCount, Deque<Byte> data);
 }

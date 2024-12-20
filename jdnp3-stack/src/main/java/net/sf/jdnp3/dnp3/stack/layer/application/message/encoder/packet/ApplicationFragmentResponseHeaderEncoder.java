@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentResponseHeader;
 
@@ -23,7 +23,7 @@ public class ApplicationFragmentResponseHeaderEncoder {
 	private ApplicationControlFieldEncoder applicationControlEncoder = new ApplicationControlFieldEncoder();
 	private InternalIndicatorsEncoder internalIndicatorsEncoder = new InternalIndicatorsEncoder();
 	
-	public void encode(ApplicationFragmentResponseHeader header, List<Byte> data) {
+	public void encode(ApplicationFragmentResponseHeader header, Deque<Byte> data) {
 		applicationControlEncoder.encode(header.getApplicationControl(), data);
 		data.add((byte) header.getFunctionCode().getCode());
 		internalIndicatorsEncoder.encode(header.getInternalIndicatorField(), data);

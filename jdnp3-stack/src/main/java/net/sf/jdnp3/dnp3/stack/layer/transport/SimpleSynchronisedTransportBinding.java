@@ -15,6 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.transport;
 
+import java.util.Deque;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public class SimpleSynchronisedTransportBinding implements TransportBinding {
-	private Logger logger = LoggerFactory.getLogger(SimpleSynchronisedTransportBinding.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SimpleSynchronisedTransportBinding.class);
 	
 	private int address;
 	private DataLinkLayer dataLinkLayer;
@@ -35,35 +36,43 @@ public class SimpleSynchronisedTransportBinding implements TransportBinding {
 	private TransportSegmentDigester transportSegmentDigester = new TransportSegmentDigester();
 	private TransportSegmentSplitter transportSegmentSplitter = new TransportSegmentSplitter();
 
-	public synchronized void receiveDataLinkData(MessageProperties messageProperties, List<Byte> data) {
+	public void receiveDataLinkData(MessageProperties messageProperties, Deque<Byte> data) {
 		validate();
 		if (address != messageProperties.getDestinationAddress()) {
 			return;
 		}
 		TransportSegment transportSegment = transportSegmentDecoder.decode(data);
-		logger.debug(TransportSegmentUtils.toString(messageProperties.getChannelId(), transportSegment));
-		if (transportSegmentDigester.digestData(messageProperties, transportSegment, data)) {
-			applicationLayer.dataReceived(messageProperties, transportSegmentDigester.pollData());
+		LOGGER.debug(TransportSegmentUtils.toString(messageProperties.getChannelId(), transportSegment));
+		synchronized (transportSegmentDigester) {
+			if (transportSegmentDigester.digestData(messageProperties, transportSegment, data)) {
+				applicationLayer.dataReceived(messageProperties, transportSegmentDigester.pollData());
+			}
 		}
 	}
 
-	public synchronized void receiveApplicationData(MessageProperties messageProperties, List<Byte> data) {
+	public void receiveApplicationData(MessageProperties messageProperties, Deque<Byte> data) {
 		validate();
-		List<TransportSegment> transportSegments = transportSegmentSplitter.splitData(messageProperties, data);
-		for (TransportSegment transportSegment : transportSegments) {
-			dataLinkLayer.sendData(messageProperties, transportSegmentEncoder.encode(transportSegment));
+		synchronized (transportSegmentSplitter) {
+			List<TransportSegment> transportSegments = transportSegmentSplitter.splitData(messageProperties, data);
+			for (TransportSegment transportSegment : transportSegments) {
+				dataLinkLayer.sendData(messageProperties, transportSegmentEncoder.encode(transportSegment));
+			}	
 		}
 	}
 	
-	public synchronized void setApplicationLayer(int address, ApplicationLayer applicationLayer) {
-		this.address = address;
-		this.applicationLayer = applicationLayer;
-		transportSegmentDigester.setApplicationMtu(applicationLayer.getMtu());
+	public void setApplicationLayer(int address, ApplicationLayer applicationLayer) {
+		synchronized (transportSegmentDigester) {
+			this.address = address;
+			this.applicationLayer = applicationLayer;
+			transportSegmentDigester.setApplicationMtu(applicationLayer.getMtu());	
+		}
 	}
 	
-	public synchronized void setDataLinkLayer(DataLinkLayer dataLinkLayer) {
-		this.dataLinkLayer = dataLinkLayer;
-		transportSegmentSplitter.setDataLinkMtu(dataLinkLayer.getMtu());
+	public void setDataLinkLayer(DataLinkLayer dataLinkLayer) {
+		synchronized (transportSegmentSplitter) {
+			this.dataLinkLayer = dataLinkLayer;
+			transportSegmentSplitter.setDataLinkMtu(dataLinkLayer.getMtu());
+		}
 	}
 
 	private void validate() {

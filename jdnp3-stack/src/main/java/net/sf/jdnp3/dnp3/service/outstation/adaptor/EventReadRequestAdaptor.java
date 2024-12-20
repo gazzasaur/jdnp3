@@ -34,7 +34,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstanc
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 public class EventReadRequestAdaptor<E extends EventObjectInstance> implements OutstationRequestHandlerAdaptor {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(EventReadRequestAdaptor.class);
 	
 	private int group;
 	private Class<E> clazz;
@@ -66,7 +66,7 @@ public class EventReadRequestAdaptor<E extends EventObjectInstance> implements O
 			}
 			
 			if (result == null) {
-				logger.warn(String.format("Cannot perform a read request on the event with a prefix type of %s and a range of %s.", prefixType.getClass(), range.getClass()));
+				LOGGER.warn("Cannot perform a read request on the event with a prefix type of %s and a range of %s.", prefixType.getClass(), range.getClass());
 			} else {
 				for (E objectInstance : result) {
 					objectInstance.setRequestedType(request.getObjectFragmentHeader().getObjectType());

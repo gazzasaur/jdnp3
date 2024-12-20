@@ -15,10 +15,11 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
 
-import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getInteger;
+import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getUnsignedInteger;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.trim;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ByteDataObjectTypeDecoder;
@@ -42,7 +43,7 @@ public class ObjectFragmentDecoder {
 		customDecoders.add(decoder);
 	}
 	
-	public void decode(ApplicationFragmentDecoderContext decoderContext, ObjectFragment objectFragment, List<Byte> data) {
+	public void decode(ApplicationFragmentDecoderContext decoderContext, ObjectFragment objectFragment, Deque<Byte> data) {
 		for (ByteDataObjectTypeDecoder customDecoder : customDecoders) {
 			customDecoder.canDecode(decoderContext, data);
 			
@@ -53,7 +54,7 @@ public class ObjectFragmentDecoder {
 			}
 		}
 		
-		objectFragment.getObjectFragmentHeader().setObjectType(new ObjectType((int) getInteger(0, 1, data), (int) getInteger(1, 1, data)));
+		objectFragment.getObjectFragmentHeader().setObjectType(new ObjectType((int) getUnsignedInteger(0, 1, data), (int) getUnsignedInteger(1, 1, data)));
 		decoderContext.setObjectType(objectFragment.getObjectFragmentHeader().getObjectType());
 		trim(2, data);
 		

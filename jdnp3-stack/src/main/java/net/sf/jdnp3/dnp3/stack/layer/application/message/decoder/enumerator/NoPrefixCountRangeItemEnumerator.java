@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
 
@@ -31,7 +31,7 @@ public class NoPrefixCountRangeItemEnumerator implements ItemEnumerator {
 		return index < size;
 	}
 	
-	public long next(List<Byte> data) {
+	public long next(Deque<Byte> data) {
 		if (!this.hasNext()) {
 			throw new IllegalStateException("No items remain.");
 		}

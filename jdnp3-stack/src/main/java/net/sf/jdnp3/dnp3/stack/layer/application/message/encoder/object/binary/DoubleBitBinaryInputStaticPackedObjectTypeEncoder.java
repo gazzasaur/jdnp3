@@ -16,9 +16,10 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.binary;
 
 import static java.lang.String.format;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCodeUtils.isResponseCode;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.DOUBLE_BIT_BINARY_INPUT_STATIC_PACKED;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
@@ -29,10 +30,10 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstanc
 
 public class DoubleBitBinaryInputStaticPackedObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(DOUBLE_BIT_BINARY_INPUT_STATIC_PACKED);
+		return isResponseCode(functionCode) && objectType.equals(DOUBLE_BIT_BINARY_INPUT_STATIC_PACKED);
 	}
 
-	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
+	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, Deque<Byte> data) {
 		if (!this.canEncode(context.getFunctionCode(), context.getObjectType())) {
 			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}
@@ -42,9 +43,9 @@ public class DoubleBitBinaryInputStaticPackedObjectTypeEncoder implements Object
 			data.add((byte) 0);
 		}
 		
-		byte value = data.get(data.size() - 1);
+		byte value = data.pollLast();
 		DoubleBitBinaryInputStaticObjectInstance specificObjectInstance = (DoubleBitBinaryInputStaticObjectInstance) objectInstance;
 		value |= (specificObjectInstance.getValue() << bitIndex);
-		data.set(data.size() - 1, value);
+		data.offerLast(value);
 	}
 }

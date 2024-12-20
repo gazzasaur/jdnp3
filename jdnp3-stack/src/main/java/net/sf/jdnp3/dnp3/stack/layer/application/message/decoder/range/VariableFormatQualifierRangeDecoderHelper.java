@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.range;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecifierCode;
@@ -23,7 +23,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.VariableFor
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class VariableFormatQualifierRangeDecoderHelper implements RangeDecoderHelper {
-	public Range decode(RangeSpecifierCode rangeSpecifierCode, List<Byte> data) {
+	public Range decode(RangeSpecifierCode rangeSpecifierCode, Deque<Byte> data) {
 		VariableFormatQualifierRange range = new VariableFormatQualifierRange();
 		range.setCount(DataUtils.getUnsignedInteger(0, 1, data));
 		DataUtils.trim(1, data);

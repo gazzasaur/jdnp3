@@ -15,11 +15,11 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.service.core;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public interface DataLinkListener {
 	// TODO Likely provide a handle back to check for nack or handle it under the hood.
-	public void receiveData(MessageProperties messageProperties, List<Byte> data);
+	public void receiveData(MessageProperties messageProperties, Deque<Byte> data);
 }

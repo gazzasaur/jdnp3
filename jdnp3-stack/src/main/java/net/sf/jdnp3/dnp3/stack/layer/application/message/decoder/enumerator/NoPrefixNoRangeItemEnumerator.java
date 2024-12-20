@@ -15,14 +15,14 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.enumerator;
 
-import java.util.List;
+import java.util.Deque;
 
 public class NoPrefixNoRangeItemEnumerator implements ItemEnumerator {
 	public boolean hasNext() {
 		return false;
 	}
 	
-	public long next(List<Byte> data) {
+	public long next(Deque<Byte> data) {
 		throw new UnsupportedOperationException("No items exist for this combination.");
 	}
 }

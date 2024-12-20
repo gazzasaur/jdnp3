@@ -15,14 +15,12 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.model;
 
-import static java.util.Collections.unmodifiableList;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class DataLinkFrame {
 	private DataLinkFrameHeader dataLinkFrameHeader = new DataLinkFrameHeader();
-	private List<Byte> data = new ArrayList<>();
+	private Deque<Byte> data = new ArrayDeque<>();
 	
 	public DataLinkFrameHeader getDataLinkFrameHeader() {
 		return dataLinkFrameHeader;
@@ -32,11 +30,11 @@ public class DataLinkFrame {
 		this.dataLinkFrameHeader = dataLinkFrameHeader;
 	}
 
-	public List<Byte> getData() {
-		return unmodifiableList(data);
+	public Deque<Byte> getData() {
+		return data;
 	}
 
-	public void setData(List<Byte> data) {
-		this.data = new ArrayList<>(data);
+	public void setData(Deque<Byte> data) {
+		this.data = data;
 	}
 }

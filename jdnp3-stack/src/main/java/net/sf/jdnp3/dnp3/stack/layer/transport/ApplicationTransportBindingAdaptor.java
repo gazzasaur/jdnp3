@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.transport;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationTransport;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
@@ -27,7 +27,7 @@ public class ApplicationTransportBindingAdaptor implements ApplicationTransport 
 		this.transportBinding = transportBinding;
 	}
 	
-	public void sendData(MessageProperties messageProperties, List<Byte> data) {
+	public void sendData(MessageProperties messageProperties, Deque<Byte> data) {
 		transportBinding.receiveApplicationData(messageProperties, data);
 	}
 }

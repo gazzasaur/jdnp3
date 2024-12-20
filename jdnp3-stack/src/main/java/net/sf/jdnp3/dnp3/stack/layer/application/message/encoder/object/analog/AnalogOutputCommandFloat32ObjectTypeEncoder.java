@@ -19,7 +19,7 @@ import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_COMMAND_FLOAT32;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
@@ -34,7 +34,7 @@ public class AnalogOutputCommandFloat32ObjectTypeEncoder implements ObjectTypeEn
 		return objectType.equals(ANALOG_OUTPUT_COMMAND_FLOAT32);
 	}
 
-	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
+	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, Deque<Byte> data) {
 		if (!this.canEncode(context.getFunctionCode(), context.getObjectType())) {
 			throw new IllegalArgumentException(format("Cannot encode the given value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}

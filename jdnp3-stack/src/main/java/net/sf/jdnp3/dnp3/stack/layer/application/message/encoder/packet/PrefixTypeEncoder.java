@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet;
 
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.NoPrefixType;
@@ -25,7 +25,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class PrefixTypeEncoder {
-	public static void encode(PrefixType prefixType, ObjectInstance objectInstance, List<Byte> data) {
+	public static void encode(PrefixType prefixType, ObjectInstance objectInstance, Deque<Byte> data) {
 		if (prefixType instanceof NoPrefixType) {
 		} else if (prefixType instanceof IndexPrefixType) {
 			addInteger(objectInstance.getIndex(), prefixType.getOctetCount(), data);

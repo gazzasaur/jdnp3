@@ -15,8 +15,8 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.transport;
 
-import java.util.List;
+import java.util.Deque;
 
 public interface TransportSegmentEncoder {
-	public List<Byte> encode(TransportSegment transportSegment);
+	public Deque<Byte> encode(TransportSegment transportSegment);
 }

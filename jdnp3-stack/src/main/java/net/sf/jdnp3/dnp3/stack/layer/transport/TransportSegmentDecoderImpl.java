@@ -15,9 +15,9 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.transport;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.BitSet;
-import java.util.List;
+import java.util.Deque;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,21 +25,21 @@ import org.slf4j.LoggerFactory;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class TransportSegmentDecoderImpl implements TransportSegmentDecoder {
-	private Logger logger = LoggerFactory.getLogger(TransportSegmentDecoderImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TransportSegmentDecoderImpl.class);
 	
-	public TransportSegment decode(List<Byte> linkData) {
-		logger.debug("Transport Data Received: " + DataUtils.toString(linkData));
+	public TransportSegment decode(Deque<Byte> linkData) {
+		LOGGER.debug("Transport Data Received: {}", DataUtils.toString(linkData));
 		
-		List<Byte> data = new ArrayList<Byte>(linkData);
+		Deque<Byte> data = new ArrayDeque<Byte>(linkData);
 		TransportSegment transportSegment = new TransportSegment();
-		byte headerByte = data.remove(0);
+		byte headerByte = data.pollFirst();
 		BitSet bitSet = BitSet.valueOf(new byte[] { headerByte });
 		
 		transportSegment.getTransportHeader().setFirstSegment(bitSet.get(7));
 		transportSegment.getTransportHeader().setFinalSegment(bitSet.get(6));
 		transportSegment.getTransportHeader().setSequenceNumber(headerByte & 0x3F);
 		
-		transportSegment.getData().addAll(data.subList(0, data.size()));
+		transportSegment.getData().addAll(data);
 		return transportSegment;
 	}
 }

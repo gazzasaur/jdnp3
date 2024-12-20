@@ -15,12 +15,11 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server;
 
-import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.SocketChannelUtils.getRemoteSocketAddress;
 
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.List;
+import java.util.Deque;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +51,7 @@ public class ServerSocketChannelDataPumpListener implements DataPumpListener {
 			socketChannel.configureBlocking(false);
 			
 			ChannelId channelId = channelManager.addChannel(socketChannel);
-			logger.info(format("Connection received from %s and has been assigned a channel id of %s.", getRemoteSocketAddress(socketChannel), channelId));
+			logger.info("Connection received from {} and has been assigned a channel id of {}.", getRemoteSocketAddress(socketChannel), channelId);
 			dataPump.registerChannel(socketChannel, new SocketChannelDataPumpListener(channelId, channelManager, dataLinkInterceptor));
 		} catch (Exception e) {
 			logger.error("Failed to accept client socket.", e);
@@ -75,6 +74,6 @@ public class ServerSocketChannelDataPumpListener implements DataPumpListener {
 		channelManager.closeAll();
 	}
 
-	public void dataReceived(List<Byte> data) {
+	public void dataReceived(Deque<Byte> data) {
 	}
 }

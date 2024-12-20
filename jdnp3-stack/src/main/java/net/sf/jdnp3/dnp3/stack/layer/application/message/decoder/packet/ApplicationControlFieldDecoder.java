@@ -16,17 +16,17 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet;
 
 import java.util.BitSet;
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationControlField;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class ApplicationControlFieldDecoder {
-	public void decode(ApplicationControlField applicationControlField, List<Byte> data) {
-		int sequenceNumber = (int) DataUtils.getInteger(0, 1, data) & 0x0F;
+	public void decode(ApplicationControlField applicationControlField, Deque<Byte> data) {
+		int sequenceNumber = (int) DataUtils.getUnsignedInteger(0, 1, data) & 0x0F;
 		applicationControlField.setSequenceNumber(sequenceNumber);
 		
-		BitSet flags = BitSet.valueOf(new byte[] { data.remove(0) });
+		BitSet flags = BitSet.valueOf(new byte[] { data.pollFirst() });
 		applicationControlField.setFirstFragmentOfMessage(flags.get(7));
 		applicationControlField.setFinalFragmentOfMessage(flags.get(6));
 		applicationControlField.setConfirmationRequired(flags.get(5));

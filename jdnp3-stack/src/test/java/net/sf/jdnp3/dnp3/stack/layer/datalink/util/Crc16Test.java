@@ -22,7 +22,7 @@ import static org.apache.commons.lang3.ArrayUtils.toObject;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 
 import org.junit.Test;
 
@@ -34,7 +34,7 @@ public class Crc16Test {
 	
 	@Test
 	public void testCrcGeneration() throws Exception {
-		assertThat(computeCrc(new ArrayList<Byte>()), is(0xFFFF));
-		assertThat(computeCrc(asList(toObject(decodeHex("b00b1e55".toCharArray())))), is(0x22BB));
+		assertThat(computeCrc(new ArrayDeque<Byte>()), is(0xFFFF));
+		assertThat(computeCrc(new ArrayDeque<>(asList(toObject(decodeHex("b00b1e55".toCharArray()))))), is(0x22BB));
 	}
 }

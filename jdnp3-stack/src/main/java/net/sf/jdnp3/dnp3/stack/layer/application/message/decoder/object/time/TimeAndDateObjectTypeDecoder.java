@@ -19,7 +19,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getInteger;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.trim;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.generic.ObjectTypeDecoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.packet.ApplicationFragmentDecoderContext;
@@ -31,7 +31,7 @@ public class TimeAndDateObjectTypeDecoder implements ObjectTypeDecoder {
 		return decoderContext.getObjectType().equals(TIME_AND_DATE_ABSOLUTE_TIME);
 	}
 	
-	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, List<Byte> data) {
+	public ObjectInstance decode(ApplicationFragmentDecoderContext decoderContext, Deque<Byte> data) {
 		if (!this.canDecode(decoderContext)) {
 			throw new IllegalArgumentException("Unable to decode data.");
 		}

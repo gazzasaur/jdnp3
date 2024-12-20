@@ -15,7 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.adaptor;
 
-import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.WRITE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.INTERNAL_INDICATIONS_PACKED;
 
@@ -36,7 +35,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstanc
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 public class InternalIndicatorWriteRequestAdaptor implements OutstationRequestHandlerAdaptor {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(InternalIndicatorWriteRequestAdaptor.class);
 	
 	private InternalIndicatorWriteRequestHandler serviceRequestHandler = null;
 
@@ -60,7 +59,7 @@ public class InternalIndicatorWriteRequestAdaptor implements OutstationRequestHa
 					serviceRequestHandler.doWriteIndicatorBit(index, specificObjectInstance.isActive());
 				}
 			} else {
-				logger.warn(format("Cannot perform a %s request on the type %s for the range type of %s and prefix type %s.", WRITE, INTERNAL_INDICATIONS_PACKED, range, request.getObjectFragmentHeader().getPrefixType()));
+				LOGGER.warn("Cannot perform a %s request on the type %s for the range type of %s and prefix type %s.", WRITE, INTERNAL_INDICATIONS_PACKED, range, request.getObjectFragmentHeader().getPrefixType());
 			}
 		}
 	}

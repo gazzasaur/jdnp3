@@ -15,12 +15,12 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.QualifierField;
 
 public class QualifierEncoder {
-	public void encode(QualifierField qualifierField, List<Byte> data) {
+	public void encode(QualifierField qualifierField, Deque<Byte> data) {
 		byte value = (byte) (qualifierField.getObjectPrefixCode().getCode() << 4);
 		value |= qualifierField.getRangeSpecifierCode().getCode();
 		data.add(value);

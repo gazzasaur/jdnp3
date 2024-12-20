@@ -15,8 +15,8 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.range;
 
+import java.util.Deque;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragmentHeader;
@@ -37,7 +37,7 @@ public class RangeDecoder {
 		this.put(RangeSpecifierCode.VARIABLE_FORMAT_QUALIFIER, new VariableFormatQualifierRangeDecoderHelper());
 	}};
 	
-	public void decode(ObjectFragmentHeader header, List<Byte> data) {
+	public void decode(ObjectFragmentHeader header, Deque<Byte> data) {
 		RangeDecoderHelper helper = helpers.get(header.getQualifierField().getRangeSpecifierCode());
 		if (helper == null) {
 			throw new IllegalStateException("No range decoder was found for the given range: " + header.getQualifierField().getRangeSpecifierCode());

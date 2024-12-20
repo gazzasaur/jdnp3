@@ -101,6 +101,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationLa
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationRequestHandler;
 
 public class OutstationFactory {
+	private boolean unsolicitedEnabled = false;
 	private InternalStatusProvider internalStatusProvider = null;
 	private List<ObjectTypeEncoder> encoders = new ArrayList<>();
 	private List<ObjectTypeDecoder> decoders = new ArrayList<>();
@@ -112,6 +113,10 @@ public class OutstationFactory {
 	private List<OutstationRequestHandler> outstationRequestHandlers = new ArrayList<>();
 	private List<OutstationApplicationRequestHandler> outstationApplicationRequestHandlers = new ArrayList<>();
 	
+	public void setUnsolicitedEnabled(boolean unsolicitedEnabled) {
+		this.unsolicitedEnabled = unsolicitedEnabled;
+	}
+
 	public void setInternalStatusProvider(InternalStatusProvider internalStatusProvider) {
 		this.internalStatusProvider = internalStatusProvider;
 	}
@@ -241,6 +246,7 @@ public class OutstationFactory {
 		ApplicationFragmentResponseEncoder applicationFragmentResponseEncoder = new ApplicationFragmentResponseEncoderImpl(objectFragmentEncoder);
 		ApplicationFragmentRequestDecoder applicationFragmentRequestDecoder = new ApplicationFragmentRequestDecoderImpl(objectFragmentDecoder);
 		OutstationApplicationLayer outstationApplicationLayer = new OutstationApplicationLayer();
+		outstationApplicationLayer.setUnsolicitedEnabled(unsolicitedEnabled);
 		outstationApplicationLayer.setEncoder(applicationFragmentResponseEncoder);
 		outstationApplicationLayer.setDecoder(applicationFragmentRequestDecoder);
 		

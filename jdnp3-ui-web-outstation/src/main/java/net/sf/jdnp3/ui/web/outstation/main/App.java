@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.jetty.server.Server;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -46,28 +48,31 @@ public class App {
 	public static void main(String[] args) {
 		SLF4JBridgeHandler.removeHandlersForRootLogger();
 		SLF4JBridgeHandler.install();
+
+		Logger logger = LoggerFactory.getLogger(App.class);
 		
-		ClassPathXmlApplicationContext loadContext = new ClassPathXmlApplicationContext("outstation-config.xml");
-		Map<String, DeviceFactory> deviceFactories = loadContext.getBeansOfType(DeviceFactory.class);
-		for (Entry<String, DeviceFactory> entry : deviceFactories.entrySet()) {
-			DeviceFactoryRegistry.registerFactory(entry.getKey(), entry.getValue());
+		try (ClassPathXmlApplicationContext loadContext = new ClassPathXmlApplicationContext("outstation-config.xml");) {
+			Map<String, DeviceFactory> deviceFactories = loadContext.getBeansOfType(DeviceFactory.class);
+			for (Entry<String, DeviceFactory> entry : deviceFactories.entrySet()) {
+				DeviceFactoryRegistry.registerFactory(entry.getKey(), entry.getValue());
+			}
+
+			Map<String, DataLinkFactory> dataLinkFactories = loadContext.getBeansOfType(DataLinkFactory.class);
+			for (Entry<String, DataLinkFactory> entry : dataLinkFactories.entrySet()) {
+				DataLinkFactoryRegistry.registerFactory(entry.getKey(), entry.getValue());
+			}	
 		}
-		
-		Map<String, DataLinkFactory> dataLinkFactories = loadContext.getBeansOfType(DataLinkFactory.class);
-		for (Entry<String, DataLinkFactory> entry : dataLinkFactories.entrySet()) {
-			DataLinkFactoryRegistry.registerFactory(entry.getKey(), entry.getValue());
+
+		Server server = null;
+		try (ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("jetty-config.xml")) {
+			server = context.getBean(Server.class);
 		}
-		loadContext.close();
-		
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("jetty-config.xml");
+
 		try {
-			Server server = context.getBean(Server.class);
-			context.close();
 			server.start();
 			server.join();
 		} catch (Exception e) {
-			context.close();
-			e.printStackTrace();
+			logger.error("Webserver failed: ", e);
 		}
 	}
 }

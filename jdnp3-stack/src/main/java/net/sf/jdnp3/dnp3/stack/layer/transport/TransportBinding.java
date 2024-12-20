@@ -15,15 +15,15 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.transport;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.service.ApplicationLayer;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public interface TransportBinding {
-	public void receiveDataLinkData(MessageProperties messageProperties, List<Byte> data);
-	public void receiveApplicationData(MessageProperties messageProperties, List<Byte> data);
+	public void receiveDataLinkData(MessageProperties messageProperties, Deque<Byte> data);
+	public void receiveApplicationData(MessageProperties messageProperties, Deque<Byte> data);
 	
 	public void setApplicationLayer(int address, ApplicationLayer applicationLayer);
 	public void setDataLinkLayer(DataLinkLayer dataLinkLayer);

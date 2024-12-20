@@ -15,8 +15,8 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.range;
 
+import java.util.Deque;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.CountRange;
@@ -44,7 +44,7 @@ public class RangeEncoder {
 		return helper.calculateRangeSpecifierCode(range, minOctetCount);
 	}
 	
-	public void encode(Range range, int minOctetCount, List<Byte> data) {
+	public void encode(Range range, int minOctetCount, Deque<Byte> data) {
 		RangeEncoderHelper helper = helpers.get(range.getClass());
 		if (helper == null) {
 			throw new RuntimeException("No RangeEncoderHelper found for class " + range.getClass());

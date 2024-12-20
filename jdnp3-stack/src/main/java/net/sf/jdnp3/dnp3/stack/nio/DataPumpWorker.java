@@ -20,8 +20,8 @@ import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import java.util.Deque;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -32,7 +32,6 @@ public class DataPumpWorker implements Runnable {
 	
 	private Selector selector;
 	private boolean running = false;
-	private Object selectionLock = new Object();
 	
 	public DataPumpWorker() {
 		try {
@@ -44,13 +43,10 @@ public class DataPumpWorker implements Runnable {
 	
 	public void registerServerChannel(SelectableChannel selectableChannel, DataPumpListener dataPumpListener) {
 		try {
-			synchronized (selectionLock) {
-				selector.wakeup();
-				if (!selectableChannel.isRegistered()) {
-					selectableChannel.register(selector, SelectionKey.OP_ACCEPT, new DataPumpItem(0, new NullDataPumpTransceiver(), dataPumpListener));
-				} else {
-					logger.warn("Cannot register a socket channel that is already registered.");
-				}
+			if (!selectableChannel.isRegistered()) {
+				selectableChannel.register(selector, SelectionKey.OP_ACCEPT, new DataPumpItem(0, new NullDataPumpTransceiver(), dataPumpListener));
+			} else {
+				logger.warn("Cannot register a socket channel that is already registered.");
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -59,29 +55,22 @@ public class DataPumpWorker implements Runnable {
 	
 	public void registerChannel(SocketChannel socketChannel, DataPumpListener dataListener) {
 		try {
-			synchronized (selectionLock) {
-				selector.wakeup();
-				if (!socketChannel.isRegistered()) {
-					socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_CONNECT, new DataPumpItem(65535, new SocketChannelDataPumpTransceiver(), dataListener));
-				} else {
-					logger.warn("Cannot register a socket channel that is already registered.");
-				}
+			if (!socketChannel.isRegistered()) {
+				socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE | SelectionKey.OP_CONNECT, new DataPumpItem(65535, new SocketChannelDataPumpTransceiver(), dataListener));
+			} else {
+				logger.warn("Cannot register a socket channel that is already registered.");
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
-	public void sendData(SocketChannel socketChannel, List<Byte> data) {
-		synchronized (selectionLock) {
-			selector.wakeup();
-			SelectionKey key = socketChannel.keyFor(selector);
-			if (key != null) {
-				((DataPumpItem) key.attachment()).getDataPumpSendBuffer().addData(data);
-				key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
-			} else {
-				logger.warn("Cannot send data to a socket channel that is not registered.");
-			}
+	public void sendData(SocketChannel socketChannel, Deque<Byte> data) {
+		SelectionKey key = socketChannel.keyFor(selector);
+		if (key != null) {
+			((DataPumpItem) key.attachment()).getDataPumpSendBuffer().addData(data);
+		} else {
+			logger.warn("Cannot send data to a socket channel that is not registered.");
 		}
 	}
 
@@ -89,9 +78,7 @@ public class DataPumpWorker implements Runnable {
 		running = true;
 		while (running) {
 			try {
-				synchronized (selectionLock) {
-				}
-				selector.select();
+				selector.select(10);
 				Set<SelectionKey> selectedKeys = selector.selectedKeys();
 				Iterator<SelectionKey> iterator = selectedKeys.iterator();
 				
@@ -100,6 +87,12 @@ public class DataPumpWorker implements Runnable {
 					DataPumpItem dataPumpItem = (DataPumpItem) selectionKey.attachment();
 					DataPumpListener dataPumpListener = dataPumpItem.getDataPumpListener();
 					DataPumpTransceiver dataPumpTransceiver = dataPumpItem.getDataPumpTransceiver();
+					iterator.remove();
+
+					if (!selectionKey.isValid()) {
+						dataPumpListener.disconnected();
+						logger.error("Socket cancelled, disconnecting.");
+					}
 
 					if (selectionKey.isConnectable()) {
 						try {
@@ -109,6 +102,7 @@ public class DataPumpWorker implements Runnable {
 							logger.error("Failed to connect to end point.", e);
 							selectionKey.cancel();
 							selectionKey.channel().close();
+							dataPumpListener.disconnected();
 							continue;
 						}
 					}
@@ -120,6 +114,7 @@ public class DataPumpWorker implements Runnable {
 							logger.error("Failed to connect to end point.", e);
 							selectionKey.cancel();
 							selectionKey.channel().close();
+							dataPumpListener.disconnected();
 							continue;
 						}
 					}
@@ -137,26 +132,22 @@ public class DataPumpWorker implements Runnable {
 							logger.error("Failed to read from end point.", e);
 							selectionKey.cancel();
 							selectionKey.channel().close();
+							dataPumpListener.disconnected();
 							continue;
 						}
 					}
 
 					if (selectionKey.isWritable()) {
 						try {
-							synchronized (selectionLock) {
-								if (!dataPumpTransceiver.write(selectionKey.channel(), dataPumpItem)) {
-									selectionKey.interestOps(SelectionKey.OP_READ);
-								}
-							}
+							dataPumpTransceiver.write(selectionKey.channel(), dataPumpItem);
 						} catch (Exception e) {
 							logger.error("Failed to write to end point.", e);
 							selectionKey.cancel();
 							selectionKey.channel().close();
+							dataPumpListener.disconnected();
 							continue;
 						}
 					}
-
-					iterator.remove();
 				}
 			} catch (Exception e) {
 				logger.error("Catastrophic failure.  Failed during read loop.", e);

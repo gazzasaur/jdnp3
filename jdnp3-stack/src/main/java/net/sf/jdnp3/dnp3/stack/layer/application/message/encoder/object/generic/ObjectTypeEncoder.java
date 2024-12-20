@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
@@ -24,5 +24,5 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstanc
 
 public interface ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType);
-	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data);
+	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, Deque<Byte> data);
 }

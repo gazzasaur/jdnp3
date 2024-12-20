@@ -15,7 +15,9 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.encoder;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
@@ -23,17 +25,18 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.util.Crc16;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class DataLinkFrameEncoderImpl implements DataLinkFrameEncoder {
-	public List<Byte> encode(DataLinkFrame dataLinkFrame) {
+	public Deque<Byte> encode(DataLinkFrame dataLinkFrame) {
 		int partCount = 0;
-		List<Byte> partBuffer = new ArrayList<>();
-		for (int i = 0; i < dataLinkFrame.getData().size(); i += 16) {
-			List<Byte> buffer = dataLinkFrame.getData().subList(i, (i + 16 > dataLinkFrame.getData().size()) ? dataLinkFrame.getData().size() : (i + 16));
+		Deque<Byte> partBuffer = new ArrayDeque<>();
+		List<Byte> dataLinkFrameData = new ArrayList<>(dataLinkFrame.getData());
+		for (int i = 0; i < dataLinkFrameData.size(); i += 16) {
+			Deque<Byte> buffer = new ArrayDeque<>(dataLinkFrameData.subList(i, (i + 16 > dataLinkFrameData.size()) ? dataLinkFrameData.size() : (i + 16)));
 			partBuffer.addAll(buffer);
 			partCount += buffer.size();
 			DataUtils.addInteger(Crc16.computeCrc(buffer), 2, partBuffer);
 		}
 		
-		List<Byte> data = new ArrayList<>();
+		Deque<Byte> data = new ArrayDeque<>();
 		dataLinkFrame.getDataLinkFrameHeader().setLength(partCount + 5);
 		DataLinkFrameHeaderEncoder.encode(dataLinkFrame.getDataLinkFrameHeader(), data);
 		data.addAll(partBuffer);

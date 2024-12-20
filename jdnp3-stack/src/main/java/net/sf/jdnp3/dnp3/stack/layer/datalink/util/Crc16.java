@@ -22,7 +22,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.util;
 
-import java.util.List;
+import java.util.Deque;
 
 public class Crc16 {
 	private static final int[] CRC_LOOKUP_TABLE = new int[] { 
@@ -60,10 +60,10 @@ public class Crc16 {
 		0x91AF, 0xA7F1, 0xFD13, 0xCB4D, 0x48D7, 0x7E89, 0x246B, 0x1235
 	};
 	
-	public static int computeCrc(List<Byte> data) {
+	public static int computeCrc(Deque<Byte> data) {
 		int crc = 0;
-		for (int index = 0; index < data.size(); ++index) {
-			crc = (crc >> 8) ^ CRC_LOOKUP_TABLE[(crc ^ data.get(index)) & 0xFF]; 
+		for (Byte dataByte : data) {
+			crc = (crc >> 8) ^ CRC_LOOKUP_TABLE[(crc ^ dataByte) & 0xFF];
 		}
 		return (~crc) & 0xFFFF;
 	}

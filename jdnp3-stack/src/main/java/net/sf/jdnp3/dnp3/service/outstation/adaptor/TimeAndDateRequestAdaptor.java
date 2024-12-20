@@ -37,7 +37,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeAndDateOb
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 public class TimeAndDateRequestAdaptor implements OutstationRequestHandlerAdaptor {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(TimeAndDateRequestAdaptor.class);
 	
 	private TimeAndDateRequestHandler serviceRequestHandler = null;
 
@@ -66,7 +66,7 @@ public class TimeAndDateRequestAdaptor implements OutstationRequestHandlerAdapto
 			}
 			
 			if (result == null) {
-				logger.warn(String.format("Cannot perform a %s request on a TimeAndDate object with the range type of %s", functionCode, range.getClass()));
+				LOGGER.warn("Cannot perform a %s request on a TimeAndDate object with the range type of %s", functionCode, range.getClass());
 			} else {
 				for (TimeAndDateObjectInstance objectInstance : result) {
 					objectInstance.setRequestedType(request.getObjectFragmentHeader().getObjectType());

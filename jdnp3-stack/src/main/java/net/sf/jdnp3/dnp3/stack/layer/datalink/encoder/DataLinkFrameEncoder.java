@@ -15,10 +15,10 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.encoder;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 
 public interface DataLinkFrameEncoder {
-	public List<Byte> encode(DataLinkFrame dataLinkFrame);
+	public Deque<Byte> encode(DataLinkFrame dataLinkFrame);
 }

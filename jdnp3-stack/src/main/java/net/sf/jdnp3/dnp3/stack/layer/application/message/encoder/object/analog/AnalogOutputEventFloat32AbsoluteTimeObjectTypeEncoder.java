@@ -16,11 +16,12 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.analog;
 
 import static java.lang.String.format;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCodeUtils.isResponseCode;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_EVENT_FLOAT32_WITH_TIME;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addFloat;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.addInteger;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.object.generic.ObjectTypeEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ObjectFragmentEncoderContext;
@@ -31,10 +32,10 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstanc
 
 public class AnalogOutputEventFloat32AbsoluteTimeObjectTypeEncoder implements ObjectTypeEncoder {
 	public boolean canEncode(FunctionCode functionCode, ObjectType objectType) {
-		return functionCode.equals(FunctionCode.RESPONSE) && objectType.equals(ANALOG_OUTPUT_EVENT_FLOAT32_WITH_TIME);
+		return isResponseCode(functionCode) && objectType.equals(ANALOG_OUTPUT_EVENT_FLOAT32_WITH_TIME);
 	}
 
-	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, List<Byte> data) {
+	public void encode(ObjectFragmentEncoderContext context, ObjectInstance objectInstance, Deque<Byte> data) {
 		if (!this.canEncode(context.getFunctionCode(), context.getObjectType())) {
 			throw new IllegalArgumentException(format("Cannot encode the give value %s %s.", context.getFunctionCode(), context.getObjectType()));
 		}

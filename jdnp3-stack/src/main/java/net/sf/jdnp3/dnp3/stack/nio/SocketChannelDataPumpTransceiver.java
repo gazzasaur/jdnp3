@@ -22,7 +22,8 @@ import static org.apache.commons.lang3.ArrayUtils.toObject;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SocketChannel;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class SocketChannelDataPumpTransceiver implements DataPumpTransceiver {
 	public boolean read(SelectableChannel selectableChannel, DataPumpItem dataPumpItem) {
@@ -34,15 +35,16 @@ public class SocketChannelDataPumpTransceiver implements DataPumpTransceiver {
 		try {
 			count = socketChannel.read(byteBuffer);
 			if (count < 0) {
-				socketChannel.close();
 				return false;
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 		
-		List<Byte> data = asList(toObject(copyOf(byteBuffer.array(), count)));
-		dataPumpItem.getDataPumpListener().dataReceived(data);
+		if (count != 0) {
+			Deque<Byte> data = new ArrayDeque<>(asList(toObject(copyOf(byteBuffer.array(), count))));
+			dataPumpItem.getDataPumpListener().dataReceived(data);
+		}
 		return true;
 	}
 

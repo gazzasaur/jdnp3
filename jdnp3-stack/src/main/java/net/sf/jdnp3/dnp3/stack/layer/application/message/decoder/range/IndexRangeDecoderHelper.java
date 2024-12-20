@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.range;
 
-import java.util.List;
+import java.util.Deque;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
@@ -23,7 +23,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.RangeSpecif
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class IndexRangeDecoderHelper implements RangeDecoderHelper {
-	public Range decode(RangeSpecifierCode rangeSpecifierCode, List<Byte> data) {
+	public Range decode(RangeSpecifierCode rangeSpecifierCode, Deque<Byte> data) {
 		IndexRange range = new IndexRange();
 		range.setStartIndex(DataUtils.getUnsignedInteger(0, rangeSpecifierCode.getOctetCount(), data));
 		range.setStopIndex(DataUtils.getUnsignedInteger(rangeSpecifierCode.getOctetCount(), rangeSpecifierCode.getOctetCount(), data));

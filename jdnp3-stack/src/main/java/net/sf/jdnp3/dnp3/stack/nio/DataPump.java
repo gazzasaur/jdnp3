@@ -17,7 +17,7 @@ package net.sf.jdnp3.dnp3.stack.nio;
 
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SocketChannel;
-import java.util.List;
+import java.util.Deque;
 
 public class DataPump {
 	private Thread thread = null;
@@ -31,7 +31,7 @@ public class DataPump {
 		dataPumpWorker.registerChannel(socketChannel, dataListener);
 	}
 	
-	public void sendData(SocketChannel socketChannel, List<Byte> data) {
+	public void sendData(SocketChannel socketChannel, Deque<Byte> data) {
 		dataPumpWorker.sendData(socketChannel, data);
 	}
 	
@@ -39,6 +39,7 @@ public class DataPump {
 	public void start() {
 		if (thread == null || !thread.isAlive()) {
 			thread = new Thread(dataPumpWorker);
+			thread.setName("DnpDataPump");
 			thread.start();
 		}
 	}
