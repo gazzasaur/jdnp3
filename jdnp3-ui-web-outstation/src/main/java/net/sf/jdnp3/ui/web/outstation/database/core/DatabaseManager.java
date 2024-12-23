@@ -22,8 +22,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
 import net.sf.jdnp3.ui.web.outstation.database.device.InternalIndicatorsDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
@@ -406,7 +404,11 @@ public class DatabaseManager {
 
 	private <T> List<T> cloneObjects(List<T> obj, Class<T> clazz) {
 		try {
-			return ;
+			List<T> cloned = new ArrayList<>();
+			for (T item : obj) {
+				cloned.add(this.cloneObject(item, clazz));
+			}
+			return cloned;
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
