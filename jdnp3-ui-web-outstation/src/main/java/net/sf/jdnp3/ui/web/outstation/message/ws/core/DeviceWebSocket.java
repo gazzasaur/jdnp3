@@ -154,7 +154,7 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 				LOGGER.error("Cannot create message.", e);
 			}
 		} else {
-			LOGGER.warn(format("Data point type %s has not been mapped to a message.", dataPoint.getClass()));
+			LOGGER.warn("Data point type {} has not been mapped to a message.", dataPoint.getClass());
 		}
 	}
 

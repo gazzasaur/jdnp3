@@ -15,7 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server;
 
-import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.MASTER_TO_OUTSTATION;
 
 import java.util.Date;
@@ -58,7 +57,7 @@ public class SocketChannelDataPumpListener implements DataPumpListener {
 
 	public void dataReceived(List<Byte> data) {
 		try {
-			LOGGER.debug(format("Data received on channel %s: %s", channelId, DataUtils.toString(data)));
+			LOGGER.debug("Data received on channel {}: {}", channelId, DataUtils.toString(data));
 			if (dataLinkDigester.digest(data)) {
 				MessageProperties messageProperties = new MessageProperties();
 				DataLinkFrame dataLinkFrame = dataLinkDigester.getDataLinkFrame();

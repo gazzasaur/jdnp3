@@ -73,7 +73,7 @@ public class StaticReadRequestAdaptor<E extends StaticObjectInstance> implements
 			}
 			
 			if (result == null) {
-				LOGGER.warn(String.format("Cannot perform a read request on the static input qith a prefix type of %s and a range of %s.", prefixType.getClass(), range.getClass()));
+				LOGGER.warn("Cannot perform a read request on the static input qith a prefix type of {} and a range of {}.", prefixType.getClass(), range.getClass());
 			} else {
 				for (E objectInstance : result) {
 					objectInstance.setRequestedType(request.getObjectFragmentHeader().getObjectType());

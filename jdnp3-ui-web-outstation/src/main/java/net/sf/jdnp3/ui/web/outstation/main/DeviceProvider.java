@@ -136,8 +136,8 @@ public class DeviceProvider {
 			outstationDevice = DeviceProvider.getDevice(station, device);
 			outstationDevice.getDatabaseManager().addDatabaseListener(databaseListener);
 		} catch (Exception e) {
-			LOGGER.debug(format("Cannot retreive device %s:%s.", station, device), e);
-			LOGGER.info(format("No device found for %s:%s.  Registered interest.", station, device));
+			LOGGER.debug("Cannot retreive device {}:{}.", station, device, e);
+			LOGGER.info("No device found for {}:{}.  Registered interest.", station, device);
 		}
 		
 		if (outstationDevice != null) {
@@ -158,7 +158,7 @@ public class DeviceProvider {
 			outstationDevice = DeviceProvider.getDevice(station, device);
 			outstationDevice.getDatabaseManager().removeDatabaseListener(databaseListener);
 		} catch (Exception e) {
-			LOGGER.error(format("No device found for %s:%s.", station, device));
+			LOGGER.error("No device found for {}:{}.", station, device);
 		}
 		databaseListeners.get(station).get(device).remove(databaseListener);
 

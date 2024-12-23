@@ -15,7 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util;
 
-import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_EVENT_ABSOLUTE_TIME;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_EVENT_ANY;
@@ -43,7 +42,7 @@ public class BinaryInputEventTypeRationaliserHelper implements ObjectInstanceTyp
 	public void rationalise(ObjectInstance objectInstance) {
 		BinaryInputEventObjectInstance specificInstance = (BinaryInputEventObjectInstance) objectInstance;
 		if (!validObjectTypes.contains(specificInstance.getRequestedType())) {
-			LOGGER.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
+			LOGGER.warn("Unknown object type '{}' for class '{}', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass());
 			objectInstance.setRequestedType(ANY);
 		}
 		if (groupObjectTypes.contains(objectInstance.getRequestedType())) {

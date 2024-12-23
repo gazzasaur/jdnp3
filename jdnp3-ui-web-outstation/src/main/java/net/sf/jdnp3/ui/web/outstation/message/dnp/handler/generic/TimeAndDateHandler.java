@@ -42,7 +42,7 @@ public class TimeAndDateHandler implements TimeAndDateRequestHandler {
 	}
 
 	public void doWriteTime(TimeAndDateObjectInstance timeAndDateObjectInstance) {
-		LOGGER.info("Write Time: " + new Date(timeAndDateObjectInstance.getTimestamp()));
+		LOGGER.debug("Write Time: {}", new Date(timeAndDateObjectInstance.getTimestamp()));
 		internalStatusProvider.setNeedTime(false);
 	}
 }

@@ -15,7 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util;
 
-import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.TIME_DELAY_COARSE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.TIME_DELAY_FINE;
 
@@ -37,11 +36,11 @@ public class TimeDelayTypeRationaliserHelper implements ObjectInstanceTypeRation
 	public void rationalise(ObjectInstance objectInstance) {
 		TimeDelayObjectInstance specificInstance = (TimeDelayObjectInstance) objectInstance;
 		if (!validObjectTypes.contains(specificInstance.getRequestedType())) {
-			LOGGER.warn(format("Unknown object type '%s' for class '%s', setting to TimeDelayFine.", specificInstance.getRequestedType(), specificInstance.getClass()));
+			LOGGER.warn("Unknown object type '{}' for class '{}', setting to TimeDelayFine.", specificInstance.getRequestedType(), specificInstance.getClass());
 			objectInstance.setRequestedType(TIME_DELAY_FINE);
 		}
 		if (specificInstance.getRequestedType().equals(ObjectTypeConstants.TIME_DELAY_FINE) && specificInstance.getTimestamp() > 0xFFFF) {
-			LOGGER.warn(format("TimeDelayFine was requested but a delay of %d is required.  Using time delay coarse instead.", specificInstance.getTimestamp()));
+			LOGGER.warn("TimeDelayFine was requested but a delay of {} is required.  Using time delay coarse instead.", specificInstance.getTimestamp());
 			specificInstance.setRequestedType(ObjectTypeConstants.TIME_DELAY_COARSE);
 		}
 	}

@@ -15,7 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server;
 
-import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.server.SocketChannelUtils.getRemoteSocketAddress;
 
 import java.nio.channels.ServerSocketChannel;
@@ -52,7 +51,7 @@ public class ServerSocketChannelDataPumpListener implements DataPumpListener {
 			socketChannel.configureBlocking(false);
 			
 			ChannelId channelId = channelManager.addChannel(socketChannel);
-			LOGGER.info(format("Connection received from %s and has been assigned a channel id of %s.", getRemoteSocketAddress(socketChannel), channelId));
+			LOGGER.info("Connection received from {} and has been assigned a channel id of {}.", getRemoteSocketAddress(socketChannel), channelId);
 			dataPump.registerAcceptedChannel(socketChannel, new SocketChannelDataPumpListener(channelId, channelManager, dataLinkInterceptor));
 		} catch (Exception e) {
 			LOGGER.error("Failed to accept client socket.", e);

@@ -15,7 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util;
 
-import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.COUNTER_STATIC_GROUP;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.COUNTER_STATIC_INT16;
@@ -44,7 +43,7 @@ public class CounterStaticTypeRationaliserHelper implements ObjectInstanceTypeRa
 	public void rationalise(ObjectInstance objectInstance) {
 		CounterStaticObjectInstance specificInstance = (CounterStaticObjectInstance) objectInstance;
 		if (!validObjectTypes.contains(specificInstance.getRequestedType())) {
-			LOGGER.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
+			LOGGER.warn("Unknown object type '{}' for class '{}', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass());
 			objectInstance.setRequestedType(ANY);
 		}
 		boolean otherFlags = !specificInstance.isOnline() ||
@@ -59,19 +58,19 @@ public class CounterStaticTypeRationaliserHelper implements ObjectInstanceTypeRa
 		}
 		
 		if (specificInstance.getRequestedType().equals(COUNTER_STATIC_INT32_NO_FLAGS) && otherFlags) {
-			LOGGER.warn(format(COUNTER_STATIC_INT32_NO_FLAGS.toString() + " format requested but flags are required."));
+			LOGGER.warn("{} format requested but flags are required.", COUNTER_STATIC_INT32_NO_FLAGS);
 			specificInstance.setRequestedType(COUNTER_STATIC_INT32);
 		}
 		if (specificInstance.getRequestedType().equals(COUNTER_STATIC_INT16_NO_FLAGS) && otherFlags) {
-			LOGGER.warn(format(COUNTER_STATIC_INT16_NO_FLAGS.toString() + " format requested but flags are required."));
+			LOGGER.warn("{} format requested but flags are required.", COUNTER_STATIC_INT16_NO_FLAGS);
 			specificInstance.setRequestedType(COUNTER_STATIC_INT16);
 		}
 		if (specificInstance.getRequestedType().equals(COUNTER_STATIC_INT32_DELTA_NO_FLAGS) && otherFlags) {
-			LOGGER.warn(format(COUNTER_STATIC_INT32_DELTA_NO_FLAGS.toString() + " format requested but flags are required."));
+			LOGGER.warn("{} format requested but flags are required.", COUNTER_STATIC_INT32_DELTA_NO_FLAGS);
 			specificInstance.setRequestedType(COUNTER_STATIC_INT32_DELTA_NO_FLAGS);
 		}
 		if (specificInstance.getRequestedType().equals(COUNTER_STATIC_INT16_DELTA_NO_FLAGS) && otherFlags) {
-			LOGGER.warn(format(COUNTER_STATIC_INT16_DELTA_NO_FLAGS.toString() + " format requested but flags are required."));
+			LOGGER.warn("{} format requested but flags are required.", COUNTER_STATIC_INT16_DELTA_NO_FLAGS);
 			specificInstance.setRequestedType(COUNTER_STATIC_INT16_DELTA_NO_FLAGS);
 		}
 	}

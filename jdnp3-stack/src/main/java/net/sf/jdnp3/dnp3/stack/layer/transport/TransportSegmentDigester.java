@@ -51,7 +51,7 @@ public class TransportSegmentDigester {
 			if (receiveBuffer.size() > applicationMtu) {
 				int receivedSize = receiveBuffer.size();
 				receiveBuffer.clear();
-				LOGGER.warn(String.format("Received %s bytes but the MTU onlypermits %s.", receivedSize, applicationMtu));
+				LOGGER.warn("Received {} bytes but the MTU onlypermits {}.", receivedSize, applicationMtu);
 			} else if (transportSegment.getTransportHeader().isFinalSegment()) {
 				applicationData = new ArrayList<Byte>(receiveBuffer);
 				receiveBuffer = new ArrayDeque<Byte>();
@@ -67,7 +67,7 @@ public class TransportSegmentDigester {
 				if (receiveBuffer.size() > applicationMtu) {
 					int receivedSize = receiveBuffer.size();
 					receiveBuffer.clear();
-					LOGGER.warn(String.format("Received %s bytes but the MTU onlypermits %s.", receivedSize, applicationMtu));
+					LOGGER.warn("Received {} bytes but the MTU onlypermits {}.", receivedSize, applicationMtu);
 				} else if (transportSegment.getTransportHeader().isFinalSegment()) {
 					applicationData = new ArrayList<Byte>(receiveBuffer);
 					receiveBuffer = new ArrayDeque<Byte>();

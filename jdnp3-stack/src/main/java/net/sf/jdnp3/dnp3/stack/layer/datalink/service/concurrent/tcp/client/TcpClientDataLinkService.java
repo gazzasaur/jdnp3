@@ -153,7 +153,7 @@ public class TcpClientDataLinkService implements DataLinkLayer {
 
 	public synchronized void sendData(MessageProperties messageProperties, DataLinkFrame frame) {
 		List<Byte> frameData = dataLinkFrameEncoder.encode(frame);
-		LOGGER.debug(String.format("Send data to %s from %s using channel %s: %s", messageProperties.getDestinationAddress(), messageProperties.getSourceAddress(), messageProperties.getChannelId(), DataUtils.toString(frameData)));
+		LOGGER.debug("Send data to {} from {} using channel {}: {}", messageProperties.getDestinationAddress(), messageProperties.getSourceAddress(), messageProperties.getChannelId(), DataUtils.toString(frameData));
 		SocketChannel socketChannel = channelManager.getChannel(messageProperties.getChannelId());
 		dataPump.sendData(socketChannel, frameData);
 	}

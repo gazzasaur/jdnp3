@@ -38,7 +38,7 @@ public class ChannelManager {
 	public synchronized ChannelId addChannel(SocketChannel socketChannel) {
 		ChannelId channelId = new BasicChannelId();
 		connectedSocketChanels.put(channelId, socketChannel);
-		LOGGER.info(String.format("Assigned channel %s to socket locally bound to %s to remote destination %s.", channelId, getLocalSocketAddress(socketChannel), getRemoteSocketAddress(socketChannel)));
+		LOGGER.info("Assigned channel {} to socket locally bound to {} to remote destination {}.", channelId, getLocalSocketAddress(socketChannel), getRemoteSocketAddress(socketChannel));
 		return channelId;
 	}
 
@@ -60,7 +60,7 @@ public class ChannelManager {
 			LOGGER.warn("Channel does not exist: " + channelId);
 			return;
 		}
-		LOGGER.info(String.format("Cleaning up socket with a channel id %s.", channelId));
+		LOGGER.info("Cleaning up socket with a channel id {}.", channelId);
 		TcpServerDataLinkServiceConnector.closeChannel(socketChannel);
 		connectedSocketChanels.remove(channelId);
 	}

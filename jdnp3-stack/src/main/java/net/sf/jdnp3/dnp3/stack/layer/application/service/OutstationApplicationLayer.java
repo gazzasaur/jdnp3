@@ -491,7 +491,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		try {
 			applicationTransport.sendData(returnMessageProperties, encoder.encode(response));
 		} catch (Exception e) {
-			LOGGER.error(String.format("Failed to send message to DNP3 address %s on channel %s.", returnMessageProperties.getDestinationAddress(), returnMessageProperties.getChannelId()), e);
+			LOGGER.error("Failed to send message to DNP3 address {} on channel {}.", returnMessageProperties.getDestinationAddress(), returnMessageProperties.getChannelId(), e);
 		}
 	}
 

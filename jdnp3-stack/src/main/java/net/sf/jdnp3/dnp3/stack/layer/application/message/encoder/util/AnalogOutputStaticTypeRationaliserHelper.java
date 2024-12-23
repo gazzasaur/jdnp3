@@ -15,7 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util;
 
-import static java.lang.String.format;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_STATIC_ANY;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_STATIC_FLOAT32;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANALOG_OUTPUT_STATIC_FLOAT64;
@@ -41,7 +40,7 @@ public class AnalogOutputStaticTypeRationaliserHelper implements ObjectInstanceT
 	public void rationalise(ObjectInstance objectInstance) {
 		AnalogOutputStaticObjectInstance specificInstance = (AnalogOutputStaticObjectInstance) objectInstance;
 		if (!validObjectTypes.contains(specificInstance.getRequestedType())) {
-			LOGGER.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
+			LOGGER.warn("Unknown object type '{}' for class '{}', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass());
 			objectInstance.setRequestedType(ANY);
 		}
 		if (specificInstance.getRequestedType().getGroup() != ANALOG_OUTPUT_STATIC_ANY.getGroup() || specificInstance.getRequestedType().getVariation() == 0) {

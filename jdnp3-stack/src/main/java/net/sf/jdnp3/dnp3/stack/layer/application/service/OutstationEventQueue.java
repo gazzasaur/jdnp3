@@ -15,8 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.stack.layer.application.service;
 
-import static java.lang.String.format;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,7 +39,7 @@ public class OutstationEventQueue implements ConfirmationListener {
 	
 	public synchronized void addEvent(EventObjectInstance eventObjectInstance) {
 		if (eventObjectInstance.getEventClass() < 1 || eventObjectInstance.getEventClass() > 3) {
-			LOGGER.info(format("Ignoring event of type %s and event class of %d.", eventObjectInstance.getClass(), eventObjectInstance.getEventClass()));
+			LOGGER.info("Ignoring event of type {} and event class of {}.", eventObjectInstance.getClass(), eventObjectInstance.getEventClass());
 			return;
 		}
 

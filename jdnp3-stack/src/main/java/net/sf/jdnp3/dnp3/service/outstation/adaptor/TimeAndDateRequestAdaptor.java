@@ -66,7 +66,7 @@ public class TimeAndDateRequestAdaptor implements OutstationRequestHandlerAdapto
 			}
 			
 			if (result == null) {
-				LOGGER.warn(String.format("Cannot perform a %s request on a TimeAndDate object with the range type of %s", functionCode, range.getClass()));
+				LOGGER.warn("Cannot perform a {} request on a TimeAndDate object with the range type of {}", functionCode, range.getClass());
 			} else {
 				for (TimeAndDateObjectInstance objectInstance : result) {
 					objectInstance.setRequestedType(request.getObjectFragmentHeader().getObjectType());
