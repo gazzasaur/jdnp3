@@ -16,7 +16,6 @@
 package net.sf.jdnp3.dnp3.stack.layer.application.message.decoder.object.binary;
 
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_OUTPUT_COMMAND_CROB;
-import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getInteger;
 import static net.sf.jdnp3.dnp3.stack.utils.DataUtils.getUnsignedInteger;
 
 import java.util.List;

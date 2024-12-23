@@ -3,8 +3,8 @@ package net.sf.jdnp3.dnp3.stack.layer.datalink.service.core;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.MASTER_TO_OUTSTATION;
 import static net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction.OUTSTATION_TO_MASTER;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ public class StatefulDataLinkInterceptor implements DataLinkInterceptor {
 
     // Inbound link state tracking (secondary)
     private boolean master;
-    private Map<Integer, Boolean> expectedFrameCheckBitState = new ConcurrentHashMap<>();
+    private Map<Integer, Boolean> expectedFrameCheckBitState = new HashMap<>();
 
     // If this is set, the outstation will ignore the FCB and always ACK messages.
     private boolean ignoreFcb = false;
@@ -38,11 +38,11 @@ public class StatefulDataLinkInterceptor implements DataLinkInterceptor {
         this.destinationAddress = destinationAddress;
     }
 
-    public void setIgnoreFcb(boolean ignoreFcb) {
+    public synchronized void setIgnoreFcb(boolean ignoreFcb) {
         this.ignoreFcb = ignoreFcb;
     }
 
-    public void receiveData(MessageProperties messageProperties, DataLinkFrame frame) {
+    public synchronized void receiveData(MessageProperties messageProperties, DataLinkFrame frame) {
         if (messageProperties.getDestinationAddress() != destinationAddress) {
             return;
         }

@@ -22,9 +22,6 @@ import static org.apache.commons.lang3.ArrayUtils.toObject;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SocketChannel;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 
 public class SocketChannelDataPumpTransceiver implements DataPumpTransceiver {

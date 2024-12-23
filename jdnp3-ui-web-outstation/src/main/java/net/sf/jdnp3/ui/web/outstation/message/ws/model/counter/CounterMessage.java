@@ -15,9 +15,6 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.model.counter;
 
-import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.ANY;
-
-import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectType;

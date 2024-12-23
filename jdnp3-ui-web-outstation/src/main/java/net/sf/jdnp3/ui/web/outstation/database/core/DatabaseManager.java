@@ -34,8 +34,6 @@ import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInput
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 
 public class DatabaseManager {
-	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-
 	private Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
 	
 	private Database database = new Database();
@@ -400,7 +398,7 @@ public class DatabaseManager {
 
 	private <T> T cloneObject(T obj, Class<T> clazz) {
 		try {
-			return OBJECT_MAPPER.readValue(OBJECT_MAPPER.writeValueAsString(obj), clazz);
+			return clazz.cast(BeanUtils.cloneBean(obj));
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -408,7 +406,7 @@ public class DatabaseManager {
 
 	private <T> List<T> cloneObjects(List<T> obj, Class<T> clazz) {
 		try {
-			return OBJECT_MAPPER.readValue(OBJECT_MAPPER.writeValueAsString(obj), OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
+			return ;
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}

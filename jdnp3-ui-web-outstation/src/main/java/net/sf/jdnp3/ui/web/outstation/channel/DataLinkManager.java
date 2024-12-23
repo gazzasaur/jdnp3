@@ -69,10 +69,6 @@ public class DataLinkManager {
 	public int getBindingCount() {
 		return transportBindings.size();
 	}
-
-	public int getConnectionCount() {
-		return this.dataLinkLayer.getConnectionCount();
-	}
 	
 	public void removeBinding(TransportBindingItem transportBindingItem) {
 		transportBindings.remove(transportBindingItem);

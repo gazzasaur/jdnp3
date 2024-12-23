@@ -17,7 +17,6 @@ package net.sf.jdnp3.dnp3.stack.layer.application.service;
 
 import static java.lang.String.format;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,18 +44,19 @@ public class OutstationEventQueue implements ConfirmationListener {
 			logger.info(format("Ignoring event of type %s and event class of %d.", eventObjectInstance.getClass(), eventObjectInstance.getEventClass()));
 			return;
 		}
-		
+
 		ListIterator<EventObjectInstance> currentEvents = events.listIterator();
-			while (currentEvents.hasNext()) {
-				EventObjectInstance current = currentEvents.next();
-				if (eventObjectInstance.getTimestamp() < current.getTimestamp()) {
-					currentEvents.previous();
-					currentEvents.add(eventObjectInstance);
-                    setInternalStatus();
-                    return;
-				}
-			}
+		while (currentEvents.hasNext()) {
+			EventObjectInstance current = currentEvents.next();
+			if (eventObjectInstance.getTimestamp() < current.getTimestamp()) {
+				currentEvents.previous();
+				currentEvents.add(eventObjectInstance);
+				setInternalStatus();
+				return;
+			}			
 		}
+		events.add(eventObjectInstance);
+		setInternalStatus();
 	}
 
 	public synchronized List<ObjectInstance> request(EventObjectInstanceSelector selector) {

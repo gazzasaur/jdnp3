@@ -20,9 +20,9 @@ import static net.sf.jdnp3.dnp3.stack.layer.datalink.service.concurrent.tcp.serv
 
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,20 +33,20 @@ import net.sf.jdnp3.dnp3.stack.message.ChannelId;
 public class ChannelManager {
 	private Logger logger = LoggerFactory.getLogger(ChannelManager.class);
 	
-	private Map<ChannelId, SocketChannel> connectedSocketChanels = new ConcurrentHashMap<>();
+	private Map<ChannelId, SocketChannel> connectedSocketChanels = new HashMap<>();
 	
-	public ChannelId addChannel(SocketChannel socketChannel) {
+	public synchronized ChannelId addChannel(SocketChannel socketChannel) {
 		ChannelId channelId = new BasicChannelId();
 		connectedSocketChanels.put(channelId, socketChannel);
 		logger.info(String.format("Assigned channel %s to socket locally bound to %s to remote destination %s.", channelId, getLocalSocketAddress(socketChannel), getRemoteSocketAddress(socketChannel)));
 		return channelId;
 	}
 
-	public List<SocketChannel> getChannels() {
+	public synchronized List<SocketChannel> getChannels() {
 		return new ArrayList<>(connectedSocketChanels.values());
 	}
 
-	public SocketChannel getChannel(ChannelId channelId) {
+	public synchronized SocketChannel getChannel(ChannelId channelId) {
 		SocketChannel socketChannel = connectedSocketChanels.get(channelId);
 		if (socketChannel == null) {
 			throw new IllegalArgumentException("No SocketChannel can be found for the ChannelId: " + channelId);
@@ -54,7 +54,7 @@ public class ChannelManager {
 		return socketChannel;
 	}
 
-	public void closeChannel(ChannelId channelId) {
+	public synchronized void closeChannel(ChannelId channelId) {
 		SocketChannel socketChannel = connectedSocketChanels.get(channelId);
 		if (socketChannel == null) {
 			logger.warn("Channel does not exist: " + channelId);
@@ -65,7 +65,7 @@ public class ChannelManager {
 		connectedSocketChanels.remove(channelId);
 	}
 
-	public void closeAll() {
+	public synchronized void closeAll() {
 		for (ChannelId channelId : new ArrayList<>(connectedSocketChanels.keySet())) {
 			SocketChannel socketChannel = connectedSocketChanels.remove(channelId);
 			if (socketChannel != null) {

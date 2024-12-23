@@ -35,19 +35,21 @@ public class SimpleSynchronisedTransportBinding implements TransportBinding {
 	private TransportSegmentDigester transportSegmentDigester = new TransportSegmentDigester();
 	private TransportSegmentSplitter transportSegmentSplitter = new TransportSegmentSplitter();
 
-	public synchronized void receiveDataLinkData(MessageProperties messageProperties, List<Byte> data) {
+	public void receiveDataLinkData(MessageProperties messageProperties, List<Byte> data) {
 		validate();
 		if (address != messageProperties.getDestinationAddress()) {
 			return;
 		}
 		TransportSegment transportSegment = transportSegmentDecoder.decode(data);
 		logger.debug(TransportSegmentUtils.toString(messageProperties.getChannelId(), transportSegment));
-		if (transportSegmentDigester.digestData(messageProperties, transportSegment, data)) {
-			applicationLayer.dataReceived(messageProperties, transportSegmentDigester.pollData());
+		synchronized (transportSegmentDigester) {
+			if (transportSegmentDigester.digestData(messageProperties, transportSegment, data)) {
+				applicationLayer.dataReceived(messageProperties, transportSegmentDigester.pollData());
+			}
 		}
 	}
 
-	public synchronized void receiveApplicationData(MessageProperties messageProperties, List<Byte> data) {
+	public void receiveApplicationData(MessageProperties messageProperties, List<Byte> data) {
 		validate();
 		List<TransportSegment> transportSegments = transportSegmentSplitter.splitData(messageProperties, data);
 		for (TransportSegment transportSegment : transportSegments) {
@@ -55,13 +57,13 @@ public class SimpleSynchronisedTransportBinding implements TransportBinding {
 		}
 	}
 	
-	public synchronized void setApplicationLayer(int address, ApplicationLayer applicationLayer) {
+	public void setApplicationLayer(int address, ApplicationLayer applicationLayer) {
 		this.address = address;
 		this.applicationLayer = applicationLayer;
 		transportSegmentDigester.setApplicationMtu(applicationLayer.getMtu());
 	}
 	
-	public synchronized void setDataLinkLayer(DataLinkLayer dataLinkLayer) {
+	public void setDataLinkLayer(DataLinkLayer dataLinkLayer) {
 		this.dataLinkLayer = dataLinkLayer;
 		transportSegmentSplitter.setDataLinkMtu(dataLinkLayer.getMtu());
 	}

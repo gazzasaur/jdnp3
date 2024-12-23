@@ -17,11 +17,9 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.core;
 
 import static java.lang.String.format;
 
-import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import javax.websocket.EncodeException;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
