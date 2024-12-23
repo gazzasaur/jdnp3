@@ -103,43 +103,43 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		UNSOLICITED_THREAD_POOL.scheduleWithFixedDelay(() -> this.sendUnsolicited(), 5000 + RandomUtils.nextInt(0, 1000), 5000 + RandomUtils.nextInt(0, 1000), TimeUnit.MILLISECONDS);
 	}
 	
-	public synchronized DataLinkLayer getDataLinkLayer() {
+	public DataLinkLayer getDataLinkLayer() {
 		return dataLinkLayer;
 	}
 
-	public synchronized void addApplicationTransport(ApplicationTransport applicationTransport) {
+	public void addApplicationTransport(ApplicationTransport applicationTransport) {
 		this.applicationTransport = applicationTransport;
 	}
 	
-	public synchronized void removeApplicationTransport(ApplicationTransport applicationTransport) {
+	public void removeApplicationTransport(ApplicationTransport applicationTransport) {
 		this.applicationTransport = null;
 	}
 	
-	public synchronized void addRequestHandler(OutstationApplicationRequestHandler outstationRequestHandler) {
+	public void addRequestHandler(OutstationApplicationRequestHandler outstationRequestHandler) {
 		outstationRequestHandlers.add(outstationRequestHandler);
 	}
 	
-	public synchronized void addDefaultObjectTypeMapping(Class<? extends ObjectInstance> clazz, ObjectType defaultMapping) {
+	public void addDefaultObjectTypeMapping(Class<? extends ObjectInstance> clazz, ObjectType defaultMapping) {
 		defaultObjectTypeMapping.addMapping(clazz, defaultMapping);
 	}
 	
-	public synchronized void addObjectFragmentPacker(ObjectFragmentPacker packer) {
+	public void addObjectFragmentPacker(ObjectFragmentPacker packer) {
 		packers.add(packer);
 	}
 	
-	public synchronized OutstationEventQueue getOutstationEventQueue() {
+	public OutstationEventQueue getOutstationEventQueue() {
 		return eventQueue;
 	}
 	
-	public synchronized void setEncoder(ApplicationFragmentResponseEncoder encoder) {
+	public void setEncoder(ApplicationFragmentResponseEncoder encoder) {
 		this.encoder = encoder;
 	}
 	
-	public synchronized void setDecoder(ApplicationFragmentRequestDecoder decoder) {
+	public void setDecoder(ApplicationFragmentRequestDecoder decoder) {
 		this.decoder = decoder;
 	}
 	
-	public synchronized void setInternalStatusProvider(InternalStatusProvider internalStatusProvider) {
+	public void setInternalStatusProvider(InternalStatusProvider internalStatusProvider) {
 		this.internalStatusProvider = internalStatusProvider;
 		eventQueue.setInternalStatusProvider(internalStatusProvider);
 	}
@@ -323,16 +323,18 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			return;
 		}
 
-		if (request.getHeader().getFunctionCode() == CONFIRM
-			&& request.getHeader().getApplicationControl().isUnsolicitedResponse()
-			&& request.getHeader().getApplicationControl().getSequenceNumber() == expectedUnsolicitedSeqNr) {
-				for (EventObjectInstance eventObjectInstance : pendingUnsolicitedEvents) {
-					eventQueue.confirm(eventObjectInstance);
-				}
-				pendingUnsolicitedEvents.clear();
-				expectedUnsolicitedSeqNr = -1;
-				nextUnsolicitedSeqNr += 1;
-				return;
+		synchronized (unsolicitedLock) {
+			if (request.getHeader().getFunctionCode() == CONFIRM
+				&& request.getHeader().getApplicationControl().isUnsolicitedResponse()
+				&& request.getHeader().getApplicationControl().getSequenceNumber() == expectedUnsolicitedSeqNr) {
+					for (EventObjectInstance eventObjectInstance : pendingUnsolicitedEvents) {
+						eventQueue.confirm(eventObjectInstance);
+					}
+					pendingUnsolicitedEvents.clear();
+					expectedUnsolicitedSeqNr = -1;
+					nextUnsolicitedSeqNr += 1;
+					return;
+			}
 		}
 
 		boolean firstFragment = true;
@@ -525,15 +527,15 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		applicationTransport.sendData(returnMessageProperties, unmodifiableList(encoder.encode(response)));
 	}
 
-	public synchronized void setPrimaryAddress(int address) {
+	public void setPrimaryAddress(int address) {
 		this.address  = address;
 	}
 
-	public synchronized int getMtu() {
+	public int getMtu() {
 		return mtu;
 	}
 
-	public synchronized void setMtu(int mtu) {
+	public void setMtu(int mtu) {
 		this.mtu = mtu;
 	}
 

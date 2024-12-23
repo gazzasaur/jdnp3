@@ -21,6 +21,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,16 +46,17 @@ public class OutstationEventQueue implements ConfirmationListener {
 			return;
 		}
 		
-		for (int i = 0; i < events.size(); ++i) {
-			EventObjectInstance current = events.get(i);
-			if (eventObjectInstance.getTimestamp() < current.getTimestamp()) {
-				events.add(i, eventObjectInstance);
-				setInternalStatus();
-				return;
+		ListIterator<EventObjectInstance> currentEvents = events.listIterator();
+			while (currentEvents.hasNext()) {
+				EventObjectInstance current = currentEvents.next();
+				if (eventObjectInstance.getTimestamp() < current.getTimestamp()) {
+					currentEvents.previous();
+					currentEvents.add(eventObjectInstance);
+                    setInternalStatus();
+                    return;
+				}
 			}
 		}
-		events.add(eventObjectInstance);
-		setInternalStatus();
 	}
 
 	public synchronized List<ObjectInstance> request(EventObjectInstanceSelector selector) {
