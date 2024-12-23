@@ -13,6 +13,7 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.Direction;
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.FunctionCode;
+import net.sf.jdnp3.dnp3.stack.message.ChannelId;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 // TODO For master stations this should also be a datalink layer to store state from outstations
@@ -95,5 +96,11 @@ public class StatefulDataLinkInterceptor implements DataLinkInterceptor {
             return;
         }
         logger.error("Unknown payload type: " + frame.getDataLinkFrameHeader().getFunctionCode());
+    }
+
+    public void connected(ChannelId channelId) {
+    }
+
+    public void disconnected(ChannelId channelId) {
     }
 }

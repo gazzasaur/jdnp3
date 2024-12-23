@@ -177,4 +177,138 @@ public class DirectPointDeviceFactory {
 		
 		return outstationDevice;
 	}
+
+	public static OutstationDevice create(
+			String siteName,
+			String deviceName,
+			int primaryAddress,
+			boolean unsolicitedEnabled,
+			List<BinaryInputDataPoint> binaryInputDataPoints,
+			List<BinaryOutputDataPoint> binaryOutputDataPoints,
+			List<DoubleBitBinaryInputDataPoint> doubleBitBinaryInputDataPoints,
+			List<AnalogInputDataPoint> analogInputDataPoints,
+			List<AnalogOutputDataPoint> analogOutputDataPoints,
+			List<CounterDataPoint> counterDataPoints) {
+		OutstationDevice outstationDevice = new OutstationDevice();
+		outstationDevice.setSite(siteName);
+		outstationDevice.setDevice(deviceName);
+		
+		DatabaseManager databaseManager = new DatabaseManager();
+
+		long nextIndex = databaseManager.getBinaryInputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(0);
+		for (BinaryInputDataPoint dataPoint : binaryInputDataPoints) {
+			if (dataPoint.getIndex() >= 0 && dataPoint.getIndex() < nextIndex) {
+				throw new IllegalArgumentException("Data points must be created in ascending order.");
+			}
+			if (dataPoint.getIndex() < 0) {
+				dataPoint.setIndex(nextIndex++);
+			} else {
+				nextIndex = dataPoint.getIndex() + 1;
+			}
+			databaseManager.setBinaryInputDataPoint(dataPoint);
+		}
+
+		nextIndex = databaseManager.getBinaryOutputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(0);
+		for (BinaryOutputDataPoint dataPoint : binaryOutputDataPoints) {
+			if (dataPoint.getIndex() >= 0 && dataPoint.getIndex() < nextIndex) {
+				throw new IllegalArgumentException("Data points must be created in ascending order.");
+			}
+			if (dataPoint.getIndex() < 0) {
+				dataPoint.setIndex(nextIndex++);
+			} else {
+				nextIndex = dataPoint.getIndex() + 1;
+			}
+			databaseManager.setBinaryOutputDataPoint(dataPoint);
+		}
+
+		nextIndex = databaseManager.getDoubleBitBinaryInputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(0);
+		for (DoubleBitBinaryInputDataPoint dataPoint : doubleBitBinaryInputDataPoints) {
+			if (dataPoint.getIndex() >= 0 && dataPoint.getIndex() < nextIndex) {
+				throw new IllegalArgumentException("Data points must be created in ascending order.");
+			}
+			if (dataPoint.getIndex() < 0) {
+				dataPoint.setIndex(nextIndex++);
+			} else {
+				nextIndex = dataPoint.getIndex() + 1;
+			}
+			databaseManager.setDoubleBitBinaryInputDataPoint(dataPoint);
+		}
+
+		nextIndex = databaseManager.getAnalogInputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(0);
+		for (AnalogInputDataPoint dataPoint : analogInputDataPoints) {
+			if (dataPoint.getIndex() >= 0 && dataPoint.getIndex() < nextIndex) {
+				throw new IllegalArgumentException("Data points must be created in ascending order.");
+			}
+			if (dataPoint.getIndex() < 0) {
+				dataPoint.setIndex(nextIndex++);
+			} else {
+				nextIndex = dataPoint.getIndex() + 1;
+			}
+			databaseManager.setAnalogInputDataPoint(dataPoint);
+		}
+
+		nextIndex = databaseManager.getAnalogOutputDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(0);
+		for (AnalogOutputDataPoint dataPoint : analogOutputDataPoints) {
+			if (dataPoint.getIndex() >= 0 && dataPoint.getIndex() < nextIndex) {
+				throw new IllegalArgumentException("Data points must be created in ascending order.");
+			}
+			if (dataPoint.getIndex() < 0) {
+				dataPoint.setIndex(nextIndex++);
+			} else {
+				nextIndex = dataPoint.getIndex() + 1;
+			}
+			databaseManager.setAnalogOutputDataPoint(dataPoint);
+		}
+
+		nextIndex = databaseManager.getCounterDataPoints().stream().mapToLong(DataPoint::getIndex).max().orElse(0);
+		for (CounterDataPoint dataPoint : counterDataPoints) {
+			if (dataPoint.getIndex() >= 0 && dataPoint.getIndex() < nextIndex) {
+				throw new IllegalArgumentException("Data points must be created in ascending order.");
+			}
+			if (dataPoint.getIndex() < 0) {
+				dataPoint.setIndex(nextIndex++);
+			} else {
+				nextIndex = dataPoint.getIndex() + 1;
+			}
+			databaseManager.setCounterDataPoint(dataPoint);
+		}
+
+		OutstationFactory outstationFactory = new OutstationFactory();
+		
+		outstationFactory.setUnsolicitedEnabled(unsolicitedEnabled);
+		outstationFactory.addOutstationApplicationRequestHandler(new ByteDataOutstationApplicationRequestHandler());
+		outstationFactory.addStandardObjectTypeEncoders();
+		outstationFactory.addStandardObjectTypeDecoders();
+		outstationFactory.addStandardObjectFragmentPackers();
+		outstationFactory.addStandardItemEnumeratorFactories();
+		outstationFactory.addStandardOutstationRequestHandlerAdaptors();
+		outstationFactory.setInternalStatusProvider(databaseManager.getInternalStatusProvider());
+		
+		Outstation outstation = outstationFactory.createOutstation();
+		outstation.addRequestHandler(new BinaryInputStaticHandler(databaseManager));
+		outstation.addRequestHandler(new AnalogInputStaticHandler(databaseManager));
+		outstation.addRequestHandler(new DoubleBitBinaryInputStaticHandler(databaseManager));
+		outstation.addRequestHandler(new Class0Reader(databaseManager));
+		outstation.addRequestHandler(new Class1Reader());
+		outstation.addRequestHandler(new Class2Reader());
+		outstation.addRequestHandler(new Class3Reader());
+		outstation.addRequestHandler(new CrobOperator(databaseManager));
+		outstation.addRequestHandler(new AnalogOutputCommandOperator(databaseManager));
+		outstation.addRequestHandler(new TimeAndDateHandler(databaseManager.getInternalStatusProvider()));
+		outstation.addRequestHandler(new InternalIndicatorWriter(databaseManager.getInternalStatusProvider()));
+		
+		databaseManager.addEventListener(new BinaryInputEventListener(outstation));
+		databaseManager.addEventListener(new BinaryOutputEventListener(outstation));
+		databaseManager.addEventListener(new DoubleBitBinaryInputEventListener(outstation));
+		databaseManager.addEventListener(new AnalogInputEventListener(outstation));
+		databaseManager.addEventListener(new AnalogOutputEventListener(outstation));
+		databaseManager.addEventListener(new CounterEventListener(outstation));
+		
+		outstation.setPrimaryAddress(primaryAddress);
+		outstationDevice.setOutstation(outstation);
+		outstationDevice.setDatabaseManager(databaseManager);
+		DeviceProvider.registerDevice(outstationDevice);
+		
+		return outstationDevice;
+	}
 }

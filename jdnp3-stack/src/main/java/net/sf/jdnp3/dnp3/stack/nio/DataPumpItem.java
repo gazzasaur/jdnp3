@@ -28,6 +28,10 @@ public class DataPumpItem {
 		dataPumpSendBuffer = new DataPumpSendBuffer(maxBufferSize);
 	}
 
+	public void disconnected() {
+		dataPumpListener.disconnected();
+	}
+
 	public int getMaxBufferSize() {
 		return maxBufferSize;
 	}

@@ -69,7 +69,7 @@ public class OutstationEventQueue implements ConfirmationListener {
 		return requestedEvents;
 	}
 
-	public List<ObjectInstance> request(EventObjectInstanceSelector selector, long returnLimit) {
+	public synchronized List<ObjectInstance> request(EventObjectInstanceSelector selector, long returnLimit) {
 		List<ObjectInstance> requestedEvents = new ArrayList<>();
 		for (EventObjectInstance eventObjectInstance : events) {
 			if (selector.select(eventObjectInstance) && !pendingConfirmation.contains(eventObjectInstance)) {

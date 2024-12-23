@@ -16,6 +16,7 @@
 package net.sf.jdnp3.dnp3.stack.layer.datalink.service.core;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -23,18 +24,32 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrame;
+import net.sf.jdnp3.dnp3.stack.message.ChannelId;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public class MultiDataLinkInterceptor implements DataLinkInterceptor {
 	private Logger logger = LoggerFactory.getLogger(MultiDataLinkInterceptor.class);
 	
 	private ExecutorService executorService;
-	private List<DataLinkInterceptor> listeners = new ArrayList<DataLinkInterceptor>();
+	private List<ChannelId> connectedChannels = new LinkedList<ChannelId>();
+	private List<DataLinkInterceptor> listeners = new LinkedList<DataLinkInterceptor>();
 	
 	public void setExecutorService(ExecutorService executorService) {
 		this.executorService = executorService;
 	}
-	
+
+	public void connected(ChannelId channelId) {
+		synchronized (listeners) {
+			connectedChannels.add(channelId);
+		}
+	}
+
+	public void disconnected(ChannelId channelId) {
+		synchronized (listeners) {
+			while (connectedChannels.remove(channelId)) {}
+		}
+	}
+
 	public void addDataLinkListener(DataLinkInterceptor dataLinkInterceptor) {
 		synchronized (listeners) {
 			listeners.add(dataLinkInterceptor);
@@ -51,26 +66,24 @@ public class MultiDataLinkInterceptor implements DataLinkInterceptor {
 		if (executorService == null) {
 			throw new IllegalStateException("No ExecutorService has been defined.");
 		}
-		
-		List<DataLinkInterceptor> listenersCopy;
-		synchronized (listeners) {
-			listenersCopy = new ArrayList<>(listeners);
-		}
-		
-		for (DataLinkInterceptor dataLinkInterceptor : listenersCopy) {
-			executorService.execute(
-				new Runnable() {
-					public void run() {
-						try {
-							dataLinkInterceptor.receiveData(messageProperties, frame);
-						} catch (Exception e) {
-							logger.error("Error caught from datalink interceptor.  Moving on.", e);
-							// FIXME IMPL I have been requested not to remove this here.  This could be dangerous, but it make sense. This should be an option if anything.
-							// listeners.remove(dataLinkListener);
-						}
-					}
+		executorService.execute(() -> {
+			List<DataLinkInterceptor> listenersCopy;
+			synchronized (listeners) {
+				if (!connectedChannels.contains(messageProperties.getChannelId())) {
+					logger.warn("Dropping payload as the channel has been disconnected.");
 				}
-			);
-		}
+				listenersCopy = new ArrayList<>(listeners);
+			}
+			
+			for (DataLinkInterceptor dataLinkInterceptor : listenersCopy) {
+				try {
+					dataLinkInterceptor.receiveData(messageProperties, frame);
+				} catch (Exception e) {
+					logger.error("Error caught from datalink interceptor.  Moving on.", e);
+					// FIXME IMPL I have been requested not to remove this here.  This could be dangerous, but it make sense. This should be an option if anything.
+					// listeners.remove(dataLinkListener);
+				}
+			}	
+		});
 	}
 }

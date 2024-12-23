@@ -34,7 +34,7 @@ public class ApplicationFragmentRequestHeaderDecoder {
 		acfDecoder.decode(header.getApplicationControl(), data);
 		
 		boolean found = false;
-		int funcionCodeValue = (int) DataUtils.getInteger(0, 1, data);
+		int funcionCodeValue = (int) DataUtils.getUnsignedInteger(0, 1, data);
 		for (FunctionCode functionCode : FunctionCode.values()) {
 			if (functionCode.getCode() == funcionCodeValue) {
 				header.setFunctionCode(functionCode);

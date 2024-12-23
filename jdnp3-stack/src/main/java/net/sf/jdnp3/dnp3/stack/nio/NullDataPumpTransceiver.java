@@ -18,7 +18,7 @@ package net.sf.jdnp3.dnp3.stack.nio;
 import java.nio.channels.SelectableChannel;
 
 public class NullDataPumpTransceiver implements DataPumpTransceiver {
-	public boolean read(SelectableChannel selectableChannel, DataPumpItem dataPumpItem) {
+	public void read(SelectableChannel selectableChannel, DataPumpItem dataPumpItem) {
 		throw new UnsupportedOperationException();
 	}
 

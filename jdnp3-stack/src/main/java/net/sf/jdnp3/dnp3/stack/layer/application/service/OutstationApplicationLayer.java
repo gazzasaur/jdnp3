@@ -22,6 +22,7 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.Fun
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.OPERATE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.RESPONSE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.SELECT;
+import static net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode.UNSOLICITED_RESPONSE;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.BINARY_INPUT_EVENT_RELATIVE_TIME;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CLASS_1;
 import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeConstants.CLASS_2;
@@ -89,6 +90,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	private int expectedConfirmationSeqNr = -1;
 	private LinkedList<ObjectInstance> remainingObjects = new LinkedList<ObjectInstance>();
 
+	private Object unsolicitedLock = new Object();
 	private int nextUnsolicitedSeqNr = 0;
 	private int expectedUnsolicitedSeqNr = -1;
 	private boolean unsolicitedEnabled = false;
@@ -98,7 +100,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	private static final ScheduledExecutorService UNSOLICITED_THREAD_POOL = Executors.newSingleThreadScheduledExecutor();
 
 	public OutstationApplicationLayer() {
-		UNSOLICITED_THREAD_POOL.schedule(() -> this.sendUnsolicited(), 5000 + RandomUtils.secure().randomInt(0, 1000), TimeUnit.MILLISECONDS);
+		UNSOLICITED_THREAD_POOL.scheduleWithFixedDelay(() -> this.sendUnsolicited(), 5000 + RandomUtils.nextInt(0, 1000), 5000 + RandomUtils.nextInt(0, 1000), TimeUnit.MILLISECONDS);
 	}
 	
 	public synchronized DataLinkLayer getDataLinkLayer() {
@@ -142,8 +144,31 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		eventQueue.setInternalStatusProvider(internalStatusProvider);
 	}
 
-	public synchronized void sendUnsolicited() {
-		if (!unsolicitedEnabled) {
+	public void sendUnsolicited() {
+		synchronized (unsolicitedLock) {
+			try {
+				trySendUnsolicited();
+			} catch (Exception e) {
+				logger.error("Failed to send unsolicited: ", e);
+	
+				expectedUnsolicitedSeqNr = -1;
+				expectedConfirmationSeqNr = -1;
+				for (EventObjectInstance event : pendingUnsolicitedEvents) {
+					eventQueue.cancelled(event);
+				}
+				pendingUnsolicitedEvents.clear();
+				nextUnsolicitedSeqNr += 1;
+				nextUnsolicitedSeqNr %= 16;
+	
+				unsolicitedMessageProperties = null;
+			}
+		}
+	}
+
+	private void trySendUnsolicited() {
+		MessageProperties returnMessageProperties = unsolicitedMessageProperties;
+
+		if (!unsolicitedEnabled || unsolicitedMessageProperties == null) {
 			expectedUnsolicitedSeqNr = -1;
 			for (EventObjectInstance event : pendingUnsolicitedEvents) {
 				eventQueue.cancelled(event);
@@ -152,16 +177,16 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			return;
 		}
 
+		// Timeout
 		if (expectedUnsolicitedSeqNr >= 0) {
-			// Timed out
+			expectedUnsolicitedSeqNr = -1;
 			expectedConfirmationSeqNr = -1;
+			for (EventObjectInstance event : pendingUnsolicitedEvents) {
+				eventQueue.cancelled(event);
+			}
+			pendingUnsolicitedEvents.clear();
 			nextUnsolicitedSeqNr += 1;
-			UNSOLICITED_THREAD_POOL.schedule(() -> this.sendUnsolicited(), 1000 + RandomUtils.secure().randomInt(0, 1000), TimeUnit.MILLISECONDS);
-			return;
-		}
-
-		MessageProperties returnMessageProperties = unsolicitedMessageProperties;
-		if (returnMessageProperties == null) {
+			nextUnsolicitedSeqNr %= 16;
 			return;
 		}
 
@@ -185,11 +210,16 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			}
 		}
 
+		if (responseObjects.size() == 0) {
+			return;
+		};
+		expectedUnsolicitedSeqNr = nextUnsolicitedSeqNr;
+
 		LinkedList<ObjectInstance> replyObjects = new LinkedList<ObjectInstance>();
 
 		ApplicationFragmentResponse response = new ApplicationFragmentResponse();
 		ApplicationFragmentResponseHeader applicationResponseHeader = response.getHeader();
-		applicationResponseHeader.setFunctionCode(RESPONSE);
+		applicationResponseHeader.setFunctionCode(UNSOLICITED_RESPONSE);
 		applicationResponseHeader.getApplicationControl().setConfirmationRequired(false);
 		applicationResponseHeader.getApplicationControl().setFirstFragmentOfMessage(true);
 		applicationResponseHeader.getApplicationControl().setFinalFragmentOfMessage(true);
@@ -242,15 +272,14 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 				response.addObjectFragment(result.getObjectFragment());
 			}
 			if (result.isAtCapacity()) {
-				UNSOLICITED_THREAD_POOL.schedule(() -> this.sendUnsolicited(), 1000 + RandomUtils.secure().randomInt(0, 5000), TimeUnit.MILLISECONDS);
-				throw new RuntimeException("Unsolicited response cannot be fragmented.");
+				// An unsolicited response is not allowed to be freagmented. So just send it as it.
+				break;
 			}
 		}
 
-		UNSOLICITED_THREAD_POOL.schedule(() -> this.sendUnsolicited(), 1000 + RandomUtils.secure().randomInt(0, 5000), TimeUnit.MILLISECONDS);
-		trySendData(returnMessageProperties, response);
+		applicationTransport.sendData(returnMessageProperties, encoder.encode(response));
 	}
-	
+
 	public synchronized void dataReceived(MessageProperties messageProperties, List<Byte> data) {
 		validateState();
 		
@@ -506,5 +535,9 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 
 	public synchronized void setMtu(int mtu) {
 		this.mtu = mtu;
+	}
+
+	public void setUnsolicitedEnabled(boolean unsolicitedEnabled) {
+		this.unsolicitedEnabled = unsolicitedEnabled;
 	}
 }

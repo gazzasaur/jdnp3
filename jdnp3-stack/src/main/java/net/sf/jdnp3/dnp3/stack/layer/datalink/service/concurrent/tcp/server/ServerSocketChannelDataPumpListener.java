@@ -53,7 +53,7 @@ public class ServerSocketChannelDataPumpListener implements DataPumpListener {
 			
 			ChannelId channelId = channelManager.addChannel(socketChannel);
 			logger.info(format("Connection received from %s and has been assigned a channel id of %s.", getRemoteSocketAddress(socketChannel), channelId));
-			dataPump.registerChannel(socketChannel, new SocketChannelDataPumpListener(channelId, channelManager, dataLinkInterceptor));
+			dataPump.registerAcceptedChannel(socketChannel, new SocketChannelDataPumpListener(channelId, channelManager, dataLinkInterceptor));
 		} catch (Exception e) {
 			logger.error("Failed to accept client socket.", e);
 			try {

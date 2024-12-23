@@ -57,14 +57,17 @@ public class CountRangeObjectFragmentPacker implements ObjectFragmentPacker {
 			throw new IllegalArgumentException(format("No encoder found for the operation %s on type %s.", context.getFunctionCode(), objectType));
 		}
 
+		// FIXME This should be calculated from the max intexd that is included on the object.
 		long maxIndex = objectInstances.stream().map(ObjectInstance::getIndex).mapToLong(index -> index).max().orElse(1);
 		int indexSize = calculateOctetCount(maxIndex);
 
 		CountRange countRange = new CountRange();
+		CountRange committedCountRange = new CountRange();
+
 		IndexPrefixType indexPrefixType = new IndexPrefixType();
 		indexPrefixType.setOctetCount(indexSize);
 		ObjectFragment objectFragment = new ObjectFragment();
-		objectFragment.getObjectFragmentHeader().setRange(countRange);
+		objectFragment.getObjectFragmentHeader().setRange(committedCountRange);
 		objectFragment.getObjectFragmentHeader().setObjectType(objectType);
 		objectFragment.getObjectFragmentHeader().setPrefixType(indexPrefixType);
 		
@@ -72,6 +75,10 @@ public class CountRangeObjectFragmentPacker implements ObjectFragmentPacker {
 		encoderContext.setCommonTimeOfOccurrance(context.getTimeReference());
 		encoderContext.setFunctionCode(context.getFunctionCode());
 		encoderContext.setObjectType(objectType);
+
+		long committedObjectSize = 0;
+		long committedMaxCount = 0;
+		long addedObjects = 0;
 		long overhead = 2;
 		
 		List<Byte> data = new ArrayList<Byte>();
@@ -90,14 +97,24 @@ public class CountRangeObjectFragmentPacker implements ObjectFragmentPacker {
 			long objectSize = data.size();
 			if (overhead + rangeSize + (countRange.getCount() * indexSize) + objectSize < context.getFreeSpace()) {
 				objectInstances.remove(0);
+				addedObjects += 1;
+				committedMaxCount += 1;
+				committedObjectSize = objectSize;
 				objectFragment.addObjectInstance(nextInstance);
+				committedCountRange.setCount(committedCountRange.getCount() + 1);
 			} else {
 				result.setAtCapacity(true);
+				break;
 			}
+		}
+
+		if (addedObjects == 0) {
+			return result;
 		}
 		
 		QualifierField qualifierField = QualifierFieldCalculator.calculate(indexPrefixType, countRange);
 		objectFragment.getObjectFragmentHeader().setQualifierField(qualifierField);
+		context.setFreeSpace(context.getFreeSpace() - (overhead + calculateOctetCount(committedMaxCount) + (committedMaxCount * indexSize) + committedObjectSize));
 		
 		result.setObjectFragment(objectFragment);
 		return result;

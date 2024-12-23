@@ -40,7 +40,7 @@ public class AnalogOutputCommandFloat64ObjectTypeDecoder implements ObjectTypeDe
 		command.setIndex(decoderContext.getCurrentIndex());
 		
 		double value = DataUtils.getDouble(0, data);
-		long statusCode = DataUtils.getInteger(8, 1, data);
+		long statusCode = DataUtils.getUnsignedInteger(8, 1, data);
 		
 		command.setValue(value);
 		for (StatusCode status : StatusCode.values()) {

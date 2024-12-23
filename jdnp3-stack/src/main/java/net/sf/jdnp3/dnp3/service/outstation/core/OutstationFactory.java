@@ -101,6 +101,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationLa
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationApplicationRequestHandler;
 
 public class OutstationFactory {
+	private boolean unsolicitedEnabled = false;
 	private InternalStatusProvider internalStatusProvider = null;
 	private List<ObjectTypeEncoder> encoders = new ArrayList<>();
 	private List<ObjectTypeDecoder> decoders = new ArrayList<>();
@@ -243,6 +244,7 @@ public class OutstationFactory {
 		OutstationApplicationLayer outstationApplicationLayer = new OutstationApplicationLayer();
 		outstationApplicationLayer.setEncoder(applicationFragmentResponseEncoder);
 		outstationApplicationLayer.setDecoder(applicationFragmentRequestDecoder);
+		outstationApplicationLayer.setUnsolicitedEnabled(unsolicitedEnabled);
 		
 		for (ByteDataObjectTypeDecoder customDecoder : customDecoders) {
 			objectFragmentDecoder.addCustomDecoder(customDecoder);
@@ -286,4 +288,8 @@ public class OutstationFactory {
 		
 		return outstation;
 	}
+
+    public void setUnsolicitedEnabled(boolean unsolicitedEnabled) {
+		this.unsolicitedEnabled = unsolicitedEnabled;
+    }
 }

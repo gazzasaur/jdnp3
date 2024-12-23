@@ -22,10 +22,13 @@ import static org.apache.commons.lang3.ArrayUtils.toObject;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 public class SocketChannelDataPumpTransceiver implements DataPumpTransceiver {
-	public boolean read(SelectableChannel selectableChannel, DataPumpItem dataPumpItem) {
+	public void read(SelectableChannel selectableChannel, DataPumpItem dataPumpItem) {
 		SocketChannel socketChannel = (SocketChannel) selectableChannel;
 		
 		int count = 0;
@@ -34,16 +37,16 @@ public class SocketChannelDataPumpTransceiver implements DataPumpTransceiver {
 		try {
 			count = socketChannel.read(byteBuffer);
 			if (count < 0) {
-				socketChannel.close();
-				return false;
+				throw new RuntimeException("Send buffer has been closed.");
 			}
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Failed to read from send buffer", e);
 		}
 		
-		List<Byte> data = asList(toObject(copyOf(byteBuffer.array(), count)));
-		dataPumpItem.getDataPumpListener().dataReceived(data);
-		return true;
+		if (count != 0) {
+			List<Byte> data = asList(toObject(copyOf(byteBuffer.array(), count)));
+			dataPumpItem.getDataPumpListener().dataReceived(data);
+		}
 	}
 
 	public boolean write(SelectableChannel selectableChannel, DataPumpItem dataPumpItem) {
@@ -57,7 +60,7 @@ public class SocketChannelDataPumpTransceiver implements DataPumpTransceiver {
 		try {
 			socketChannel.write(sendBuffer);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Failed to write to buffer.", e);
 		}
 		return true;
 	}

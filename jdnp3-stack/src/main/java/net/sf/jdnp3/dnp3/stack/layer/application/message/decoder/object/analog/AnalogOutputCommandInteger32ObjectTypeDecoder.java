@@ -40,7 +40,7 @@ public class AnalogOutputCommandInteger32ObjectTypeDecoder implements ObjectType
 		command.setIndex(decoderContext.getCurrentIndex());
 		
 		long value = DataUtils.getInteger(0, 4, data);
-		long statusCode = DataUtils.getInteger(4, 1, data);
+		long statusCode = DataUtils.getUnsignedInteger(4, 1, data);
 		
 		command.setValue(value);
 		for (StatusCode status : StatusCode.values()) {

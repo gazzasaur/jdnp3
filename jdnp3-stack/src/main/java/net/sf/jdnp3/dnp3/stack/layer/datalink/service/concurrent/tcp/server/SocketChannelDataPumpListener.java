@@ -45,12 +45,14 @@ public class SocketChannelDataPumpListener implements DataPumpListener {
 		this.channelId = channelId;
 		this.channelManager = channelManager;
 		this.dataLinkInterceptor = dataLinkInterceptor;
+		this.dataLinkInterceptor.connected(channelId);
 	}
 	
 	public void connected() {
 	}
 
 	public void disconnected() {
+		dataLinkInterceptor.disconnected(channelId);
 		channelManager.closeChannel(channelId);
 	}
 

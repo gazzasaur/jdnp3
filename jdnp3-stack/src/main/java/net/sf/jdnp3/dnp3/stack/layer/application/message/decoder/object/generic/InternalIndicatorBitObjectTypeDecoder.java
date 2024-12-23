@@ -34,9 +34,9 @@ public class InternalIndicatorBitObjectTypeDecoder implements ObjectTypeDecoder 
 			throw new IllegalArgumentException("Cannot decode data.");
 		}
 		
-		long value = DataUtils.getInteger(0, 1, data);
+		long value = DataUtils.getUnsignedInteger(0, 1, data);
 		if (decoderContext.getCurrentIndex() > 7) {
-			value = DataUtils.getInteger(0, 1, data);
+			value = DataUtils.getUnsignedInteger(0, 1, data);
 		}
 		
 		InternalIndicatorBitObjectInstance objectInstance = new InternalIndicatorBitObjectInstance();

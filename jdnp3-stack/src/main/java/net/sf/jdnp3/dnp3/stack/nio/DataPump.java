@@ -27,6 +27,10 @@ public class DataPump {
 		dataPumpWorker.registerServerChannel(selectableChannel, dataPumpListener);
 	}
 
+	public void registerAcceptedChannel(SocketChannel socketChannel, DataPumpListener dataListener) {
+		dataPumpWorker.registerAcceptedChannel(socketChannel, dataListener);
+	}
+
 	public void registerChannel(SocketChannel socketChannel, DataPumpListener dataListener) {
 		dataPumpWorker.registerChannel(socketChannel, dataListener);
 	}
