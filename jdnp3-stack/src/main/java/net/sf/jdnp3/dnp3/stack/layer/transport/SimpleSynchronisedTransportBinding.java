@@ -25,7 +25,7 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.service.core.DataLinkLayer;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public class SimpleSynchronisedTransportBinding implements TransportBinding {
-	private Logger logger = LoggerFactory.getLogger(SimpleSynchronisedTransportBinding.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SimpleSynchronisedTransportBinding.class);
 	
 	private int address;
 	private DataLinkLayer dataLinkLayer;
@@ -41,7 +41,7 @@ public class SimpleSynchronisedTransportBinding implements TransportBinding {
 			return;
 		}
 		TransportSegment transportSegment = transportSegmentDecoder.decode(data);
-		logger.debug(TransportSegmentUtils.toString(messageProperties.getChannelId(), transportSegment));
+		LOGGER.debug(TransportSegmentUtils.toString(messageProperties.getChannelId(), transportSegment));
 		synchronized (transportSegmentDigester) {
 			if (transportSegmentDigester.digestData(messageProperties, transportSegment, data)) {
 				applicationLayer.dataReceived(messageProperties, transportSegmentDigester.pollData());

@@ -42,7 +42,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.SuccessMessage;
 
 // FIXME DEBT Remove the dependence on state for the error message.
 public class JsonApiServlet extends HttpServlet implements Messanger {
-	private Logger logger = LoggerFactory.getLogger(JsonApiServlet.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(JsonApiServlet.class);
 	private Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().setPrettyPrinting().create();
 	
 	private Message returnMessage;
@@ -54,7 +54,7 @@ public class JsonApiServlet extends HttpServlet implements Messanger {
 		try {
 			message = decoder.decode(jsonData);
 		} catch (Exception e) {
-			logger.error("Failed to parse message.", e);
+			LOGGER.error("Failed to parse message.", e);
 			generateFailure(response, "Failed to parse message.");
 			return;
 		}
@@ -65,7 +65,7 @@ public class JsonApiServlet extends HttpServlet implements Messanger {
 			messageHandler.processMessage(this, message);
 		} catch (Exception e) {
 			String reason = "Failed to process message.";
-			logger.error(reason, e);
+			LOGGER.error(reason, e);
 			generateFailure(response, reason);
 			return;
 		}

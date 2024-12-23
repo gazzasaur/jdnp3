@@ -32,7 +32,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.SuccessMessage;
 
 public class DestroyAllMessageHandler implements MessageHandler {
-	private Logger logger = LoggerFactory.getLogger(DestroyAllMessageHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DestroyAllMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof DestroyAllMessage;
@@ -52,14 +52,14 @@ public class DestroyAllMessageHandler implements MessageHandler {
 					try {
 						DeviceProvider.unregisterDevice(stationName, deviceName);
 					} catch (Exception e) {
-						logger.warn(format("Cannot destroy device %s:%s.", stationName, deviceName), e);
+						LOGGER.warn(format("Cannot destroy device %s:%s.", stationName, deviceName), e);
 						FailureMessage failureMessage = new FailureMessage();
 						failureMessage.setReason("Failed to destroy all devices.  Please check log for details.");
 						responseMessage = failureMessage;
 					}
 				}
 			} catch (Exception e) {
-				logger.warn(format("Cannot destroy station %s.", stationName), e);
+				LOGGER.warn(format("Cannot destroy station %s.", stationName), e);
 				FailureMessage failureMessage = new FailureMessage();
 				failureMessage.setReason("Failed to destroy all devices.  Please check log for details.");
 				responseMessage = failureMessage;
@@ -71,7 +71,7 @@ public class DestroyAllMessageHandler implements MessageHandler {
 			try {
 				DataLinkManagerProvider.unregisterDataLink(name);
 			} catch (Exception e) {
-				logger.warn("Cannot destroy data link: " + name, e);
+				LOGGER.warn("Cannot destroy data link: " + name, e);
 				FailureMessage failureMessage = new FailureMessage();
 				failureMessage.setReason("Failed to destroy all devices.  Please check log for details.");
 				responseMessage = failureMessage;

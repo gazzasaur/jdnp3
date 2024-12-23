@@ -37,13 +37,13 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogInput
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class AnalogInputStaticTypeRationaliserHelper implements ObjectInstanceTypeRationaliserHelper {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(AnalogInputStaticTypeRationaliserHelper.class);
 	private List<ObjectType> validObjectTypes = Arrays.asList(ANY, CLASS_0, ANALOG_INPUT_STATIC_ANY, ANALOG_INPUT_STATIC_INT32, ANALOG_INPUT_STATIC_INT16, ANALOG_INPUT_STATIC_INT32_NO_FLAGS, ANALOG_INPUT_STATIC_INT16_NO_FLAGS, ANALOG_INPUT_STATIC_FLOAT32, ANALOG_INPUT_STATIC_FLOAT64);
 	
 	public void rationalise(ObjectInstance objectInstance) {
 		AnalogInputStaticObjectInstance specificInstance = (AnalogInputStaticObjectInstance) objectInstance;
 		if (!validObjectTypes.contains(specificInstance.getRequestedType())) {
-			logger.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
+			LOGGER.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
 			objectInstance.setRequestedType(ANY);
 		}
 		boolean otherFlags = !specificInstance.isOnline() ||
@@ -57,11 +57,11 @@ public class AnalogInputStaticTypeRationaliserHelper implements ObjectInstanceTy
 			objectInstance.setRequestedType(ANALOG_INPUT_STATIC_FLOAT32);
 		}
 		if (specificInstance.getRequestedType().equals(ANALOG_INPUT_STATIC_INT16_NO_FLAGS) && otherFlags) {
-			logger.warn(format(ANALOG_INPUT_STATIC_INT16_NO_FLAGS.toString() + " format requested but flags are required."));
+			LOGGER.warn(format(ANALOG_INPUT_STATIC_INT16_NO_FLAGS.toString() + " format requested but flags are required."));
 			specificInstance.setRequestedType(ANALOG_INPUT_STATIC_INT16);
 		}
 		if (specificInstance.getRequestedType().equals(ANALOG_INPUT_STATIC_INT32_NO_FLAGS) && otherFlags) {
-			logger.warn(format(ANALOG_INPUT_STATIC_INT32_NO_FLAGS.toString() + " format requested but flags are required."));
+			LOGGER.warn(format(ANALOG_INPUT_STATIC_INT32_NO_FLAGS.toString() + " format requested but flags are required."));
 			specificInstance.setRequestedType(ANALOG_INPUT_STATIC_INT32);
 		}
 	}

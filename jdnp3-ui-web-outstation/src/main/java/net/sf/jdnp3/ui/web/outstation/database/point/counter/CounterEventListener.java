@@ -27,7 +27,7 @@ import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.core.EventListener;
 
 public class CounterEventListener implements EventListener {
-	private Logger logger = LoggerFactory.getLogger(CounterEventListener.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CounterEventListener.class);
 	
 	private Outstation outstation;
 
@@ -50,7 +50,7 @@ public class CounterEventListener implements EventListener {
 				counterEventObjectInstance.setRequestedType(counterDataPoint.getEventType());
 				outstation.sendEvent(counterEventObjectInstance);
 			} catch (Exception e) {
-				logger.error("Failed to send event.", e);
+				LOGGER.error("Failed to send event.", e);
 			}
 		}
 	}

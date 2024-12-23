@@ -27,7 +27,7 @@ import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.core.EventListener;
 
 public class DoubleBitBinaryInputEventListener implements EventListener {
-	private Logger logger = LoggerFactory.getLogger(BinaryInputEventListener.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BinaryInputEventListener.class);
 	
 	private Outstation outstation;
 
@@ -50,7 +50,7 @@ public class DoubleBitBinaryInputEventListener implements EventListener {
 				binaryInputEventObjectInstance.setRequestedType(binaryDataPoint.getEventType());
 				outstation.sendEvent(binaryInputEventObjectInstance);
 			} catch (Exception e) {
-				logger.error("Failed to send event.", e);
+				LOGGER.error("Failed to send event.", e);
 			}
 		}
 	}

@@ -68,7 +68,7 @@ import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class OutstationApplicationLayer implements ApplicationLayer {
-	private Logger logger = LoggerFactory.getLogger(OutstationApplicationLayer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OutstationApplicationLayer.class);
 	private static final List<ObjectType> RELATIVE_TIME_TYPES = Arrays.asList(BINARY_INPUT_EVENT_RELATIVE_TIME);
 	
 	private int mtu = 2048;
@@ -148,7 +148,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			try {
 				trySendUnsolicited();
 			} catch (Exception e) {
-				logger.error("Failed to send unsolicited: ", e);
+				LOGGER.error("Failed to send unsolicited: ", e);
 	
 				expectedUnsolicitedSeqNr = -1;
 				expectedConfirmationSeqNr = -1;
@@ -302,9 +302,9 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		try {
 			decoder.decode(decoderContext, request, localData);
 		} catch (UnknownObjectException unknownObjectException) {
-			logger.error("Failed to decode: " + DataUtils.toString(data));
-			logger.error(decoderContext.getDecodeLogic());
-			logger.error(unknownObjectException.getMessage(), unknownObjectException);
+			LOGGER.error("Failed to decode: " + DataUtils.toString(data));
+			LOGGER.error(decoderContext.getDecodeLogic());
+			LOGGER.error(unknownObjectException.getMessage(), unknownObjectException);
 			if (request.getHeader().getApplicationControl().getSequenceNumber() >= 0) {
 				ApplicationFragmentResponse response = new ApplicationFragmentResponse();
 				response.getHeader().getInternalIndicatorField().setObjectUnknown(true);
@@ -397,7 +397,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 					BeanUtils.copyProperties(applicationResponseHeader.getInternalIndicatorField(), internalStatusProvider);
 				} catch (Exception e) {
 					applicationResponseHeader.getInternalIndicatorField().setDeviceTrouble(true);
-					logger.error("Cannot copy IIN properties.", e);
+					LOGGER.error("Cannot copy IIN properties.", e);
 				}
 			}
 			applicationResponseHeader.getInternalIndicatorField().setBroadcast(applicationResponseHeader.getInternalIndicatorField().isBroadcast() || broadcast);
@@ -410,7 +410,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 				BeanUtils.copyProperties(applicationResponseHeader.getInternalIndicatorField(), internalStatusProvider);
 			} catch (Exception e) {
 				applicationResponseHeader.getInternalIndicatorField().setDeviceTrouble(true);
-				logger.error("Cannot copy IIN properties.", e);
+				LOGGER.error("Cannot copy IIN properties.", e);
 			}
 		}
 		applicationResponseHeader.getInternalIndicatorField().setBroadcast(applicationResponseHeader.getInternalIndicatorField().isBroadcast() || broadcast);
@@ -491,7 +491,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		try {
 			applicationTransport.sendData(returnMessageProperties, encoder.encode(response));
 		} catch (Exception e) {
-			logger.error(String.format("Failed to send message to DNP3 address %s on channel %s.", returnMessageProperties.getDestinationAddress(), returnMessageProperties.getChannelId()), e);
+			LOGGER.error(String.format("Failed to send message to DNP3 address %s on channel %s.", returnMessageProperties.getDestinationAddress(), returnMessageProperties.getChannelId()), e);
 		}
 	}
 

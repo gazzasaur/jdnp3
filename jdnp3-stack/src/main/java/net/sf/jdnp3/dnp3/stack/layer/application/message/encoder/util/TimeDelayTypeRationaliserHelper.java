@@ -31,17 +31,17 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectTypeCon
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeDelayObjectInstance;
 
 public class TimeDelayTypeRationaliserHelper implements ObjectInstanceTypeRationaliserHelper {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(TimeDelayTypeRationaliserHelper.class);
 	private List<ObjectType> validObjectTypes = Arrays.asList(TIME_DELAY_FINE, TIME_DELAY_COARSE);
 	
 	public void rationalise(ObjectInstance objectInstance) {
 		TimeDelayObjectInstance specificInstance = (TimeDelayObjectInstance) objectInstance;
 		if (!validObjectTypes.contains(specificInstance.getRequestedType())) {
-			logger.warn(format("Unknown object type '%s' for class '%s', setting to TimeDelayFine.", specificInstance.getRequestedType(), specificInstance.getClass()));
+			LOGGER.warn(format("Unknown object type '%s' for class '%s', setting to TimeDelayFine.", specificInstance.getRequestedType(), specificInstance.getClass()));
 			objectInstance.setRequestedType(TIME_DELAY_FINE);
 		}
 		if (specificInstance.getRequestedType().equals(ObjectTypeConstants.TIME_DELAY_FINE) && specificInstance.getTimestamp() > 0xFFFF) {
-			logger.warn(format("TimeDelayFine was requested but a delay of %d is required.  Using time delay coarse instead.", specificInstance.getTimestamp()));
+			LOGGER.warn(format("TimeDelayFine was requested but a delay of %d is required.  Using time delay coarse instead.", specificInstance.getTimestamp()));
 			specificInstance.setRequestedType(ObjectTypeConstants.TIME_DELAY_COARSE);
 		}
 	}

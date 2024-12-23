@@ -28,7 +28,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.SuccessMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.datalink.CreateDataLinkMessage;
 
 public class CreateDataLinkMessageHandler implements MessageHandler {
-	private Logger logger = LoggerFactory.getLogger(CreateDataLinkMessageHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CreateDataLinkMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof CreateDataLinkMessage;
@@ -48,7 +48,7 @@ public class CreateDataLinkMessageHandler implements MessageHandler {
 			FailureMessage failureMessage = new FailureMessage();
 			failureMessage.setReason("Cannot start datalink binding.  Please check log for details.");
 			responseMessage = failureMessage;
-			logger.error("Cannot create datalink.", e);
+			LOGGER.error("Cannot create datalink.", e);
 		}
 		
 		messanger.sendMessage(responseMessage);

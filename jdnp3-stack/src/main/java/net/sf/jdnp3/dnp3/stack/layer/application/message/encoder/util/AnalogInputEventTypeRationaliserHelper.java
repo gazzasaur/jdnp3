@@ -42,7 +42,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstanc
 
 // FIXME Rationalisers should only be required for fixing things like flags. Use the DefaultObjectTypeMappings for everything else.
 public class AnalogInputEventTypeRationaliserHelper implements ObjectInstanceTypeRationaliserHelper {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(AnalogInputEventTypeRationaliserHelper.class);
 	private List<ObjectType> groupObjectTypes = Arrays.asList(
 		ANY,
 		CLASS_1,
@@ -69,7 +69,7 @@ public class AnalogInputEventTypeRationaliserHelper implements ObjectInstanceTyp
 	public void rationalise(ObjectInstance objectInstance) {
 		AnalogInputEventObjectInstance specificInstance = (AnalogInputEventObjectInstance) objectInstance;
 		if (!validObjectTypes.contains(specificInstance.getRequestedType())) {
-			logger.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
+			LOGGER.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
 			objectInstance.setRequestedType(ANY);
 		}
 		if (groupObjectTypes.contains(specificInstance.getRequestedType())) {

@@ -29,7 +29,7 @@ import net.sf.jdnp3.dnp3.stack.layer.datalink.model.DataLinkFrameHeader;
 
 public class DataLinkDigester {
 	private static final int CHARACTER_TIMEOUT = 500;
-	private Logger logger = LoggerFactory.getLogger(DataLinkDigester.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DataLinkDigester.class);
 	
 	private int mtu = 253;
 	
@@ -56,7 +56,7 @@ public class DataLinkDigester {
 				return true;
 			}
 		} catch (Exception e) {
-			logger.warn("Error found on stream.", e);
+			LOGGER.warn("Error found on stream.", e);
 			performRapidDrop(frameBuffer);
 		}
 		
@@ -64,11 +64,11 @@ public class DataLinkDigester {
 			lastDrop = new Date().getTime();
 		}
 		if (new Date().getTime() - lastDrop > CHARACTER_TIMEOUT) {
-			logger.warn("Timeout on stream.");
+			LOGGER.warn("Timeout on stream.");
 			performRapidDrop(frameBuffer);
 		}
 		if (frameBuffer.size() > maximumReceiveDataSize) {
-			logger.warn("Receive buffer has exceeded max size.");
+			LOGGER.warn("Receive buffer has exceeded max size.");
 			performRapidDrop(frameBuffer);
 		}
 		return false;
@@ -103,7 +103,7 @@ public class DataLinkDigester {
 		for (Byte droppedByte : droppedData) {
 			stringBuilder.append(String.format("%02X", droppedByte));
 		}
-		logger.warn(stringBuilder.toString());
+		LOGGER.warn(stringBuilder.toString());
 		lastDrop = new Date().getTime();
 	}
 }

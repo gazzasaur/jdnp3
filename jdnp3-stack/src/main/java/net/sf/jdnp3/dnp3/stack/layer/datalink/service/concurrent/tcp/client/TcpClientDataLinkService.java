@@ -42,7 +42,7 @@ import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 // TODO This is very similat to the server version. Refactor to combine common elements
 public class TcpClientDataLinkService implements DataLinkLayer {
-	private Logger logger = LoggerFactory.getLogger(TcpClientDataLinkService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TcpClientDataLinkService.class);
 	
 	private static final int MTU = 249;
 
@@ -153,7 +153,7 @@ public class TcpClientDataLinkService implements DataLinkLayer {
 
 	public synchronized void sendData(MessageProperties messageProperties, DataLinkFrame frame) {
 		List<Byte> frameData = dataLinkFrameEncoder.encode(frame);
-		logger.debug(String.format("Send data to %s from %s using channel %s: %s", messageProperties.getDestinationAddress(), messageProperties.getSourceAddress(), messageProperties.getChannelId(), DataUtils.toString(frameData)));
+		LOGGER.debug(String.format("Send data to %s from %s using channel %s: %s", messageProperties.getDestinationAddress(), messageProperties.getSourceAddress(), messageProperties.getChannelId(), DataUtils.toString(frameData)));
 		SocketChannel socketChannel = channelManager.getChannel(messageProperties.getChannelId());
 		dataPump.sendData(socketChannel, frameData);
 	}

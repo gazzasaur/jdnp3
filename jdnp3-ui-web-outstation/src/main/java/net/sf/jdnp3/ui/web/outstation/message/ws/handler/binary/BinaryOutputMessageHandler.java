@@ -27,7 +27,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.BinaryOutputMessag
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
 public class BinaryOutputMessageHandler implements DeviceMessageHandler {
-	private Logger logger = LoggerFactory.getLogger(BinaryOutputMessageHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BinaryOutputMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof BinaryOutputMessage;
@@ -45,7 +45,7 @@ public class BinaryOutputMessageHandler implements DeviceMessageHandler {
 			MessageUtils.copyProperties(dataPoint, pointMessage);
 			outstationDevice.getDatabaseManager().setBinaryOutputDataPoint(dataPoint);
 		} catch (Exception e) {
-			logger.error("Failed to copy object.", e);
+			LOGGER.error("Failed to copy object.", e);
 		}
 	}
 }

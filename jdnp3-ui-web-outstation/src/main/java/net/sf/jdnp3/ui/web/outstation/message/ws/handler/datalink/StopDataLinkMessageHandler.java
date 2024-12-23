@@ -28,7 +28,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.SuccessMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.datalink.StopDataLinkMessage;
 
 public class StopDataLinkMessageHandler implements MessageHandler {
-	private Logger logger = LoggerFactory.getLogger(StopDataLinkMessageHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(StopDataLinkMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof StopDataLinkMessage;
@@ -48,7 +48,7 @@ public class StopDataLinkMessageHandler implements MessageHandler {
 			FailureMessage failureMessage = new FailureMessage();
 			failureMessage.setReason("Cannot stop datalink binding.  Please check log for details.");
 			responseMessage = failureMessage;
-			logger.error("Cannot stop datalink binding.", e);
+			LOGGER.error("Cannot stop datalink binding.", e);
 		}
 		
 		webSocket.sendMessage(responseMessage);

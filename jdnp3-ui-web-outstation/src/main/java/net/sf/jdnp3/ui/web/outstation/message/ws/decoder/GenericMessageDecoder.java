@@ -30,7 +30,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
 public class GenericMessageDecoder implements Decoder.Text<Message> {
 	private final Gson gson = new GsonBuilder().setPrettyPrinting().serializeSpecialFloatingPointValues().create();
-	private Logger logger = LoggerFactory.getLogger(GenericMessageDecoder.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GenericMessageDecoder.class);
 
 	public void init(EndpointConfig config) {
 	}
@@ -44,7 +44,7 @@ public class GenericMessageDecoder implements Decoder.Text<Message> {
 		if (registry.isRegistered(genericMessage.getType())) {
 			return gson.fromJson(data, registry.get(genericMessage.getType()));
 		}
-		logger.warn("No decoder registered for " + genericMessage.getType());
+		LOGGER.warn("No decoder registered for " + genericMessage.getType());
 		throw new IllegalArgumentException("Failed to decode message: " + data);
 	}
 

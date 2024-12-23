@@ -29,7 +29,7 @@ import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
 
 public class BinaryInputStaticHandler implements BinaryInputStaticReadRequestHandler, BinaryInputStaticAssignClassRequestHandler {
-	private Logger logger = LoggerFactory.getLogger(BinaryInputStaticHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BinaryInputStaticHandler.class);
 	
 	private DatabaseManager databaseManager;
 
@@ -105,7 +105,7 @@ public class BinaryInputStaticHandler implements BinaryInputStaticReadRequestHan
 			binaryInputStaticObjectInstance.setRequestedType(dataPoint.getStaticType());
 			points.add(binaryInputStaticObjectInstance);
 		} catch (Exception e) {
-			logger.error("Cannot copy data point.", e);
+			LOGGER.error("Cannot copy data point.", e);
 		}
 	}
 }

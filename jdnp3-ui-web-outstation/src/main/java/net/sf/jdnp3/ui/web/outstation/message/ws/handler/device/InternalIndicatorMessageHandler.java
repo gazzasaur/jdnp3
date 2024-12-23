@@ -29,7 +29,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.InternalIndicatorMessage;
 
 public class InternalIndicatorMessageHandler implements DeviceMessageHandler {
-	private Logger logger = LoggerFactory.getLogger(InternalIndicatorMessageHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(InternalIndicatorMessageHandler.class);
 	private static final List<String> TRUSTED_ATTRIBUTES = Arrays.asList("broadcast", "class1Events", "class2Events", "class3Events", "needTime", "localControl", "deviceTrouble", "deviceRestart", "noFunctionCodeSupport", "objectUnknown", "parameterError", "eventBufferOverflow", "alreadyExecuting", "configurationCorrupt", "readonly");
 	
 	public boolean canHandle(Message message) {
@@ -43,14 +43,14 @@ public class InternalIndicatorMessageHandler implements DeviceMessageHandler {
 		InternalIndicatorMessage specificMessage = (InternalIndicatorMessage) message;
 		
 		if (!TRUSTED_ATTRIBUTES.contains(specificMessage.getAttribute())) {
-			logger.warn("An attempt was made to set an untrusted attribute: " + specificMessage.getAttribute());
+			LOGGER.warn("An attempt was made to set an untrusted attribute: " + specificMessage.getAttribute());
 			return;
 		}
 		
 		try {
 			BeanUtils.setProperty(outstationDevice.getDatabaseManager().getInternalStatusProvider(), specificMessage.getAttribute(), specificMessage.isValue());
 		} catch (Exception e) {
-			logger.error("Failed to set IIN flag.", e);
+			LOGGER.error("Failed to set IIN flag.", e);
 		}
 	}
 }

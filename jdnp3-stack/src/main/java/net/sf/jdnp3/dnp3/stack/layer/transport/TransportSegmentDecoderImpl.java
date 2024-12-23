@@ -25,10 +25,10 @@ import org.slf4j.LoggerFactory;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class TransportSegmentDecoderImpl implements TransportSegmentDecoder {
-	private Logger logger = LoggerFactory.getLogger(TransportSegmentDecoderImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TransportSegmentDecoderImpl.class);
 	
 	public TransportSegment decode(List<Byte> linkData) {
-		logger.debug("Transport Data Received: " + DataUtils.toString(linkData));
+		LOGGER.debug("Transport Data Received: " + DataUtils.toString(linkData));
 		
 		List<Byte> data = new ArrayList<Byte>(linkData);
 		TransportSegment transportSegment = new TransportSegment();

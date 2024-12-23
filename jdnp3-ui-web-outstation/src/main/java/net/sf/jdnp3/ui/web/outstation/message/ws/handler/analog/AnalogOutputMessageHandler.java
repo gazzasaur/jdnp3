@@ -27,7 +27,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.analog.AnalogOutputMessag
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
 public class AnalogOutputMessageHandler implements DeviceMessageHandler {
-	private Logger logger = LoggerFactory.getLogger(AnalogOutputMessageHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AnalogOutputMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof AnalogOutputMessage;
@@ -44,7 +44,7 @@ public class AnalogOutputMessageHandler implements DeviceMessageHandler {
 			MessageUtils.copyProperties(dataPoint, pointMessage);
 			outstationDevice.getDatabaseManager().setAnalogOutputDataPoint(dataPoint);
 		} catch (Exception e) {
-			logger.error("Failed to copy object.", e);
+			LOGGER.error("Failed to copy object.", e);
 		}
 	}
 }

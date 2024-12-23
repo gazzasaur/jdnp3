@@ -28,7 +28,7 @@ import net.sf.jdnp3.dnp3.stack.message.ChannelId;
 import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 public class MultiDataLinkInterceptor implements DataLinkInterceptor {
-	private Logger logger = LoggerFactory.getLogger(MultiDataLinkInterceptor.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MultiDataLinkInterceptor.class);
 	
 	private ExecutorService executorService;
 	private List<ChannelId> connectedChannels = new LinkedList<ChannelId>();
@@ -70,7 +70,7 @@ public class MultiDataLinkInterceptor implements DataLinkInterceptor {
 			List<DataLinkInterceptor> listenersCopy;
 			synchronized (listeners) {
 				if (!connectedChannels.contains(messageProperties.getChannelId())) {
-					logger.warn("Dropping payload as the channel has been disconnected.");
+					LOGGER.warn("Dropping payload as the channel has been disconnected.");
 				}
 				listenersCopy = new ArrayList<>(listeners);
 			}
@@ -79,7 +79,7 @@ public class MultiDataLinkInterceptor implements DataLinkInterceptor {
 				try {
 					dataLinkInterceptor.receiveData(messageProperties, frame);
 				} catch (Exception e) {
-					logger.error("Error caught from datalink interceptor.  Moving on.", e);
+					LOGGER.error("Error caught from datalink interceptor.  Moving on.", e);
 					// FIXME IMPL I have been requested not to remove this here.  This could be dangerous, but it make sense. This should be an option if anything.
 					// listeners.remove(dataLinkListener);
 				}

@@ -27,7 +27,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.SuccessMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.datalink.DestroyDataLinkMessage;
 
 public class DestroyDataLinkMessageHandler implements MessageHandler {
-	private Logger logger = LoggerFactory.getLogger(DestroyDataLinkMessageHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DestroyDataLinkMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof DestroyDataLinkMessage;
@@ -46,7 +46,7 @@ public class DestroyDataLinkMessageHandler implements MessageHandler {
 			FailureMessage failureMessage = new FailureMessage();
 			failureMessage.setReason("Cannot destroy datalink.  Please check log for details.");
 			responseMessage = failureMessage;
-			logger.error("Cannot create datalink.", e);
+			LOGGER.error("Cannot create datalink.", e);
 		}
 		
 		messanger.sendMessage(responseMessage);

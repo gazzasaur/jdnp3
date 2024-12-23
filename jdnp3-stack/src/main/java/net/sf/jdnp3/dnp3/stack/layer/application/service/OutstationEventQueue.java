@@ -29,7 +29,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.EventObjectIn
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class OutstationEventQueue implements ConfirmationListener {
-	private Logger logger = LoggerFactory.getLogger(OutstationEventQueue.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OutstationEventQueue.class);
 	
 	private InternalStatusProvider internalStatusProvider = null;
 	private List<EventObjectInstance> events = new LinkedList<>();
@@ -41,7 +41,7 @@ public class OutstationEventQueue implements ConfirmationListener {
 	
 	public synchronized void addEvent(EventObjectInstance eventObjectInstance) {
 		if (eventObjectInstance.getEventClass() < 1 || eventObjectInstance.getEventClass() > 3) {
-			logger.info(format("Ignoring event of type %s and event class of %d.", eventObjectInstance.getClass(), eventObjectInstance.getEventClass()));
+			LOGGER.info(format("Ignoring event of type %s and event class of %d.", eventObjectInstance.getClass(), eventObjectInstance.getEventClass()));
 			return;
 		}
 

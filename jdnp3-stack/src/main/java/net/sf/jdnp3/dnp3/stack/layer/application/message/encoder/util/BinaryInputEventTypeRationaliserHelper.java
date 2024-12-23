@@ -36,14 +36,14 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryInput
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class BinaryInputEventTypeRationaliserHelper implements ObjectInstanceTypeRationaliserHelper {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(BinaryInputEventTypeRationaliserHelper.class);
 	private List<ObjectType> groupObjectTypes = Arrays.asList(ANY, CLASS_1, CLASS_2, CLASS_3, BINARY_INPUT_EVENT_ANY);
 	private List<ObjectType> validObjectTypes = Arrays.asList(ANY, CLASS_1, CLASS_2, CLASS_3, BINARY_INPUT_EVENT_ANY, BINARY_INPUT_EVENT_ABSOLUTE_TIME, BINARY_INPUT_EVENT_RELATIVE_TIME, BINARY_INPUT_EVENT_WITHOUT_TIME);
 	
 	public void rationalise(ObjectInstance objectInstance) {
 		BinaryInputEventObjectInstance specificInstance = (BinaryInputEventObjectInstance) objectInstance;
 		if (!validObjectTypes.contains(specificInstance.getRequestedType())) {
-			logger.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
+			LOGGER.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
 			objectInstance.setRequestedType(ANY);
 		}
 		if (groupObjectTypes.contains(objectInstance.getRequestedType())) {

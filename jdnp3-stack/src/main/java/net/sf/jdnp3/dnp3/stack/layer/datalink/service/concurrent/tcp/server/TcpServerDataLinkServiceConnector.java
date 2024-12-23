@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TcpServerDataLinkServiceConnector {
-	private static final Logger logger = LoggerFactory.getLogger(TcpServerDataLinkServiceConnector.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TcpServerDataLinkServiceConnector.class);
 	
 	public static ServerSocketChannel create(String host, int port) {
 		ServerSocketChannel serverSocketChannel = null;
@@ -43,7 +43,7 @@ public class TcpServerDataLinkServiceConnector {
 		try {
 			channel.close();
 		} catch (Exception e) {
-			logger.error("Cannot close channel.", e);
+			LOGGER.error("Cannot close channel.", e);
 		}
 	}
 	
@@ -51,7 +51,7 @@ public class TcpServerDataLinkServiceConnector {
 		try {
 			channel.close();
 		} catch (Exception e) {
-			logger.error("Cannot close channel.", e);
+			LOGGER.error("Cannot close channel.", e);
 		}
 	}
 }

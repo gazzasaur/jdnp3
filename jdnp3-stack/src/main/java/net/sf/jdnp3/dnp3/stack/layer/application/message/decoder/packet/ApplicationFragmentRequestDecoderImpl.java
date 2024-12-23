@@ -27,7 +27,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.Applicatio
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
 
 public class ApplicationFragmentRequestDecoderImpl implements ApplicationFragmentRequestDecoder {
-	private Logger logger = LoggerFactory.getLogger(ApplicationFragmentRequestDecoderImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationFragmentRequestDecoderImpl.class);
 	
 	private ObjectFragmentDecoder objectFragmentDecoder;
 	private ApplicationFragmentRequestHeaderDecoder decoder = new ApplicationFragmentRequestHeaderDecoder();
@@ -50,7 +50,7 @@ public class ApplicationFragmentRequestDecoderImpl implements ApplicationFragmen
 			applicationFragmentRequest.addObjectFragment(objectFragment);
 		}
 		
-		logger.debug(decoderContext.getDecodeLogic());
+		LOGGER.debug(decoderContext.getDecodeLogic());
 		
 		return applicationFragmentRequest;
 	}

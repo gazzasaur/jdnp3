@@ -31,7 +31,7 @@ import net.sf.jdnp3.dnp3.stack.nio.DataPump;
 import net.sf.jdnp3.dnp3.stack.nio.DataPumpListener;
 
 public class ServerSocketChannelDataPumpListener implements DataPumpListener {
-	private Logger logger = LoggerFactory.getLogger(ServerSocketChannelDataPumpListener.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ServerSocketChannelDataPumpListener.class);
 	
 	private DataPump dataPump;
 	private ChannelManager channelManager;
@@ -52,16 +52,16 @@ public class ServerSocketChannelDataPumpListener implements DataPumpListener {
 			socketChannel.configureBlocking(false);
 			
 			ChannelId channelId = channelManager.addChannel(socketChannel);
-			logger.info(format("Connection received from %s and has been assigned a channel id of %s.", getRemoteSocketAddress(socketChannel), channelId));
+			LOGGER.info(format("Connection received from %s and has been assigned a channel id of %s.", getRemoteSocketAddress(socketChannel), channelId));
 			dataPump.registerAcceptedChannel(socketChannel, new SocketChannelDataPumpListener(channelId, channelManager, dataLinkInterceptor));
 		} catch (Exception e) {
-			logger.error("Failed to accept client socket.", e);
+			LOGGER.error("Failed to accept client socket.", e);
 			try {
 				if (socketChannel != null) {
 					socketChannel.close();
 				}
 			} catch (Exception sce) {
-				logger.error("Failed to close socket channel.", sce);
+				LOGGER.error("Failed to close socket channel.", sce);
 			}
 		}
 	}
@@ -70,7 +70,7 @@ public class ServerSocketChannelDataPumpListener implements DataPumpListener {
 		try {
 			serverSocketChannel.close();
 		} catch (Exception e) {
-			logger.error("FAiled to close ServerSocketChannel.", e);
+			LOGGER.error("FAiled to close ServerSocketChannel.", e);
 		}
 		channelManager.closeAll();
 	}

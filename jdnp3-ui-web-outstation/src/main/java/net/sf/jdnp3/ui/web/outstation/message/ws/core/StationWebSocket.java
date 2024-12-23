@@ -36,7 +36,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.SiteListingMessage;
 
 @ServerEndpoint(value="/ws/station", encoders=MessageEncoder.class, decoders=GenericMessageDecoder.class, configurator=StationWebSocketConfigurator.class)
 public class StationWebSocket implements Messanger, DeviceProviderListener {
-	private Logger logger = LoggerFactory.getLogger(StationWebSocket.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(StationWebSocket.class);
 	
 	private Session session;
 
@@ -58,7 +58,7 @@ public class StationWebSocket implements Messanger, DeviceProviderListener {
     
     @OnError
     public void onError(Session session, Throwable throwable) {
-    	logger.error("Websocket Error", throwable);
+    	LOGGER.error("Websocket Error", throwable);
     }
     
     public void sendMessage(Message message) {

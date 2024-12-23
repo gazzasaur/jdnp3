@@ -27,7 +27,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.binary.DoubleBitBinaryInp
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
 public class DoubleBitBinaryInputMessageHandler implements DeviceMessageHandler {
-	private Logger logger = LoggerFactory.getLogger(DoubleBitBinaryInputMessageHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DoubleBitBinaryInputMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof DoubleBitBinaryInputMessage;
@@ -44,7 +44,7 @@ public class DoubleBitBinaryInputMessageHandler implements DeviceMessageHandler 
 			MessageUtils.copyProperties(dataPoint, pointMessage);
 			outstationDevice.getDatabaseManager().setDoubleBitBinaryInputDataPoint(dataPoint);
 		} catch (Exception e) {
-			logger.error("Failed to copy object.", e);
+			LOGGER.error("Failed to copy object.", e);
 		}
 	}
 }

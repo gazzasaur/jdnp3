@@ -18,7 +18,7 @@ import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 
 // TODO For master stations this should also be a datalink layer to store state from outstations
 public class StatefulDataLinkInterceptor implements DataLinkInterceptor {
-    private Logger logger = LoggerFactory.getLogger(StatefulDataLinkInterceptor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StatefulDataLinkInterceptor.class);
 
     private long destinationAddress;
     private DataLinkLayer dataLinkLayer;
@@ -95,7 +95,7 @@ public class StatefulDataLinkInterceptor implements DataLinkInterceptor {
             }
             return;
         }
-        logger.error("Unknown payload type: " + frame.getDataLinkFrameHeader().getFunctionCode());
+        LOGGER.error("Unknown payload type: " + frame.getDataLinkFrameHeader().getFunctionCode());
     }
 
     public void connected(ChannelId channelId) {

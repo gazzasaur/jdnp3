@@ -27,7 +27,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.InternalIndicatorsMessage;
 
 public class InternalIndicatorsMessageHandler implements DeviceMessageHandler {
-	private Logger logger = LoggerFactory.getLogger(InternalIndicatorsMessageHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(InternalIndicatorsMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof InternalIndicatorsMessage;
@@ -43,7 +43,7 @@ public class InternalIndicatorsMessageHandler implements DeviceMessageHandler {
 			BeanUtils.copyProperties(dataPoint, specificMessage);
 			outstationDevice.getDatabaseManager().setInternalIndicatorDataPoint(dataPoint);
 		} catch (Exception e) {
-			logger.error("Failed to copy object.", e);
+			LOGGER.error("Failed to copy object.", e);
 		}
 	}
 }

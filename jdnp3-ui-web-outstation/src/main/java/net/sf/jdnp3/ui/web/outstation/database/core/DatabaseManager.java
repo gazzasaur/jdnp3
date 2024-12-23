@@ -32,7 +32,7 @@ import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInput
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 
 public class DatabaseManager {
-	private Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseManager.class);
 	
 	private Database database = new Database();
 	private List<EventListener> eventListeners = new ArrayList<>();
@@ -234,7 +234,7 @@ public class DatabaseManager {
 				databaseListener.valueChanged(dataPoint);
 			}
 		} catch (Exception e) {
-			logger.error("Cannot set IIN bits.", e);
+			LOGGER.error("Cannot set IIN bits.", e);
 		}
 	}
 	

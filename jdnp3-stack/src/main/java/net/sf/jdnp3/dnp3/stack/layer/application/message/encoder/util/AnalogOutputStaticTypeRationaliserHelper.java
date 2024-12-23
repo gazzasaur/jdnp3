@@ -35,13 +35,13 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.analog.AnalogOutpu
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class AnalogOutputStaticTypeRationaliserHelper implements ObjectInstanceTypeRationaliserHelper {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(AnalogOutputStaticTypeRationaliserHelper.class);
 	private List<ObjectType> validObjectTypes = Arrays.asList(ANY, CLASS_0, ANALOG_OUTPUT_STATIC_ANY, ANALOG_OUTPUT_STATIC_INT32, ANALOG_OUTPUT_STATIC_INT16, ANALOG_OUTPUT_STATIC_FLOAT32, ANALOG_OUTPUT_STATIC_FLOAT64);
 	
 	public void rationalise(ObjectInstance objectInstance) {
 		AnalogOutputStaticObjectInstance specificInstance = (AnalogOutputStaticObjectInstance) objectInstance;
 		if (!validObjectTypes.contains(specificInstance.getRequestedType())) {
-			logger.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
+			LOGGER.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
 			objectInstance.setRequestedType(ANY);
 		}
 		if (specificInstance.getRequestedType().getGroup() != ANALOG_OUTPUT_STATIC_ANY.getGroup() || specificInstance.getRequestedType().getVariation() == 0) {

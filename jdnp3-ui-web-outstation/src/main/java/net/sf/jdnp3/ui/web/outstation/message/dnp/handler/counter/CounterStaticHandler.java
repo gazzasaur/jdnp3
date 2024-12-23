@@ -28,7 +28,7 @@ import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 
 public class CounterStaticHandler implements CounterStaticReadRequestHandler {
-	private Logger logger = LoggerFactory.getLogger(CounterStaticHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CounterStaticHandler.class);
 	
 	private DatabaseManager databaseManager;
 
@@ -76,7 +76,7 @@ public class CounterStaticHandler implements CounterStaticReadRequestHandler {
 			objectInstance.setRequestedType(dataPoint.getStaticType());
 			points.add(objectInstance);
 		} catch (Exception e) {
-			logger.error("Cannot copy data point.", e);
+			LOGGER.error("Cannot copy data point.", e);
 		}
 	}
 }

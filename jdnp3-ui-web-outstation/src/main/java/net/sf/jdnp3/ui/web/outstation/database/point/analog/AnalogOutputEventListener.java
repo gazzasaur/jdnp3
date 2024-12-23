@@ -27,7 +27,7 @@ import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.core.EventListener;
 
 public class AnalogOutputEventListener implements EventListener {
-	private Logger logger = LoggerFactory.getLogger(AnalogOutputEventListener.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AnalogOutputEventListener.class);
 	
 	private Outstation outstation;
 
@@ -50,7 +50,7 @@ public class AnalogOutputEventListener implements EventListener {
 				objectInstance.setRequestedType(specificDataPoint.getEventType());
 				outstation.sendEvent(objectInstance);
 			} catch (Exception e) {
-				logger.error("Failed to send event.", e);
+				LOGGER.error("Failed to send event.", e);
 			}
 		}
 	}

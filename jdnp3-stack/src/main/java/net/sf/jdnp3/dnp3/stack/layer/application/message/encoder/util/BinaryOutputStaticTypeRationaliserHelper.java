@@ -33,13 +33,13 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.BinaryOutpu
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class BinaryOutputStaticTypeRationaliserHelper implements ObjectInstanceTypeRationaliserHelper {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(BinaryOutputStaticTypeRationaliserHelper.class);
 	private List<ObjectType> validObjectTypes = Arrays.asList(ANY, CLASS_0, BINARY_OUTPUT_STATIC_ANY, BINARY_OUTPUT_STATIC_FLAGS, BINARY_OUTPUT_STATIC_PACKED);
 	
 	public void rationalise(ObjectInstance objectInstance) {
 		BinaryOutputStaticObjectInstance specificInstance = (BinaryOutputStaticObjectInstance) objectInstance;
 		if (!validObjectTypes.contains(specificInstance.getRequestedType())) {
-			logger.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
+			LOGGER.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
 			objectInstance.setRequestedType(ANY);
 		}
 		if (!specificInstance.isOnline()
@@ -49,7 +49,7 @@ public class BinaryOutputStaticTypeRationaliserHelper implements ObjectInstanceT
 				|| specificInstance.isCommunicationsLost()
 				|| specificInstance.getRequestedType().equals(BINARY_OUTPUT_STATIC_FLAGS)) {
 			if (specificInstance.getRequestedType().equals(BINARY_OUTPUT_STATIC_PACKED)) {
-				logger.warn(format("Packed format requested but flags are required."));
+				LOGGER.warn(format("Packed format requested but flags are required."));
 			}
 			objectInstance.setRequestedType(BINARY_OUTPUT_STATIC_FLAGS);
 		} else {

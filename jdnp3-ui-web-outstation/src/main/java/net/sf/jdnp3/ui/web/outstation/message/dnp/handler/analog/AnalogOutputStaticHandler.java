@@ -28,7 +28,7 @@ import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 
 public class AnalogOutputStaticHandler implements AnalogOutputStaticReadRequestHandler {
-	private Logger logger = LoggerFactory.getLogger(AnalogOutputStaticHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AnalogOutputStaticHandler.class);
 	
 	private DatabaseManager databaseManager;
 
@@ -76,7 +76,7 @@ public class AnalogOutputStaticHandler implements AnalogOutputStaticReadRequestH
 			objectInstance.setRequestedType(dataPoint.getStaticType());
 			points.add(objectInstance);
 		} catch (Exception e) {
-			logger.error("Cannot copy data point.", e);
+			LOGGER.error("Cannot copy data point.", e);
 		}
 	}
 }

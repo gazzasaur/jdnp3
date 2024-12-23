@@ -45,7 +45,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.counter.CounterMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.GetDeviceMessage;
 
 public class GetDeviceMessageHandler implements DeviceMessageHandler, MessageHandler {
-	private Logger logger = LoggerFactory.getLogger(GetDeviceMessageHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GetDeviceMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof GetDeviceMessage;
@@ -106,7 +106,7 @@ public class GetDeviceMessageHandler implements DeviceMessageHandler, MessageHan
 			}
 			specificMessage.getOutstationBindings().addAll(DataLinkManagerProvider.getDataLinkBindings(outstationDevice));
 		} catch (Exception e) {
-			logger.error("Failed to copy object.", e);
+			LOGGER.error("Failed to copy object.", e);
 		}
 		
 		messanger.sendMessage(specificMessage);

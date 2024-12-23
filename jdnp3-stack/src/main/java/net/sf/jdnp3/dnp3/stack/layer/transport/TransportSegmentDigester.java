@@ -27,7 +27,7 @@ import net.sf.jdnp3.dnp3.stack.message.MessageProperties;
 import net.sf.jdnp3.dnp3.stack.utils.DataUtils;
 
 public class TransportSegmentDigester {
-	private Logger logger = LoggerFactory.getLogger(TransportSegmentDigester.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TransportSegmentDigester.class);
 	
 	private int applicationMtu = 0;
 	private int lastSequenceNumber = 0;
@@ -38,7 +38,7 @@ public class TransportSegmentDigester {
 
 	public boolean digestData(MessageProperties messageProperties, TransportSegment transportSegment, List<Byte> data) {
 		if (data.equals(lastTransportSegment) && !transportSegment.getTransportHeader().isFirstSegment()) {
-			logger.warn("Duplicate packet received from " + messageProperties.getSourceAddress());
+			LOGGER.warn("Duplicate packet received from " + messageProperties.getSourceAddress());
 			return false;
 		}
 
@@ -51,11 +51,11 @@ public class TransportSegmentDigester {
 			if (receiveBuffer.size() > applicationMtu) {
 				int receivedSize = receiveBuffer.size();
 				receiveBuffer.clear();
-				logger.warn(String.format("Received %s bytes but the MTU onlypermits %s.", receivedSize, applicationMtu));
+				LOGGER.warn(String.format("Received %s bytes but the MTU onlypermits %s.", receivedSize, applicationMtu));
 			} else if (transportSegment.getTransportHeader().isFinalSegment()) {
 				applicationData = new ArrayList<Byte>(receiveBuffer);
 				receiveBuffer = new ArrayDeque<Byte>();
-				logger.debug("Application Data Assembled: " + DataUtils.toString(applicationData));
+				LOGGER.debug("Application Data Assembled: " + DataUtils.toString(applicationData));
 				return true;
 			}
 		} else if (receiveBuffer != null) {
@@ -67,7 +67,7 @@ public class TransportSegmentDigester {
 				if (receiveBuffer.size() > applicationMtu) {
 					int receivedSize = receiveBuffer.size();
 					receiveBuffer.clear();
-					logger.warn(String.format("Received %s bytes but the MTU onlypermits %s.", receivedSize, applicationMtu));
+					LOGGER.warn(String.format("Received %s bytes but the MTU onlypermits %s.", receivedSize, applicationMtu));
 				} else if (transportSegment.getTransportHeader().isFinalSegment()) {
 					applicationData = new ArrayList<Byte>(receiveBuffer);
 					receiveBuffer = new ArrayDeque<Byte>();

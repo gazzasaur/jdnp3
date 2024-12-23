@@ -35,7 +35,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeDelayObje
 
 // FIXME IMPL Update this to avoid hard coding the helpers.
 public class ObjectInstanceTypeRationaliser {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(ObjectInstanceTypeRationaliser.class);
 	
 	private Map<Class<? extends ObjectInstance>, ObjectInstanceTypeRationaliserHelper> rationaliserHelpers = new HashMap<Class<? extends ObjectInstance>, ObjectInstanceTypeRationaliserHelper>() {{
 		this.put(BinaryInputStaticObjectInstance.class, new BinaryInputStaticTypeRationaliserHelper());
@@ -53,7 +53,7 @@ public class ObjectInstanceTypeRationaliser {
 	public void rationaliseType(ObjectInstance objectInstance) {
 		ObjectInstanceTypeRationaliserHelper rationaliserHelper = rationaliserHelpers.get(objectInstance.getClass());
 		if (rationaliserHelper == null) {
-			logger.info("No Rationaliser found for type: " + objectInstance.getClass());
+			LOGGER.info("No Rationaliser found for type: " + objectInstance.getClass());
 		} else {
 			rationaliserHelper.rationalise(objectInstance);
 		}

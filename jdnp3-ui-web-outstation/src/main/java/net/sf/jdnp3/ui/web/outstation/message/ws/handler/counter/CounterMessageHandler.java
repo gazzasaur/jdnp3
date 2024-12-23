@@ -27,7 +27,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.counter.CounterMessage;
 
 public class CounterMessageHandler implements DeviceMessageHandler {
-	private Logger logger = LoggerFactory.getLogger(CounterMessageHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CounterMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof CounterMessage;
@@ -44,7 +44,7 @@ public class CounterMessageHandler implements DeviceMessageHandler {
 			MessageUtils.copyProperties(dataPoint, pointMessage);
 			outstationDevice.getDatabaseManager().setCounterDataPoint(dataPoint);
 		} catch (Exception e) {
-			logger.error("Failed to copy object.", e);
+			LOGGER.error("Failed to copy object.", e);
 		}
 	}
 }

@@ -35,14 +35,14 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.binary.DoubleBitBi
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 
 public class DoubleBitBinaryInputEventTypeRationaliserHelper implements ObjectInstanceTypeRationaliserHelper {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(DoubleBitBinaryInputEventTypeRationaliserHelper.class);
 	private List<ObjectType> groupObjectTypes = Arrays.asList(ANY, CLASS_1, CLASS_2, CLASS_3, DOUBLE_BIT_BINARY_INPUT_EVENT_ANY);
 	private List<ObjectType> validObjectTypes = Arrays.asList(ANY, CLASS_1, CLASS_2, CLASS_3, DOUBLE_BIT_BINARY_INPUT_EVENT_ANY, DOUBLE_BIT_BINARY_INPUT_EVENT_WITHOUT_TIME, DOUBLE_BIT_BINARY_INPUT_EVENT_ABSOLUTE_TIME, DOUBLE_BIT_BINARY_INPUT_EVENT_RELATIVE_TIME);
 	
 	public void rationalise(ObjectInstance objectInstance) {
 		DoubleBitBinaryInputEventObjectInstance specificInstance = (DoubleBitBinaryInputEventObjectInstance) objectInstance;
 		if (!validObjectTypes.contains(specificInstance.getRequestedType())) {
-			logger.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
+			LOGGER.warn(format("Unknown object type '%s' for class '%s', setting to ANY.", specificInstance.getRequestedType(), specificInstance.getClass()));
 			objectInstance.setRequestedType(ANY);
 		}
 		if (groupObjectTypes.contains(objectInstance.getRequestedType())) {

@@ -27,7 +27,7 @@ import net.sf.jdnp3.dnp3.stack.layer.application.model.object.time.TimeAndDateOb
 import net.sf.jdnp3.dnp3.stack.layer.application.service.InternalStatusProvider;
 
 public class TimeAndDateHandler implements TimeAndDateRequestHandler {
-	private Logger logger = LoggerFactory.getLogger(TimeAndDateHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TimeAndDateHandler.class);
 	
 	private InternalStatusProvider internalStatusProvider;
 	
@@ -42,7 +42,7 @@ public class TimeAndDateHandler implements TimeAndDateRequestHandler {
 	}
 
 	public void doWriteTime(TimeAndDateObjectInstance timeAndDateObjectInstance) {
-		logger.info("Write Time: " + new Date(timeAndDateObjectInstance.getTimestamp()));
+		LOGGER.info("Write Time: " + new Date(timeAndDateObjectInstance.getTimestamp()));
 		internalStatusProvider.setNeedTime(false);
 	}
 }

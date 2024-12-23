@@ -28,7 +28,7 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.SuccessMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.datalink.StartDataLinkMessage;
 
 public class StartDataLinkMessageHandler implements MessageHandler {
-	private Logger logger = LoggerFactory.getLogger(StartDataLinkMessageHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(StartDataLinkMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof StartDataLinkMessage;
@@ -48,7 +48,7 @@ public class StartDataLinkMessageHandler implements MessageHandler {
 			FailureMessage failureMessage = new FailureMessage();
 			failureMessage.setReason("Cannot start datalink binding.  Please check log for details.");
 			responseMessage = failureMessage;
-			logger.error("Cannot start datalink binding.", e);
+			LOGGER.error("Cannot start datalink binding.", e);
 		}
 		
 		messanger.sendMessage(responseMessage);
