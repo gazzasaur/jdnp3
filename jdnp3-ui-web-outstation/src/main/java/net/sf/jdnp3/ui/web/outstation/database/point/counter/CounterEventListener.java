@@ -17,7 +17,7 @@ package net.sf.jdnp3.ui.web.outstation.database.point.counter;
 
 import java.util.Date;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +44,7 @@ public class CounterEventListener implements EventListener {
 			CounterEventObjectInstance counterEventObjectInstance = new CounterEventObjectInstance();
 			try {
 				CounterDataPoint counterDataPoint = (CounterDataPoint) dataPoint;
-				BeanUtils.copyProperties(counterEventObjectInstance, counterDataPoint);
+				PropertyUtils.copyProperties(counterEventObjectInstance, counterDataPoint);
 				counterEventObjectInstance.setTimestamp(timestamp);
 				counterEventObjectInstance.setEventClass(counterDataPoint.getEventClass());
 				counterEventObjectInstance.setRequestedType(counterDataPoint.getEventType());

@@ -18,7 +18,7 @@ package net.sf.jdnp3.ui.web.outstation.message.dnp.handler.counter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +72,7 @@ public class CounterStaticHandler implements CounterStaticReadRequestHandler {
 	private void copyDataPoint(List<CounterStaticObjectInstance> points, CounterDataPoint dataPoint) {
 		CounterStaticObjectInstance objectInstance = new CounterStaticObjectInstance();
 		try {
-			BeanUtils.copyProperties(objectInstance, dataPoint);
+			PropertyUtils.copyProperties(objectInstance, dataPoint);
 			objectInstance.setRequestedType(dataPoint.getStaticType());
 			points.add(objectInstance);
 		} catch (Exception e) {

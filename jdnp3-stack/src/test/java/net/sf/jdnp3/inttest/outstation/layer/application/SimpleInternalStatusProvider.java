@@ -60,6 +60,9 @@ public class SimpleInternalStatusProvider implements InternalStatusProvider {
 	public void setAlreadyExecuting(boolean value) {
 	}
 
+	public void setUnsolicitedEnabled(boolean value) {
+	}
+
 	public boolean isParameterError() {
 		return false;
 	}
@@ -113,6 +116,10 @@ public class SimpleInternalStatusProvider implements InternalStatusProvider {
 	}
 
 	public boolean isAlreadyExecuting() {
+		return false;
+	}
+
+	public boolean isUnsolicitedEnabled() {
 		return false;
 	}
 }

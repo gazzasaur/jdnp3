@@ -15,7 +15,6 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.core;
 
-import static java.lang.String.format;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 import java.io.IOException;
@@ -31,7 +30,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -134,7 +133,7 @@ public class DeviceWebSocket implements Messanger, DatabaseListener {
 					deviceMessage.setDevice(device);
 				}
 				
-				BeanUtils.copyProperties(message, dataPoint);
+				PropertyUtils.copyProperties(message, dataPoint);
 				EXECUTOR.execute(new Runnable() {
 					public void run() {
 						try {

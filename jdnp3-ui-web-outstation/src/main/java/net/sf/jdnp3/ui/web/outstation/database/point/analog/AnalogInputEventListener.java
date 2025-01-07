@@ -17,7 +17,7 @@ package net.sf.jdnp3.ui.web.outstation.database.point.analog;
 
 import java.util.Date;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +44,7 @@ public class AnalogInputEventListener implements EventListener {
 			AnalogInputEventObjectInstance analogInputEventObjectInstance = new AnalogInputEventObjectInstance();
 			try {
 				AnalogInputDataPoint analogDataPoint = (AnalogInputDataPoint) dataPoint;
-				BeanUtils.copyProperties(analogInputEventObjectInstance, analogDataPoint);
+				PropertyUtils.copyProperties(analogInputEventObjectInstance, analogDataPoint);
 				analogInputEventObjectInstance.setTimestamp(timestamp);
 				analogInputEventObjectInstance.setEventClass(analogDataPoint.getEventClass());
 				analogInputEventObjectInstance.setRequestedType(analogDataPoint.getEventType());

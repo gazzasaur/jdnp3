@@ -18,7 +18,7 @@ package net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 
 import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryOutputStaticAssignClassRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.handler.binary.BinaryOutputStaticReadRequestHandler;
@@ -98,7 +98,7 @@ public class BinaryOutputStaticHandler implements BinaryOutputStaticReadRequestH
 	private void copyDataPoint(List<BinaryOutputStaticObjectInstance> points, BinaryOutputDataPoint dataPoint) {
 		BinaryOutputStaticObjectInstance staticObjectInstance = new BinaryOutputStaticObjectInstance();
 		try {
-			BeanUtils.copyProperties(staticObjectInstance, dataPoint);
+			PropertyUtils.copyProperties(staticObjectInstance, dataPoint);
 			staticObjectInstance.setRequestedType(dataPoint.getStaticType());
 			points.add(staticObjectInstance);
 		} catch (Exception e) {

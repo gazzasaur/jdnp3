@@ -53,7 +53,39 @@ public class AnalogOutputDataPoint implements DataPoint {
 	private boolean triggerEventOnChange = false;
 
 	private Map<String, String> tags = new HashMap<>();
+
+	public AnalogOutputDataPoint copy() {
+		AnalogOutputDataPoint other = new AnalogOutputDataPoint();
+
+		other.index = this.index;
+		other.name = this.name;
+		other.value = this.value;
+
+		other.online = this.online;
+		other.restart = this.restart;
+		other.overRange = this.overRange;
+		other.localForced = this.localForced;
+		other.remoteForced = this.remoteForced;
+		other.referenceError = this.referenceError;
+		other.communicationsLost = this.communicationsLost;
+
+		other.operatedCount = this.operatedCount;
+		other.statusCode = this.statusCode;
+		other.autoUpdateOnSuccess = this.autoUpdateOnSuccess;
 	
+		other.staticType = this.staticType.copy();
+		other.eventType = this.eventType.copy();
+		other.commandEventType = this.commandEventType;
+
+		other.eventClass = this.eventClass;
+		other.commandEventClass = this.commandEventClass;
+		other.triggerEventOnChange = this.triggerEventOnChange;
+
+		other.tags = new HashMap<>(this.tags);
+
+		return other;
+	}
+
 	public long getIndex() {
 		return index;
 	}

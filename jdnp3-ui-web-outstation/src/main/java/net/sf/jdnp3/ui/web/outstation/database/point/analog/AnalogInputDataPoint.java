@@ -45,6 +45,32 @@ public class AnalogInputDataPoint implements DataPoint {
 
 	private Map<String, String> tags = new HashMap<>();
 
+	public AnalogInputDataPoint copy() {
+		AnalogInputDataPoint other = new AnalogInputDataPoint();
+
+		other.index = this.index;
+		other.name = this.name;
+		other.value = this.value;
+
+		other.online = this.online;
+		other.restart = this.restart;
+		other.overRange = this.overRange;
+		other.localForced = this.localForced;
+		other.remoteForced = this.remoteForced;
+		other.referenceError = this.referenceError;
+		other.communicationsLost = this.communicationsLost;
+
+		other.staticType = this.staticType.copy();
+		other.eventType = this.eventType.copy();
+
+		other.eventClass = this.eventClass;
+		other.triggerEventOnChange = this.triggerEventOnChange;
+
+		other.tags = new HashMap<>(this.tags);
+
+		return other;
+	}
+
 	public long getIndex() {
 		return index;
 	}

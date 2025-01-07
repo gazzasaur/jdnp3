@@ -17,7 +17,7 @@ package net.sf.jdnp3.ui.web.outstation.database.point.binary;
 
 import java.util.Date;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +44,7 @@ public class BinaryInputEventListener implements EventListener {
 			BinaryInputEventObjectInstance binaryInputEventObjectInstance = new BinaryInputEventObjectInstance();
 			try {
 				BinaryInputDataPoint binaryDataPoint = (BinaryInputDataPoint) dataPoint;
-				BeanUtils.copyProperties(binaryInputEventObjectInstance, binaryDataPoint);
+				PropertyUtils.copyProperties(binaryInputEventObjectInstance, binaryDataPoint);
 				binaryInputEventObjectInstance.setTimestamp(timestamp);
 				binaryInputEventObjectInstance.setEventClass(binaryDataPoint.getEventClass());
 				binaryInputEventObjectInstance.setRequestedType(binaryDataPoint.getEventType());

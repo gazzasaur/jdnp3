@@ -18,7 +18,7 @@ package net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,7 +102,7 @@ public class DoubleBitBinaryInputStaticHandler implements DoubleBitBinaryInputSt
 	private void copyDataPoint(List<DoubleBitBinaryInputStaticObjectInstance> points, DoubleBitBinaryInputDataPoint dataPoint) {
 		DoubleBitBinaryInputStaticObjectInstance binaryInputStaticObjectInstance = new DoubleBitBinaryInputStaticObjectInstance();
 		try {
-			BeanUtils.copyProperties(binaryInputStaticObjectInstance, dataPoint);
+			PropertyUtils.copyProperties(binaryInputStaticObjectInstance, dataPoint);
 			binaryInputStaticObjectInstance.setRequestedType(dataPoint.getStaticType());
 			points.add(binaryInputStaticObjectInstance);
 		} catch (Exception e) {

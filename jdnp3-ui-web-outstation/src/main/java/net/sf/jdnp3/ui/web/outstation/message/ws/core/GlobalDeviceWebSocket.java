@@ -15,8 +15,6 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.core;
 
-import static java.lang.String.format;
-
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -28,7 +26,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,7 +100,7 @@ public class GlobalDeviceWebSocket implements Messanger, GlobalDatabaseListener 
 					deviceMessage.setDevice(device);
 				}
 				
-				BeanUtils.copyProperties(message, dataPoint);
+				PropertyUtils.copyProperties(message, dataPoint);
 				EXECUTOR.execute(new Runnable() {
 					public void run() {
 						if (session.isOpen()) {

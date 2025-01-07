@@ -37,7 +37,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,7 +92,6 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	private Object unsolicitedLock = new Object();
 	private int nextUnsolicitedSeqNr = 0;
 	private int expectedUnsolicitedSeqNr = -1;
-	private boolean unsolicitedEnabled = false;
 	private volatile MessageProperties unsolicitedMessageProperties = null;
 	private List<EventObjectInstance> pendingUnsolicitedEvents = new ArrayList<>();
 
@@ -167,7 +166,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	private void trySendUnsolicited() {
 		MessageProperties returnMessageProperties = unsolicitedMessageProperties;
 
-		if (!unsolicitedEnabled || unsolicitedMessageProperties == null) {
+		if (!internalStatusProvider.isUnsolicitedEnabled() || returnMessageProperties == null) {
 			expectedUnsolicitedSeqNr = -1;
 			for (EventObjectInstance event : pendingUnsolicitedEvents) {
 				eventQueue.cancelled(event);
@@ -394,7 +393,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 
 			if (internalStatusProvider != null) {
 				try {
-					BeanUtils.copyProperties(applicationResponseHeader.getInternalIndicatorField(), internalStatusProvider);
+					PropertyUtils.copyProperties(applicationResponseHeader.getInternalIndicatorField(), internalStatusProvider);
 				} catch (Exception e) {
 					applicationResponseHeader.getInternalIndicatorField().setDeviceTrouble(true);
 					LOGGER.error("Cannot copy IIN properties.", e);
@@ -407,7 +406,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 		}
 		if (internalStatusProvider != null) {
 			try {
-				BeanUtils.copyProperties(applicationResponseHeader.getInternalIndicatorField(), internalStatusProvider);
+				PropertyUtils.copyProperties(applicationResponseHeader.getInternalIndicatorField(), internalStatusProvider);
 			} catch (Exception e) {
 				applicationResponseHeader.getInternalIndicatorField().setDeviceTrouble(true);
 				LOGGER.error("Cannot copy IIN properties.", e);
@@ -536,9 +535,5 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 
 	public void setMtu(int mtu) {
 		this.mtu = mtu;
-	}
-
-	public void setUnsolicitedEnabled(boolean unsolicitedEnabled) {
-		this.unsolicitedEnabled = unsolicitedEnabled;
 	}
 }

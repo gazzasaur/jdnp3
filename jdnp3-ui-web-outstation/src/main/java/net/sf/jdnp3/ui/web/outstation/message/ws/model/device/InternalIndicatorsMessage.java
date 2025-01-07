@@ -26,6 +26,7 @@ public class InternalIndicatorsMessage implements DeviceMessage {
 	private String site = "";
 	private String device = "";
 	private boolean readonly = false;
+	private boolean unsolicitedEnabled = false;
 	
 	private boolean needTime = false;
 	private boolean broadcast = false;
@@ -182,6 +183,14 @@ public class InternalIndicatorsMessage implements DeviceMessage {
 
 	public void setReadonly(boolean readonly) {
 		this.readonly = readonly;
+	}
+
+	public boolean isUnsolicitedEnabled() {
+		return unsolicitedEnabled;
+	}
+
+	public void setUnsolicitedEnabled(boolean unsolicitedEnabled) {
+		this.unsolicitedEnabled = unsolicitedEnabled;
 	}
 
 	public Map<String, String> getTags() {

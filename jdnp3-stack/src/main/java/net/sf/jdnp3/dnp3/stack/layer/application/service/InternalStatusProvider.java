@@ -57,4 +57,7 @@ public interface InternalStatusProvider {
 	
 	public boolean isConfigurationCorrupt();
 	public void setConfigurationCorrupt(boolean value);
+
+	public boolean isUnsolicitedEnabled();
+	public void setUnsolicitedEnabled(boolean value);
 }

@@ -15,7 +15,7 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler.device;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,7 @@ public class InternalIndicatorsMessageHandler implements DeviceMessageHandler {
 		InternalIndicatorsMessage specificMessage = (InternalIndicatorsMessage) message;
 		InternalIndicatorsDataPoint dataPoint = new InternalIndicatorsDataPoint();
 		try {
-			BeanUtils.copyProperties(dataPoint, specificMessage);
+			PropertyUtils.copyProperties(dataPoint, specificMessage);
 			outstationDevice.getDatabaseManager().setInternalIndicatorDataPoint(dataPoint);
 		} catch (Exception e) {
 			LOGGER.error("Failed to copy object.", e);

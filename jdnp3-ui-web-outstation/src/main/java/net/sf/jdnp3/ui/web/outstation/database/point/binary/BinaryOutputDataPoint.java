@@ -59,6 +59,41 @@ public class BinaryOutputDataPoint implements DataPoint {
 
 	private Map<String, String> tags = new HashMap<>();
 
+	public BinaryOutputDataPoint copy() {
+		BinaryOutputDataPoint other = new BinaryOutputDataPoint();
+
+		other.index = this.index;
+		other.name = this.name;
+		
+		other.online = this.online;
+		other.active = this.active;
+		other.restart = this.restart;
+		other.localForced = this.localForced;
+		other.remoteForced = this.remoteForced;
+		other.communicationsLost = this.communicationsLost;
+
+		other.operatedCount = this.operatedCount;
+		other.autoUpdateOnSuccess = this.autoUpdateOnSuccess;
+		other.count = this.count;
+		other.onTime = this.onTime;
+		other.offTime = this.offTime;
+		other.statusCode = this.statusCode;
+		other.operationType = this.operationType;
+		other.tripCloseCode = this.tripCloseCode;
+	
+		other.staticType = this.staticType.copy();
+		other.eventType = this.eventType.copy();
+		other.commandEventType = this.commandEventType.copy();
+
+		other.eventClass = this.eventClass;
+		other.commandEventClass = this.commandEventClass;
+		other.triggerEventOnChange = this.triggerEventOnChange;
+
+		other.tags = new HashMap<>(this.tags);
+
+		return other;
+	}
+
 	public long getIndex() {
 		return index;
 	}

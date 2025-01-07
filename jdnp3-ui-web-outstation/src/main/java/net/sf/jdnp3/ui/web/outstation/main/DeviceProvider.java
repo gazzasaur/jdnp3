@@ -123,6 +123,10 @@ public class DeviceProvider {
 	}
 
 	public synchronized static void addDatabaseListener(String station, String device, DatabaseListener databaseListener) {
+		DeviceProvider.addDatabaseListener(station, device, databaseListener, true);
+	}
+
+	public synchronized static void addDatabaseListener(String station, String device, DatabaseListener databaseListener, boolean dumpData) {
 		if (!databaseListeners.containsKey(station)) {
 			databaseListeners.put(station, new HashMap<>());
 		}
@@ -140,11 +144,11 @@ public class DeviceProvider {
 			LOGGER.info("No device found for {}:{}.  Registered interest.", station, device);
 		}
 		
-		if (outstationDevice != null) {
+		if (dumpData && outstationDevice != null) {
 			triggerDatabaseListener(databaseListener, outstationDevice);
 		}
 	}
-	
+
 	public synchronized static void removeDatabaseListener(String station, String device, DatabaseListener databaseListener) {
 		if (!databaseListeners.containsKey(station)) {
 			return;
@@ -179,7 +183,7 @@ public class DeviceProvider {
 		for (SiteDeviceList site : globalDeviceList.getSiteDeviceLists()) {
 			for (String device : site.getDevices()) {
 				GlobalDatabaseListenerAdaptor adaptor = new GlobalDatabaseListenerAdaptor(site.getSite(), device, databaseListener);
-				DeviceProvider.addDatabaseListener(site.getSite(), device, adaptor);
+				DeviceProvider.addDatabaseListener(site.getSite(), device, adaptor, false);
 				globalDatabaseListeners.add(adaptor);
 			}
 		}

@@ -17,7 +17,7 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler.device;
 
 import java.util.ArrayList;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,32 +76,32 @@ public class GetDeviceMessageHandler implements DeviceMessageHandler, MessageHan
 			
 			for (BinaryInputDataPoint point : databaseManager.getBinaryInputDataPoints()) {
 				BinaryInputMessage part = new BinaryInputMessage();
-				BeanUtils.copyProperties(part, point);
+				PropertyUtils.copyProperties(part, point);
 				specificMessage.getBinaryInputPoints().add(part);
 			}
 			for (DoubleBitBinaryInputDataPoint point : databaseManager.getDoubleBitBinaryInputDataPoints()) {
 				DoubleBitBinaryInputMessage part = new DoubleBitBinaryInputMessage();
-				BeanUtils.copyProperties(part, point);
+				PropertyUtils.copyProperties(part, point);
 				specificMessage.getDoubleBitBinaryInputPoints().add(part);
 			}
 			for (BinaryOutputDataPoint point : databaseManager.getBinaryOutputDataPoints()) {
 				BinaryOutputMessage part = new BinaryOutputMessage();
-				BeanUtils.copyProperties(part, point);
+				PropertyUtils.copyProperties(part, point);
 				specificMessage.getBinaryOutputPoints().add(part);
 			}
 			for (AnalogInputDataPoint point : databaseManager.getAnalogInputDataPoints()) {
 				AnalogInputMessage part = new AnalogInputMessage();
-				BeanUtils.copyProperties(part, point);
+				PropertyUtils.copyProperties(part, point);
 				specificMessage.getAnalogInputPoints().add(part);
 			}
 			for (AnalogOutputDataPoint point : databaseManager.getAnalogOutputDataPoints()) {
 				AnalogOutputMessage part = new AnalogOutputMessage();
-				BeanUtils.copyProperties(part, point);
+				PropertyUtils.copyProperties(part, point);
 				specificMessage.getAnalogOutputPoints().add(part);
 			}
 			for (CounterDataPoint point : databaseManager.getCounterDataPoints()) {
 				CounterMessage part = new CounterMessage();
-				BeanUtils.copyProperties(part, point);
+				PropertyUtils.copyProperties(part, point);
 				specificMessage.getCounterPoints().add(part);
 			}
 			specificMessage.getOutstationBindings().addAll(DataLinkManagerProvider.getDataLinkBindings(outstationDevice));

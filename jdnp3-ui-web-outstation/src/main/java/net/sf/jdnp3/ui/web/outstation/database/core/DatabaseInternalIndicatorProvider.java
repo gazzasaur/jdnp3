@@ -216,4 +216,14 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		internalIndicatorsDataPoint.setReadonly(value);
 		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 	}
+
+	public boolean isUnsolicitedEnabled() {
+		return databaseManager.getInternalIndicatorsDataPoint().isUnsolicitedEnabled();
+	}
+
+	public void setUnsolicitedEnabled(boolean value) {
+		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		internalIndicatorsDataPoint.setUnsolicitedEnabled(value);
+		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+	}
 }

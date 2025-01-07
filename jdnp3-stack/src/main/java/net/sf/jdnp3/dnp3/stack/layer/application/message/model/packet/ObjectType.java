@@ -26,6 +26,10 @@ public class ObjectType {
 		this.group = group;
 		this.variation = variation;
 	}
+
+	public ObjectType copy() {
+		return new ObjectType(this.group, this.variation);
+	}
 	
 	public int getGroup() {
 		return group;

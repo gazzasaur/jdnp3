@@ -24,6 +24,7 @@ import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 public class InternalIndicatorsDataPoint implements DataPoint {
 	private long index = 0;
 	private boolean readonly = false;
+	private boolean unsolicitedEnabled = false;
 	private String name = "Internal Indicators";
 	
 	private boolean broadcast = false;
@@ -42,6 +43,34 @@ public class InternalIndicatorsDataPoint implements DataPoint {
 	private boolean configurationCorrupt = false;
 	
 	private Map<String, String> tags = new HashMap<>();
+
+	public InternalIndicatorsDataPoint copy() {
+		InternalIndicatorsDataPoint other = new InternalIndicatorsDataPoint();
+
+		other.index = this.index;
+		other.readonly = this.readonly;
+		other.unsolicitedEnabled = this.unsolicitedEnabled;
+		other.name = this.name;
+
+		other.broadcast = this.broadcast;
+		other.class1Events = this.class1Events;
+		other.class2Events = this.class2Events;
+		other.class3Events = this.class3Events;
+		other.needTime = this.needTime;
+		other.localControl = this.localControl;
+		other.deviceTrouble = this.deviceTrouble;
+		other.deviceRestart = this.deviceRestart;
+		other.noFunctionCodeSupport = this.noFunctionCodeSupport;
+		other.objectUnknown = this.objectUnknown;
+		other.parameterError = this.parameterError;
+		other.eventBufferOverflow = this.eventBufferOverflow;
+		other.alreadyExecuting = this.alreadyExecuting;
+		other.configurationCorrupt = this.configurationCorrupt;
+
+		other.tags = new HashMap<>(this.tags);
+
+		return other;
+	}
 
 	public long getIndex() {
 		return index;
@@ -169,6 +198,14 @@ public class InternalIndicatorsDataPoint implements DataPoint {
 
 	public void setReadonly(boolean readonly) {
 		this.readonly = readonly;
+	}
+
+	public boolean isUnsolicitedEnabled() {
+		return unsolicitedEnabled;
+	}
+
+	public void setUnsolicitedEnabled(boolean unsolicitedEnabled) {
+		this.unsolicitedEnabled = unsolicitedEnabled;
 	}
 
 	public Map<String, String> getTags() {

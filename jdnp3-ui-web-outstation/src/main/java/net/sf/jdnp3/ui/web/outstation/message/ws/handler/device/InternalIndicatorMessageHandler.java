@@ -18,7 +18,7 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler.device;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +48,7 @@ public class InternalIndicatorMessageHandler implements DeviceMessageHandler {
 		}
 		
 		try {
-			BeanUtils.setProperty(outstationDevice.getDatabaseManager().getInternalStatusProvider(), specificMessage.getAttribute(), specificMessage.isValue());
+			PropertyUtils.setProperty(outstationDevice.getDatabaseManager().getInternalStatusProvider(), specificMessage.getAttribute(), specificMessage.isValue());
 		} catch (Exception e) {
 			LOGGER.error("Failed to set IIN flag.", e);
 		}

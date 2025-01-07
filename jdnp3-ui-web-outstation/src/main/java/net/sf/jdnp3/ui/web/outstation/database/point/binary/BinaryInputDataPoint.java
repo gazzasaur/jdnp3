@@ -44,6 +44,31 @@ public class BinaryInputDataPoint implements DataPoint {
 
 	private Map<String, String> tags = new HashMap<>();
 
+	public BinaryInputDataPoint copy() {
+		BinaryInputDataPoint other = new BinaryInputDataPoint();
+
+		other.index = this.index;
+		other.name = this.name;
+		other.active = this.active;
+
+		other.online = this.online;
+		other.restart = this.restart;
+		other.localForced = this.localForced;
+		other.remoteForced = this.remoteForced;
+		other.chatterFilter = this.chatterFilter;
+		other.communicationsLost = this.communicationsLost;
+	
+		other.staticType = this.staticType.copy();
+		other.eventType = this.eventType.copy();
+
+		other.eventClass = this.eventClass;
+		other.triggerEventOnChange = this.triggerEventOnChange;
+
+		other.tags = new HashMap<>(this.tags);
+
+		return other;
+	}
+
 	public long getIndex() {
 		return index;
 	}
