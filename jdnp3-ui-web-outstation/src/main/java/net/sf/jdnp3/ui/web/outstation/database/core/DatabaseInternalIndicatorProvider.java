@@ -34,8 +34,10 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		if (internalIndicatorsDataPoint.isReadonly()) {
 			return;
 		}
-		internalIndicatorsDataPoint.setBroadcast(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isBroadcast() != value) {
+			internalIndicatorsDataPoint.setBroadcast(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 
 	public boolean isClass1Events() {
@@ -47,8 +49,10 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		if (internalIndicatorsDataPoint.isReadonly()) {
 			return;
 		}
-		internalIndicatorsDataPoint.setClass1Events(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isClass1Events() != value) {
+			internalIndicatorsDataPoint.setClass1Events(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 
 	public boolean isClass2Events() {
@@ -60,8 +64,10 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		if (internalIndicatorsDataPoint.isReadonly()) {
 			return;
 		}
-		internalIndicatorsDataPoint.setClass2Events(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isClass2Events() != value) {
+			internalIndicatorsDataPoint.setClass2Events(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 
 	public boolean isClass3Events() {
@@ -73,8 +79,10 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		if (internalIndicatorsDataPoint.isReadonly()) {
 			return;
 		}
-		internalIndicatorsDataPoint.setClass3Events(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isClass3Events() != value) {
+			internalIndicatorsDataPoint.setClass3Events(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 
 	public boolean isNeedTime() {
@@ -86,8 +94,10 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		if (internalIndicatorsDataPoint.isReadonly()) {
 			return;
 		}
-		internalIndicatorsDataPoint.setNeedTime(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isNeedTime() != value) {
+			internalIndicatorsDataPoint.setNeedTime(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 
 	public boolean isLocalControl() {
@@ -99,8 +109,10 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		if (internalIndicatorsDataPoint.isReadonly()) {
 			return;
 		}
-		internalIndicatorsDataPoint.setLocalControl(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isLocalControl() != value) {
+			internalIndicatorsDataPoint.setLocalControl(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 
 	public boolean isDeviceTrouble() {
@@ -112,8 +124,10 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		if (internalIndicatorsDataPoint.isReadonly()) {
 			return;
 		}
-		internalIndicatorsDataPoint.setDeviceTrouble(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isDeviceTrouble() != value) {
+			internalIndicatorsDataPoint.setDeviceTrouble(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 
 	public boolean isDeviceRestart() {
@@ -125,8 +139,10 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		if (internalIndicatorsDataPoint.isReadonly()) {
 			return;
 		}
-		internalIndicatorsDataPoint.setDeviceRestart(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isDeviceRestart() != value) {
+			internalIndicatorsDataPoint.setDeviceRestart(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 
 	public boolean isNoFunctionCodeSupport() {
@@ -138,8 +154,10 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		if (internalIndicatorsDataPoint.isReadonly()) {
 			return;
 		}
-		internalIndicatorsDataPoint.setNoFunctionCodeSupport(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isNoFunctionCodeSupport() != value) {
+			internalIndicatorsDataPoint.setNoFunctionCodeSupport(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 
 	public boolean isObjectUnknown() {
@@ -151,8 +169,10 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		if (internalIndicatorsDataPoint.isReadonly()) {
 			return;
 		}
-		internalIndicatorsDataPoint.setObjectUnknown(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isObjectUnknown() != value) {
+			internalIndicatorsDataPoint.setObjectUnknown(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 
 	public boolean isParameterError() {
@@ -164,8 +184,10 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		if (internalIndicatorsDataPoint.isReadonly()) {
 			return;
 		}
-		internalIndicatorsDataPoint.setParameterError(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isParameterError() != value) {
+			internalIndicatorsDataPoint.setParameterError(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 
 	public boolean isEventBufferOverflow() {
@@ -177,8 +199,10 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		if (internalIndicatorsDataPoint.isReadonly()) {
 			return;
 		}
-		internalIndicatorsDataPoint.setEventBufferOverflow(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isEventBufferOverflow() != value) {
+			internalIndicatorsDataPoint.setEventBufferOverflow(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 
 	public boolean isAlreadyExecuting() {
@@ -190,8 +214,10 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		if (internalIndicatorsDataPoint.isReadonly()) {
 			return;
 		}
-		internalIndicatorsDataPoint.setAlreadyExecuting(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isAlreadyExecuting() != value) {
+			internalIndicatorsDataPoint.setAlreadyExecuting(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 
 	public boolean isConfigurationCorrupt() {
@@ -203,8 +229,10 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		if (internalIndicatorsDataPoint.isReadonly()) {
 			return;
 		}
-		internalIndicatorsDataPoint.setConfigurationCorrupt(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isConfigurationCorrupt() != value) {
+			internalIndicatorsDataPoint.setConfigurationCorrupt(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 
 	public boolean isReadonly() {
@@ -213,8 +241,10 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 	
 	public synchronized void setReadonly(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
-		internalIndicatorsDataPoint.setReadonly(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isReadonly() != value) {
+			internalIndicatorsDataPoint.setReadonly(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 
 	public boolean isUnsolicitedEnabled() {
@@ -223,7 +253,9 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 
 	public void setUnsolicitedEnabled(boolean value) {
 		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
-		internalIndicatorsDataPoint.setUnsolicitedEnabled(value);
-		databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		if (internalIndicatorsDataPoint.isUnsolicitedEnabled() != value) {
+			internalIndicatorsDataPoint.setUnsolicitedEnabled(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
 	}
 }
