@@ -15,21 +15,40 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.model.datalink;
 
-import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
+import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.DeviceMessage;
 
-public class StartDataLinkMessage implements Message {
+public class StartDataLinkMessage implements DeviceMessage {
+	// TODO CLEANUP Site and device is not required here. It is only used to allow this from the device API
+	private String site = "";
+	private String device = "";
 	private String type = "startDataLink";
-	private String dataLink = "";
+	private String dataLinkName = "";
 	
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	public String getDevice() {
+		return device;
+	}
+
+	public void setDevice(String device) {
+		this.device = device;
+	}
+
 	public String getType() {
 		return type;
 	}
 
-	public String getDataLink() {
-		return dataLink;
+	public String getDataLinkName() {
+		return dataLinkName;
 	}
 
-	public void setDataLink(String dataLink) {
-		this.dataLink = dataLink;
+	public void setDataLinkName(String dataLinkName) {
+		this.dataLinkName = dataLinkName;
 	}
 }

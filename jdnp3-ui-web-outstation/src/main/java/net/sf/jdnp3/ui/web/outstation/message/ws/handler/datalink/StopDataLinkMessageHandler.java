@@ -18,8 +18,9 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.handler.datalink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManager;
-import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
+import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
+import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
+import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.MessageHandler;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.Messanger;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.FailureMessage;
@@ -27,11 +28,15 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.SuccessMessage;
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.datalink.StopDataLinkMessage;
 
-public class StopDataLinkMessageHandler implements MessageHandler {
+public class StopDataLinkMessageHandler implements DeviceMessageHandler, MessageHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(StopDataLinkMessageHandler.class);
 	
 	public boolean canHandle(Message message) {
 		return message instanceof StopDataLinkMessage;
+	}
+
+	public void processMessage(Messanger messanger, OutstationDevice outstationDevice, Message message) {
+		this.processMessage(messanger, message);
 	}
 
 	public void processMessage(Messanger webSocket, Message message) {
@@ -42,8 +47,7 @@ public class StopDataLinkMessageHandler implements MessageHandler {
 		Message responseMessage = new SuccessMessage();
 
 		try {
-			DataLinkManager dataLinkManager = DataLinkManagerProvider.getDataLinkManager(specificMessage.getDataLink());
-			dataLinkManager.stop();
+			DeviceProvider.stopDataLinkManager(specificMessage.getDataLinkName());
 		} catch (Exception e) {
 			FailureMessage failureMessage = new FailureMessage();
 			failureMessage.setReason("Cannot stop datalink binding.  Please check log for details.");

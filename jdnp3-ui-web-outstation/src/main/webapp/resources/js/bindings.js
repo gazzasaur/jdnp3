@@ -27,17 +27,23 @@ jdnp3.bindings.SetBindingsMessageHandler.prototype.processMessage = function(bin
 		addressCell.className = 'full-text-field-label';
 		addressCell.appendChild(document.createTextNode('DNP3 Address:' + item.address));
 		tableRow.appendChild(addressCell);
-		
+
 		var dropDownButtonView = document.createElement('div');
 		dropDownButtonView.setAttribute('style', 'display: inline-block;');
 
 		var id = 'bindings-' + index;
 		var buttonCell = document.createElement('td');
 		var dropDownButton = jdnp3.ui.createDialogButton(id, ([
-			{text: 'Unbind', callback: function() {
+			{text: 'Start', callback: function() {
 				jdnp3.schedule.getDefaultScheduler().addTask(function() {
 					jdnp3.ui.destroyMenu();
-					device.unbind(bindings.site, bindings.device, item.dataLinkName, item.address);
+					device.start(bindings.site, bindings.device, item.dataLinkName);
+				}, 0);
+			}},
+			{text: 'Stop', callback: function() {
+				jdnp3.schedule.getDefaultScheduler().addTask(function() {
+					jdnp3.ui.destroyMenu();
+					device.stop(bindings.site, bindings.device, item.dataLinkName);
 				}, 0);
 			}}
 		]));

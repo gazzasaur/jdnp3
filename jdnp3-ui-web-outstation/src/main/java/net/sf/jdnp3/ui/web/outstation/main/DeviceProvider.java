@@ -27,6 +27,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManager;
 import net.sf.jdnp3.ui.web.outstation.channel.DataLinkManagerProvider;
 import net.sf.jdnp3.ui.web.outstation.channel.OutstationBinding;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseListener;
@@ -214,6 +215,24 @@ public class DeviceProvider {
 	public static synchronized void removeDeviceProviderListener(DeviceProviderListener deviceProviderListener) {
 		deviceProviderListeners.remove(deviceProviderListener);
 	}
+
+	public static synchronized void startDataLinkManager(String dataLink) {
+		DataLinkManager dataLinkManager = DataLinkManagerProvider.getDataLinkManager(dataLink);
+		dataLinkManager.start();
+
+		for (OutstationDevice outstationDevice : dataLinkManager.getOutstationDevices()) {
+			triggerBindingsUpdate(outstationDevice);
+		}
+    }
+
+    public static synchronized void stopDataLinkManager(String dataLink) {
+		DataLinkManager dataLinkManager = DataLinkManagerProvider.getDataLinkManager(dataLink);
+		dataLinkManager.stop();
+
+		for (OutstationDevice outstationDevice : dataLinkManager.getOutstationDevices()) {
+			triggerBindingsUpdate(outstationDevice);
+		}
+    }
 
 	private static void triggerDeviceProviderListeners() {
 		SiteListing deviceListings = fetchDeviceListings();

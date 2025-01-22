@@ -18,11 +18,12 @@ package net.sf.jdnp3.ui.web.outstation.channel;
 public class OutstationBinding {
 	private int address = 0;
 	private String dataLinkName = "";
-	
+	private DataLinkState dataLinkState = DataLinkState.UNKNOWN;
+
 	public int getAddress() {
 		return address;
 	}
-	
+
 	public void setAddress(int address) {
 		this.address = address;
 	}
@@ -33,5 +34,13 @@ public class OutstationBinding {
 
 	public void setDataLinkName(String dataLinkName) {
 		this.dataLinkName = dataLinkName;
+	}
+	
+	public DataLinkState getDataLinkState() {
+		return dataLinkState;
+	}
+
+	public void setDataLinkState(DataLinkState dataLinkState) {
+		this.dataLinkState = dataLinkState;
 	}
 }

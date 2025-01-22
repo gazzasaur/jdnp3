@@ -22,6 +22,7 @@ public class BindDeviceMessage implements DeviceMessage {
 	private String site = "";
 	private String device = "";
 	private String dataLinkName = "";
+
 	private int address = 0;
 	
 	public String getType() {

@@ -45,6 +45,10 @@ public class DataLinkManager {
 		dataLinkBinding.bindDataLink(dataLinkLayer, ignoreFcb);
 		transportBindings.put(dataLinkBinding, outstationDevice);
 	}
+
+	public List<OutstationDevice> getOutstationDevices() {
+		return new ArrayList<>(transportBindings.values());
+	}
 	
 	public void start() {
 		dataLinkLayer.start();
@@ -110,6 +114,7 @@ public class DataLinkManager {
 				OutstationBinding outstationBinding = new OutstationBinding();
 				outstationBinding.setAddress(binding.getKey().getAddress());
 				outstationBinding.setDataLinkName(dataLinkName);
+				outstationBinding.setDataLinkState(dataLinkLayer.isRunning() ? DataLinkState.ENABLED : DataLinkState.DISABLED);
 				outstationBindings.add(outstationBinding);
 			}
 		}

@@ -79,6 +79,7 @@ jdnp3.station.updateSearchResults = function(searchResult) {
 
 		// FIXME Add this in when the UX feels better
 		// resultDiv.href = '/device.jsf?stationCode=' + result['site'] + '&deviceCode=' + result['device'] + '&filter=' + searchResult['searchTerm'];
+		resultDiv.target = '_blank';
 		resultDiv.href = '/device.jsf?stationCode=' + result['site'] + '&deviceCode=' + result['device'];
 
 		searchResultsPanel.appendChild(resultDiv);

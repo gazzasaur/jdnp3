@@ -74,4 +74,9 @@ public class DataLinkManagerProvider {
 		}
 		return outstationBindings;
 	}
+
+	public synchronized static void disableDataLink(String name) {
+		DataLinkManager dataLinkManager = dataLinkManagers.get(name);
+		dataLinkManager.stop();
+	}
 }

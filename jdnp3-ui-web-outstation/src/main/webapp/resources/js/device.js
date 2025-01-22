@@ -98,13 +98,24 @@ jdnp3.device.Device.prototype.requestEvent = function(type, dataPoint, timestamp
 	}, 0);
 }
 
-jdnp3.device.Device.prototype.unbind = function(site, deviceName, dataLinkName, address) {
+jdnp3.device.Device.prototype.start = function(site, deviceName, dataLinkName) {
 	jdnp3.schedule.getDefaultScheduler().addTask(function() {
 		var data = {
-			'type': 'unbindDevice',
+			'type': 'startDataLink',
 			'site': site,
 			'device': deviceName,
-			'address': address,
+			'dataLinkName': dataLinkName
+		};
+		device.messanger.sendMessage(data);
+	}, 0);
+}
+
+jdnp3.device.Device.prototype.stop = function(site, deviceName, dataLinkName) {
+	jdnp3.schedule.getDefaultScheduler().addTask(function() {
+		var data = {
+			'type': 'stopDataLink',
+			'site': site,
+			'device': deviceName,
 			'dataLinkName': dataLinkName
 		};
 		device.messanger.sendMessage(data);
