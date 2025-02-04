@@ -43,16 +43,17 @@ public class OutstationEventQueue implements ConfirmationListener {
 			return;
 		}
 
-		ListIterator<EventObjectInstance> currentEvents = events.listIterator();
-		while (currentEvents.hasNext()) {
-			EventObjectInstance current = currentEvents.next();
-			if (eventObjectInstance.getTimestamp() < current.getTimestamp()) {
-				currentEvents.previous();
-				currentEvents.add(eventObjectInstance);
-				setInternalStatus();
-				return;
-			}			
-		}
+		// TODO Add an option to force sort events
+		// ListIterator<EventObjectInstance> currentEvents = events.listIterator();
+		// while (currentEvents.hasNext()) {
+		// 	EventObjectInstance current = currentEvents.next();
+		// 	if (eventObjectInstance.getTimestamp() < current.getTimestamp()) {
+		// 		currentEvents.previous();
+		// 		currentEvents.add(eventObjectInstance);
+		// 		setInternalStatus();
+		// 		return;
+		// 	}			
+		// }
 		events.add(eventObjectInstance);
 		setInternalStatus();
 	}

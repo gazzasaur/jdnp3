@@ -50,7 +50,6 @@ import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFr
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packer.ObjectFragmentPackerResult;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.packet.ApplicationFragmentResponseEncoder;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.DefaultObjectTypeMapping;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.ObjectInstanceSorter;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.encoder.util.ObjectInstanceTypeRationaliser;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentRequest;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ApplicationFragmentResponse;
@@ -421,8 +420,9 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 			mapping.performMapping(objectInstance);
 			rationaliser.rationaliseType(objectInstance);
 		}
-		ObjectInstanceSorter sorter = new ObjectInstanceSorter();
-		sorter.sort(responseObjects);
+		// TODO Disabling sorting as events should not be sorted.
+		// ObjectInstanceSorter sorter = new ObjectInstanceSorter();
+		// sorter.sort(responseObjects);
 		
 		LinkedList<ObjectInstance> replyObjects = new LinkedList<ObjectInstance>();
 		
