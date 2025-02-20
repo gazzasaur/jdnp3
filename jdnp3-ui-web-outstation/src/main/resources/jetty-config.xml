@@ -31,6 +31,16 @@
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
 			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.GlobalAutoEventMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="messageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
 				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.core.SearchRequestMessageHandler" />
 			</list>
 		</property>
@@ -314,6 +324,17 @@
 			<list>
 				<value>heartbeat</value>
 				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.core.HeartbeatMessage</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="genericMessageRegistry" />
+		<property name="targetMethod" value="register" />
+		<property name="arguments">
+			<list>
+				<value>globalAutoEvent</value>
+				<value>net.sf.jdnp3.ui.web.outstation.message.ws.model.core.GlobalAutoEventMessage</value>
 			</list>
 		</property>
 	</bean>

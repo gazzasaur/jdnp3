@@ -207,6 +207,22 @@ jdnp3.station.Station.prototype.search = function(keyword) {
 	}, 10, false);
 }
 
+jdnp3.station.Station.prototype.globalAutoTriggerEvent = function(enable) {
+	var thisObject = this;
+
+	var performOperation = function() {
+		try {
+			thisObject.messanger.sendMessage({'type': 'globalAutoEvent', 'enable': enable});
+		} catch (exception) {
+			console.log('WARN: Unable to update flag.');
+		}
+	}
+
+	jdnp3.schedule.getDefaultScheduler().addTask(function() {
+		performOperation();
+	}, 10, false);
+}
+
 jdnp3.station.Station.prototype.messageReceived = function(message) {
 	if (message.data) {
 		messageData = message.data.replace(/([\s\[{.]"value"\s*:\s*)NaN/, '$1"NaN"');
