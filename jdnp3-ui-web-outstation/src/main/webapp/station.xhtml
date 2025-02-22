@@ -66,21 +66,31 @@
 				<div style="margin-bottom: 2px;" class="section-header">
 					<span>Global Controls</span>
 				</div>
-				<div>
-					<div>
-						<span>Auto Trigger Binary Input Event on Change: </span>
-						<button onclick="window['station'].globalAutoTriggerEvent('binaryInputPoint', true)">Enable</button>
-						<button onclick="window['station'].globalAutoTriggerEvent('binaryInputPoint', false)">Disable</button>
+				<div style="white-space: nowrap;">
+					<div style="display: inline-block;">
+						<div>
+							<span>Auto Trigger Binary Input Event on Change: </span>
+						</div>
+						<div>
+							<span>Auto Trigger Double Bit Binary Input Event on Change: </span>
+						</div>
+						<div>
+							<span>Auto Trigger Analogue Input Event on Change: </span>
+						</div>
 					</div>
-					<div>
-						<span>Auto Trigger Double Bit Binary Input Event on Change: </span>
-						<button onclick="window['station'].globalAutoTriggerEvent('doubleBitBinaryInputPoint', true)">Enable</button>
-						<button onclick="window['station'].globalAutoTriggerEvent('doubleBitBinaryInputPoint', false)">Disable</button>
-					</div>
-					<div>
-						<span>Auto Trigger Analogue Input Event on Change: </span>
-						<button onclick="window['station'].globalAutoTriggerEvent('analogInputPoint', true)">Enable</button>
-						<button onclick="window['station'].globalAutoTriggerEvent('analogInputPoint', false)">Disable</button>
+					<div style="display: inline-block;">
+						<div>
+							<button onclick="window['station'].globalAutoTriggerEvent('binaryInputPoint', true)">Enable</button>
+							<button onclick="window['station'].globalAutoTriggerEvent('binaryInputPoint', false)">Disable</button>
+						</div>
+						<div>
+							<button onclick="window['station'].globalAutoTriggerEvent('doubleBitBinaryInputPoint', true)">Enable</button>
+							<button onclick="window['station'].globalAutoTriggerEvent('doubleBitBinaryInputPoint', false)">Disable</button>
+						</div>
+						<div>
+							<button onclick="window['station'].globalAutoTriggerEvent('analogInputPoint', true)">Enable</button>
+							<button onclick="window['station'].globalAutoTriggerEvent('analogInputPoint', false)">Disable</button>
+						</div>
 					</div>
 				</div>
 			</div>
