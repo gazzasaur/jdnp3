@@ -47,26 +47,32 @@ public class GlobalAutoEventMessageHandler implements MessageHandler {
 
 				for (AnalogInputDataPoint dataPoint : device.getDatabaseManager().getAnalogInputDataPoints()) {
 					dataPoint.setTriggerEventOnChange(enable);
+					device.getDatabaseManager().setAnalogInputDataPoint(dataPoint);
 				}
 
 				for (AnalogOutputDataPoint dataPoint : device.getDatabaseManager().getAnalogOutputDataPoints()) {
 					dataPoint.setTriggerEventOnChange(enable);
+					device.getDatabaseManager().setAnalogOutputDataPoint(dataPoint);
 				}
 
 				for (BinaryInputDataPoint dataPoint : device.getDatabaseManager().getBinaryInputDataPoints()) {
 					dataPoint.setTriggerEventOnChange(enable);
+					device.getDatabaseManager().setBinaryInputDataPoint(dataPoint);
 				}
 
 				for (BinaryOutputDataPoint dataPoint : device.getDatabaseManager().getBinaryOutputDataPoints()) {
 					dataPoint.setTriggerEventOnChange(enable);
+					device.getDatabaseManager().setBinaryOutputDataPoint(dataPoint);
 				}
 
 				for (CounterDataPoint dataPoint : device.getDatabaseManager().getCounterDataPoints()) {
 					dataPoint.setTriggerEventOnChange(enable);
+					device.getDatabaseManager().setCounterDataPoint(dataPoint);
 				}
 
 				for (DoubleBitBinaryInputDataPoint dataPoint : device.getDatabaseManager().getDoubleBitBinaryInputDataPoints()) {
 					dataPoint.setTriggerEventOnChange(enable);
+					device.getDatabaseManager().setDoubleBitBinaryInputDataPoint(dataPoint);
 				}
 			}
 		}
