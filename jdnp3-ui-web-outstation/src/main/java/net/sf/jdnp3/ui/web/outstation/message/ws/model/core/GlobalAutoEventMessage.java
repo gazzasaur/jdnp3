@@ -18,7 +18,8 @@ package net.sf.jdnp3.ui.web.outstation.message.ws.model.core;
 public class GlobalAutoEventMessage implements Message {
 	private String type = "globalAutoEvent";
 	private boolean enable = false;
-	
+	private String pointType = "";
+
 	public String getType() {
 		return type;
 	}
@@ -29,5 +30,13 @@ public class GlobalAutoEventMessage implements Message {
 
 	public void setEnable(boolean enable) {
 		this.enable = enable;
+	}
+
+	public String getPointType() {
+		return pointType;
+	}
+
+	public void setPointType(String pointType) {
+		this.pointType = pointType;
 	}
 }

@@ -15,6 +15,12 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.ws.handler.core;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
+
+import org.apache.commons.lang3.StringUtils;
+
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
@@ -30,6 +36,36 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.GlobalAutoEventMessa
 import net.sf.jdnp3.ui.web.outstation.message.ws.model.core.Message;
 
 public class GlobalAutoEventMessageHandler implements MessageHandler {
+	private static final Map<String, BiConsumer<OutstationDevice, Boolean>> processors = new HashMap<String, BiConsumer<OutstationDevice, Boolean>>() {{
+		put("binaryInputPoint", (OutstationDevice device, Boolean enable) -> {
+			for (BinaryInputDataPoint dataPoint : device.getDatabaseManager().getBinaryInputDataPoints()) {
+				dataPoint.setTriggerEventOnChange(enable);
+				device.getDatabaseManager().setBinaryInputDataPoint(dataPoint);
+			}
+		});
+
+		put("doubleBitBinaryInputPoint", (OutstationDevice device, Boolean enable) -> {
+			for (DoubleBitBinaryInputDataPoint dataPoint : device.getDatabaseManager().getDoubleBitBinaryInputDataPoints()) {
+				dataPoint.setTriggerEventOnChange(enable);
+				device.getDatabaseManager().setDoubleBitBinaryInputDataPoint(dataPoint);
+			}
+		});
+
+		put("analogInputPoint", (OutstationDevice device, Boolean enable) -> {
+			for (AnalogInputDataPoint dataPoint : device.getDatabaseManager().getAnalogInputDataPoints()) {
+				dataPoint.setTriggerEventOnChange(enable);
+				device.getDatabaseManager().setAnalogInputDataPoint(dataPoint);
+			}
+		});
+
+		put("counterPoint", (OutstationDevice device, Boolean enable) -> {
+			for (CounterDataPoint dataPoint : device.getDatabaseManager().getCounterDataPoints()) {
+				dataPoint.setTriggerEventOnChange(enable);
+				device.getDatabaseManager().setCounterDataPoint(dataPoint);
+			}
+		});
+	}};
+
 	public boolean canHandle(Message message) {
 		return message instanceof GlobalAutoEventMessage;
 	}
@@ -39,41 +75,17 @@ public class GlobalAutoEventMessageHandler implements MessageHandler {
 			throw new IllegalArgumentException("Cannot handle message of type " + message.getClass());
 		}
 
-		boolean enable = ((GlobalAutoEventMessage) message).getEnable();
+		GlobalAutoEventMessage globalAutoEventMessage = ((GlobalAutoEventMessage) message);
 
 		for (SiteDeviceList site : DeviceProvider.gettDeviceList().getSiteDeviceLists()) {
 			for (String deviceName : site.getDevices()) {
 				OutstationDevice device = DeviceProvider.getDevice(site.getSite(), deviceName);
 
-				for (AnalogInputDataPoint dataPoint : device.getDatabaseManager().getAnalogInputDataPoints()) {
-					dataPoint.setTriggerEventOnChange(enable);
-					device.getDatabaseManager().setAnalogInputDataPoint(dataPoint);
-				}
-
-				for (AnalogOutputDataPoint dataPoint : device.getDatabaseManager().getAnalogOutputDataPoints()) {
-					dataPoint.setTriggerEventOnChange(enable);
-					device.getDatabaseManager().setAnalogOutputDataPoint(dataPoint);
-				}
-
-				for (BinaryInputDataPoint dataPoint : device.getDatabaseManager().getBinaryInputDataPoints()) {
-					dataPoint.setTriggerEventOnChange(enable);
-					device.getDatabaseManager().setBinaryInputDataPoint(dataPoint);
-				}
-
-				for (BinaryOutputDataPoint dataPoint : device.getDatabaseManager().getBinaryOutputDataPoints()) {
-					dataPoint.setTriggerEventOnChange(enable);
-					device.getDatabaseManager().setBinaryOutputDataPoint(dataPoint);
-				}
-
-				for (CounterDataPoint dataPoint : device.getDatabaseManager().getCounterDataPoints()) {
-					dataPoint.setTriggerEventOnChange(enable);
-					device.getDatabaseManager().setCounterDataPoint(dataPoint);
-				}
-
-				for (DoubleBitBinaryInputDataPoint dataPoint : device.getDatabaseManager().getDoubleBitBinaryInputDataPoints()) {
-					dataPoint.setTriggerEventOnChange(enable);
-					device.getDatabaseManager().setDoubleBitBinaryInputDataPoint(dataPoint);
-				}
+				processors.entrySet().forEach(entry -> {
+					if (StringUtils.isBlank(globalAutoEventMessage.getPointType()) || entry.getKey().equals(globalAutoEventMessage.getPointType())) {
+						entry.getValue().accept(device, globalAutoEventMessage.getEnable());
+					}
+				});
 			}
 		}
 		return;

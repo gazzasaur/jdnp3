@@ -207,12 +207,12 @@ jdnp3.station.Station.prototype.search = function(keyword) {
 	}, 10, false);
 }
 
-jdnp3.station.Station.prototype.globalAutoTriggerEvent = function(enable) {
+jdnp3.station.Station.prototype.globalAutoTriggerEvent = function(pointType, enable) {
 	var thisObject = this;
 
 	var performOperation = function() {
 		try {
-			thisObject.messanger.sendMessage({'type': 'globalAutoEvent', 'enable': enable});
+			thisObject.messanger.sendMessage({'type': 'globalAutoEvent', 'pointType': pointType, 'enable': enable});
 		} catch (exception) {
 			console.log('WARN: Unable to update flag.');
 		}

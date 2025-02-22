@@ -68,9 +68,19 @@
 				</div>
 				<div>
 					<div>
-						<span>Auto Trigger Event on Change: </span>
-						<button onclick="window['station'].globalAutoTriggerEvent(true)">Enable</button>
-						<button onclick="window['station'].globalAutoTriggerEvent(false)">Disable</button>
+						<span>Auto Trigger Binary Input Event on Change: </span>
+						<button onclick="window['station'].globalAutoTriggerEvent('binaryInputPoint', true)">Enable</button>
+						<button onclick="window['station'].globalAutoTriggerEvent('binaryInputPoint', false)">Disable</button>
+					</div>
+					<div>
+						<span>Auto Trigger Double Bit Binary Input Event on Change: </span>
+						<button onclick="window['station'].globalAutoTriggerEvent('doubleBitBinaryInputPoint', true)">Enable</button>
+						<button onclick="window['station'].globalAutoTriggerEvent('doubleBitBinaryInputPoint', false)">Disable</button>
+					</div>
+					<div>
+						<span>Auto Trigger Analogue Input Event on Change: </span>
+						<button onclick="window['station'].globalAutoTriggerEvent('analogInputPoint', true)">Enable</button>
+						<button onclick="window['station'].globalAutoTriggerEvent('analogInputPoint', false)">Disable</button>
 					</div>
 				</div>
 			</div>
