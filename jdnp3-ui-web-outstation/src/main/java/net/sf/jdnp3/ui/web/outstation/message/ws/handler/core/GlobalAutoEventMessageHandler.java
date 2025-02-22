@@ -22,9 +22,7 @@ import java.util.function.BiConsumer;
 import org.apache.commons.lang3.StringUtils;
 
 import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.point.analog.AnalogOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryInputDataPoint;
-import net.sf.jdnp3.ui.web.outstation.database.point.binary.BinaryOutputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.binary.DoubleBitBinaryInputDataPoint;
 import net.sf.jdnp3.ui.web.outstation.database.point.counter.CounterDataPoint;
 import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
@@ -40,28 +38,28 @@ public class GlobalAutoEventMessageHandler implements MessageHandler {
 		put("binaryInputPoint", (OutstationDevice device, Boolean enable) -> {
 			for (BinaryInputDataPoint dataPoint : device.getDatabaseManager().getBinaryInputDataPoints()) {
 				dataPoint.setTriggerEventOnChange(enable);
-				device.getDatabaseManager().setBinaryInputDataPoint(dataPoint);
+				device.getDatabaseManager().setBinaryInputDataPoint(dataPoint, true);
 			}
 		});
 
 		put("doubleBitBinaryInputPoint", (OutstationDevice device, Boolean enable) -> {
 			for (DoubleBitBinaryInputDataPoint dataPoint : device.getDatabaseManager().getDoubleBitBinaryInputDataPoints()) {
 				dataPoint.setTriggerEventOnChange(enable);
-				device.getDatabaseManager().setDoubleBitBinaryInputDataPoint(dataPoint);
+				device.getDatabaseManager().setDoubleBitBinaryInputDataPoint(dataPoint, true);
 			}
 		});
 
 		put("analogInputPoint", (OutstationDevice device, Boolean enable) -> {
 			for (AnalogInputDataPoint dataPoint : device.getDatabaseManager().getAnalogInputDataPoints()) {
 				dataPoint.setTriggerEventOnChange(enable);
-				device.getDatabaseManager().setAnalogInputDataPoint(dataPoint);
+				device.getDatabaseManager().setAnalogInputDataPoint(dataPoint, true);
 			}
 		});
 
 		put("counterPoint", (OutstationDevice device, Boolean enable) -> {
 			for (CounterDataPoint dataPoint : device.getDatabaseManager().getCounterDataPoints()) {
 				dataPoint.setTriggerEventOnChange(enable);
-				device.getDatabaseManager().setCounterDataPoint(dataPoint);
+				device.getDatabaseManager().setCounterDataPoint(dataPoint, true);
 			}
 		});
 	}};

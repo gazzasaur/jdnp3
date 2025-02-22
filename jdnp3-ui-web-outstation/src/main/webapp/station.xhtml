@@ -25,7 +25,9 @@
 	</script>
 
 	<f:facet name="last">
+		<h:outputStylesheet library="css" name="buttons.css" />
 		<h:outputStylesheet library="css" name="general.css" />
+		<h:outputStylesheet library="css" name="switches.css" />
 	</f:facet>
 	
 	<div style="font-size: 1.2em;">
@@ -66,30 +68,31 @@
 				<div style="margin-bottom: 2px;" class="section-header">
 					<span>Global Controls</span>
 				</div>
+
 				<div style="white-space: nowrap;">
-					<div style="display: inline-block;">
-						<div>
+					<div style="display: inline-block; vertical-align: top;">
+						<div style="padding: 0.45em;">
 							<span>Auto Trigger Binary Input Event on Change: </span>
 						</div>
-						<div>
+						<div style="padding: 0.45em;">
 							<span>Auto Trigger Double Bit Binary Input Event on Change: </span>
 						</div>
-						<div>
+						<div style="padding: 0.45em;">
 							<span>Auto Trigger Analogue Input Event on Change: </span>
 						</div>
 					</div>
-					<div style="display: inline-block;">
+					<div style="display: inline-block; margin-top: 0.2em;">
 						<div>
-							<button onclick="window['station'].globalAutoTriggerEvent('binaryInputPoint', true)">Enable</button>
-							<button onclick="window['station'].globalAutoTriggerEvent('binaryInputPoint', false)">Disable</button>
+							<div style="font-size: 0.8rem; display: inline-block; margin-left: 5px;" title="Enable" onclick="window['station'].globalAutoTriggerEvent('binaryInputPoint', true)"><input id="bi-tigger-event-enable" disabled="true" type="button" class="eventbutton-checkbox" /><label class="glossy-button" for="bi-tigger-event-enable" style="width: 6em;"><span style="background-image: none; text-align: center; font-size: 1.5em; line-height: 1.75em;">Enable</span></label></div>
+							<div style="font-size: 0.8rem; display: inline-block; margin-left: 5px;" title="Disable" onclick="window['station'].globalAutoTriggerEvent('binaryInputPoint', false)"><input id="bi-tigger-event-disable" disabled="true" type="button" class="eventbutton-checkbox" /><label class="glossy-button" for="bi-tigger-event-disable" style="width: 6em;"><span style="background-image: none; text-align: center; font-size: 1.5em; line-height: 1.75em;">Disable</span></label></div>
 						</div>
 						<div>
-							<button onclick="window['station'].globalAutoTriggerEvent('doubleBitBinaryInputPoint', true)">Enable</button>
-							<button onclick="window['station'].globalAutoTriggerEvent('doubleBitBinaryInputPoint', false)">Disable</button>
+							<div style="font-size: 0.8rem; display: inline-block; margin-left: 5px;" title="Enable" onclick="window['station'].globalAutoTriggerEvent('doubleBitBinaryInputPoint', true)"><input id="di-tigger-event-enable" disabled="true" type="button" class="eventbutton-checkbox" /><label class="glossy-button" for="di-tigger-event-enable" style="width: 6em;"><span style="background-image: none; text-align: center; font-size: 1.5em; line-height: 1.75em;">Enable</span></label></div>
+							<div style="font-size: 0.8rem; display: inline-block; margin-left: 5px;" title="Disable" onclick="window['station'].globalAutoTriggerEvent('doubleBitBinaryInputPoint', false)"><input id="di-tigger-event-disable" disabled="true" type="button" class="eventbutton-checkbox" /><label class="glossy-button" for="di-tigger-event-disable" style="width: 6em;"><span style="background-image: none; text-align: center; font-size: 1.5em; line-height: 1.75em;">Disable</span></label></div>
 						</div>
 						<div>
-							<button onclick="window['station'].globalAutoTriggerEvent('analogInputPoint', true)">Enable</button>
-							<button onclick="window['station'].globalAutoTriggerEvent('analogInputPoint', false)">Disable</button>
+							<div style="font-size: 0.8rem; display: inline-block; margin-left: 5px;" title="Enable" onclick="window['station'].globalAutoTriggerEvent('analogInputPoint', true)"><input id="ai-tigger-event-enable" disabled="true" type="button" class="eventbutton-checkbox" /><label class="glossy-button" for="ai-tigger-event-enable" style="width: 6em;"><span style="background-image: none; text-align: center; font-size: 1.5em; line-height: 1.75em;">Enable</span></label></div>
+							<div style="font-size: 0.8rem; display: inline-block; margin-left: 5px;" title="Disable" onclick="window['station'].globalAutoTriggerEvent('analogInputPoint', false)"><input id="ai-tigger-event-disable" disabled="true" type="button" class="eventbutton-checkbox" /><label class="glossy-button" for="ai-tigger-event-disable" style="width: 6em;"><span style="background-image: none; text-align: center; font-size: 1.5em; line-height: 1.75em;">Disable</span></label></div>
 						</div>
 					</div>
 				</div>

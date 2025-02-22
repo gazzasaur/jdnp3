@@ -257,6 +257,10 @@ public class DatabaseManager {
 	}
 	
 	public void setAnalogInputDataPoint(AnalogInputDataPoint analogDataPoint) {
+		this.setAnalogInputDataPoint(analogDataPoint, false);
+	}
+
+	public void setAnalogInputDataPoint(AnalogInputDataPoint analogDataPoint, boolean suppressTrigger) {
 		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			database.setAnalogInputDataPoint(analogDataPoint.copy());
@@ -265,7 +269,7 @@ public class DatabaseManager {
 		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.valueChanged(analogDataPoint);
 		}
-		if (analogDataPoint.isTriggerEventOnChange()) {
+		if (analogDataPoint.isTriggerEventOnChange() && !suppressTrigger) {
 			this.triggerAnalogInputEvent(analogDataPoint.getIndex(), System.currentTimeMillis());
 		}
 	}
@@ -285,7 +289,11 @@ public class DatabaseManager {
 	}
 	
 	public void setBinaryInputDataPoint(BinaryInputDataPoint binaryDataPoint) {
-		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
+		this.setBinaryInputDataPoint(binaryDataPoint, false);
+	}
+
+	public void setBinaryInputDataPoint(BinaryInputDataPoint binaryDataPoint, boolean suppressTrigger) {
+			List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			database.setBinaryInputDataPoint(binaryDataPoint.copy());
 			snapshotDatabaseListeners.addAll(databaseListeners);
@@ -293,12 +301,16 @@ public class DatabaseManager {
 		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.valueChanged(binaryDataPoint);
 		}
-		if (binaryDataPoint.isTriggerEventOnChange()) {
+		if (binaryDataPoint.isTriggerEventOnChange() && !suppressTrigger) {
 			this.triggerBinaryInputEvent(binaryDataPoint.getIndex(), System.currentTimeMillis());
 		}
 	}
 
 	public void setDoubleBitBinaryInputDataPoint(DoubleBitBinaryInputDataPoint binaryDataPoint) {
+		this.setDoubleBitBinaryInputDataPoint(binaryDataPoint, false);
+	}
+
+	public void setDoubleBitBinaryInputDataPoint(DoubleBitBinaryInputDataPoint binaryDataPoint, boolean suppressTrigger) {
 		if ((binaryDataPoint.getValue()) < 0 || (binaryDataPoint.getValue() > 3)) {
 			throw new IllegalArgumentException("Unsupported Double Bit Binary Value: " + binaryDataPoint.getValue());
 		}
@@ -310,7 +322,7 @@ public class DatabaseManager {
 		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.valueChanged(binaryDataPoint);
 		}
-		if (binaryDataPoint.isTriggerEventOnChange()) {
+		if (binaryDataPoint.isTriggerEventOnChange() && !suppressTrigger) {
 			this.triggerDoubleBitBinaryInputEvent(binaryDataPoint.getIndex(), System.currentTimeMillis());
 		}
 	}
@@ -330,6 +342,10 @@ public class DatabaseManager {
 	}
 	
 	public void setCounterDataPoint(CounterDataPoint dataPoint) {
+		this.setCounterDataPoint(dataPoint, false);
+	}
+	
+	public void setCounterDataPoint(CounterDataPoint dataPoint, boolean suppressTrigger) {
 		List<DatabaseListener> snapshotDatabaseListeners = new ArrayList<DatabaseListener>();
 		synchronized (database) {
 			database.setCounterDataPoint(dataPoint.copy());
@@ -338,7 +354,7 @@ public class DatabaseManager {
 		for (DatabaseListener databaseListener : snapshotDatabaseListeners) {
 			databaseListener.valueChanged(dataPoint);
 		}
-		if (dataPoint.isTriggerEventOnChange()) {
+		if (dataPoint.isTriggerEventOnChange() && !suppressTrigger) {
 			this.triggerCounterEvent(dataPoint.getIndex(), System.currentTimeMillis());
 		}
 	}
