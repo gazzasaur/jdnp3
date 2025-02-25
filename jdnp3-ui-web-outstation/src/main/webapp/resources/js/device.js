@@ -104,7 +104,7 @@ jdnp3.device.Device.prototype.start = function(site, deviceName, dataLinkName) {
 			'type': 'startDataLink',
 			'site': site,
 			'device': deviceName,
-			'dataLinkName': dataLinkName
+			'dataLink': dataLinkName
 		};
 		device.messanger.sendMessage(data);
 	}, 0);
@@ -116,7 +116,7 @@ jdnp3.device.Device.prototype.stop = function(site, deviceName, dataLinkName) {
 			'type': 'stopDataLink',
 			'site': site,
 			'device': deviceName,
-			'dataLinkName': dataLinkName
+			'dataLink': dataLinkName
 		};
 		device.messanger.sendMessage(data);
 	}, 0);

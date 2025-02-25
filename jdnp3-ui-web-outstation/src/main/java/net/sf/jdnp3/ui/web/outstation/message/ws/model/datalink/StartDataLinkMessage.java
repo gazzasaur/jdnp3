@@ -22,7 +22,7 @@ public class StartDataLinkMessage implements DeviceMessage {
 	private String site = "";
 	private String device = "";
 	private String type = "startDataLink";
-	private String dataLinkName = "";
+	private String dataLink = "";
 	
 	public String getSite() {
 		return site;
@@ -44,11 +44,11 @@ public class StartDataLinkMessage implements DeviceMessage {
 		return type;
 	}
 
-	public String getDataLinkName() {
-		return dataLinkName;
+	public String getDataLink() {
+		return dataLink;
 	}
 
-	public void setDataLinkName(String dataLinkName) {
-		this.dataLinkName = dataLinkName;
+	public void setDataLink(String dataLink) {
+		this.dataLink = dataLink;
 	}
 }

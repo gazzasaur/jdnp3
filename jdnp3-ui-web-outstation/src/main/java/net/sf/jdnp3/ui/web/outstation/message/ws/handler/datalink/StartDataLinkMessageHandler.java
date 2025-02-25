@@ -47,7 +47,7 @@ public class StartDataLinkMessageHandler implements DeviceMessageHandler, Messag
 		Message responseMessage = new SuccessMessage();
 
 		try {
-			DeviceProvider.startDataLinkManager(specificMessage.getDataLinkName());
+			DeviceProvider.startDataLinkManager(specificMessage.getDataLink());
 		} catch (Exception e) {
 			FailureMessage failureMessage = new FailureMessage();
 			failureMessage.setReason("Cannot start datalink binding.  Please check log for details.");
