@@ -20,6 +20,8 @@ import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import net.sf.jdnp3.ui.web.outstation.main.DeviceProvider;
 import net.sf.jdnp3.ui.web.outstation.main.OutstationDevice;
 import net.sf.jdnp3.ui.web.outstation.message.ws.core.DeviceMessageHandler;
@@ -50,8 +52,15 @@ public class DeviceMessageHandlerRegistry implements MessageHandler {
 
 	public void processMessage(Messanger messanger, Message message) {
 		DeviceMessage deviceMessage = (DeviceMessage) message;
-		OutstationDevice outstationDevice;
+
+		// Some messages, such as start and stop datalink do not require a site or device but may still be called via the device API
+		DeviceMessageHandler messageHandler = this.fetchMessageHandler(message);
+		if ((StringUtils.isEmpty(deviceMessage.getSite()) || StringUtils.isEmpty(deviceMessage.getDevice())) && (messageHandler instanceof MessageHandler)) {
+			((MessageHandler) messageHandler).processMessage(messanger, deviceMessage);
+			return;
+		}
 		
+		OutstationDevice outstationDevice;
 		try {
 			outstationDevice = DeviceProvider.getDevice(deviceMessage.getSite(), deviceMessage.getDevice());
 		} catch (Exception e) {
@@ -59,7 +68,6 @@ public class DeviceMessageHandlerRegistry implements MessageHandler {
 			throw new RuntimeException(reason, e);
 		}
 
-		DeviceMessageHandler messageHandler = this.fetchMessageHandler(message);
 		messageHandler.processMessage(messanger, outstationDevice, message);
 	}
 
