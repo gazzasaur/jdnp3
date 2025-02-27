@@ -65,7 +65,7 @@ public class DataPumpWorker implements Runnable {
 			synchronized (selectionLock) {
 				selector.wakeup();
 				if (!socketChannel.isRegistered()) {
-					LOGGER.error("Open sockets: {}", registeredSockets.incrementAndGet());
+					LOGGER.debug("Open sockets: {}", registeredSockets.incrementAndGet());
 					socketChannel.register(selector, SelectionKey.OP_READ, new DataPumpItem(65535, new SocketChannelDataPumpTransceiver(), dataListener));
 				} else {
 					LOGGER.warn("Cannot register a socket channel that is already registered.");
