@@ -47,7 +47,7 @@ public class StopDataLinkMessageHandler implements DeviceMessageHandler, Message
 		Message responseMessage = new SuccessMessage();
 
 		try {
-			DeviceProvider.startDataLinkManager(specificMessage.getDataLink());
+			DeviceProvider.stopDataLinkManager(specificMessage.getDataLink());
 		} catch (Exception e) {
 			FailureMessage failureMessage = new FailureMessage();
 			failureMessage.setReason("Cannot stop datalink binding.  Please check log for details.");

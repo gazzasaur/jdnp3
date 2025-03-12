@@ -49,7 +49,7 @@ public class DataPumpWorker implements Runnable {
 			synchronized (selectionLock) {
 				selector.wakeup();
 				if (!selectableChannel.isRegistered()) {
-					LOGGER.error("Open sockets: {}", registeredSockets.incrementAndGet());
+					LOGGER.info("Open sockets: {}", registeredSockets.incrementAndGet());
 					selectableChannel.register(selector, SelectionKey.OP_ACCEPT, new DataPumpItem(0, new NullDataPumpTransceiver(), dataPumpListener));
 				} else {
 					LOGGER.warn("Cannot register a socket channel that is already registered.");
@@ -81,7 +81,7 @@ public class DataPumpWorker implements Runnable {
 			synchronized (selectionLock) {
 				selector.wakeup();
 				if (!socketChannel.isRegistered()) {
-					LOGGER.error("Open sockets: {}", registeredSockets.incrementAndGet());
+					LOGGER.info("Open sockets: {}", registeredSockets.incrementAndGet());
 					socketChannel.register(selector, SelectionKey.OP_CONNECT, new DataPumpItem(65535, new SocketChannelDataPumpTransceiver(), dataListener));
 				} else {
 					LOGGER.warn("Cannot register a socket channel that is already registered.");
@@ -129,7 +129,7 @@ public class DataPumpWorker implements Runnable {
 						} catch (Exception e) {
 							LOGGER.error("Failed to disconnection. Moving on.", e);
 						}
-						LOGGER.error("Open sockets: {}", registeredSockets.decrementAndGet());
+						LOGGER.info("Open sockets: {}", registeredSockets.decrementAndGet());
 						continue;
 					}
 
@@ -164,7 +164,7 @@ public class DataPumpWorker implements Runnable {
 							dataPumpTransceiver.read(selectionKey.channel(), dataPumpItem);
 						} catch (Exception e) {
 							LOGGER.error("Failed to read from end point.", e);
-							LOGGER.error("Open sockets: {}", registeredSockets.decrementAndGet());
+							LOGGER.info("Open sockets: {}", registeredSockets.decrementAndGet());
 							selectionKey.channel().close();
 							dataPumpItem.disconnected();
 							selectionKey.cancel();
@@ -181,7 +181,7 @@ public class DataPumpWorker implements Runnable {
 							}
 						} catch (Exception e) {
 							LOGGER.error("Failed to write to end point.", e);
-							LOGGER.error("Open sockets: {}", registeredSockets.decrementAndGet());
+							LOGGER.info("Open sockets: {}", registeredSockets.decrementAndGet());
 							selectionKey.channel().close();
 							dataPumpItem.disconnected();
 							selectionKey.cancel();
