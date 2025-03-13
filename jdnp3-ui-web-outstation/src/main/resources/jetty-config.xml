@@ -181,6 +181,26 @@
 		<property name="targetMethod" value="registerHandler" />
 		<property name="arguments">
 			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.device.EnableDeviceMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="deviceMessageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
+				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.device.DisableDeviceMessageHandler" />
+			</list>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="deviceMessageHandlerRegistry" />
+		<property name="targetMethod" value="registerHandler" />
+		<property name="arguments">
+			<list>
 				<bean class="net.sf.jdnp3.ui.web.outstation.message.ws.handler.device.GetDeviceMessageHandler" />
 			</list>
 		</property>

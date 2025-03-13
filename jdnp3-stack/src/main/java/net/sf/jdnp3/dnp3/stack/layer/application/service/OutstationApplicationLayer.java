@@ -72,6 +72,7 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	
 	private int mtu = 2048;
 	private int address = 2;
+	private volatile boolean enabled = true;
 	private List<EventObjectInstance> pendingEvents = new ArrayList<>();
 	private List<OutstationApplicationRequestHandler> outstationRequestHandlers = new ArrayList<>();
 	
@@ -142,6 +143,9 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	}
 
 	public void sendUnsolicited() {
+		if (!enabled) {
+			return;
+		}
 		synchronized (unsolicitedLock) {
 			try {
 				trySendUnsolicited();
@@ -278,6 +282,10 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 	}
 
 	public synchronized void dataReceived(MessageProperties messageProperties, List<Byte> data) {
+		if (!enabled) {
+			return;
+		}
+
 		validateState();
 		
 		List<Byte> localData = new ArrayList<>(data);
@@ -535,5 +543,13 @@ public class OutstationApplicationLayer implements ApplicationLayer {
 
 	public void setMtu(int mtu) {
 		this.mtu = mtu;
+	}
+
+	public void enable() {
+		this.enabled = true;
+	}
+
+	public void disable() {
+		this.enabled = false;
 	}
 }

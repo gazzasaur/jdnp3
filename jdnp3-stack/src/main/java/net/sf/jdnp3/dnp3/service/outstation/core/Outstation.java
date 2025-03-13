@@ -27,6 +27,9 @@ public interface Outstation {
 	public void setPrimaryAddress(int address);
 	public ApplicationLayer getApplicationLayer();
 	public void sendEvent(EventObjectInstance eventObjectInstance);
+
+	public void enable();
+	public void disable();
 	
 	public void addApplicationTransport(ApplicationTransport applicationTransport);
 	public void removeApplicationTransport(ApplicationTransport applicationTransport);
