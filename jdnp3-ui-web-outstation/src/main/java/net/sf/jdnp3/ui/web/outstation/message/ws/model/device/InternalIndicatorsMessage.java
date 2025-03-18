@@ -25,6 +25,7 @@ public class InternalIndicatorsMessage implements DeviceMessage {
 	private String type = "internalIndicators";
 	private String site = "";
 	private String device = "";
+	private boolean enabled = true;
 	private boolean readonly = false;
 	private boolean unsolicitedEnabled = false;
 	
@@ -175,6 +176,14 @@ public class InternalIndicatorsMessage implements DeviceMessage {
 
 	public void setDevice(String device) {
 		this.device = device;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	public boolean isReadonly() {

@@ -63,6 +63,9 @@ public class SimpleInternalStatusProvider implements InternalStatusProvider {
 	public void setUnsolicitedEnabled(boolean value) {
 	}
 
+	public void setEnabled(boolean value) {
+	}
+
 	public boolean isParameterError() {
 		return false;
 	}
@@ -121,5 +124,9 @@ public class SimpleInternalStatusProvider implements InternalStatusProvider {
 
 	public boolean isUnsolicitedEnabled() {
 		return false;
+	}
+
+	public boolean isEnabled() {
+		return true;
 	}
 }

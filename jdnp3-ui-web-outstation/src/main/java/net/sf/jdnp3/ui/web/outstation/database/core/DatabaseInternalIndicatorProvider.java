@@ -235,6 +235,18 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 		}
 	}
 
+	public boolean isEnabled() {
+		return databaseManager.getInternalIndicatorsDataPoint().isEnabled();
+	}
+	
+	public synchronized void setEnabled(boolean value) {
+		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.isEnabled() != value) {
+			internalIndicatorsDataPoint.setEnabled(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
+	}
+
 	public boolean isReadonly() {
 		return databaseManager.getInternalIndicatorsDataPoint().isReadonly();
 	}

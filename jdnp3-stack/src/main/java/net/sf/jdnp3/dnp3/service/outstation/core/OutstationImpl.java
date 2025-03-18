@@ -65,12 +65,4 @@ public class OutstationImpl implements Outstation {
 	public void removeApplicationTransport(ApplicationTransport applicationTransport) {
 		outstationApplicationLayer.removeApplicationTransport(applicationTransport);
 	}
-
-	public void enable() {
-		outstationApplicationLayer.enable();
-	}
-
-	public void disable() {
-		outstationApplicationLayer.disable();
-	}
 }

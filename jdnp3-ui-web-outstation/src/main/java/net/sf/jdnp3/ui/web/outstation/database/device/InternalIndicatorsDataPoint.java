@@ -23,6 +23,7 @@ import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 
 public class InternalIndicatorsDataPoint implements DataPoint {
 	private long index = 0;
+	private boolean enabled = true;
 	private boolean readonly = false;
 	private boolean unsolicitedEnabled = false;
 	private String name = "Internal Indicators";
@@ -48,6 +49,7 @@ public class InternalIndicatorsDataPoint implements DataPoint {
 		InternalIndicatorsDataPoint other = new InternalIndicatorsDataPoint();
 
 		other.index = this.index;
+		other.enabled = this.enabled;
 		other.readonly = this.readonly;
 		other.unsolicitedEnabled = this.unsolicitedEnabled;
 		other.name = this.name;
@@ -190,6 +192,14 @@ public class InternalIndicatorsDataPoint implements DataPoint {
 
 	public void setConfigurationCorrupt(boolean configurationCorrupt) {
 		this.configurationCorrupt = configurationCorrupt;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	public boolean isReadonly() {

@@ -60,4 +60,7 @@ public interface InternalStatusProvider {
 
 	public boolean isUnsolicitedEnabled();
 	public void setUnsolicitedEnabled(boolean value);
+
+	public boolean isEnabled();
+	public void setEnabled(boolean value);
 }

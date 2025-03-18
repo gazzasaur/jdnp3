@@ -97,7 +97,18 @@ jdnp3.iin.createDialog = function(index) {
 	
 	var staticElementRow = document.createElement('tr');
 	var staticElementCell = document.createElement('td');
-	staticElementCell.appendChild(document.createTextNode('Readonly:'));
+	staticElementCell.appendChild(document.createTextNode('Device Enabled:'));
+	staticElementRow.appendChild(staticElementCell);
+	var staticElementItems = document.createElement('td');
+	staticElementItems.setAttribute('style', 'text-align: right;');
+	
+	staticElementItems.appendChild(jdnp3.ui.createSlideSwitch('iin-' + index + '-enabled', 'Enabled', 'enabled', function() {var attribute = 'enabled'; var dataPoint = jdnp3.iin.internalIndicators.get(index); device.requestChangeSingleAttributeValue('internalIndicator', attribute, !dataPoint[attribute]);}));
+	staticElementRow.appendChild(staticElementItems);
+	table.appendChild(staticElementRow);
+
+	var staticElementRow = document.createElement('tr');
+	var staticElementCell = document.createElement('td');
+	staticElementCell.appendChild(document.createTextNode('IIN Readonly:'));
 	staticElementRow.appendChild(staticElementCell);
 	var staticElementItems = document.createElement('td');
 	staticElementItems.setAttribute('style', 'text-align: right;');
@@ -142,5 +153,8 @@ jdnp3.iin.createRefreshCallback = function(index) {
 		
 		var fieldId = 'iin-' + index + '-readonly';
 		document.getElementById(fieldId).checked = dataPoint.readonly;
+
+		var fieldId = 'iin-' + index + '-enabled';
+		document.getElementById(fieldId).checked = dataPoint.enabled;
 	}
 }
