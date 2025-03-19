@@ -30,8 +30,8 @@ import net.sf.jdnp3.ui.web.outstation.message.ws.model.device.InternalIndicatorM
 
 public class InternalIndicatorMessageHandler implements DeviceMessageHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InternalIndicatorMessageHandler.class);
-	private static final List<String> TRUSTED_ATTRIBUTES = Arrays.asList("broadcast", "class1Events", "class2Events", "class3Events", "needTime", "localControl", "deviceTrouble", "deviceRestart", "noFunctionCodeSupport", "objectUnknown", "parameterError", "eventBufferOverflow", "alreadyExecuting", "configurationCorrupt", "readonly");
-	
+	private static final List<String> TRUSTED_ATTRIBUTES = Arrays.asList("broadcast", "class1Events", "class2Events", "class3Events", "needTime", "localControl", "deviceTrouble", "deviceRestart", "noFunctionCodeSupport", "objectUnknown", "parameterError", "eventBufferOverflow", "alreadyExecuting", "configurationCorrupt", "readonly", "enabled");
+
 	public boolean canHandle(Message message) {
 		return message instanceof InternalIndicatorMessage;
 	}
