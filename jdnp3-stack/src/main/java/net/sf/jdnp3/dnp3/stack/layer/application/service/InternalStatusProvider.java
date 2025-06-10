@@ -63,4 +63,7 @@ public interface InternalStatusProvider {
 
 	public boolean isEnabled();
 	public void setEnabled(boolean value);
+
+	public long getTimestampOffset();
+	public void setTimestampOffset(long offset);
 }

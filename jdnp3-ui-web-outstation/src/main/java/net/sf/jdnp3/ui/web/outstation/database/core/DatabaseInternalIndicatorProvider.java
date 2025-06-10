@@ -270,4 +270,16 @@ public class DatabaseInternalIndicatorProvider implements InternalStatusProvider
 			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
 		}
 	}
+
+	public long getTimestampOffset() {
+		return databaseManager.getInternalIndicatorsDataPoint().getTimestampOffset();
+	}
+
+	public synchronized void setTimestampOffset(long value) {
+		InternalIndicatorsDataPoint internalIndicatorsDataPoint = databaseManager.getInternalIndicatorsDataPoint();
+		if (internalIndicatorsDataPoint.getTimestampOffset() != value) {
+			internalIndicatorsDataPoint.setTimestampOffset(value);
+			databaseManager.setInternalIndicatorDataPoint(internalIndicatorsDataPoint);
+		}
+	}
 }

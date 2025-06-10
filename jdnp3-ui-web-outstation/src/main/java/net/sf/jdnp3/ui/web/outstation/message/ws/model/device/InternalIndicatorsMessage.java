@@ -28,7 +28,9 @@ public class InternalIndicatorsMessage implements DeviceMessage {
 	private boolean enabled = true;
 	private boolean readonly = false;
 	private boolean unsolicitedEnabled = false;
-	
+
+	private long timestampOffset = 0L;
+
 	private boolean needTime = false;
 	private boolean broadcast = false;
 	private boolean class1Events = false;
@@ -200,6 +202,14 @@ public class InternalIndicatorsMessage implements DeviceMessage {
 
 	public void setUnsolicitedEnabled(boolean unsolicitedEnabled) {
 		this.unsolicitedEnabled = unsolicitedEnabled;
+	}
+	
+	public long getTimestampOffset() {
+		return timestampOffset;
+	}
+
+	public void setTimestampOffset(long timestampOffset) {
+		this.timestampOffset = timestampOffset;
 	}
 
 	public Map<String, String> getTags() {

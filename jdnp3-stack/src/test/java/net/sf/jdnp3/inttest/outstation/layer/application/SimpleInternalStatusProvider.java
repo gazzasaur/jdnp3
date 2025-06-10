@@ -66,6 +66,9 @@ public class SimpleInternalStatusProvider implements InternalStatusProvider {
 	public void setEnabled(boolean value) {
 	}
 
+	public void setTimestampOffset(long value) {
+	}
+
 	public boolean isParameterError() {
 		return false;
 	}
@@ -128,5 +131,9 @@ public class SimpleInternalStatusProvider implements InternalStatusProvider {
 
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public long getTimestampOffset() {
+		return 0L;
 	}
 }

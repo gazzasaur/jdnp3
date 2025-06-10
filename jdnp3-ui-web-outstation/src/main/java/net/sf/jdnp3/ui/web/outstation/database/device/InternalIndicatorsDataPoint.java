@@ -20,13 +20,15 @@ import java.util.Map;
 
 import net.sf.jdnp3.ui.web.outstation.database.core.DataPoint;
 
-
 public class InternalIndicatorsDataPoint implements DataPoint {
 	private long index = 0;
 	private boolean enabled = true;
 	private boolean readonly = false;
 	private boolean unsolicitedEnabled = false;
 	private String name = "Internal Indicators";
+
+	// Used to enable a device to use local time when none is specified in the event or of unsolicited responses.
+	private long timestampOffset = 0L;
 	
 	private boolean broadcast = false;
 	private boolean class1Events = false;
@@ -53,6 +55,7 @@ public class InternalIndicatorsDataPoint implements DataPoint {
 		other.readonly = this.readonly;
 		other.unsolicitedEnabled = this.unsolicitedEnabled;
 		other.name = this.name;
+		other.timestampOffset = this.timestampOffset;
 
 		other.broadcast = this.broadcast;
 		other.class1Events = this.class1Events;
@@ -216,6 +219,14 @@ public class InternalIndicatorsDataPoint implements DataPoint {
 
 	public void setUnsolicitedEnabled(boolean unsolicitedEnabled) {
 		this.unsolicitedEnabled = unsolicitedEnabled;
+	}
+
+	public long getTimestampOffset() {
+		return timestampOffset;
+	}
+
+	public void setTimestampOffset(long timestampOffset) {
+		this.timestampOffset = timestampOffset;
 	}
 
 	public Map<String, String> getTags() {
