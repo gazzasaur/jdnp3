@@ -270,7 +270,8 @@ public class DatabaseManager {
 			databaseListener.valueChanged(analogDataPoint);
 		}
 		if (analogDataPoint.isTriggerEventOnChange() && !suppressTrigger) {
-			this.triggerAnalogInputEvent(analogDataPoint.getIndex(), System.currentTimeMillis());
+			long calculatedTimestamp = System.currentTimeMillis() + internalStatusProvider.getTimestampOffset();
+			this.triggerAnalogInputEvent(analogDataPoint.getIndex(), calculatedTimestamp);
 		}
 	}
 	
@@ -284,7 +285,8 @@ public class DatabaseManager {
 			databaseListener.valueChanged(analogDataPoint);
 		}
 		if (analogDataPoint.isTriggerEventOnChange()) {
-			this.triggerAnalogOutputEvent(analogDataPoint.getIndex(), System.currentTimeMillis());
+			long calculatedTimestamp = System.currentTimeMillis() + internalStatusProvider.getTimestampOffset();
+			this.triggerAnalogOutputEvent(analogDataPoint.getIndex(), calculatedTimestamp);
 		}
 	}
 	
@@ -302,7 +304,8 @@ public class DatabaseManager {
 			databaseListener.valueChanged(binaryDataPoint);
 		}
 		if (binaryDataPoint.isTriggerEventOnChange() && !suppressTrigger) {
-			this.triggerBinaryInputEvent(binaryDataPoint.getIndex(), System.currentTimeMillis());
+			long calculatedTimestamp = System.currentTimeMillis() + internalStatusProvider.getTimestampOffset();
+			this.triggerBinaryInputEvent(binaryDataPoint.getIndex(), calculatedTimestamp);
 		}
 	}
 
@@ -323,7 +326,8 @@ public class DatabaseManager {
 			databaseListener.valueChanged(binaryDataPoint);
 		}
 		if (binaryDataPoint.isTriggerEventOnChange() && !suppressTrigger) {
-			this.triggerDoubleBitBinaryInputEvent(binaryDataPoint.getIndex(), System.currentTimeMillis());
+			long calculatedTimestamp = System.currentTimeMillis() + internalStatusProvider.getTimestampOffset();
+			this.triggerDoubleBitBinaryInputEvent(binaryDataPoint.getIndex(), calculatedTimestamp);
 		}
 	}
 
@@ -337,7 +341,8 @@ public class DatabaseManager {
 			databaseListener.valueChanged(binaryDataPoint);
 		}
 		if (binaryDataPoint.isTriggerEventOnChange()) {
-			this.triggerBinaryOutputEvent(binaryDataPoint.getIndex(), System.currentTimeMillis());
+			long calculatedTimestamp = System.currentTimeMillis() + internalStatusProvider.getTimestampOffset();
+			this.triggerBinaryOutputEvent(binaryDataPoint.getIndex(), calculatedTimestamp);
 		}
 	}
 	
@@ -355,7 +360,8 @@ public class DatabaseManager {
 			databaseListener.valueChanged(dataPoint);
 		}
 		if (dataPoint.isTriggerEventOnChange() && !suppressTrigger) {
-			this.triggerCounterEvent(dataPoint.getIndex(), System.currentTimeMillis());
+			long calculatedTimestamp = System.currentTimeMillis() + internalStatusProvider.getTimestampOffset();
+			this.triggerCounterEvent(dataPoint.getIndex(), calculatedTimestamp);
 		}
 	}
 
