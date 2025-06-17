@@ -24,7 +24,7 @@ public class InternalIndicatorMessage implements DeviceMessage {
 	private String device = "";
 	
 	private String attribute = "";
-	private boolean value = false;
+	private String value = "";
 	
 	public String getType() {
 		return type;
@@ -38,11 +38,11 @@ public class InternalIndicatorMessage implements DeviceMessage {
 		this.attribute = attribute;
 	}
 
-	public boolean isValue() {
+	public String getValue() {
 		return value;
 	}
 
-	public void setValue(boolean value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 

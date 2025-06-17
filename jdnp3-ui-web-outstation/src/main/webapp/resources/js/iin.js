@@ -117,6 +117,41 @@ jdnp3.iin.createDialog = function(index) {
 	staticElementRow.appendChild(staticElementItems);
 	table.appendChild(staticElementRow);
 
+	var staticElementRow = document.createElement('tr');
+	var staticElementCell = document.createElement('td');
+	staticElementCell.appendChild(document.createTextNode('Timestamp Offset:'));
+	staticElementRow.appendChild(staticElementCell);
+
+	var staticElementItems = document.createElement('td');
+	staticElementItems.setAttribute('style', 'text-align: right;');
+	
+	staticElementRow.appendChild(staticElementItems);
+	table.appendChild(staticElementRow);
+
+	var textField = document.createElement('div');
+	textField.className = 'text-field';
+	textField.setAttribute('style', 'width: 100%; min-width: 250px');
+	staticElementItems.appendChild(textField);
+	textField.title = 'Supports Infinity, -Infinity, MAX, MIN and NaN';
+
+	var textFieldValue = document.createElement('input');
+	textFieldValue.id = 'iin-' + index + '-timestampOffset';
+	textFieldValue.value = jdnp3.iin.internalIndicators.get(index).timestampOffset;
+	textFieldValue.className = 'text-field-value';
+	textFieldValue.setAttribute('style', 'border: none');
+	textFieldValue.type = 'text';
+	textFieldValue.select();
+	textField.appendChild(textFieldValue);
+
+	textField.onkeydown = function(event) {
+		var attribute = 'timestampOffset';
+		var dataPoint = jdnp3.iin.internalIndicators.get(index);
+
+		if (event.key == 'Enter') {
+			device.requestChangeSingleAttributeValue('internalIndicator', attribute, parseInt(event.target.value));
+		};
+	};
+
 	var tags = jdnp3.iin.internalIndicators.get(index)['tags'];
 
 	if (Object.keys(tags).length) {
@@ -156,5 +191,8 @@ jdnp3.iin.createRefreshCallback = function(index) {
 
 		var fieldId = 'iin-' + index + '-enabled';
 		document.getElementById(fieldId).checked = dataPoint.enabled;
+
+		var fieldId = 'iin-' + index + '-timestampOffset';
+		document.getElementById(fieldId).value = dataPoint.timestampOffset;
 	}
 }
