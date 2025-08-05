@@ -56,6 +56,7 @@ import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogOutputCom
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryInputStaticHandler;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.CrobOperator;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.DoubleBitBinaryInputStaticHandler;
+import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic.AssignClassObjectWriter;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic.Class0Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic.Class1Reader;
 import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic.Class2Reader;
@@ -190,6 +191,7 @@ public class SimpleDeviceFactory implements DeviceFactory {
 		outstation.addRequestHandler(new AnalogOutputCommandOperator(databaseManager));
 		outstation.addRequestHandler(new TimeAndDateHandler(databaseManager.getInternalStatusProvider()));
 		outstation.addRequestHandler(new InternalIndicatorWriter(databaseManager.getInternalStatusProvider()));
+		outstation.addRequestHandler(new AssignClassObjectWriter(databaseManager));
 		
 		databaseManager.addEventListener(new BinaryInputEventListener(outstation));
 		databaseManager.addEventListener(new DoubleBitBinaryInputEventListener(outstation));

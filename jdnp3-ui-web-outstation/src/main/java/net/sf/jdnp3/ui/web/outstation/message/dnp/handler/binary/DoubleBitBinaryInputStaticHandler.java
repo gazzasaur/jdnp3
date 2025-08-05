@@ -66,7 +66,8 @@ public class DoubleBitBinaryInputStaticHandler implements DoubleBitBinaryInputSt
 		return points;
 	}
 
-	public void assignClass(long index, long eventClass) {
+	public void assignClass(long index) {
+		long eventClass = databaseManager.getAssignClassCategory();
 		List<DoubleBitBinaryInputDataPoint> binaryDataPoints = databaseManager.getDoubleBitBinaryInputDataPoints();
 
 		binaryDataPoints.stream().filter(dataPoint -> dataPoint.getIndex() == index).findAny().ifPresent(dataPoint -> {
@@ -75,7 +76,8 @@ public class DoubleBitBinaryInputStaticHandler implements DoubleBitBinaryInputSt
 		});
 	}
 
-	public void assignClasses(long eventClass) {
+	public void assignClasses() {
+		long eventClass = databaseManager.getAssignClassCategory();
 		List<DoubleBitBinaryInputDataPoint> binaryDataPoints = databaseManager.getDoubleBitBinaryInputDataPoints();
 
 		for (DoubleBitBinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
@@ -84,7 +86,8 @@ public class DoubleBitBinaryInputStaticHandler implements DoubleBitBinaryInputSt
 		}
 	}
 
-	public void assignClasses(long startIndex, long stopIndex, long eventClass) {
+	public void assignClasses(long startIndex, long stopIndex) {
+		long eventClass = databaseManager.getAssignClassCategory();
 		List<DoubleBitBinaryInputDataPoint> binaryDataPoints = databaseManager.getDoubleBitBinaryInputDataPoints();
 
 		for (DoubleBitBinaryInputDataPoint dataPoint : binaryDataPoints) {

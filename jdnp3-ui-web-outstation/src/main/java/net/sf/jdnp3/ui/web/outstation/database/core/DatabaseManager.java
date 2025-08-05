@@ -35,7 +35,7 @@ public class DatabaseManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseManager.class);
 	
 	private Database database = new Database();
-	private volatile int assignClassCategory = 0;
+	private volatile long assignClassCategory = 0;
 	private List<EventListener> eventListeners = new ArrayList<>();
 	private List<DatabaseListener> databaseListeners = new ArrayList<>();
 	private InternalStatusProvider internalStatusProvider = new DatabaseInternalIndicatorProvider(this);
@@ -146,10 +146,14 @@ public class DatabaseManager {
 		}
 	}
 
-	public int getAssignClassCategory() {
+	public long getAssignClassCategory() {
 		return assignClassCategory;
 	}
-	
+
+	public void setAssignClassCategory(long assignClassCategory) {
+		this.assignClassCategory = assignClassCategory;
+	}
+
 	public InternalIndicatorsDataPoint getInternalIndicatorsDataPoint() {
 		synchronized (database) {
 			return database.getIndicatorsDataPoint().copy();

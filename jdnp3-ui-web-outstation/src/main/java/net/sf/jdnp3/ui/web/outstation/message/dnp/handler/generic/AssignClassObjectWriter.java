@@ -15,19 +15,8 @@
  */
 package net.sf.jdnp3.ui.web.outstation.message.dnp.handler.generic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.sf.jdnp3.dnp3.service.outstation.handler.generic.AssignClassObjectRequestHandler;
-import net.sf.jdnp3.dnp3.service.outstation.handler.generic.Class0ReadRequestHandler;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
 import net.sf.jdnp3.ui.web.outstation.database.core.DatabaseManager;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogInputStaticHandler;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.analog.AnalogOutputStaticHandler;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryInputStaticHandler;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.BinaryOutputStaticHandler;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.binary.DoubleBitBinaryInputStaticHandler;
-import net.sf.jdnp3.ui.web.outstation.message.dnp.handler.counter.CounterStaticHandler;
 
 public class AssignClassObjectWriter implements AssignClassObjectRequestHandler {
 	private DatabaseManager databaseManager;
@@ -36,11 +25,7 @@ public class AssignClassObjectWriter implements AssignClassObjectRequestHandler 
 		this.databaseManager = databaseManager;
 	}
 	
-	public List<ObjectInstance> doAssignClassObject() {
-	}
-
 	public void assignClassObject(long eventClass) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'assignClassObject'");
+		this.databaseManager.setAssignClassCategory(eventClass);
 	}
 }

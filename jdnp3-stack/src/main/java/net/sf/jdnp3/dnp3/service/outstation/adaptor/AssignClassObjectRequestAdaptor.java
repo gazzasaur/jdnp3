@@ -20,22 +20,14 @@ import static net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.Object
 import java.util.List;
 
 import net.sf.jdnp3.dnp3.service.outstation.core.OutstationRequestHandlerAdaptor;
-import net.sf.jdnp3.dnp3.service.outstation.handler.generic.AssignClassRequestHandler;
+import net.sf.jdnp3.dnp3.service.outstation.handler.generic.AssignClassObjectRequestHandler;
 import net.sf.jdnp3.dnp3.service.outstation.handler.generic.OutstationRequestHandler;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.FunctionCode;
 import net.sf.jdnp3.dnp3.stack.layer.application.message.model.packet.ObjectFragment;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.IndexPrefixType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.prefix.PrefixType;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.IndexRange;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.NoRange;
-import net.sf.jdnp3.dnp3.stack.layer.application.message.model.range.Range;
 import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.ObjectInstance;
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StaticObjectInstance;
 import net.sf.jdnp3.dnp3.stack.layer.application.service.OutstationEventQueue;
 
 public class AssignClassObjectRequestAdaptor implements OutstationRequestHandlerAdaptor {
-	private int group;
-	private Class<E> clazz;
 	private AssignClassObjectRequestHandler serviceRequestHandler = null;
 	
 	public AssignClassObjectRequestAdaptor() {
@@ -59,15 +51,13 @@ public class AssignClassObjectRequestAdaptor implements OutstationRequestHandler
 		}
 		
 		if (serviceRequestHandler != null) {
-			serviceRequestHandler.assignClasses(eventClass);
+			serviceRequestHandler.assignClassObject(eventClass);
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void setRequestHandler(OutstationRequestHandler requestHandler) {
 		if (requestHandler instanceof AssignClassObjectRequestHandler) {
-			AssignClassObjectRequestHandler assignClassRequestHandler = (AssignClassObjectRequestHandler) requestHandler;
-			this.serviceRequestHandler = (AssignClassRequestHandler<E>) assignClassRequestHandler;
+			this.serviceRequestHandler = (AssignClassObjectRequestHandler) requestHandler;
 		}
 	}
 }

@@ -63,13 +63,13 @@ public class AssignClassRequestAdaptor<E extends StaticObjectInstance> implement
 			PrefixType prefixType = request.getObjectFragmentHeader().getPrefixType();
 			
 			if (range instanceof NoRange) {
-				serviceRequestHandler.assignClasses(eventClass);
+				serviceRequestHandler.assignClasses();
 			} else if (range instanceof IndexRange) {
 				IndexRange indexRange = (IndexRange) range;
-				serviceRequestHandler.assignClasses(indexRange.getStartIndex(), indexRange.getStopIndex(), eventClass);
+				serviceRequestHandler.assignClasses(indexRange.getStartIndex(), indexRange.getStopIndex());
 			} else if (prefixType instanceof IndexPrefixType) {
 				for (ObjectInstance objectInstance : request.getObjectInstances()) {
-					serviceRequestHandler.assignClass(objectInstance.getIndex(), eventClass);
+					serviceRequestHandler.assignClass(objectInstance.getIndex());
 				}
 			}
 		}

@@ -62,7 +62,8 @@ public class BinaryOutputStaticHandler implements BinaryOutputStaticReadRequestH
 		return points;
 	}
 	
-	public void assignClass(long index, long eventClass) {
+	public void assignClass(long index) {
+		long eventClass = databaseManager.getAssignClassCategory();
 		List<BinaryOutputDataPoint> dataPoints = databaseManager.getBinaryOutputDataPoints();
 
 		dataPoints.stream().filter(dataPoint -> dataPoint.getIndex() == index).findAny().ifPresent(dataPoint -> {
@@ -71,7 +72,8 @@ public class BinaryOutputStaticHandler implements BinaryOutputStaticReadRequestH
 		});
 	}
 	
-	public void assignClasses(long eventClass) {
+	public void assignClasses() {
+		long eventClass = databaseManager.getAssignClassCategory();
 		List<BinaryOutputDataPoint> dataPoints = databaseManager.getBinaryOutputDataPoints();
 
 		for (BinaryOutputDataPoint dataPoint : dataPoints) {
@@ -80,7 +82,8 @@ public class BinaryOutputStaticHandler implements BinaryOutputStaticReadRequestH
 		}
 	}
 	
-	public void assignClasses(long startIndex, long stopIndex, long eventClass) {
+	public void assignClasses(long startIndex, long stopIndex) {
+		long eventClass = databaseManager.getAssignClassCategory();
 		List<BinaryOutputDataPoint> dataPoints = databaseManager.getBinaryOutputDataPoints();
 
 		for (BinaryOutputDataPoint dataPoint : dataPoints) {

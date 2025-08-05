@@ -68,7 +68,7 @@ public class BinaryInputStaticHandler implements BinaryInputStaticReadRequestHan
 	}
 
 	public void assignClass(long index) {
-		int eventClass = databaseManager.getAssignClassCategory();
+		long eventClass = databaseManager.getAssignClassCategory();
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 		binaryDataPoints.stream().filter(dataPoint -> dataPoint.getIndex() == index).findAny().ifPresent(dataPoint -> {
 			dataPoint.setEventClass((int) eventClass);
@@ -77,7 +77,7 @@ public class BinaryInputStaticHandler implements BinaryInputStaticReadRequestHan
 	}
 
 	public void assignClasses() {
-		int eventClass = databaseManager.getAssignClassCategory();
+		long eventClass = databaseManager.getAssignClassCategory();
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 		for (BinaryInputDataPoint binaryDataPoint : binaryDataPoints) {
 			binaryDataPoint.setEventClass((int) eventClass);
@@ -86,7 +86,7 @@ public class BinaryInputStaticHandler implements BinaryInputStaticReadRequestHan
 	}
 
 	public void assignClasses(long startIndex, long stopIndex) {
-		int eventClass = databaseManager.getAssignClassCategory();
+		long eventClass = databaseManager.getAssignClassCategory();
 		List<BinaryInputDataPoint> binaryDataPoints = databaseManager.getBinaryInputDataPoints();
 
 		for (BinaryInputDataPoint dataPoint : binaryDataPoints) {
