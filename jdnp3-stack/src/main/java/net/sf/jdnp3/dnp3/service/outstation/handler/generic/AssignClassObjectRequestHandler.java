@@ -15,13 +15,6 @@
  */
 package net.sf.jdnp3.dnp3.service.outstation.handler.generic;
 
-import net.sf.jdnp3.dnp3.stack.layer.application.model.object.core.StaticObjectInstance;
-
-public interface AssignClassRequestHandler<E extends StaticObjectInstance> extends OutstationRequestHandler {
-	public void assignClass(long index);
-	
-	public void assignClasses();
-	public void assignClasses(long startIndex, long stopIndex);
-
-	public Class<E> getObjectInstanceClass();
+public interface AssignClassObjectRequestHandler extends OutstationRequestHandler {
+	public void assignClassObject(long eventClass);
 }
