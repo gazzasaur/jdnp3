@@ -114,7 +114,7 @@ class Outstation:
         self.set(data)
 
     def get_binary_output(self, index, *args):
-        data = self.get_point('binaryInputPoints', int(index))
+        data = self.get_point('binaryOutputPoints', int(index))
         return self.get_attribute(data, *args);
     
     def wait_for_binary_output(self, index, *args):
