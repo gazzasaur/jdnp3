@@ -122,6 +122,17 @@ public class ReadBinaryInputIntegrationTest {
 		assertThat(transportData, is("C7810000010200FFFF80"));
 	}
 
+	@Test
+	public void assignClass() {
+		when(mockBinaryInputStaticReadRequestHandler.getObjectInstanceClass()).thenReturn(BinaryInputStaticObjectInstance.class);
+		when(mockBinaryInputStaticReadRequestHandler.readStatic(1)).thenReturn(asList(dummyBinaryInputStaticObjectInstances.get(1)));
+
+		List<Byte> data = asList(toObject(parseHexBinary("C7163C0206")));
+		outstation.addRequestHandler(mockBinaryInputStaticReadRequestHandler);
+		outstation.getApplicationLayer().dataReceived(dummyMessageProperties, data);
+		assertThat(transportData, is("C7810000"));
+	}
+
 	private void buildOutstation() {
 		OutstationFactory factory = new OutstationFactory();
 		factory.setInternalStatusProvider(mockInternalStatusProvider);

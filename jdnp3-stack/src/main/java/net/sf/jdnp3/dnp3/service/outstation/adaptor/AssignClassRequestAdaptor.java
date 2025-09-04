@@ -53,11 +53,6 @@ public class AssignClassRequestAdaptor<E extends StaticObjectInstance> implement
 			throw new RuntimeException("Cannot perform assign class operation.");
 		}
 		
-		long eventClass = request.getObjectFragmentHeader().getObjectType().getVariation();
-		if (eventClass < 0 || eventClass > 3) {
-			throw new RuntimeException("Illegal class code received: " + eventClass);
-		}
-		
 		if (serviceRequestHandler != null) {
 			Range range = request.getObjectFragmentHeader().getRange();
 			PrefixType prefixType = request.getObjectFragmentHeader().getPrefixType();

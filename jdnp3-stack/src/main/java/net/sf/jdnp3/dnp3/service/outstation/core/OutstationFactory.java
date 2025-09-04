@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.AnalogOutputOperateRequestAdaptor;
+import net.sf.jdnp3.dnp3.service.outstation.adaptor.AssignClassObjectRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.AssignClassRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.BinaryOutputOperateRequestAdaptor;
 import net.sf.jdnp3.dnp3.service.outstation.adaptor.Class0ReadRequestAdaptor;
@@ -156,6 +157,8 @@ public class OutstationFactory {
 	}
 	
 	public void addStandardOutstationRequestHandlerAdaptors() {
+		adaptors.add(new AssignClassObjectRequestAdaptor());
+
 		adaptors.add(new StaticReadRequestAdaptor<>(BINARY_INPUT_STATIC_GROUP, BinaryInputStaticObjectInstance.class));
 		adaptors.add(new AssignClassRequestAdaptor<>(BINARY_INPUT_STATIC_GROUP, BinaryInputStaticObjectInstance.class));
 		adaptors.add(new EventReadRequestAdaptor<>(BINARY_INPUT_EVENT_GROUP, BinaryInputEventObjectInstance.class));
