@@ -125,7 +125,6 @@ public class ReadBinaryInputIntegrationTest {
 	@Test
 	public void assignClass() {
 		when(mockBinaryInputStaticReadRequestHandler.getObjectInstanceClass()).thenReturn(BinaryInputStaticObjectInstance.class);
-		when(mockBinaryInputStaticReadRequestHandler.readStatic(1)).thenReturn(asList(dummyBinaryInputStaticObjectInstances.get(1)));
 
 		List<Byte> data = asList(toObject(parseHexBinary("C7163C0206")));
 		outstation.addRequestHandler(mockBinaryInputStaticReadRequestHandler);
